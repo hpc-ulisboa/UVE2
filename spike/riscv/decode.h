@@ -157,6 +157,10 @@ public:
   int64_t uve_conf_base() { return x(15, 5); }
   int64_t uve_conf_size() { return x(20, 5); }
   int64_t uve_conf_stride() { return x(27, 5); }
+  // Registers for modificator configuration instructions
+  int64_t uve_mod_dest() { return x(7, 5); }
+  int64_t uve_mod_size() { return x(15, 5); }
+  int64_t uve_mod_disp() { return x(27, 5); }
   // Registers for computation instructions
   int64_t uve_comp_dest() { return x(7, 5); }
   int64_t uve_comp_src1() { return x(15, 5); }

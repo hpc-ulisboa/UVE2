@@ -66,6 +66,8 @@ struct Modifier
 
   void modDimension(Dimension& dim) const;
 
+  void printModifier() const;
+
   Type getType() const;
 
 private:

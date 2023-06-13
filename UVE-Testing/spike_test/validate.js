@@ -3,12 +3,12 @@
 const { spawnSync }= require("child_process");
 
 //const kernels = [ "saxpy", "memcpy", "jacobi-1d" ];
-const kernels = [ "memcpy" ];
-const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=4", "-DSIZE=128" ];
+const kernels = [ "trisolv" ];
+const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=4", "-DSIZE=64" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
-const pkPath = "/home/afernandes/UVE-Testing/pk";
-const spikePath = "/home/afernandes/UVE-Testing/spike";
+const pkPath = "./pk";
+const spikePath = "./spike";
 const bin_simple = "./run_simple";
 const bin_uve = "./run_uve";
 

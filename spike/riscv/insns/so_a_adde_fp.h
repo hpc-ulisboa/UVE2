@@ -1,20 +1,10 @@
-std::cout << "\n---ADDE---" << "\n";
-
-std::cout << "\n---1---" << "\n";
+// std::cout << "\n---ADDE---" << "\n";
 auto streamReg = insn.uve_comp_dest();
-
-std::cout << "\n---2---" << "\n";
 auto& destReg = P.SU.registers[streamReg];
-
-/*  
-std::cout << "\n---3---" << "\n";
 auto& srcReg = P.SU.registers[insn.uve_comp_src1()];
 
 
-
-// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would
-    use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to
-    later on infer its type and know the storage we need to use 
+// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use 
 auto baseBehaviour = [](auto& dest, auto& src, auto extra) {
   auto elements = src.getElements(true);
   auto validElementsIndex = elements.size();
@@ -24,15 +14,15 @@ auto baseBehaviour = [](auto& dest, auto& src, auto extra) {
   using Operation = decltype(extra);
   decltype(dest.getElements(false)) out;
   auto value = *reinterpret_cast<Operation*>(&elements.at(0));
-  std::cout << "\nADDE s1: " << elements.size() << "\n";
+  // std::cout << "\nADDE s1: " << elements.size() << "\n";
   for (size_t i = 1; i < validElementsIndex; i++) {
     auto e = *reinterpret_cast<Operation*>(&elements.at(i));
     value += e;
-    std::cout << "Adde Iter: " << i << " element: " << e << " total sum: " << value << '\n';
+    // std::cout << "Adde Iter: " << i << " element: " << e << " total sum: " << value << '\n';
   }
   out.push_back(*reinterpret_cast<Storage*>(&value));
   dest.setElements(true, out);
-  std::cout << "\n\nOUT: " << out.size() << "\n\n";
+  // std::cout << "\n\nOUT: " << out.size() << "\n\n";
 };
 
 // If the destination register is a temporary, we have to build it before the operation so that it's element size matches before any calculations are done
@@ -62,5 +52,3 @@ std::visit(overloaded {
     [&](auto& dest, auto& src) { assert_msg("Invoking so.a.adde.fp with invalid parameter sizes", false); }
   },
   destReg, srcReg);
-
-  */

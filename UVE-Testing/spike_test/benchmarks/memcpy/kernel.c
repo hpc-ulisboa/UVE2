@@ -11,10 +11,9 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
       [size] "r" (SIZE),
       [stride] "r" (1));
 	asm volatile(
-		//".uve_loop%= : \t\n"
-		//"so.v.mv u1, u2, p0 \n\t"
-		//"so.b.nc u2, .uve_loop%= \n\t"
-		"so.a.adde.fp u1, u2, p0 \n\t"
+		".uve_loop%= : \t\n"
+			"so.v.mv u1, u2, p0 \n\t"
+		"so.b.nc u2, .uve_loop%= \n\t"
 		 :::);
 }
 #endif // RUN_UVE
@@ -22,9 +21,8 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 
 #ifdef RUN_SIMPLE
 void core(DataType dest[SIZE], DataType src[SIZE]) {
-	/*dest[0] = 0;
-	for (int i = 0; i < SIZE; i++) {
-		dest[0] += src[i];
-	}*/
+	for (int i = 0; i < SIZE; ++i) {
+		dest[i] = src[i];
+	}
 }
 #endif // RUN_SIMPLE

@@ -10,8 +10,8 @@ auto& src2Reg = P.SU.registers[insn.uve_comp_src2()];
 auto baseBehaviour = [](auto& dest, auto& src1, auto& src2, auto extra) {
   /* Each stream's elements must have the same width for content to be
    * operated on */
-  const bool src1Check = src1.getType() == RegisterType::Load || src1.getType() == RegisterType::Duplicate;
-  const bool src2Check = src2.getType() == RegisterType::Load || src2.getType() == RegisterType::Duplicate;
+  const bool src1Check = src1.getType() == RegisterType::Load || src1.getType() == RegisterType::Temporary;
+  const bool src2Check = src2.getType() == RegisterType::Load || src2.getType() == RegisterType::Temporary;
   if (src1Check && src2Check) {
     assert_msg("Given streams have different widths",
       src1.getElementsWidth() == src2.getElementsWidth());
@@ -29,7 +29,7 @@ auto baseBehaviour = [](auto& dest, auto& src1, auto& src2, auto extra) {
     auto e1 = *reinterpret_cast<Operation*>(&elements1.at(i));
     auto e2 = *reinterpret_cast<Operation*>(&elements2.at(i));
     auto value = e1 + e2;
-    //std::cout << "Add Iter: " << i << " v1: " << e1 << " v2: " << e2 << " value: " << value << '\n';
+    std::cout << "Add load1: " << e1 << " load2: " << e2 << '\n';
     out.push_back(*reinterpret_cast<Storage*>(&value));
   }
   dest.setElements(true, out);

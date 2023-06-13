@@ -33,20 +33,26 @@
 #define DataSet iDataset
 #define DataFormat(start, end) start "%d" end
 
-// Using doubles
+// Using floats (words)
 #elif TYPE == 4
+#define DataType float
+#define DataSet fDataset
+#define DataFormat(start, end) start "%3.4f" end
+
+// Using doubles
+#elif TYPE == 5
 #define DataType double
 #define DataSet fDataset
 #define DataFormat(start, end) start "%3.4lf" end
 
 #else
-#error *Did not pass a type of value 1, 2, 3 or 4*
+#error *Did not pass a type of value 1, 2, 3, 4 or 5*
 #endif // TYPE
 
-void initArray(DataType array[SIZE]);
-void initArray2D(DataType array[SIZE][SIZE]);
+void initArray(DataType *array);
+void initArray2D(DataType *array);
 
-void initZero(DataType array[SIZE]);
+void initZero(DataType *array);
 
 
 #endif // FUNCTIONS_H

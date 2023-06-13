@@ -26,7 +26,7 @@ void Dimension::resetIterValues()
 
 void Dimension::advance()
 {
-  iter_index++;
+  ++iter_index;
 }
 
 bool Dimension::isLastIteration() const
@@ -64,10 +64,6 @@ void Modifier::modDimension(Dimension& dim) const
   case Type::Indirect:
     modIndirect(dim);
     break;
-  /*case Type::CfgVec:
-    // Do nothing. This case gets handled in generateOffset
-    break;
-  */
   default:
     assert_msg("Unhandled Type case in modifiers's modDimension", false);
   }
@@ -88,12 +84,15 @@ void Modifier::modStatic(Dimension& dim) const
 
   if (target == Target::Offset) {
     dim.iter_offset += valueChange;
+    //std::cout << "iter_offset: " << dim.iter_offset << std::endl;
   }
   else if (target == Target::Size) {
     dim.iter_size += valueChange;
+    //std::cout << "valueChange: " << valueChange << " iter_size: " << dim.iter_size << std::endl;
   }
   else if (target == Target::Stride) {
     dim.iter_stride += valueChange;
+    //std::cout << "iter_stride: " << dim.iter_stride << std::endl;
   }
   else {
     assert_msg("Unexpected target for a static modifier", false);
@@ -108,4 +107,52 @@ void Modifier::modIndirect(Dimension& dim) const
 Modifier::Type Modifier::getType() const
 {
   return type;
+}
+
+void Modifier::printModifier() const
+{
+  // print modifier
+  std::cout << "Modifier: ";
+  switch (type) {
+  case Type::Static:
+    std::cout << "Static";
+    break;
+  case Type::Indirect:
+    std::cout << "Indirect";
+    break;
+  default:
+    assert_msg("Unhandled Type case in modifiers's printModifier", false);
+  }
+  std::cout << ", ";
+  switch (target) {
+  case Target::None:
+    std::cout << "None";
+    break;
+  case Target::Offset:
+    std::cout << "Offset";
+    break;
+  case Target::Size:
+    std::cout << "Size";
+    break;
+  case Target::Stride:
+    std::cout << "Stride";
+    break;  
+  default:
+    assert_msg("Unhandled Target case in modifiers's printModifier", false);
+  }
+  std::cout << ", ";
+  switch (behaviour) {
+  case Behaviour::None:
+    std::cout << "None";
+    break;
+  case Behaviour::Increment:
+    std::cout << "Increment";
+    break;
+  case Behaviour::Decrement:
+    std::cout << "Decrement";
+    break;
+  default:
+    assert_msg("Unhandled Behaviour case in modifiers's printModifier", false);
+  }
+  std::cout << ", displacement: " << displacement << ", size: " << size;
 }

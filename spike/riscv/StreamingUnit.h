@@ -19,7 +19,7 @@ class processor_t;
 extern processor_t *globalProcessor;
 #define gMMU (*(globalProcessor->get_mmu()))
 
-enum class RegisterType { Temporary, Load, Store, Duplicate };
+enum class RegisterType { Temporary, Load, Store};
 enum class RegisterStatus { NotConfigured, Running, Finished };
 
 /* T is one of std::uint8_t, std::uint16_t, std::uint32_t or std::uint64_t and
@@ -45,18 +45,17 @@ struct StreamRegister
   static constexpr size_t maxAmountElements = registerLength / elementsWidth;
 
 
-
-  StreamRegister(RegisterType t = RegisterType::Temporary, ElementsType v = 0)
+  StreamRegister(RegisterType t = RegisterType::Temporary)
     : modifiers{}, type(t)
   {
     status = RegisterStatus::NotConfigured;
-    duplicateValue = v;
+    configEOD = false;
   }
 
   void addModifier(Modifier mod)
   {
     /* A recently added modifier alters the last inserted dimension */
-    const auto modIndex = dimensions.size() - 1;
+    const auto modIndex = dimensions.size() - 2;
     auto iter = modifiers.find(modIndex);
     assert_msg("Trying to add a modifier, when one already exists in this index", iter == modifiers.end());
     modifiers.insert({ modIndex, mod });
@@ -85,9 +84,6 @@ struct StreamRegister
     if (this->type == RegisterType::Load) {
       updateAsLoad();
     }
-    else if (this->type == RegisterType::Duplicate) {
-      updateAsDuplicate();
-    }
   }
 
   std::vector<ElementsType> getElements(bool causesUpdate)
@@ -101,7 +97,7 @@ struct StreamRegister
     return ret;
   }
 
-  void setElements(bool causesUpdate, std::vector<ElementsType> e, bool flag = false)
+  void setElements(bool causesUpdate, std::vector<ElementsType> e)
   {
 
     //std::cout << "Setting elements to " << e.size() << " elements" << std::endl;
@@ -109,8 +105,17 @@ struct StreamRegister
     assert_msg("Trying to set values to a load stream", type != RegisterType::Load);
 
     elements = e;
-    if (causesUpdate)
-      updateStreamValues(flag);
+
+    // print elements
+    /*std::cout << "Elements: ";
+    for (auto& e : elements) {
+      std::cout << e << " ";
+    }
+    */
+    if (causesUpdate){
+      //std::cout << "Updating stream values (if stream)" << std::endl;
+      updateStreamValues();
+    }
   }
 
   bool hasStreamFinished() const
@@ -130,6 +135,7 @@ struct StreamRegister
   bool isEndOfDimensionOfDim(std::size_t i) const
   {
     assert_msg("Trying to check eof of invalid dimension", i < dimensions.size() - 1);
+    std::cout << "Checking eof of dimension " << i << " = " << dimensions.at(i).isEndOfDimension() << std::endl;
     return dimensions.at(i).isEndOfDimension();
   }
 
@@ -145,6 +151,9 @@ struct StreamRegister
   }
   std::size_t getElementsWidth() const {
       return elementsWidth;
+  }
+  std::size_t getMaxElements() const {
+      return maxAmountElements; 
   }
   RegisterType getType() const {
       return type;
@@ -166,36 +175,18 @@ private:
   std::unordered_map<int, Modifier> modifiers;
   RegisterType type;
   RegisterStatus status;
-  /* In case this stream is a duplicate stream, we store here the value we intent
-  to duplicate each time an operation is performed */
-  ElementsType duplicateValue;
 
-
-  void updateStreamValues(bool flag = false)
+  void updateStreamValues()
   {
     if (this->type == RegisterType::Load) {
-      /*if(flag)
-        std::cout << "Updating load stream" << std::endl;
-      */
       updateAsLoad();
     }
     else if (this->type == RegisterType::Store) {
-      /*if(flag)
-        std::cout << "Updating store stream" << std::endl;
-      */
+
       updateAsStore();
     }
     else if (this->type == RegisterType::Temporary) {
-      // Do nothing ...
-      /*if(flag)
-        std::cout << "Updating temporary stream" << std::endl;
-      */
-    }
-    else if (this->type == RegisterType::Duplicate) {
-      /*if(flag)
-        std::cout << "Updating duplicate stream" << std::endl;
-      */
-      updateAsDuplicate();
+      // do nothing
     }
     else {
       assert_msg("Unhandled type of stream was asked to update", false);
@@ -205,7 +196,7 @@ private:
 
   size_t generateOffset()
   {
-    /* Result will be the final accumulation of all offset calculated per dimension */
+    /* Result will be the final accumulation of all offsets calculated per dimension */
     std::size_t init = 0;
     return std::accumulate(dimensions.begin(), dimensions.end(), init, [](size_t acc, Dimension& dim) {
       dim.setEndOfDimension(dim.isLastIteration());
@@ -235,20 +226,20 @@ private:
     if (isStreamDone()) {
       return false;
     }
-
-    /* We don't check the last dimension as it cannot have a modifier attached */
+ /*
+    // We don't check the last dimension as it cannot have a modifier attached
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
       // auto& currDim = dimensions.at(i);
       auto currentModifierIterator = modifiers.find(i);
       const bool dimensionsDone = isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1);
       if (dimensionsDone && currentModifierIterator != modifiers.end()) {
         auto type = currentModifierIterator->second.getType();
-        /*if (type == Modifier::Type::CfgVec) {
+        if (type == Modifier::Type::CfgVec) {
           return false;
-        }*/
+        }
       }
     }
-
+*/
     return true;
   }
 
@@ -265,24 +256,38 @@ private:
     if (dimensions.size() == 1) {
       return;
     }
-
+    //std::cout << "Updating iteration. Dimensions: " << dimensions.size() << std::endl;
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
       auto& currDim = dimensions.at(i);
-      /* The following calculation are only necessary if we ARE in the
+      /* The following calculations are only necessary if we ARE in the
       last iteration of a dimension */
       if (!currDim.triggerIterationUpdate())
         continue;
-
+      //std::cout << "Looking for modifiers of dimension " << i << std::endl;
       auto currentModifierIter = modifiers.find(i);
       const bool modifierExists = currentModifierIter != modifiers.end();
+
+      // print std::unordered_map currentMofifierIter
+      // Helper lambda function to print key-value pairs
+      auto print_key_value = [](const auto& key, const auto& value)
+      {
+          std::cout << "Key:[" << key << "] Value:[";
+          value.printModifier();
+          std::cout << "]\n";
+      };
+
+      // print std::unordered_map
+      //std::cout << "modifiers contains:\n";
+      //for (auto& p : modifiers) print_key_value(p.first, p.second);
+
       currDim.resetIndex();
       currDim.setEndOfDimension(false);
       dimensions.at(i + 1).advance();
       if (modifierExists) {
+        //std::cout << "Updating modifier" << std::endl;
         currentModifierIter->second.modDimension(currDim);
       }
-      /* The values at lower dimensions might have been modified. As such, we need
-      to reset them before next iteration */
+      // The values at lower dimensions might have been modified. As such, we need to reset them before next iteration
       for (size_t j = 0; j < i; j++) {
         dimensions.at(j).resetIterValues();
       }
@@ -294,15 +299,15 @@ private:
     if (isStreamDone()) {
       return false;
     }
-
+  /*
     for (const auto& [key, modifier] : modifiers) {
-      /*if (modifier.getType() == Modifier::Type::CfgVec) {
+      if (modifier.getType() == Modifier::Type::CfgVec) {
         if (isDimensionFullyDone(dimensions.begin(), dimensions.begin() + key + 1)) {
           return false;
         }
-      }*/
+      }
     }
-
+  */
     return true;
   }
 
@@ -324,7 +329,9 @@ private:
 
     std::size_t eCount = maxAmountElements;
     while (eCount > 0 && canGenerateOffset()) {
+      //std::cout << "Iteration: " << eCount << std::endl;
       std::size_t offset = generateOffset();
+      //std::cout << "Offset: " << offset << std::endl;
       auto value = [](auto address) -> ElementsType {
           if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
               return readAS<ElementsType>(gMMU.template load<std::uint8_t>(address));
@@ -353,9 +360,11 @@ private:
 
     //std::cout << "Storing " << elements.size() << " elements. eCount=" << maxAmountElements << std::endl;
 
-    std::size_t eCount = maxAmountElements;
+    std::size_t eCount = std::min(maxAmountElements, elements.size());
     while (eCount > 0 && canGenerateOffset()) {
+      //std::cout << "Generating offset" << std::endl;
       std::size_t offset = generateOffset();
+      //std::cout << "Offset: " << offset << std::endl;
       auto value = elements.front();
       elements.erase(elements.begin());
       if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
@@ -373,12 +382,23 @@ private:
     elements.clear();
   }
 
-  void updateAsDuplicate()
+};
+
+template <typename T>
+struct PredRegister
+{
+  static constexpr size_t registerLength = 64; // in Bytes
+  using ElementsType = T;
+  static constexpr size_t elementsWidth = sizeof(ElementsType);
+  static constexpr size_t maxAmountElements = registerLength / elementsWidth;
+
+  PredRegister(std::vector<ElementsType> e)
   {
-    elements = std::vector(maxAmountElements, duplicateValue);
+    elements = e;
   }
 
-
+  private:
+  std::vector<ElementsType> elements;
 };
 
 using StreamReg8 = StreamRegister<std::uint8_t>;
@@ -386,10 +406,16 @@ using StreamReg16 = StreamRegister<std::uint16_t>;
 using StreamReg32 = StreamRegister<std::uint32_t>;
 using StreamReg64 = StreamRegister<std::uint64_t>;
 
+using PredReg8 = PredRegister<std::uint8_t>;
+using PredReg16 = PredRegister<std::uint16_t>;
+using PredReg32 = PredRegister<std::uint32_t>;
+using PredReg64 = PredRegister<std::uint64_t>;
+
 struct StreamingUnit
 {
   /* UVE specification is to have 32 streaming/vectorial registers */
   static constexpr std::size_t registerCount = 32;
+  static constexpr std::size_t predRegCount = 16;
   /* There are 2 types at play when implementing the UVE specification. A storage
   type, which is how values get stored, and a computation type, the type a value
   should have when doing computations. Using a variant allows us to have almost
@@ -397,29 +423,52 @@ struct StreamingUnit
   be contained in a register at a given moment. During computations, we might need
   a raw cast to a signed or floating-point value.  */
   using RegisterType = std::variant<StreamReg8, StreamReg16, StreamReg32, StreamReg64>;
+  using PredType = std::variant<PredReg8, PredReg16, PredReg32, PredReg64>;
   /* Property defined as public so that this class can be small and have most
   operations happen outside of it */
   std::array<RegisterType, registerCount> registers;
+  std::array<PredType, registerCount> predicates;
 };
 
 template <typename T, typename Arg = T>
-auto makeStreamRegister(RegisterType type = RegisterType::Temporary, Arg init = 0)
+auto makeStreamRegister(RegisterType type = RegisterType::Temporary)
 {
   if constexpr (std::is_same_v<T, std::uint8_t>) {
-    return StreamReg8{type, readAS<T>(init)};
+    return StreamReg8{type};
   }
   else if constexpr (std::is_same_v<T, std::uint16_t>) {
-    return StreamReg16{type, readAS<T>(init)};
+    return StreamReg16{type};
   }
   else if constexpr (std::is_same_v<T, std::uint32_t>) {
-    return StreamReg32{type, readAS<T>(init)};
+    return StreamReg32{type};
   }
   else if constexpr (std::is_same_v<T, std::uint64_t>) {
-    return StreamReg64{type, readAS<T>(init)};
+    return StreamReg64{type};
   }
   else {
     static_assert(always_false_v<T>,
       "Cannot create register with this element width");
+  }
+}
+
+template <typename T, typename Arg = T>
+auto makePredRegister(std::vector<T> elements)
+{
+  if constexpr (std::is_same_v<T, std::uint8_t>) {
+    return PredReg8{elements};
+  }
+  else if constexpr (std::is_same_v<T, std::uint16_t>) {
+    return PredReg16{elements};
+  }
+  else if constexpr (std::is_same_v<T, std::uint32_t>) {
+    return PredReg32{elements};
+  }
+  else if constexpr (std::is_same_v<T, std::uint64_t>) {
+    return PredReg64{elements};
+  }
+  else {
+    static_assert(always_false_v<T>,
+      "Cannot create predicate register with this element width");
   }
 }
 

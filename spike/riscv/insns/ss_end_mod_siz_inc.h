@@ -1,15 +1,17 @@
-auto streamReg = insn.uve_comp_dest();
-auto dispReg = insn.uve_comp_src1();
-auto sizeReg = insn.uve_comp_src2();
+auto streamReg = insn.uve_mod_dest();
+auto sizeReg = insn.uve_mod_size();
+auto dispReg = insn.uve_mod_disp();
 
-int32_t displacement = READ_REG(dispReg);
 int32_t size = READ_REG(sizeReg);
+int32_t disp = READ_REG(dispReg);
 
-//std::cout << "END MOD SIZ INC" << std::endl;
+/* For debug, print the indexes of each register as well as their contents 
+fprintf(stderr, "UVE    Register u%ld\n", streamReg);
+fprintf(stderr, "RISC-V Register x%2ld: %d (Size)\n", sizeReg, size);
+fprintf(stderr, "RISC-V Register x%2ld: %d (Displacement)\n", dispReg, disp);
+*/
 
 operateRegister(P.SU, streamReg, [=](auto& reg) {
-  reg.addModifier(Modifier(Modifier::Type::Static, Modifier::Target::Size, Modifier::Behaviour::Increment, displacement, size));
+  reg.addModifier(Modifier(Modifier::Type::Static, Modifier::Target::Size, Modifier::Behaviour::Increment, disp, size));
   reg.endConfiguration();
 });
-
-//std::cout << "END END MOD SIZ INC" << std::endl;

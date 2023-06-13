@@ -18,8 +18,8 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
 
 	asm volatile(
 		".uve_loop%=: \t\n"
-    "so.a.mul.fp u5, u1, u4, p0\n\t"
-    "so.a.add.fp u3, u10, u5, p0 \n\t"
+      "so.a.mul.fp u5, u1, u4, p0\n\t"
+      "so.a.add.fp u3, u10, u5, p0 \n\t"
     "so.b.nc u1, .uve_loop%= \n\t" :::);
 
 }
