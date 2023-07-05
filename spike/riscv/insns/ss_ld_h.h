@@ -1,4 +1,5 @@
 auto streamReg = insn.uve_conf_destination();
+auto &destReg = P.SU.registers[streamReg];
 auto baseReg = insn.uve_conf_base();
 auto sizeReg = insn.uve_conf_size();
 auto strideReg = insn.uve_conf_stride();
@@ -29,8 +30,12 @@ for (int32_t i = 0; i < size; i++) {
 }
 */
 
-P.SU.registers[streamReg] = makeStreamRegister<std::uint16_t>(RegisterType::Load);
-operateRegister(P.SU, streamReg, [=](auto& reg) {
+P.SU.makeStreamRegister<std::uint16_t>(RegisterConfig::Load, streamReg);
+/*operateRegister(P.SU, streamReg, [=](auto& reg) {
     reg.startConfiguration({ base, size, stride });
     reg.endConfiguration();
-});
+});*/
+std::visit([&](auto& reg){
+    reg.startConfiguration({ base, size, stride });
+    reg.endConfiguration();
+}, destReg);

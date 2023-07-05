@@ -28,7 +28,7 @@
 #undef STATE
 #define STATE state
 
-processor_t *globalProcessor;
+//processor_t *globalProcessor;
 
 processor_t::processor_t(const isa_parser_t *isa, const cfg_t *cfg,
                          simif_t* sim, uint32_t id, bool halt_on_reset,
@@ -39,8 +39,8 @@ processor_t::processor_t(const isa_parser_t *isa, const cfg_t *cfg,
   in_wfi(false),
   impl_table(256, false), last_pc(1), executions(1), TM(4)
 {
-  globalProcessor = this;
   VU.p = this;
+  SU.p = this; // UVE
   TM.proc = this;
 
 #ifndef __SIZEOF_INT128__

@@ -1,4 +1,4 @@
-auto streamReg = insn.uve_mod_dest();
+auto &destReg = P.SU.registers[insn.uve_mod_dest()];
 auto sizeReg = insn.uve_mod_size();
 auto dispReg = insn.uve_mod_disp();
 
@@ -11,7 +11,7 @@ fprintf(stderr, "RISC-V Register x%2ld: %d (Size)\n", sizeReg, size);
 fprintf(stderr, "RISC-V Register x%2ld: %d (Displacement)\n", dispReg, disp);
 */
 
-operateRegister(P.SU, streamReg, [=](auto& reg) {
-  reg.addModifier(Modifier(Modifier::Type::Static, Modifier::Target::Size, Modifier::Behaviour::Increment, disp, size));
-  reg.endConfiguration();
-});
+std::visit([&](auto &reg) {
+    reg.addModifier(Modifier(Modifier::Type::Static, Modifier::Target::Size, Modifier::Behaviour::Increment, disp, size));
+    reg.endConfiguration();
+}, destReg);

@@ -13,15 +13,15 @@ auto baseBehaviour = [](auto& dest, const auto value) {
 };
 
 // If the destination register is a temporary, we have to build it before the operation so that its element size matches before any calculations are done
-const bool makeTemporary = std::visit([](const auto& dest){
-  return dest.getStatus() != RegisterStatus::Running;
+std::visit([&](auto &dest) {
+    if (dest.getStatus() != RegisterStatus::Running) {
+        P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::Temporary, streamReg);
+        /*operateRegister(P.SU, streamReg, [=](auto& reg) {
+          reg.endConfiguration();
+        });*/
+        dest.endConfiguration();
+    }
 }, destReg);
-if (makeTemporary) {
-    destReg = makeStreamRegister<std::uint64_t>(RegisterType::Temporary);
-    operateRegister(P.SU, streamReg, [=](auto& reg) {
-      reg.endConfiguration();
-    });
-}
 
 std::visit(overloaded {
     [&, value](StreamReg64& dest) { baseBehaviour(dest, value); },

@@ -15,7 +15,6 @@ riscv_install_prog_srcs = \
 
 riscv_install_hdrs = \
 	abstract_device.h \
-	Dimension.h \
 	abstract_interrupt_controller.h \
 	cachesim.h \
 	cfg.h \
@@ -39,13 +38,14 @@ riscv_install_hdrs = \
 	trap.h \
 	triggers.h \
 	vector_unit.h \
+	dimension.h \
+	streaming_unit.h \
 
 riscv_precompiled_hdrs = \
 	insn_template.h \
 
 riscv_srcs = \
 	isa_parser.cc \
-	Dimension.cc \
 	processor.cc \
 	execute.cc \
 	dts.cc \
@@ -67,6 +67,8 @@ riscv_srcs = \
 	csrs.cc \
 	triggers.cc \
 	vector_unit.cc \
+	dimension.cc \
+	streaming_unit.cc \
 	socketif.cc \
 	cfg.cc \
 	$(riscv_gen_srcs) \
@@ -1308,32 +1310,33 @@ riscv_insn_ext_cmo = \
 	cbo_zero \
 
 riscv_insn_ext_uve = \
-	ss_ld_b \
-	ss_ld_h \
-	ss_ld_w \
-	ss_ld_d \
-	ss_st_b \
-	ss_st_h \
-	ss_st_w \
-	ss_st_d \
-	ss_sta_ld_w \
-	ss_sta_ld_d \
-	ss_sta_st_d \
-	ss_app \
-	ss_end \
-	ss_end_mod_siz_inc \
-	so_v_mv \
-	so_b_nc \
-	so_b_ndc_1 \
 	so_a_add_fp \
 	so_a_adde_fp \
-	so_a_sub_fp \
-	so_a_mul_fp \
 	so_a_div_fp \
+	so_a_mul_fp \
+	so_a_sub_fp \
+	so_b_nc \
+	so_b_ndc_1 \
 	so_v_dp_b \
+	so_v_dp_d \
 	so_v_dp_h \
 	so_v_dp_w \
-	so_v_dp_d \
+	so_v_mv \
+	ss_app \
+	ss_cfg_vec \
+	ss_end \
+	ss_end_mod_siz_inc \
+	ss_ld_b \
+	ss_ld_d \
+	ss_ld_h \
+	ss_ld_w \
+	ss_st_b \
+	ss_st_d \
+	ss_st_h \
+	ss_st_w \
+	ss_sta_ld_d \
+	ss_sta_ld_w \
+	ss_sta_st_d \
 	
 
 riscv_insn_list = \

@@ -1,11 +1,21 @@
-auto streamReg = insn.uve_branch_reg();
+auto regN = insn.uve_branch_reg();
+auto& streamReg = P.SU.registers[regN];
 auto branchIMM = insn.uve_branch_imm();
 
-const bool notComplete = operateRegister(P.SU, streamReg, [=](auto& reg) {
+/*
+const bool notComplete = std::visit([](const auto &reg){
     return !reg.isEndOfDimensionOfDim(0);
-});
+}, streamReg);
+*/
 
-if (notComplete){
-    std::cout << "not complete" << std::endl;
+/*auto streamReg = insn.uve_branch_reg();
+auto branchIMM = insn.uve_branch_imm();
+
+const bool notComplete = operateRegister(P.SU, streamReg, [=](auto &reg) {
+    return !reg.isEndOfDimensionOfDim(0);
+});*/
+
+//if (notComplete)
+
+if (!P.SU.EODTable.at(regN).at(0))
     set_pc(pc + branchIMM);
-}
