@@ -58,11 +58,11 @@ class streamRegister_t {
     std::vector<bool> vecCfg;
 
     void updateStreamValues();
-    size_t generateOffset();
+    std::size_t generateOffset();
     bool isDimensionFullyDone(const std::vector<Dimension>::const_iterator start, const std::vector<Dimension>::const_iterator end) const;
     bool isStreamDone() const;
-    bool canGenerateOffset() const;
-    void updateIteration(bool clearEOD = true);
+    bool tryGenerateOffset(std::size_t& address);
+    void updateIteration();
     void updateAsLoad();
     void updateAsStore();
 

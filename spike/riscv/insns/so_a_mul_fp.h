@@ -19,6 +19,7 @@ auto baseBehaviour = [](auto& dest, auto& src1, auto& src2, auto extra) {
   auto elements1 = src1.getElements(true);
   auto elements2 = src2.getElements(true);
   auto validElementsIndex = std::min(elements1.size(), elements2.size());
+  std::cout << "MUL s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
   if(validElementsIndex){
     /* Grab used types for storage and operation */
     using Storage = typename std::remove_reference_t<decltype(src1)>::ElementsType;

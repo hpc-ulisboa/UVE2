@@ -9,18 +9,18 @@ Dimension::Dimension(std::size_t offset, std::size_t size, std::size_t stride)
     iter_stride = stride;
     iter_index = 0;
     endOfDimension = iter_size == 0;
-    // endOfDimension = false;
+    //endOfDimension = false;
 }
 
-void Dimension::resetIndex() {
+/*void Dimension::resetIndex() {
     iter_index = 0;
-}
+}*/
 
-/*void Dimension::resetIterValues() {
+void Dimension::resetIterValues() {
     iter_offset = offset;
     iter_size = size;
     iter_stride = stride;
-}*/
+}
 
 bool Dimension::isEmpty() const {
     return iter_size == 0;

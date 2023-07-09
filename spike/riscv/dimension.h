@@ -8,9 +8,9 @@ struct Dimension
 {
   Dimension(std::size_t offset, std::size_t size, std::size_t stride);
 
-  void resetIndex();
+  //void resetIndex();
 
-  //void resetIterValues();
+  void resetIterValues();
 
   bool isEmpty() const;
 
