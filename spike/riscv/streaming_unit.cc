@@ -42,20 +42,20 @@ void streamRegister_t<T>::startConfiguration(Dimension dim) {
 template <typename T>
 void streamRegister_t<T>::endConfiguration() {
     status = RegisterStatus::Running;
-    if (this->type == RegisterConfig::Load) {
+    /*if (this->type == RegisterConfig::Load) {
       updateAsLoad();
-    }
+    }*/
 }
 
 template <typename T>
 std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
     assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
 
-    std::vector<T> e = elements;
-
     if (causesUpdate) {
         updateStreamValues();
     }
+
+    std::vector<T> e = elements;
 
     return e;
 }
@@ -64,7 +64,6 @@ template <typename T>
 void streamRegister_t<T>::setElements(bool causesUpdate, std::vector<T> e) {
     assert_msg("Trying to set values to a load stream", type != RegisterConfig::Load);
 
-    // if(e.size())
     elements = e;
 
     if (causesUpdate) {
@@ -211,12 +210,12 @@ void streamRegister_t<T>::updateIteration() {
         const bool modifierExists = currentModifierIter != modifiers.end();
 
         // currDim.resetIndex();
-        printRegN("Updating EOD of dimension.");
+        //printRegN("Updating EOD of dimension.");
 
         dimensions.at(i + 1).advance();
         currDim.setEndOfDimension(false);
         if (modifierExists) {
-            printRegN("Applying modifier.");
+            //printRegN("Applying modifier.");
             currentModifierIter->second.modDimension(currDim);
         }
 
@@ -295,11 +294,11 @@ void streamRegister_t<T>::updateAsStore() {
     // std::cout << "Storing " << elements.size() << " elements. eCount=" << maxAmountElements << std::endl;
     std::size_t offset;
     std::size_t eCount = std::min(maxAmountElements, elements.size());
-    while (eCount > 0 && tryGenerateOffset(offset)) {
-        // std::cout << "Generating offset" << std::endl;
-        // std::cout << "Offset: " << offset << std::endl;
+    while (eCount && tryGenerateOffset(offset)) {
         auto value = elements.front();
+        printf("Storing: %f\n", readAS<ElementsType>(value));
         elements.erase(elements.begin());
+        //elements.pop_front(); -- std::deque
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
             gMMU(su->p).template store<std::uint8_t>(offset, readAS<ElementsType>(value));
         else if constexpr (std::is_same_v<ElementsType, std::uint16_t>)
@@ -308,10 +307,15 @@ void streamRegister_t<T>::updateAsStore() {
             gMMU(su->p).template store<std::uint32_t>(offset, readAS<ElementsType>(value));
         else
             gMMU(su->p).template store<std::uint64_t>(offset, readAS<ElementsType>(value));
-        eCount--;
-        // if (canIterate())
-        updateIteration();
+        --eCount;
+        if(tryGenerateOffset(offset))
+            updateIteration(); // reset EOD flags and iterate stream
+        else
+            break;
     }
+    su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
+    if(eCount) // iteration is already updated when register is full (e.g. counter = 0)
+        updateIteration(); // reset EOD flags and iterate stream    
     elements.clear();
 }
 
@@ -321,7 +325,7 @@ void streamingUnit_t::updateEODTable(const std::size_t stream) {
         int d = 0;
         for (const auto dim : reg.dimensions) {
             EODTable.at(stream).at(d) = reg.vecCfg.at(d) && dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
-            fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
+            //fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
             ++d;
         }
     }, registers.at(stream));

@@ -28,118 +28,6 @@ x:
 1.0000	2.0000	3.0000	4.0000	5.0000	6.0000	7.0000	8.0000	9.0000	10.0000	11.0000	12.0000	13.0000	14.0000	15.0000	16.0000	17.0000	18.0000	19.0000	20.0000	
 
 Results (x):
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
 MUL s1: 0	 s2: 0
 ADDE Total: 0
 
@@ -182,6 +70,7 @@ DIV loaded elements (u4 - L(i,i))
 15: 1
 
 DIV element1: 1 element2: 1 result: 1
+Storing: 0.000000
 MUL s1: 1	 s2: 1
 MUL element1: 2 element2: 1 result: 2
 SUB element1: 0 element2: 2 result: -2
@@ -226,12 +115,13 @@ DIV loaded elements (u4 - L(i,i))
 15: 2
 
 DIV element1: 0 element2: 2 result: 0
+Storing: 0.000000
 MUL s1: 2	 s2: 2
 MUL element1: 3 element2: 1 result: 3
-MUL element1: 3 element2: 2 result: 6
+MUL element1: 3 element2: 0 result: 0
 SUB element1: 0 element2: 3 result: -3
-SUB element1: 0 element2: 6 result: -6
-ADDE Total: -9
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -3
 
 ADD loaded elements (u3 - b(i))
 0: 3
@@ -251,7 +141,7 @@ ADD loaded elements (u3 - b(i))
 14: 3
 15: 3
 
-ADD element1: 3 element2: -9 result: -6
+ADD element1: 3 element2: -3 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 3
@@ -271,15 +161,16 @@ DIV loaded elements (u4 - L(i,i))
 14: 3
 15: 3
 
-DIV element1: -6 element2: 3 result: -2
+DIV element1: 0 element2: 3 result: 0
+Storing: 0.000000
 MUL s1: 3	 s2: 3
 MUL element1: 4 element2: 1 result: 4
 MUL element1: 4 element2: 0 result: 0
-MUL element1: 4 element2: 3 result: 12
+MUL element1: 4 element2: 0 result: 0
 SUB element1: 0 element2: 4 result: -4
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 12 result: -12
-ADDE Total: -16
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -4
 
 ADD loaded elements (u3 - b(i))
 0: 4
@@ -299,7 +190,7 @@ ADD loaded elements (u3 - b(i))
 14: 4
 15: 4
 
-ADD element1: 4 element2: -16 result: -12
+ADD element1: 4 element2: -4 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 4
@@ -319,17 +210,18 @@ DIV loaded elements (u4 - L(i,i))
 14: 4
 15: 4
 
-DIV element1: -12 element2: 4 result: -3
+DIV element1: 0 element2: 4 result: 0
+Storing: 0.000000
 MUL s1: 4	 s2: 4
 MUL element1: 5 element2: 1 result: 5
 MUL element1: 5 element2: 0 result: 0
-MUL element1: 5 element2: -2 result: -10
-MUL element1: 5 element2: 4 result: 20
+MUL element1: 5 element2: 0 result: 0
+MUL element1: 5 element2: 0 result: 0
 SUB element1: 0 element2: 5 result: -5
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -10 result: 10
-SUB element1: 0 element2: 20 result: -20
-ADDE Total: -15
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -5
 
 ADD loaded elements (u3 - b(i))
 0: 5
@@ -349,7 +241,7 @@ ADD loaded elements (u3 - b(i))
 14: 5
 15: 5
 
-ADD element1: 5 element2: -15 result: -10
+ADD element1: 5 element2: -5 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 5
@@ -369,18 +261,19 @@ DIV loaded elements (u4 - L(i,i))
 14: 5
 15: 5
 
-DIV element1: -10 element2: 5 result: -2
+DIV element1: 0 element2: 5 result: 0
+Storing: 0.000000
 MUL s1: 5	 s2: 5
 MUL element1: 6 element2: 1 result: 6
 MUL element1: 6 element2: 0 result: 0
-MUL element1: 6 element2: -2 result: -12
-MUL element1: 6 element2: -3 result: -18
-MUL element1: 6 element2: 5 result: 30
+MUL element1: 6 element2: 0 result: 0
+MUL element1: 6 element2: 0 result: 0
+MUL element1: 6 element2: 0 result: 0
 SUB element1: 0 element2: 6 result: -6
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -12 result: 12
-SUB element1: 0 element2: -18 result: 18
-SUB element1: 0 element2: 30 result: -30
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
 ADDE Total: -6
 
 ADD loaded elements (u3 - b(i))
@@ -422,20 +315,21 @@ DIV loaded elements (u4 - L(i,i))
 15: 6
 
 DIV element1: 0 element2: 6 result: 0
+Storing: 0.000000
 MUL s1: 6	 s2: 6
 MUL element1: 7 element2: 1 result: 7
 MUL element1: 7 element2: 0 result: 0
-MUL element1: 7 element2: -2 result: -14
-MUL element1: 7 element2: -3 result: -21
-MUL element1: 7 element2: -2 result: -14
-MUL element1: 7 element2: 6 result: 42
+MUL element1: 7 element2: 0 result: 0
+MUL element1: 7 element2: 0 result: 0
+MUL element1: 7 element2: 0 result: 0
+MUL element1: 7 element2: 0 result: 0
 SUB element1: 0 element2: 7 result: -7
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -14 result: 14
-SUB element1: 0 element2: -21 result: 21
-SUB element1: 0 element2: -14 result: 14
-SUB element1: 0 element2: 42 result: -42
-ADDE Total: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -7
 
 ADD loaded elements (u3 - b(i))
 0: 7
@@ -455,7 +349,7 @@ ADD loaded elements (u3 - b(i))
 14: 7
 15: 7
 
-ADD element1: 7 element2: 0 result: 7
+ADD element1: 7 element2: -7 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 7
@@ -475,78 +369,23 @@ DIV loaded elements (u4 - L(i,i))
 14: 7
 15: 7
 
-DIV elemeEOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-nt1: 7 element2: 7 result: 1
+DIV element1: 0 element2: 7 result: 0
+Storing: 0.000000
 MUL s1: 7	 s2: 7
 MUL element1: 8 element2: 1 result: 8
 MUL element1: 8 element2: 0 result: 0
-MUL element1: 8 element2: -2 result: -16
-MUL element1: 8 element2: -3 result: -24
-MUL element1: 8 element2: -2 result: -16
 MUL element1: 8 element2: 0 result: 0
-MUL element1: 8 element2: 7 result: 56
+MUL element1: 8 element2: 0 result: 0
+MUL element1: 8 element2: 0 result: 0
+MUL element1: 8 element2: 0 result: 0
+MUL element1: 8 element2: 0 result: 0
 SUB element1: 0 element2: 8 result: -8
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -16 result: 16
-SUB element1: 0 element2: -24 result: 24
-SUB element1: 0 element2: -16 result: 16
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 56 result: -56
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
 ADDE Total: -8
 
 ADD loaded elements (u3 - b(i))
@@ -588,24 +427,25 @@ DIV loaded elements (u4 - L(i,i))
 15: 8
 
 DIV element1: 0 element2: 8 result: 0
+Storing: 0.000000
 MUL s1: 8	 s2: 8
 MUL element1: 9 element2: 1 result: 9
 MUL element1: 9 element2: 0 result: 0
-MUL element1: 9 element2: -2 result: -18
-MUL element1: 9 element2: -3 result: -27
-MUL element1: 9 element2: -2 result: -18
 MUL element1: 9 element2: 0 result: 0
-MUL element1: 9 element2: 1 result: 9
-MUL element1: 9 element2: 8 result: 72
+MUL element1: 9 element2: 0 result: 0
+MUL element1: 9 element2: 0 result: 0
+MUL element1: 9 element2: 0 result: 0
+MUL element1: 9 element2: 0 result: 0
+MUL element1: 9 element2: 0 result: 0
 SUB element1: 0 element2: 9 result: -9
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -18 result: 18
-SUB element1: 0 element2: -27 result: 27
-SUB element1: 0 element2: -18 result: 18
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 9 result: -9
-SUB element1: 0 element2: 72 result: -72
-ADDE Total: -27
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -9
 
 ADD loaded elements (u3 - b(i))
 0: 9
@@ -625,7 +465,7 @@ ADD loaded elements (u3 - b(i))
 14: 9
 15: 9
 
-ADD element1: 9 element2: -27 result: -18
+ADD element1: 9 element2: -9 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 9
@@ -645,27 +485,28 @@ DIV loaded elements (u4 - L(i,i))
 14: 9
 15: 9
 
-DIV element1: -18 element2: 9 result: -2
+DIV element1: 0 element2: 9 result: 0
+Storing: 0.000000
 MUL s1: 9	 s2: 9
 MUL element1: 10 element2: 1 result: 10
 MUL element1: 10 element2: 0 result: 0
-MUL element1: 10 element2: -2 result: -20
-MUL element1: 10 element2: -3 result: -30
-MUL element1: 10 element2: -2 result: -20
 MUL element1: 10 element2: 0 result: 0
-MUL element1: 10 element2: 1 result: 10
 MUL element1: 10 element2: 0 result: 0
-MUL element1: 10 element2: 9 result: 90
+MUL element1: 10 element2: 0 result: 0
+MUL element1: 10 element2: 0 result: 0
+MUL element1: 10 element2: 0 result: 0
+MUL element1: 10 element2: 0 result: 0
+MUL element1: 10 element2: 0 result: 0
 SUB element1: 0 element2: 10 result: -10
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -20 result: 20
-SUB element1: 0 element2: -30 result: 30
-SUB element1: 0 element2: -20 result: 20
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 10 result: -10
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 90 result: -90
-ADDE Total: -40
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -10
 
 ADD loaded elements (u3 - b(i))
 0: 10
@@ -685,7 +526,7 @@ ADD loaded elements (u3 - b(i))
 14: 10
 15: 10
 
-ADD element1: 10 element2: -40 result: -30
+ADD element1: 10 element2: -10 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 10
@@ -705,29 +546,30 @@ DIV loaded elements (u4 - L(i,i))
 14: 10
 15: 10
 
-DIV element1: -30 element2: 10 result: -3
+DIV element1: 0 element2: 10 result: 0
+Storing: 0.000000
 MUL s1: 10	 s2: 10
 MUL element1: 11 element2: 1 result: 11
 MUL element1: 11 element2: 0 result: 0
-MUL element1: 11 element2: -2 result: -22
-MUL element1: 11 element2: -3 result: -33
-MUL element1: 11 element2: -2 result: -22
 MUL element1: 11 element2: 0 result: 0
-MUL element1: 11 element2: 1 result: 11
 MUL element1: 11 element2: 0 result: 0
-MUL element1: 11 element2: -2 result: -22
-MUL element1: 11 element2: 10 result: 110
+MUL element1: 11 element2: 0 result: 0
+MUL element1: 11 element2: 0 result: 0
+MUL element1: 11 element2: 0 result: 0
+MUL element1: 11 element2: 0 result: 0
+MUL element1: 11 element2: 0 result: 0
+MUL element1: 11 element2: 0 result: 0
 SUB element1: 0 element2: 11 result: -11
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -22 result: 22
-SUB element1: 0 element2: -33 result: 33
-SUB element1: 0 element2: -22 result: 22
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 11 result: -11
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -22 result: 22
-SUB element1: 0 element2: 110 result: -110
-ADDE Total: -33
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -11
 
 ADD loaded elements (u3 - b(i))
 0: 11
@@ -747,51 +589,9 @@ ADD loaded elements (u3 - b(i))
 14: 11
 15: 11
 
-ADD element1: 11 element2: -33 result: -22
+ADD element1: 11 element2: -11 result: 0
 
-DIV loaded elements (u4 - L(i,iEOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-))
+DIV loaded elements (u4 - L(i,i))
 0: 11
 1: 11
 2: 11
@@ -809,30 +609,31 @@ EOD of u4: 0
 14: 11
 15: 11
 
-DIV element1: -22 element2: 11 result: -2
+DIV element1: 0 element2: 11 result: 0
+Storing: 0.000000
 MUL s1: 11	 s2: 11
 MUL element1: 12 element2: 1 result: 12
 MUL element1: 12 element2: 0 result: 0
-MUL element1: 12 element2: -2 result: -24
-MUL element1: 12 element2: -3 result: -36
-MUL element1: 12 element2: -2 result: -24
 MUL element1: 12 element2: 0 result: 0
-MUL element1: 12 element2: 1 result: 12
 MUL element1: 12 element2: 0 result: 0
-MUL element1: 12 element2: -2 result: -24
-MUL element1: 12 element2: -3 result: -36
-MUL element1: 12 element2: 11 result: 132
+MUL element1: 12 element2: 0 result: 0
+MUL element1: 12 element2: 0 result: 0
+MUL element1: 12 element2: 0 result: 0
+MUL element1: 12 element2: 0 result: 0
+MUL element1: 12 element2: 0 result: 0
+MUL element1: 12 element2: 0 result: 0
+MUL element1: 12 element2: 0 result: 0
 SUB element1: 0 element2: 12 result: -12
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -24 result: 24
-SUB element1: 0 element2: -36 result: 36
-SUB element1: 0 element2: -24 result: 24
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 12 result: -12
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -24 result: 24
-SUB element1: 0 element2: -36 result: 36
-SUB element1: 0 element2: 132 result: -132
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
 ADDE Total: -12
 
 ADD loaded elements (u3 - b(i))
@@ -874,32 +675,33 @@ DIV loaded elements (u4 - L(i,i))
 15: 12
 
 DIV element1: 0 element2: 12 result: 0
+Storing: 0.000000
 MUL s1: 12	 s2: 12
 MUL element1: 13 element2: 1 result: 13
 MUL element1: 13 element2: 0 result: 0
-MUL element1: 13 element2: -2 result: -26
-MUL element1: 13 element2: -3 result: -39
-MUL element1: 13 element2: -2 result: -26
 MUL element1: 13 element2: 0 result: 0
-MUL element1: 13 element2: 1 result: 13
 MUL element1: 13 element2: 0 result: 0
-MUL element1: 13 element2: -2 result: -26
-MUL element1: 13 element2: -3 result: -39
-MUL element1: 13 element2: -2 result: -26
-MUL element1: 13 element2: 12 result: 156
+MUL element1: 13 element2: 0 result: 0
+MUL element1: 13 element2: 0 result: 0
+MUL element1: 13 element2: 0 result: 0
+MUL element1: 13 element2: 0 result: 0
+MUL element1: 13 element2: 0 result: 0
+MUL element1: 13 element2: 0 result: 0
+MUL element1: 13 element2: 0 result: 0
+MUL element1: 13 element2: 0 result: 0
 SUB element1: 0 element2: 13 result: -13
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -26 result: 26
-SUB element1: 0 element2: -39 result: 39
-SUB element1: 0 element2: -26 result: 26
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 13 result: -13
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -26 result: 26
-SUB element1: 0 element2: -39 result: 39
-SUB element1: 0 element2: -26 result: 26
-SUB element1: 0 element2: 156 result: -156
-ADDE Total: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -13
 
 ADD loaded elements (u3 - b(i))
 0: 13
@@ -919,7 +721,7 @@ ADD loaded elements (u3 - b(i))
 14: 13
 15: 13
 
-ADD element1: 13 element2: 0 result: 13
+ADD element1: 13 element2: -13 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 13
@@ -939,34 +741,35 @@ DIV loaded elements (u4 - L(i,i))
 14: 13
 15: 13
 
-DIV element1: 13 element2: 13 result: 1
+DIV element1: 0 element2: 13 result: 0
+Storing: 0.000000
 MUL s1: 13	 s2: 13
 MUL element1: 14 element2: 1 result: 14
 MUL element1: 14 element2: 0 result: 0
-MUL element1: 14 element2: -2 result: -28
-MUL element1: 14 element2: -3 result: -42
-MUL element1: 14 element2: -2 result: -28
 MUL element1: 14 element2: 0 result: 0
-MUL element1: 14 element2: 1 result: 14
 MUL element1: 14 element2: 0 result: 0
-MUL element1: 14 element2: -2 result: -28
-MUL element1: 14 element2: -3 result: -42
-MUL element1: 14 element2: -2 result: -28
 MUL element1: 14 element2: 0 result: 0
-MUL element1: 14 element2: 13 result: 182
+MUL element1: 14 element2: 0 result: 0
+MUL element1: 14 element2: 0 result: 0
+MUL element1: 14 element2: 0 result: 0
+MUL element1: 14 element2: 0 result: 0
+MUL element1: 14 element2: 0 result: 0
+MUL element1: 14 element2: 0 result: 0
+MUL element1: 14 element2: 0 result: 0
+MUL element1: 14 element2: 0 result: 0
 SUB element1: 0 element2: 14 result: -14
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -28 result: 28
-SUB element1: 0 element2: -42 result: 42
-SUB element1: 0 element2: -28 result: 28
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 14 result: -14
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -28 result: 28
-SUB element1: 0 element2: -42 result: 42
-SUB element1: 0 element2: -28 result: 28
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 182 result: -182
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
 ADDE Total: -14
 
 ADD loaded elements (u3 - b(i))
@@ -990,39 +793,7 @@ ADD loaded elements (u3 - b(i))
 ADD element1: 14 element2: -14 result: 0
 
 DIV loaded elements (u4 - L(i,i))
-0: EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
-14
+0: 14
 1: 14
 2: 14
 3: 14
@@ -1040,36 +811,37 @@ EOD of u2: 0
 15: 14
 
 DIV element1: 0 element2: 14 result: 0
+Storing: 0.000000
 MUL s1: 14	 s2: 14
 MUL element1: 15 element2: 1 result: 15
 MUL element1: 15 element2: 0 result: 0
-MUL element1: 15 element2: -2 result: -30
-MUL element1: 15 element2: -3 result: -45
-MUL element1: 15 element2: -2 result: -30
 MUL element1: 15 element2: 0 result: 0
-MUL element1: 15 element2: 1 result: 15
 MUL element1: 15 element2: 0 result: 0
-MUL element1: 15 element2: -2 result: -30
-MUL element1: 15 element2: -3 result: -45
-MUL element1: 15 element2: -2 result: -30
 MUL element1: 15 element2: 0 result: 0
-MUL element1: 15 element2: 1 result: 15
-MUL element1: 15 element2: 14 result: 210
+MUL element1: 15 element2: 0 result: 0
+MUL element1: 15 element2: 0 result: 0
+MUL element1: 15 element2: 0 result: 0
+MUL element1: 15 element2: 0 result: 0
+MUL element1: 15 element2: 0 result: 0
+MUL element1: 15 element2: 0 result: 0
+MUL element1: 15 element2: 0 result: 0
+MUL element1: 15 element2: 0 result: 0
+MUL element1: 15 element2: 0 result: 0
 SUB element1: 0 element2: 15 result: -15
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -30 result: 30
-SUB element1: 0 element2: -45 result: 45
-SUB element1: 0 element2: -30 result: 30
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 15 result: -15
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -30 result: 30
-SUB element1: 0 element2: -45 result: 45
-SUB element1: 0 element2: -30 result: 30
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 15 result: -15
-SUB element1: 0 element2: 210 result: -210
-ADDE Total: -45
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -15
 
 ADD loaded elements (u3 - b(i))
 0: 15
@@ -1089,7 +861,7 @@ ADD loaded elements (u3 - b(i))
 14: 15
 15: 15
 
-ADD element1: 15 element2: -45 result: -30
+ADD element1: 15 element2: -15 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 15
@@ -1109,39 +881,40 @@ DIV loaded elements (u4 - L(i,i))
 14: 15
 15: 15
 
-DIV element1: -30 element2: 15 result: -2
+DIV element1: 0 element2: 15 result: 0
+Storing: 0.000000
 MUL s1: 15	 s2: 15
 MUL element1: 16 element2: 1 result: 16
 MUL element1: 16 element2: 0 result: 0
-MUL element1: 16 element2: -2 result: -32
-MUL element1: 16 element2: -3 result: -48
-MUL element1: 16 element2: -2 result: -32
 MUL element1: 16 element2: 0 result: 0
-MUL element1: 16 element2: 1 result: 16
 MUL element1: 16 element2: 0 result: 0
-MUL element1: 16 element2: -2 result: -32
-MUL element1: 16 element2: -3 result: -48
-MUL element1: 16 element2: -2 result: -32
 MUL element1: 16 element2: 0 result: 0
-MUL element1: 16 element2: 1 result: 16
 MUL element1: 16 element2: 0 result: 0
-MUL element1: 16 element2: 15 result: 240
+MUL element1: 16 element2: 0 result: 0
+MUL element1: 16 element2: 0 result: 0
+MUL element1: 16 element2: 0 result: 0
+MUL element1: 16 element2: 0 result: 0
+MUL element1: 16 element2: 0 result: 0
+MUL element1: 16 element2: 0 result: 0
+MUL element1: 16 element2: 0 result: 0
+MUL element1: 16 element2: 0 result: 0
+MUL element1: 16 element2: 0 result: 0
 SUB element1: 0 element2: 16 result: -16
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -32 result: 32
-SUB element1: 0 element2: -48 result: 48
-SUB element1: 0 element2: -32 result: 32
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 16 result: -16
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -32 result: 32
-SUB element1: 0 element2: -48 result: 48
-SUB element1: 0 element2: -32 result: 32
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 16 result: -16
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 240 result: -240
-ADDE Total: -64
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -16
 
 ADD loaded elements (u3 - b(i))
 0: 16
@@ -1161,7 +934,7 @@ ADD loaded elements (u3 - b(i))
 14: 16
 15: 16
 
-ADD element1: 16 element2: -64 result: -48
+ADD element1: 16 element2: -16 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 16
@@ -1181,91 +954,42 @@ DIV loaded elements (u4 - L(i,i))
 14: 16
 15: 16
 
-DIV element1: -48 element2: 16 result: -3
+DIV element1: 0 element2: 16 result: 0
+Storing: 0.000000
 MUL s1: 16	 s2: 16
 MUL element1: 17 element2: 1 result: 17
 MUL element1: 17 element2: 0 result: 0
-MUL element1: 17 element2: -2 result: -34
-MUL element1: 17 element2: -3 result: -51
-MUL element1: 17 element2: -2 result: -34
 MUL element1: 17 element2: 0 result: 0
-MUL element1: 17 element2: 1 result: 17
 MUL element1: 17 element2: 0 result: 0
-MUL element1: 17 element2: -2 result: -34
-MUL element1: 17 element2: -3 result: -51
-MUL element1: 17 element2: -2 result: -34
 MUL element1: 17 element2: 0 result: 0
-MUL element1: 17 element2: 1 result: 17
 MUL element1: 17 element2: 0 result: 0
-MUL element1: 17 element2: -2 result: -34
-MUL element1: 17 element2: 16 result: 272
+MUL element1: 17 element2: 0 result: 0
+MUL element1: 17 element2: 0 result: 0
+MUL element1: 17 element2: 0 result: 0
+MUL element1: 17 element2: 0 result: 0
+MUL element1: 17 element2: 0 result: 0
+MUL element1: 17 element2: 0 result: 0
+MUL element1: 17 element2: 0 result: 0
+MUL element1: 17 element2: 0 result: 0
+MUL element1: 17 element2: 0 result: 0
+MUL element1: 17 element2: 0 result: 0
 SUB element1: 0 element2: 17 result: -17
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -34 result: 34
-SUB element1: 0 element2: -51 resu>>> UVE Register u3 Updating EOD of dimension. <<<
-EOD of u3: 0
-EOD of u3: 0
->>> UVE Register u4 Updating EOD of dimension. <<<
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 0
-EOD of u1: 0
-EOD of u2: 0
-EOD of u2: 0
-EOD of u1: 1
-EOD of u1: 0
->>> UVE Register u1 Updating EOD of dimension. <<<
->>> UVE Register u1 Applying modifier. <<<
-EOD of u2: 1
-EOD of u2: 0
->>> UVE Register u2 Updating EOD of dimension. <<<
->>> UVE Register u2 Applying modifier. <<<
-EOD of u3: 0
-EOD of u3: 0
-EOD of u4: 0
-EOD of u4: 0
-EOD of u1: 0
-EOD of u1: 0
-EOD of u2: 0
-EOD of u2: 0
-EOD of u1: 1
-EOD of u1: 0
-EOD of u2: 1
-EOD of u2: 0
-1.0000
-0.0000
--2.0000
--3.0000
--2.0000
-0.0000
-1.0000
-0.0000
--2.0000
--3.0000
--2.0000
-0.0000
-1.0000
-0.0000
--2.0000
--3.0000
--2.0000
-1.8889
-1.8947
-20.0000
-lt: 51
-SUB element1: 0 element2: -34 result: 34
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 17 result: -17
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -34 result: 34
-SUB element1: 0 element2: -51 result: 51
-SUB element1: 0 element2: -34 result: 34
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: 17 result: -17
 SUB element1: 0 element2: 0 result: 0
-SUB element1: 0 element2: -34 result: 34
-SUB element1: 0 element2: 272 result: -272
-ADDE Total: -51
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: -17
 
 ADD loaded elements (u3 - b(i))
 0: 17
@@ -1285,7 +1009,7 @@ ADD loaded elements (u3 - b(i))
 14: 17
 15: 17
 
-ADD element1: 17 element2: -51 result: -34
+ADD element1: 17 element2: -17 result: 0
 
 DIV loaded elements (u4 - L(i,i))
 0: 17
@@ -1305,28 +1029,11 @@ DIV loaded elements (u4 - L(i,i))
 14: 17
 15: 17
 
-DIV element1: -34 element2: 17 result: -2
+DIV element1: 0 element2: 17 result: 0
+Storing: 0.000000
 MUL s1: 0	 s2: 0
-SUB element1: 0 element2: -34 result: 34
-MUL s1: 16	 s2: 16
-MUL element1: 18 element2: 1 result: 18
-MUL element1: 18 element2: 0 result: 0
-MUL element1: 18 element2: -2 result: -36
-MUL element1: 18 element2: -3 result: -54
-MUL element1: 18 element2: -2 result: -36
-MUL element1: 18 element2: 0 result: 0
-MUL element1: 18 element2: 1 result: 18
-MUL element1: 18 element2: 0 result: 0
-MUL element1: 18 element2: -2 result: -36
-MUL element1: 18 element2: -3 result: -54
-MUL element1: 18 element2: -2 result: -36
-MUL element1: 18 element2: 0 result: 0
-MUL element1: 18 element2: 1 result: 18
-MUL element1: 18 element2: 0 result: 0
-MUL element1: 18 element2: -2 result: -36
-MUL element1: 18 element2: -3 result: -54
-SUB element1: 34 element2: 18 result: 16
-ADDE Total: 16
+SUB element1: 0 element2: 0 result: 0
+ADDE Total: 0
 
 ADD loaded elements (u3 - b(i))
 0: 18
@@ -1346,7 +1053,7 @@ ADD loaded elements (u3 - b(i))
 14: 18
 15: 18
 
-ADD element1: 18 element2: 16 result: 34
+ADD element1: 18 element2: 0 result: 18
 
 DIV loaded elements (u4 - L(i,i))
 0: 18
@@ -1366,112 +1073,312 @@ DIV loaded elements (u4 - L(i,i))
 14: 18
 15: 18
 
-DIV element1: 34 element2: 18 result: 1.88889
+DIV element1: 18 element2: 18 result: 1
+Storing: 0.000000
+MUL s1: 16	 s2: 16
+MUL element1: 18 element2: 1 result: 18
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+MUL element1: 18 element2: 0 result: 0
+SUB element1: 0 element2: 18 result: -18
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
 MUL s1: 1	 s2: 1
-MUL element1: 18 element2: -2 result: -36
-SUB element1: 0 element2: -36 result: 36
+MUL element1: 18 element2: 0 result: 0
+SUB element1: -18 element2: 0 result: -18
+ADDE Total: -18
+
+ADD loaded elements (u3 - b(i))
+0: 19
+1: 19
+2: 19
+3: 19
+4: 19
+5: 19
+6: 19
+7: 19
+8: 19
+9: 19
+10: 19
+11: 19
+12: 19
+13: 19
+14: 19
+15: 19
+
+ADD element1: 19 element2: -18 result: 1
+
+DIV loaded elements (u4 - L(i,i))
+0: 19
+1: 19
+2: 19
+3: 19
+4: 19
+5: 19
+6: 19
+7: 19
+8: 19
+9: 19
+10: 19
+11: 19
+12: 19
+13: 19
+14: 19
+15: 19
+
+DIV element1: 1 element2: 19 result: 0.0526316
+Storing: 0.000000
 MUL s1: 16	 s2: 16
 MUL element1: 19 element2: 1 result: 19
 MUL element1: 19 element2: 0 result: 0
-MUL element1: 19 element2: -2 result: -38
-MUL element1: 19 element2: -3 result: -57
-MUL element1: 19 element2: -2 result: -38
 MUL element1: 19 element2: 0 result: 0
-MUL element1: 19 element2: 1 result: 19
 MUL element1: 19 element2: 0 result: 0
-MUL element1: 19 element2: -2 result: -38
-MUL element1: 19 element2: -3 result: -57
-MUL element1: 19 element2: -2 result: -38
 MUL element1: 19 element2: 0 result: 0
-MUL element1: 19 element2: 1 result: 19
 MUL element1: 19 element2: 0 result: 0
-MUL element1: 19 element2: -2 result: -38
-MUL element1: 19 element2: -3 result: -57
-SUB element1: 36 element2: 19 result: 17
-ADDE Total: 17
-
-ADD loaded elements (u3 - b(i))
-0: 19
-1: 19
-2: 19
-3: 19
-4: 19
-5: 19
-6: 19
-7: 19
-8: 19
-9: 19
-10: 19
-11: 19
-12: 19
-13: 19
-14: 19
-15: 19
-
-ADD element1: 19 element2: 17 result: 36
-
-DIV loaded elements (u4 - L(i,i))
-0: 19
-1: 19
-2: 19
-3: 19
-4: 19
-5: 19
-6: 19
-7: 19
-8: 19
-9: 19
-10: 19
-11: 19
-12: 19
-13: 19
-14: 19
-15: 19
-
-DIV element1: 36 element2: 19 result: 1.89474
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 0 result: 0
+SUB element1: 0 element2: 19 result: -19
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element21.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+0.0000
+1.0000
+0.0526
+-0.9000
+: 0 result: 0
 MUL s1: 2	 s2: 2
-MUL element1: 19 element2: -2 result: -38
-MUL element1: 19 element2: 1.88889 result: 35.8889
-SUB element1: 0 element2: -38 result: 38
-SUB element1: 0 element2: 35.8889 result: -35.8889
-ADDE Total: 2.11111
+MUL element1: 19 element2: 0 result: 0
+MUL element1: 19 element2: 1 result: 19
+SUB element1: -19 element2: 0 result: -19
+SUB element1: 0 element2: 19 result: -19
+ADDE Total: -38
 
 ADD loaded elements (u3 - b(i))
-0: 19
-1: 19
-2: 19
-3: 19
-4: 19
-5: 19
-6: 19
-7: 19
-8: 19
-9: 19
-10: 19
-11: 19
-12: 19
-13: 19
-14: 19
-15: 19
+0: 20
+1: 20
+2: 20
+3: 20
+4: 20
+5: 20
+6: 20
+7: 20
+8: 20
+9: 20
+10: 20
+11: 20
+12: 20
+13: 20
+14: 20
+15: 20
 
-ADD element1: 19 element2: 2.11111 result: 21.1111
+ADD element1: 20 element2: -38 result: -18
 
 DIV loaded elements (u4 - L(i,i))
-0: 19
-1: 19
-2: 19
-3: 19
-4: 19
-5: 19
-6: 19
-7: 19
-8: 19
-9: 19
-10: 19
-11: 19
-12: 19
-13: 19
-14: 19
-15: 19
+0: 20
+1: 20
+2: 20
+3: 20
+4: 20
+5: 20
+6: 20
+7: 20
+8: 20
+9: 20
+10: 20
+11: 20
+12: 20
+13: 20
+14: 20
+15: 20
 
-DIV element1: 21.1111 element2: 19 result: 1.11111
+DIV element1: -18 element2: 20 result: -0.9
+Storing: 0.000000
+MUL s1: 16	 s2: 16
+MUL element1: 20 element2: 1 result: 20
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 0 result: 0
+SUB element1: 0 element2: 20 result: -20
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 0 result: 0
+MUL s1: 3	 s2: 3
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 1 result: 20
+MUL element1: 20 element2: 0.0526316 result: 1.05263
+SUB element1: -20 element2: 0 result: -20
+SUB element1: 0 element2: 20 result: -20
+SUB element1: 0 element2: 1.05263 result: -1.05263
+ADDE Total: -41.0526
+
+ADD loaded elements (u3 - b(i))
+0: 20
+1: 20
+2: 20
+3: 20
+4: 20
+5: 20
+6: 20
+7: 20
+8: 20
+9: 20
+10: 20
+11: 20
+12: 20
+13: 20
+14: 20
+15: 20
+
+ADD element1: 20 element2: -41.0526 result: -21.0526
+
+DIV loaded elements (u4 - L(i,i))
+0: 20
+1: 20
+2: 20
+3: 20
+4: 20
+5: 20
+6: 20
+7: 20
+8: 20
+9: 20
+10: 20
+11: 20
+12: 20
+13: 20
+14: 20
+15: 20
+
+DIV element1: -21.0526 element2: 20 result: -1.05263
+MUL s1: 3	 s2: 3
+MUL element1: 20 element2: 0 result: 0
+MUL element1: 20 element2: 1 result: 20
+MUL element1: 20 element2: 0.0526316 result: 1.05263
+SUB element1: 0 element2: 0 result: 0
+SUB element1: 0 element2: 20 result: -20
+SUB element1: 0 element2: 1.05263 result: -1.05263
+ADDE Total: -21.0526
+
+ADD loaded elements (u3 - b(i))
+0: 20
+1: 20
+2: 20
+3: 20
+4: 20
+5: 20
+6: 20
+7: 20
+8: 20
+9: 20
+10: 20
+11: 20
+12: 20
+13: 20
+14: 20
+15: 20
+
+ADD element1: 20 element2: -21.0526 result: -1.05263
+
+DIV loaded elements (u4 - L(i,i))
+0: 20
+1: 20
+2: 20
+3: 20
+4: 20
+5: 20
+6: 20
+7: 20
+8: 20
+9: 20
+10: 20
+11: 20
+12: 20
+13: 20
+14: 20
+15: 20
+
+DIV element1: -1.05263 element2: 20 result: -0.0526316
