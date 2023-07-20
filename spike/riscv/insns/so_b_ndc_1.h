@@ -1,4 +1,4 @@
-auto regN = insn.uve_branch_reg();
+auto regN = insn.uve_branch_rs();
 auto& streamReg = P.SU.registers[regN];
 auto branchIMM = insn.uve_branch_imm();
 
@@ -8,7 +8,7 @@ const bool notComplete = std::visit([](const auto &reg){
 }, streamReg);
 */
 
-/*auto streamReg = insn.uve_branch_reg();
+/*auto streamReg = insn.uve_branch_rs();
 auto branchIMM = insn.uve_branch_imm();
 
 const bool notComplete = operateRegister(P.SU, streamReg, [=](auto &reg) {

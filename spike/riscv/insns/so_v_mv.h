@@ -1,8 +1,10 @@
-auto streamReg = insn.uve_comp_dest();
+auto streamReg = insn.uve_rd();
 auto &destReg = P.SU.registers[streamReg];
-auto &srcReg = P.SU.registers[insn.uve_conf_base()];
+auto &srcReg = P.SU.registers[insn.uve_rs1()];
+auto &predReg = P.SU.predicates[insn.uve_pred()];
 
-auto baseBehaviour = [](auto &dest, auto &src) {
+
+auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     /* Streams can only output/input values if they are in the running status */
     // const bool runningcheck = src.getStatus() != RegisterStatus::Finished;
     // assert_msg("Stream was not configured to be running", runningcheck);
@@ -47,9 +49,9 @@ std::visit([&](auto &dest) {
 }, destReg);
 
 std::visit(overloaded{
-               [&](StreamReg64 &dest, StreamReg64 &src) { baseBehaviour(dest, src); },
-               [&](StreamReg32 &dest, StreamReg32 &src) { baseBehaviour(dest, src); },
-               [&](StreamReg16 &dest, StreamReg16 &src) { baseBehaviour(dest, src); },
-               [&](StreamReg8 &dest, StreamReg8 &src) { baseBehaviour(dest, src); },
+               [&](StreamReg64 &dest, StreamReg64 &src) { baseBehaviour(dest, src, predReg); },
+               [&](StreamReg32 &dest, StreamReg32 &src) { baseBehaviour(dest, src, predReg); },
+               [&](StreamReg16 &dest, StreamReg16 &src) { baseBehaviour(dest, src, predReg); },
+               [&](StreamReg8 &dest, StreamReg8 &src) { baseBehaviour(dest, src, predReg); },
                [&](auto &dest, auto &src) { assert_msg("Invoking so.v.mv with invalid parameter sizes", false); }},
            destReg, srcReg);

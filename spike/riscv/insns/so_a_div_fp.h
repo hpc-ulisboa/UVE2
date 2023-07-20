@@ -1,12 +1,14 @@
-auto streamReg = insn.uve_comp_dest();
+auto streamReg = insn.uve_rd();
 auto& destReg = P.SU.registers[streamReg];
-auto& src1Reg = P.SU.registers[insn.uve_comp_src1()];
-auto& src2Reg = P.SU.registers[insn.uve_comp_src2()];
+auto& src1Reg = P.SU.registers[insn.uve_rs1()];
+auto& src2Reg = P.SU.registers[insn.uve_rs2()];
+auto &predReg = P.SU.predicates[insn.uve_pred()];
+
 
 /* The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would
     use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to
     later on infer its type and know the storage we need to use */
-auto baseBehaviour = [](auto& dest, auto& src1, auto& src2, auto extra) {
+auto baseBehaviour = [](auto& dest, auto& src1, auto& src2, auto &pred, auto extra) {
   /* Each stream's elements must have the same width for content to be
    * operated on */
   const bool src1Check = src1.getType() == RegisterConfig::Load || src1.getType() == RegisterConfig::Temporary;
@@ -19,6 +21,9 @@ auto baseBehaviour = [](auto& dest, auto& src1, auto& src2, auto extra) {
   auto elements1 = src1.getElements(true);
   auto elements2 = src2.getElements(true);
   auto validElementsIndex = std::min(elements1.size(), elements2.size());
+  
+  std::deque<uint8_t> p = pred.getPredicate();
+
   //std::cout << "\nDIV s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
   //print elements2
   using Operation = decltype(extra);
@@ -40,7 +45,7 @@ auto baseBehaviour = [](auto& dest, auto& src1, auto& src2, auto extra) {
       out.push_back(*reinterpret_cast<Storage*>(&value));
     }
     dest.setElements(true, out);
-    //std::cout << "\n\nOUT: " << out.size() << "\n\n";
+    std::cout << "\n\nOUT: " << out.size() << "\n\n";
   }
 };
 
@@ -67,8 +72,8 @@ std::visit([&](auto &dest) {
 }, destReg);
 
 std::visit(overloaded {
-    [&](StreamReg64& dest, StreamReg64& src1, StreamReg64& src2) { baseBehaviour(dest, src1, src2, double{}); },
-    [&](StreamReg32& dest, StreamReg32& src1, StreamReg32& src2) { baseBehaviour(dest, src1, src2, float{}); },
+    [&](StreamReg64& dest, StreamReg64& src1, StreamReg64& src2) { baseBehaviour(dest, src1, src2, predReg, double{}); },
+    [&](StreamReg32& dest, StreamReg32& src1, StreamReg32& src2) { baseBehaviour(dest, src1, src2, predReg, float{}); },
     [&](auto& dest, auto& src1, auto& src2) { assert_msg("Invoking so.a.div.fp with invalid parameter sizes", false); }
   },
   destReg, src1Reg, src2Reg);

@@ -1,13 +1,15 @@
 #define readRegAS(T, reg) static_cast<T>(READ_REG(reg))
 
-auto streamReg = insn.uve_comp_dest();
+auto streamReg = insn.uve_rd();
 auto &destReg = P.SU.registers[streamReg];
-auto baseReg = insn.uve_comp_src1();
+auto baseReg = insn.uve_rs1();
 auto &srcReg = P.SU.registers[baseReg];
+auto &predReg = P.SU.predicates[insn.uve_pred()];
 
 const auto value = readRegAS(std::uint8_t, baseReg);
 
-auto baseBehaviour = [](auto &dest, const auto value) {
+auto baseBehaviour = [](auto &dest, auto &pred, const auto value) {
+    std::deque<uint8_t> p = pred.getPredicate();
     decltype(dest.getElements(false)) out(dest.getMaxElements(), value);
     dest.setElements(true, out);
 };
@@ -24,6 +26,6 @@ std::visit([&](auto &dest) {
 }, destReg);
 
 std::visit(overloaded{
-    [&, value](StreamReg8 &dest) { baseBehaviour(dest, value); },
+    [&, value](StreamReg8 &dest) { baseBehaviour(dest, predReg, value); },
     [&, value](auto &dest) { assert_msg("Invoking so.v.dp.b with invalid parameter sizes", false); }
 }, destReg);

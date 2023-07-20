@@ -8,12 +8,12 @@ int main() {
     float b[SIZE];
     float x[SIZE];
 
-    /*
+    
     initArray2D(L);
     initArray(b);
     initArray(x);
-    */
-
+    
+/*
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j)
             L[i * SIZE + j] = i + 1;
@@ -42,6 +42,7 @@ int main() {
     }
 
     printf("\n\nResults (x):\n");
+*/
 
     core(L, b, x);
 

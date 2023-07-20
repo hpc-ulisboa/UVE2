@@ -1,4 +1,4 @@
-auto &destReg = P.SU.registers[insn.uve_conf_destination()];
+auto &destReg = P.SU.registers[insn.uve_rd()];
 auto baseReg = insn.uve_conf_base();
 auto sizeReg = insn.uve_conf_size();
 auto strideReg = insn.uve_conf_stride();

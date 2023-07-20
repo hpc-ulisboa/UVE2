@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <variant>
 #include <vector>
+#include <deque>
 
 /* Necessary for using MMU */
 class processor_t;
@@ -38,10 +39,10 @@ class streamRegister_t {
     /* FOR DEBUGGING*/
     std::size_t registerN;
     /* Although the more semantically correct choice would be an array, using a
-    vector allows us to avoid an index pointer to the last valid element. This design
+    deque allows us to avoid an index pointer to the last valid element. This design
     allows us to assume every element in the container is valid and any index checking
-    operations can be done by calling the vector::size() method */
-    std::vector<T> elements;
+    operations can be done by calling the deque::size() method */
+    std::deque<T> elements;
     /* Same ordeal as above. Although the amount of dimensions is capped, we can avoid
     indexing by just calling the size method */
     std::vector<Dimension> dimensions;
@@ -101,8 +102,8 @@ public:
     void configureDim();
     void startConfiguration(Dimension dim);
     void endConfiguration();
-    std::vector<T> getElements(bool causesUpdate);
-    void setElements(bool causesUpdate, std::vector<T> e);
+    std::deque<T> getElements(bool causesUpdate);
+    void setElements(bool causesUpdate, std::deque<T> e);
     bool hasStreamFinished() const;
     void clearEndOfDimensionOfDim(std::size_t i);
     bool isEndOfDimensionOfDim(std::size_t i) const;
@@ -125,12 +126,14 @@ struct PredRegister {
     static constexpr size_t elementsWidth = sizeof(uint8_t);
     static constexpr size_t maxAmountElements = registerLength / elementsWidth;
 
-    PredRegister(std::vector<uint8_t> e = {}) {
+    PredRegister(std::deque<uint8_t> e = {}) {
         elements = e;
     }
+    
+    std::deque<uint8_t> getPredicate() const;
 
 private:
-    std::vector<uint8_t> elements;
+    std::deque<uint8_t> elements;
 
     friend class streamingUnit_t;
 };
@@ -162,16 +165,28 @@ struct streamingUnit_t {
     std::array<PredRegister, predRegCount> predicates;
 
     streamingUnit_t() : p(nullptr), registers{RegisterType{}}, predicates{PredRegister{}} {
-        std::vector<uint8_t> ones(predicates.at(0).maxAmountElements, 1);
+        std::deque<uint8_t> ones(predicates.at(0).maxAmountElements, 1);
         predicates.at(0).elements = ones;
     }
 
     template <typename T>
     void makeStreamRegister(RegisterConfig type = RegisterConfig::Temporary, std::size_t streamRegister = -1);
 
-    void makePredRegister(std::vector<uint8_t> elements, std::size_t predRegister = -1);
+    void makePredRegister(std::deque<uint8_t> elements, std::size_t predRegister = -1);
 
     void updateEODTable(const std::size_t stream);
+
+    template <typename Operation>
+    auto operateRegister(std::size_t streamRegister, Operation &&op) {
+        assert_msg("Tried to use a register index higher than the available registers.", streamRegister < registerCount);
+        return std::visit([op = std::move(op)](auto &reg) { return op(reg); }, registers.at(streamRegister));
+    }
+
+    template <typename Operation>
+    auto operatePredReg(std::size_t predRegister, Operation &&op) {
+        assert_msg("Tried to use a predicate register index higher than the available predicate registers.", predRegister < predRegCount);
+        return std::visit([op = std::move(op)](auto &reg) { return op(reg); }, predicates.at(predRegister));
+    }
 };
 
 #endif // STREAMING_UNIT_HPP

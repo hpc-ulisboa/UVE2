@@ -22,7 +22,7 @@ void core(void *src1, void *src2, void *src3) {
 
                  // L(i,i) stream scalar load (?)
                  "ss.sta.ld.w               u4, %[src1], %[vl], zero \t\n"   // D1: scalar access
-                 "ss.end                    u4, zero, %[sn], %[snp1] \t\n" // D2: diagonal access size N
+                 "ss.end                    u4, zero, %[sn], %[snp1] \t\n" // D2: diagonal access size N  
 
                  // x stream scalar store (?)
                  "ss.st.w               u5, %[src3], %[sn], %[one] \t\n" // D1: vector - linear access
@@ -30,7 +30,8 @@ void core(void *src1, void *src2, void *src3) {
                  :
                  : [src1] "r"(src1), [src2] "r"(src2), [src3] "r"(src3),
                    [sn] "r"(SIZE), [snm1] "r"(SIZE - 1), [snp1] "r"(SIZE + 1), [one] "r"(1),
-                   [vl] "r"(v_len), [iv] "r"(SIZE / v_len), [sndx] "r"(SIZE / 2));
+                   [vl] "r"(v_len), [iv] "r"(SIZE / v_len), [sndx] "r"(SIZE / 2)
+    );
 
     asm volatile(
         // "so.a.div.fp    u5, u3, u4, p0  \n\t" //  x = b / L
@@ -48,27 +49,9 @@ void core(void *src1, void *src2, void *src3) {
         "so.a.add.fp    u7, u3, u7, p0  \n\t" //  t = b + red
         "so.a.div.fp    u5, u7, u4, p0  \n\t" //  x = t / L
 
-        "so.b.nc	u1, .fLoop1%= \n\t" ::
-
-/*      "so.v.dp.w  u6, zero, p0\n\t" // u6 = 0
-        //".jloop1%= : \t\n"
-        "so.a.mul.fp u7, u1, u2, p0\n\t" // u7 = L(i,j) * x(j)
-        "so.a.sub.fp u6, u6, u7, p0\n\t" // u6 = u6 - u7
-        //"so.b.ndc.1 u1, .jloop1%= \n\t"
-        "so.a.adde.fp   u7, u6, p0      \n\t" // reduce vector
-        "so.a.add.fp    u7, u3, u7, p0  \n\t" //  t = b + red
-        "so.a.div.fp    u5, u7, u4, p0  \n\t" //  x = t / L
-        "so.v.dp.w  u6, zero, p0\n\t" // u6 = 0
-
-        //".jloop1%= : \t\n"
-        "so.a.mul.fp u7, u1, u2, p0\n\t" // u7 = L(i,j) * x(j)
-        "so.a.sub.fp u6, u6, u7, p0\n\t" // u6 = u6 - u7
-        //"so.b.ndc.1 u1, .jloop1%= \n\t"
-        "so.a.adde.fp   u7, u6, p0      \n\t" // reduce vector
-        "so.a.add.fp    u7, u3, u7, p0  \n\t" //  t = b + red
-        "so.a.div.fp    u5, u7, u4, p0  \n\t" //  x = t / L
-*/
-            :);
+        "so.b.nc	u1, .fLoop1%= \n\t" 
+        :::
+    );
 
 }
 #endif // RUN_UVE
@@ -81,9 +64,10 @@ void core(DataType *L, DataType *b, DataType *x) {
             printf("read x[%d] = %f\n", i, x[i]);
             printf("x[%d] -= [(L[%d][%d]=%f) * (x[%d]=%f)]=%f\n", i, i, j, L[i*SIZE+j], j, x[j], L[i*SIZE+j] * x[j]);
             x[i] -= L[i * SIZE + j] * x[j];
-            printf("store x[%d] = %f\n", i, x[i]);
         }
+        printf("x[%d] = [(x[%d]=%f) / (L[%d][%d]=%f)] = %f\n", i, i, x[i], i, i, L[i*SIZE+i], x[i]/L[i*SIZE+i]);
         x[i] = x[i] / L[i * SIZE + i];
+        printf("store x[%d] = %f\n", i, x[i]);
     }
 }
 #endif // RUN_SIMPLE

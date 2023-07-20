@@ -48,27 +48,26 @@ void streamRegister_t<T>::endConfiguration() {
 }
 
 template <typename T>
-std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
-    assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
+std::deque<T> streamRegister_t<T>::getElements(bool causesUpdate) {
+    //assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
 
     if (causesUpdate) {
         updateStreamValues();
     }
 
-    std::vector<T> e = elements;
+    std::deque<T> e = elements;
 
     return e;
 }
 
 template <typename T>
-void streamRegister_t<T>::setElements(bool causesUpdate, std::vector<T> e) {
+void streamRegister_t<T>::setElements(bool causesUpdate, std::deque<T> e) {
     assert_msg("Trying to set values to a load stream", type != RegisterConfig::Load);
 
     elements = e;
 
-    if (causesUpdate) {
+    if (causesUpdate)
         updateStreamValues();
-    }
 }
 
 template <typename T>
@@ -238,7 +237,7 @@ void streamRegister_t<T>::updateAsLoad() {
     }
 
     elements.clear();
-    elements.reserve(maxAmountElements);
+    //elements.reserve(maxAmountElements);
 
     std::size_t eCount = maxAmountElements;
 
@@ -271,11 +270,11 @@ void streamRegister_t<T>::updateAsLoad() {
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint64_t>(address));
         }(offset);
         elements.push_back(value);
-        --eCount;
         if(tryGenerateOffset(offset))
             updateIteration(); // reset EOD flags and iterate stream
         else
             break;
+        --eCount;
     }
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     if(eCount) // iteration is already updated when register is full (e.g. counter = 0)
@@ -296,9 +295,9 @@ void streamRegister_t<T>::updateAsStore() {
     std::size_t eCount = std::min(maxAmountElements, elements.size());
     while (eCount && tryGenerateOffset(offset)) {
         auto value = elements.front();
-        printf("Storing: %f\n", readAS<ElementsType>(value));
-        elements.erase(elements.begin());
-        //elements.pop_front(); -- std::deque
+        //printf("Storing: %f\n", readAS<ElementsType>(value));
+        //elements.erase(elements.begin());
+        elements.pop_front(); //-- std::deque
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
             gMMU(su->p).template store<std::uint8_t>(offset, readAS<ElementsType>(value));
         else if constexpr (std::is_same_v<ElementsType, std::uint16_t>)
@@ -319,6 +318,11 @@ void streamRegister_t<T>::updateAsStore() {
     elements.clear();
 }
 
+std::deque<uint8_t> PredRegister::getPredicate() const{
+
+    return elements;
+}
+
 void streamingUnit_t::updateEODTable(const std::size_t stream) {
     int r = 0, d = 0;
     std::visit([&](const auto reg){
@@ -333,6 +337,7 @@ void streamingUnit_t::updateEODTable(const std::size_t stream) {
 
 template <typename T>
 void streamingUnit_t::makeStreamRegister(RegisterConfig type, std::size_t streamRegister) {
+    assert_msg("Tried to use a register index higher than the available registers.", streamRegister < registerCount); // should or should not show error?
     if constexpr (std::is_same_v<T, std::uint8_t>) {
         registers.at(streamRegister) = StreamReg8{this, type, streamRegister};
     } else if constexpr (std::is_same_v<T, std::uint16_t>) {
@@ -346,8 +351,9 @@ void streamingUnit_t::makeStreamRegister(RegisterConfig type, std::size_t stream
     }
 }
 
-void streamingUnit_t::makePredRegister(std::vector<uint8_t> elements, std::size_t predRegister) {
-    assert_msg("Tried to alter p0 register, which is hard-wired to 1", predRegister); // should or should not show error?
+void streamingUnit_t::makePredRegister(std::deque<uint8_t> elements, std::size_t predRegister) {
+    assert_msg("Tried to alter p0 register, which is hardwired to 1", predRegister); // should or should not show error?
+    assert_msg("ried to use a predicate register index higher than the available predicate registers.", predRegister < predRegCount); // should or should not show error?
     predicates.at(predRegister).elements = elements;
 }
 
@@ -359,9 +365,3 @@ template void streamingUnit_t::makeStreamRegister<uint8_t>(RegisterConfig type, 
 template void streamingUnit_t::makeStreamRegister<uint16_t>(RegisterConfig type, std::size_t streamRegister);
 template void streamingUnit_t::makeStreamRegister<uint32_t>(RegisterConfig type, std::size_t streamRegister);
 template void streamingUnit_t::makeStreamRegister<uint64_t>(RegisterConfig type, std::size_t streamRegister);
-/*
-template <typename Operation>
-auto streamingUnit_t::operateRegister(std::size_t streamRegister, Operation &&op) {
-    assert_msg("Tried to use a register index higher than available registers", streamRegister < registerCount);
-    return std::visit([op = std::move(op)](auto &reg) { return op(reg); }, registers.at(streamRegister));
-}*/

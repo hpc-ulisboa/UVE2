@@ -1,6 +1,6 @@
 #define readRegAS(T, reg) static_cast<T>(READ_REG(reg))
 
-auto streamReg = insn.uve_conf_destination();
+auto streamReg = insn.uve_rd();
 auto &destReg = P.SU.registers[streamReg];
 auto baseReg = insn.uve_conf_base();
 auto sizeReg = insn.uve_conf_size();

@@ -1,4 +1,4 @@
-auto &destReg = P.SU.registers[insn.uve_mod_dest()];
+auto &destReg = P.SU.registers[insn.uve_rd()];
 auto sizeReg = insn.uve_mod_size();
 auto dispReg = insn.uve_mod_disp();
 

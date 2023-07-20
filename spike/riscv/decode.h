@@ -152,24 +152,27 @@ public:
   uint64_t p_imm5() { return x(20, 5); }
   uint64_t p_imm6() { return x(20, 6); }
 
-  // Registers for configuration instructions
-  int64_t uve_conf_destination() { return x(7, 5); }
-  int64_t uve_conf_base() { return x(15, 5); }
-  int64_t uve_conf_size() { return x(20, 5); }
-  int64_t uve_conf_stride() { return x(27, 5); }
-  // Registers for modificator configuration instructions
-  int64_t uve_mod_dest() { return x(7, 5); }
-  int64_t uve_mod_size() { return x(15, 5); }
-  int64_t uve_mod_disp() { return x(27, 5); }
-  // Registers for computation instructions
-  int64_t uve_comp_dest() { return x(7, 5); }
-  int64_t uve_comp_src1() { return x(15, 5); }
-  int64_t uve_comp_src2() { return x(20, 5); }
+  uint64_t uve_rd() { return x(7, 5); }
+  int64_t uve_rs1() { return x(15, 5); }
+  int64_t uve_rs2() { return x(20, 5); }
+  int64_t uve_rs3() { return x(27, 5); }
+  uint64_t uve_pred() { return x(25, 3); }
+  uint64_t uve_v_pred() { return x(20, 3); } // Vector manipulation instructions
+  // Registers for load/store instructions
+  uint64_t uve_conf_base() { return x(15, 5); } // RS1
+  int64_t uve_conf_size() { return x(20, 5); } // RS2
+  int64_t uve_conf_stride() { return x(27, 5); } // RS3
+  // Registers for modifier configuration instructions
+  int64_t uve_mod_size() { return x(15, 5); } // RS1
+  int64_t uve_mod_disp() { return x(27, 5); } // RS3
   // Registers for branching instructions
-  int64_t uve_branch_reg() { return x(15, 5); }
+  int64_t uve_branch_rs() { return x(15, 5); } // RS1
   // Calculate offset for UVE branching instruction
   int64_t uve_branch_imm() { return (x(8, 4) << 1) + (x(22, 6) << 5) + (x(7, 1) << 11) + (imm_sign() << 12); }
-
+  // Registers for predicate instructions
+  uint64_t uve_pred_rd() { return x(7, 4); }  // RD
+  uint64_t uve_pred_rs() { return x(15, 4); } // Source: predicate register
+  uint64_t uve_pred_vs() { return x(15, 5); } // Source: vector register
 
   uint64_t zcmp_regmask() {
     unsigned mask = 0;
