@@ -171,8 +171,9 @@ public:
   int64_t uve_branch_imm() { return (x(8, 4) << 1) + (x(22, 6) << 5) + (x(7, 1) << 11) + (imm_sign() << 12); }
   // Registers for predicate instructions
   uint64_t uve_pred_rd() { return x(7, 4); }  // RD
-  uint64_t uve_pred_rs() { return x(15, 4); } // Source: predicate register
-  uint64_t uve_pred_vs() { return x(15, 5); } // Source: vector register
+  int64_t uve_pred_rs1() { return x(15, 4); } // Source: predicate register
+  int64_t uve_pred_vs1() { return x(15, 5); } // Source: vector register
+  int64_t uve_pred_rs2() { return x(20, 5); }
 
   uint64_t zcmp_regmask() {
     unsigned mask = 0;

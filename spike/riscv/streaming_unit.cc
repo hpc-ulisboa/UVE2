@@ -174,7 +174,7 @@ bool streamRegister_t<T>::tryGenerateOffset(std::size_t& address) {
     /* The outermost dimension is the last one in the container */
     if (isStreamDone())
         return false;
-
+        
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
         if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1))
             return false;
@@ -185,8 +185,10 @@ bool streamRegister_t<T>::tryGenerateOffset(std::size_t& address) {
 
 template <typename T>
 void streamRegister_t<T>::updateIteration() {
-    if (isStreamDone())
+    if (isStreamDone()){
+        status = RegisterStatus::Finished;
         return;
+    }
 
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
     dimensions.at(0).advance();
@@ -232,7 +234,6 @@ void streamRegister_t<T>::updateIteration() {
 template <typename T>
 void streamRegister_t<T>::updateAsLoad() {
     if (isStreamDone()) { // doesn't try to load if stream has finished
-        status = RegisterStatus::Finished;
         return;
     }
 
@@ -277,16 +278,16 @@ void streamRegister_t<T>::updateAsLoad() {
         --eCount;
     }
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
-    if(eCount) // iteration is already updated when register is full (e.g. counter = 0)
+    if(eCount){ // iteration is already updated when register is full (e.g. counter = 0)
+        std::cout << "Updating iteration" << std::endl;
         updateIteration(); // reset EOD flags and iterate stream
+    }
 }
  
 template <typename T>
 void streamRegister_t<T>::updateAsStore() {
     // std::cout << "Updating as store" << std::endl;
     if (isStreamDone()) {
-        status = RegisterStatus::Finished;
-        // std::cout << "Stream finished" << std::endl;
         return;
     }
 
@@ -337,7 +338,7 @@ void streamingUnit_t::updateEODTable(const std::size_t stream) {
 
 template <typename T>
 void streamingUnit_t::makeStreamRegister(RegisterConfig type, std::size_t streamRegister) {
-    assert_msg("Tried to use a register index higher than the available registers.", streamRegister < registerCount); // should or should not show error?
+    assert_msg("Tried to use a register index higher than the available register", streamRegister < registerCount);
     if constexpr (std::is_same_v<T, std::uint8_t>) {
         registers.at(streamRegister) = StreamReg8{this, type, streamRegister};
     } else if constexpr (std::is_same_v<T, std::uint16_t>) {
@@ -352,8 +353,10 @@ void streamingUnit_t::makeStreamRegister(RegisterConfig type, std::size_t stream
 }
 
 void streamingUnit_t::makePredRegister(std::deque<uint8_t> elements, std::size_t predRegister) {
-    assert_msg("Tried to alter p0 register, which is hardwired to 1", predRegister); // should or should not show error?
-    assert_msg("ried to use a predicate register index higher than the available predicate registers.", predRegister < predRegCount); // should or should not show error?
+    assert_msg("Tried to alter p0 register, which is hardwired to 1", predRegister);
+    assert_msg("Tried to use a predicate register index higher than the available predicate registers", predRegister < predRegCount);
+    for (auto &p : elements)
+        assert_msg("Invalid values for predicate (must be 0 or 1)", !p || p == 1);
     predicates.at(predRegister).elements = elements;
 }
 

@@ -4,10 +4,9 @@
 extern void core(DataType L[SIZE][SIZE], DataType b[SIZE], DataType x[SIZE]);
 
 int main() {
-    float L[SIZE * SIZE];
-    float b[SIZE];
-    float x[SIZE];
-
+    DataType L[SIZE * SIZE];
+    DataType b[SIZE];
+    DataType x[SIZE];
     
     initArray2D(L);
     initArray(b);
@@ -44,11 +43,11 @@ int main() {
     printf("\n\nResults (x):\n");
 */
 
-    core(L, b, x);
+    //core(L, b, x);
 
-    for (int i = 0; i < SIZE; i++) {
+    /*for (int i = 0; i < SIZE; i++) {
         printf(DataFormat("", "\n"), x[i]);
-    }
+    }*/
 
     return 0;
 }
