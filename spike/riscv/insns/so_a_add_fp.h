@@ -25,7 +25,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
 
     //std::cout << "\nADD s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
     //  print elements1
-    using Operation = decltype(extra);
+    //using Operation = decltype(extra);
     //std::cout << "\nADD loaded elements (u3 - b(i))\n";
     /*for (size_t i = 0; i < elements1.size(); i++) {
         std::cout << i << ": " << *reinterpret_cast<Operation *>(&elements1.at(i)) << '\n';
@@ -33,20 +33,26 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     std::cout << "\n";*/
     if (validElementsIndex) {
         /* Grab used types for storage and operation */
-        using StorageType = typename std::remove_reference_t<decltype(src1)>::ElementsType;
+        using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
         using OperationType = decltype(extra);
-        decltype(dest.getElements(false)) out;
+        std::deque<StorageType> out;
         auto destValidIndex = destElements.size();
         OperationType value = 0;
         for (size_t i = 0; i < validElementsIndex; i++) {
-            if(p.at(i)){
+            // print p from i to i+sizeof(OperationType)-1
+            /*std::cout << "ADD p: ";
+            for (size_t j = i*sizeof(OperationType); j < (i+1)*sizeof(OperationType); j++) {
+                std::cout << (int)p.at(j);
+            }
+            std::cout << "\n";
+            */
+            if(p.at((i+1)*sizeof(OperationType)-1)){
                 auto e1 = *reinterpret_cast<OperationType *>(&elements1.at(i));
                 auto e2 = *reinterpret_cast<OperationType *>(&elements2.at(i));
                 value = e1 + e2;
-                std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
-            } else {
+                //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
+            } else
                 value =  i < destValidIndex ? *reinterpret_cast<OperationType *>(destElements.at(i)) : 0;
-            }
             out.push_back(*reinterpret_cast<StorageType *>(&value));
         }
         dest.setElements(true, out);
@@ -64,9 +70,8 @@ std::visit([&](auto &dest) {
         } else if (std::holds_alternative<StreamReg32>(src1Reg)) {
             P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::Temporary, streamReg);
             dest.endConfiguration();
-        } else {
+        } else
             assert_msg("Trying to run so.a.add.fp with invalid src type", false);
-        }
     }
 }, destReg);
 

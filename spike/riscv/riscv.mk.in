@@ -1317,6 +1317,10 @@ riscv_insn_ext_uve = \
 	so_a_sub_fp \
 	so_b_nc \
 	so_b_ndc_1 \
+	so_p_cv_b \
+	so_p_cv_h \
+	so_p_cv_w \
+	so_p_cv_d \
 	so_p_egt_fp \
 	so_p_egts_fp \
 	so_p_eq_fp \

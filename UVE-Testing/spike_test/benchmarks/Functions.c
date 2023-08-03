@@ -23,3 +23,9 @@ void initZero(DataType *array) {
     array[i] = 0;
   }
 }
+
+void initConstant(DataType *array, DataType m) {
+  for (int i = 0; i < SIZE; ++i) {
+    array[i] = m;
+  }
+}

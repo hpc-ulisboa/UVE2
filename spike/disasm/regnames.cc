@@ -23,6 +23,18 @@ const char* vr_name[] = {
   "v24", "v25", "v26", "v27", "v28", "v29", "v30", "v31"
 };
 
+const char* ur_name[] = {
+  "u0",  "u1",  "u2",  "u3",  "u4",  "u5",  "u6",  "u7",
+  "u8",  "u9",  "u10", "u11", "u12", "u13", "u14", "u15",
+  "u16", "u17", "u18", "u19", "u20", "u21", "u22", "u23",
+  "u24", "u25", "u26", "u27", "u28", "u29", "u30", "u31"
+};
+
+const char* pr_name[] = {
+  "p0",  "p1",  "p2",  "p3",  "p4",  "p5",  "p6",  "p7",
+  "p8",  "p9",  "p10", "p11", "p12", "p13", "p14", "p15"
+};
+
 const char* csr_name(int which) {
   switch (which) {
     #define DECLARE_CSR(name, number)  case number: return #name;

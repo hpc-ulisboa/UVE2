@@ -13,20 +13,20 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 
     // Grab used types for storage and operation
     if (validElementsIndex) {
-        using Storage = typename std::remove_reference_t<decltype(src)>::ElementsType;
-        using Operation = decltype(extra);
-        decltype(dest.getElements(false)) out;
-        auto value = elements.size() > 0 ? *reinterpret_cast<Operation *>(&elements.at(0)) : 0;
+        using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
+        using OperationType = decltype(extra);
+        std::deque<StorageType> out;
+        auto value = elements.size() > 0 ? *reinterpret_cast<OperationType *>(&elements.at(0)) : 0;
         // std::cout << "\nADDE s1: " << elements.size() << "\n";
         for (size_t i = 1; i < validElementsIndex; i++) {
-            if (p.at(i)){
-                auto e = *reinterpret_cast<Operation *>(&elements.at(i));
+            if (p.at((i+1)*sizeof(OperationType)-1)){
+                auto e = *reinterpret_cast<OperationType *>(&elements.at(i));
                 value += e;
             }
             // std::cout << "Adde Iter: " << i << " element: " << e << " total sum: " << value << '\n';
         }
-        std::cout << "ADDE Total: " << value << '\n';
-        out.push_back(*reinterpret_cast<Storage *>(&value));
+        //std::cout << "ADDE Total: " << value << '\n';
+        out.push_back(*reinterpret_cast<StorageType *>(&value));
         dest.setElements(true, out);
         // std::cout << "\n\nOUT: " << out.size() << "\n\n";
     }

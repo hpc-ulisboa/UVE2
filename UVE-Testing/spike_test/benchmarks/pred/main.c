@@ -10,9 +10,11 @@ int main()
   DataType src2[SIZE];
   DataType dest[SIZE];
 
+  DataType m = 10;
+
   initArray(src1);
-  initArray(src2);
-  initZero(dest);
+  initConstant(src2, m);
+  initArray(dest);
 
   core(dest, src1, src2);
 

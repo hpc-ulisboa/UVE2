@@ -53,6 +53,7 @@ void initArray(DataType *array);
 void initArray2D(DataType *array);
 
 void initZero(DataType *array);
+void initConstant(DataType *array, DataType m);
 
 
 #endif // FUNCTIONS_H

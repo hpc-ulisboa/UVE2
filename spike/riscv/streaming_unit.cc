@@ -37,6 +37,7 @@ void streamRegister_t<T>::startConfiguration(Dimension dim) {
     dimensions.clear();
     dimensions.push_back(dim);
     vecCfg.push_back(false);
+    getElements(false);
 }
 
 template <typename T>
@@ -296,7 +297,6 @@ void streamRegister_t<T>::updateAsStore() {
     std::size_t eCount = std::min(maxAmountElements, elements.size());
     while (eCount && tryGenerateOffset(offset)) {
         auto value = elements.front();
-        //printf("Storing: %f\n", readAS<ElementsType>(value));
         //elements.erase(elements.begin());
         elements.pop_front(); //-- std::deque
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)

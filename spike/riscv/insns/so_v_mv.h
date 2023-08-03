@@ -15,9 +15,9 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     /* We can only operate on the first available values of the stream */
     auto elements = src.getElements(true);
     /* Grab used types for storage and operation */
-    using StorageType = typename std::remove_reference_t<decltype(src)>::ElementsType;
+    using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     using OperationType = ComputationTypeFp<StorageType>;
-    decltype(dest.getElements(false)) out;
+    std::deque<StorageType> out;
     for (size_t i = 0; i < elements.size(); i++) {
         auto e = readAS<OperationType>(elements.at(i));
         auto outPreStore = readAS<StorageType>(e);

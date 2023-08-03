@@ -18,10 +18,8 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
     auto validElementsIndex = std::min(elements1.size(), elements2.size());
 
     std::deque<uint8_t> p = pred.getPredicate();
-
     std::deque<uint8_t> predicate;
 
-    using Operation = decltype(extra);
     if (validElementsIndex) {
         /* Grab used types for storage and operation */
         using OperationType = decltype(extra);
@@ -29,15 +27,14 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
         uint8_t value = 0;
         auto e2 = *reinterpret_cast<OperationType *>(&elements2.at(0));
         for (size_t i = 0; i < validElementsIndex; i++) {
-            if(p.at(i)){
+            if(p.at((i+1)*sizeof(OperationType)-1)){
                 auto e1 = *reinterpret_cast<OperationType *>(&elements1.at(i));
                 value = e1 >= e2;
             } else
                 value =  i < destValidIndex ? destElements.at(i) : 0;
-            predicate.push_back(value);
+            predicate.insert(predicate.end(), sizeof(OperationType), value);
         }
     }
-
     return predicate;
 };
 

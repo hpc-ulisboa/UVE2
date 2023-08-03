@@ -4,13 +4,22 @@ auto streamReg = insn.uve_rd();
 auto& destReg = P.SU.registers[streamReg];
 auto baseReg = insn.uve_rs1();
 auto& srcReg = P.SU.registers[baseReg];
-auto &predReg = P.SU.predicates[insn.uve_pred()];
+auto &predReg = P.SU.predicates[insn.uve_v_pred()];
 
 
 const auto value = readRegAS(std::uint32_t, baseReg);
 
 auto baseBehaviour = [](auto& dest, auto &pred, const auto value) {
-    decltype(dest.getElements(false)) out(dest.getMaxElements(), value);
+    std::deque<uint8_t> p = pred.getPredicate();
+    auto destElements = dest.getElements(false);
+    auto destValidIndex = destElements.size();
+    std::deque<uint32_t> out;
+    for (size_t i = 0; i < dest.getMaxElements(); ++i) {
+        if (p.at(i))
+            out.push_back(value);
+        else
+            out.push_back(i < destValidIndex ? destElements.at(i) : 0);
+    }
     dest.setElements(true, out);
 };
 

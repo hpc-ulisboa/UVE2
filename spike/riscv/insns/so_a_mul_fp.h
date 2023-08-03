@@ -20,26 +20,28 @@ auto baseBehaviour = [](auto& dest, auto& src1, auto& src2, auto &pred, auto ext
   /* We can only operate on the first available values of the stream */
   auto elements1 = src1.getElements(true);
   auto elements2 = src2.getElements(true);
+  auto destElements = dest.getElements(false);
   auto validElementsIndex = std::min(elements1.size(), elements2.size());
   
   std::deque<uint8_t> p = pred.getPredicate();
 
-  std::cout << "MUL s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
   if(validElementsIndex){
     /* Grab used types for storage and operation */
-    using Storage = typename std::remove_reference_t<decltype(src1)>::ElementsType;
-    using Operation = decltype(extra);
-    //std::cout << "MUL s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
-    decltype(dest.getElements(false)) out;
-    for (size_t i = 0; i < validElementsIndex; i++) {
-      auto e1 = *reinterpret_cast<Operation*>(&elements1.at(i));
-      auto e2 = *reinterpret_cast<Operation*>(&elements2.at(i));
-      auto value = e1 * e2;
-      std::cout << "MUL element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
-      out.push_back(*reinterpret_cast<Storage*>(&value));
-    }
-    dest.setElements(true, out);
-    //std::cout << "\n\nOUT: " << out.size() << "\n\n";
+        using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
+        using OperationType = decltype(extra);
+        std::deque<StorageType> out;
+        auto destValidIndex = destElements.size();
+        OperationType value = 0;
+        for (size_t i = 0; i < validElementsIndex; i++) {
+            if(p.at((i+1)*sizeof(OperationType)-1)){
+                auto e1 = *reinterpret_cast<OperationType *>(&elements1.at(i));
+                auto e2 = *reinterpret_cast<OperationType *>(&elements2.at(i));
+                value = e1 * e2;
+            } else
+                value =  i < destValidIndex ? *reinterpret_cast<OperationType *>(destElements.at(i)) : 0;
+            out.push_back(*reinterpret_cast<StorageType *>(&value));
+        }
+        dest.setElements(true, out);
   }
 };
 
