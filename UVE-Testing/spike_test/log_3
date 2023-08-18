@@ -1,0 +1,82 @@
+bbl loader
+Updating iteration
+Updating iteration
+Updating iteration
+Updating iteration
+-85.2100
+-24.4000
+43.5400
+42.0900
+-55.5900
+-74.3200
+26.0500
+6.9200
+12.6300
+-32.6500
+83.9800
+-11.0500
+55.5100
+28.6200
+45.2900
+-94.2000
+
+
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+6.9200
+
+
+0.0000
+0.0000
+50.4600
+49.0100
+0.0000
+0.0000
+32.9700
+13.8400
+19.5500
+0.0000
+90.9000
+0.0000
+62.4300
+35.5400
+52.2100
+0.0000
+ADD p: 0000
+ADD p: 0000
+ADD p: 1111
+ADD element1: 43.54 element2: 6.92 result: 50.46
+ADD p: 1111
+ADD element1: 42.09 element2: 6.92 result: 49.01
+ADD p: 0000
+ADD p: 0000
+ADD p: 1111
+ADD element1: 26.05 element2: 6.92 result: 32.97
+ADD p: 1111
+ADD element1: 6.92 element2: 6.92 result: 13.84
+ADD p: 1111
+ADD element1: 12.63 element2: 6.92 result: 19.55
+ADD p: 0000
+ADD p: 1111
+ADD element1: 83.98 element2: 6.92 result: 90.9
+ADD p: 0000
+ADD p: 1111
+ADD element1: 55.51 element2: 6.92 result: 62.43
+ADD p: 1111
+ADD element1: 28.62 element2: 6.92 result: 35.54
+ADD p: 1111
+ADD element1: 45.29 element2: 6.92 result: 52.21
+ADD p: 0000
