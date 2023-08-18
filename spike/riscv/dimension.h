@@ -1,12 +1,12 @@
 #ifndef DIMENSION_HPP
 #define DIMENSION_HPP
 
-#include <cstddef> // std::size_t
+#include <cstddef> // size_t
 #include "helpers.h"
 
 struct Dimension
 {
-  Dimension(std::size_t offset, std::size_t size, std::size_t stride);
+  Dimension(size_t offset, size_t size, size_t stride);
 
   //void resetIndex();
 
@@ -24,18 +24,18 @@ struct Dimension
 
   void setEndOfDimension(bool b);
 
-  std::size_t calcOffset(std::size_t width) const;
+  size_t calcOffset(size_t width) const;
 
-  std::size_t getSize() const;
+  size_t getSize() const;
 
 private:
-  const std::size_t offset;
-  const std::size_t size;
-  const std::size_t stride;
-  std::size_t iter_offset;
-  std::size_t iter_size;
-  std::size_t iter_stride;
-  std::size_t iter_index;
+  const size_t offset;
+  const size_t size;
+  const size_t stride;
+  size_t iter_offset;
+  size_t iter_size;
+  size_t iter_stride;
+  size_t iter_index;
   bool endOfDimension;
 
   friend class Modifier;
@@ -46,8 +46,7 @@ struct Modifier
   enum class Type
   {
     Static,
-    Indirect,
-    //CfgVec // necessary?
+    Indirect
   };
   enum class Target
   {
@@ -64,7 +63,7 @@ struct Modifier
     //add "set-value" behaviour
   };
 
-  Modifier(Type type, Target target = Target::None, Behaviour behaviour = Behaviour::None, std::size_t displacement = 0, std::size_t size = 0)
+  Modifier(Type type, Target target = Target::None, Behaviour behaviour = Behaviour::None, size_t displacement = 0, size_t size = 0)
     : type(type), target(target), behaviour(behaviour), displacement(displacement), size(size)
   {}
 
@@ -78,8 +77,8 @@ private:
   const Type type;
   const Target target;
   const Behaviour behaviour;
-  const std::size_t displacement;
-  const std::size_t size;
+  const size_t displacement;
+  const size_t size;
 
   void modStatic(Dimension& dim) const;
 

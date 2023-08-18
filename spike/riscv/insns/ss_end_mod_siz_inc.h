@@ -2,7 +2,7 @@ auto &destReg = P.SU.registers[insn.uve_rd()];
 auto sizeReg = insn.uve_mod_size();
 auto dispReg = insn.uve_mod_disp();
 
-int32_t size = READ_REG(sizeReg);
+size_t size = READ_REG(sizeReg);
 int32_t disp = READ_REG(dispReg);
 
 /* For debug, print the indexes of each register as well as their contents 

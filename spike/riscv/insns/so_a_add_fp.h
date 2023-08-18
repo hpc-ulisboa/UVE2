@@ -19,14 +19,14 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
     auto destElements = dest.getElements(false);
-    auto validElementsIndex = std::min(elements1.size(), elements2.size());
+    auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
 
-    std::deque<uint8_t> p = pred.getPredicate();
+    auto p = pred.getPredicate();
 
-    //std::cout << "\nADD s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
-    //  print elements1
-    //using Operation = decltype(extra);
-    //std::cout << "\nADD loaded elements (u3 - b(i))\n";
+    // std::cout << "\nADD s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
+    //   print elements1
+    // using Operation = decltype(extra);
+    // std::cout << "\nADD loaded elements (u3 - b(i))\n";
     /*for (size_t i = 0; i < elements1.size(); i++) {
         std::cout << i << ": " << *reinterpret_cast<Operation *>(&elements1.at(i)) << '\n';
     }
@@ -35,8 +35,8 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
         /* Grab used types for storage and operation */
         using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
         using OperationType = decltype(extra);
-        std::deque<StorageType> out;
-        auto destValidIndex = destElements.size();
+        std::vector<StorageType> out(dest.getMaxElements());
+        // auto destValidIndex = dest.getValidIndex();
         OperationType value = 0;
         for (size_t i = 0; i < validElementsIndex; i++) {
             // print p from i to i+sizeof(OperationType)-1
@@ -46,18 +46,20 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             }
             std::cout << "\n";
             */
-            if(p.at((i+1)*sizeof(OperationType)-1)){
-                auto e1 = *reinterpret_cast<OperationType *>(&elements1.at(i));
-                auto e2 = *reinterpret_cast<OperationType *>(&elements2.at(i));
+            if (p.at((i + 1) * sizeof(OperationType) - 1)) {
+                auto e1 = readAS<OperationType>(elements1.at(i));
+                auto e2 = readAS<OperationType>(elements2.at(i));
                 value = e1 + e2;
                 //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
             } else
-                value =  i < destValidIndex ? *reinterpret_cast<OperationType *>(destElements.at(i)) : 0;
-            out.push_back(*reinterpret_cast<StorageType *>(&value));
+                // value =  i < destValidIndex ? readAS<OperationType>(destElements.at(i)) : 0;
+                value = destElements.at(i);
+            out.at(i) = readAS<StorageType>(value);
         }
         dest.setElements(true, out);
         // std::cout << "\n\nOUT: " << out.size() << "\n\n";
     }
+    dest.setValidIndex(validElementsIndex);
 };
 
 /* If the destination register is a temporary, we have to build it before the
@@ -76,7 +78,7 @@ std::visit([&](auto &dest) {
 }, destReg);
 
 std::visit(overloaded{
-    [&](StreamReg64 &dest, StreamReg64 &src1, StreamReg64 &src2) { baseBehaviour(dest, src1, src2, predReg, double{}); },
-    [&](StreamReg32 &dest, StreamReg32 &src1, StreamReg32 &src2) { baseBehaviour(dest, src1, src2, predReg, float{}); },
-    [&](auto &dest, auto &src1, auto &src2) { assert_msg("Invoking so.a.add.fp with invalid parameter sizes", false); }
+               [&](StreamReg64 &dest, StreamReg64 &src1, StreamReg64 &src2) { baseBehaviour(dest, src1, src2, predReg, double{}); },
+               [&](StreamReg32 &dest, StreamReg32 &src1, StreamReg32 &src2) { baseBehaviour(dest, src1, src2, predReg, float{}); },
+               [&](auto &dest, auto &src1, auto &src2) { assert_msg("Invoking so.a.add.fp with invalid parameter sizes", false); }
 }, destReg, src1Reg, src2Reg);

@@ -1,26 +1,20 @@
-#define readRegAS(T, reg) static_cast<T>( READ_REG(reg) )
-
 auto streamReg = insn.uve_rd();
 auto& destReg = P.SU.registers[streamReg];
 auto baseReg = insn.uve_rs1();
 auto& srcReg = P.SU.registers[baseReg];
 auto &predReg = P.SU.predicates[insn.uve_v_pred()];
 
+const float value = READ_REG(baseReg);
 
-const auto value = readRegAS(std::uint32_t, baseReg);
-
-auto baseBehaviour = [](auto& dest, auto &pred, const auto value) {
-    std::deque<uint8_t> p = pred.getPredicate();
+auto baseBehaviour = [](auto &dest, auto &pred, const auto value) {
+    auto p = pred.getPredicate();
     auto destElements = dest.getElements(false);
-    auto destValidIndex = destElements.size();
-    std::deque<uint32_t> out;
-    for (size_t i = 0; i < dest.getMaxElements(); ++i) {
-        if (p.at(i))
-            out.push_back(value);
-        else
-            out.push_back(i < destValidIndex ? destElements.at(i) : 0);
-    }
+    auto destValidIndex = dest.getMaxElements();
+    std::vector<uint32_t> out(destValidIndex, readAS<uint32_t>(value));
+    for (size_t i = 0; i < destValidIndex; ++i)
+        out.at(i) = p.at((i+1)*sizeof(uint64_t)-1) ? readAS<uint32_t>(value) : destElements.at(i);
     dest.setElements(true, out);
+    dest.setValidIndex(destValidIndex);
 };
 
 // If the destination register is a temporary, we have to build it before the operation so that its element size matches before any calculations are done

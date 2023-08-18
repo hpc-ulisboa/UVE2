@@ -17,7 +17,8 @@ void core(DataType dest[SIZE], DataType src1[SIZE], DataType src2[SIZE]) {
 	asm volatile(
 		"so.p.zero p2, p0 \t\n"
 		"so.p.egt.fp p5, u2, u3, p0 \t\n"
-		"so.v.dp.d u1, zero, p5 \t\n"
+		"li t0, 3 \t\n"
+		"so.v.dp.d u1, t0, p5 \t\n"
 		//".uve_loop%= : \t\n"
         //    "so.a.add.fp u1, u4, u6, p5 \t\n"
 		//"so.b.nc u4, .uve_loop%= \t\n"

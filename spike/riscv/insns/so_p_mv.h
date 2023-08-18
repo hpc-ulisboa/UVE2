@@ -1,8 +1,18 @@
 auto dest = insn.uve_pred_rd();
-auto& src = P.SU.predicates[insn.uve_pred_rs1()];
-auto& destPReg = P.SU.predicates[dest];
+auto &destPReg = P.SU.predicates[dest];
+auto &srcPReg = P.SU.predicates[insn.uve_pred_rs1()];
 auto &predReg = P.SU.predicates[insn.uve_pred()];
 
-std::deque<uint8_t> predicate = src.getPredicate();
+auto pi = predReg.getPredicate(); // instruction predicate
+
+auto predicate = srcPReg.getPredicate();
+size_t size = srcPReg.maxAmountElements;
+
+auto destPredicate = destPReg.getPredicate();
+
+for (size_t i = 0; i < size; ++i) {
+    if (!pi.at(i))
+        predicate.at(i) = destPredicate.at(i);
+}
 
 P.SU.makePredRegister(predicate, dest);

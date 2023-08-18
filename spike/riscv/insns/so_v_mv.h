@@ -17,7 +17,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     /* Grab used types for storage and operation */
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     using OperationType = ComputationTypeFp<StorageType>;
-    std::deque<StorageType> out;
+    std::vector<StorageType> out;
     for (size_t i = 0; i < elements.size(); i++) {
         auto e = readAS<OperationType>(elements.at(i));
         auto outPreStore = readAS<StorageType>(e);

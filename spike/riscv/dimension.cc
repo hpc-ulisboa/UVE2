@@ -2,7 +2,7 @@
 #include <iostream>
 
 /* Start of Dimension function definitions */
-Dimension::Dimension(std::size_t offset, std::size_t size, std::size_t stride)
+Dimension::Dimension(size_t offset, size_t size, size_t stride)
     : offset(offset), size(size), stride(stride) {
     iter_offset = offset;
     iter_size = size;
@@ -10,6 +10,7 @@ Dimension::Dimension(std::size_t offset, std::size_t size, std::size_t stride)
     iter_index = 0;
     endOfDimension = iter_size == 0;
     //endOfDimension = false;
+    //std::cout << "offset: " << offset << ", size: " << size << ", stride: " << stride << std::endl;
 }
 
 /*void Dimension::resetIndex() {
@@ -31,6 +32,7 @@ void Dimension::advance() {
 }
 
 bool Dimension::isLastIteration() const {
+    //std::cout << "iter_index: " << iter_index << ", iter_size: " << iter_size << std::endl;
     return iter_index + 1 >= iter_size;
 }
 /*bool Dimension::triggerIterationUpdate() const {
@@ -48,11 +50,11 @@ void Dimension::setEndOfDimension(bool b) {
         iter_index = 0;
 }
 
-std::size_t Dimension::calcOffset(std::size_t width) const {
+size_t Dimension::calcOffset(size_t width) const {
     return iter_offset + iter_stride * iter_index * width;
 }
 
-std::size_t Dimension::getSize() const {
+size_t Dimension::getSize() const {
     return iter_size;
 }
 
@@ -72,7 +74,7 @@ void Modifier::modDimension(Dimension &dim) const {
 }
 
 void Modifier::modStatic(Dimension &dim) const {
-    std::size_t valueChange = displacement;
+    size_t valueChange = displacement;
     if (behaviour == Behaviour::Increment) {
         /* Nothing changes */
     } else if (behaviour == Behaviour::Decrement) {

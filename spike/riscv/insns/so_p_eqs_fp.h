@@ -15,24 +15,26 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
     auto destElements = destP.getPredicate();
-    auto validElementsIndex = std::min(elements1.size(), elements2.size());
+    auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
 
-    std::deque<uint8_t> p = pred.getPredicate();
-    std::deque<uint8_t> predicate;
+    auto p = pred.getPredicate();
+    std::vector<uint8_t> predicate(pred.maxAmountElements);
+
+    auto iterator = predicate.begin();
 
     if (validElementsIndex) {
         /* Grab used types for storage and operation */
         using OperationType = decltype(extra);
-        auto destValidIndex = destElements.size();
         uint8_t value = 0;
-        auto e2 = *reinterpret_cast<OperationType *>(&elements2.at(0));
+        auto e2 = readAS<OperationType>(elements2.at(0));
         for (size_t i = 0; i < validElementsIndex; i++) {
             if(p.at((i+1)*sizeof(OperationType)-1)){
-                auto e1 = *reinterpret_cast<OperationType *>(&elements1.at(i));
+                auto e1 = readAS<OperationType>(elements1.at(i));
                 value = e1 == e2;
             } else
-                value =  i < destValidIndex ? destElements.at(i) : 0;
-            predicate.insert(predicate.end(), sizeof(OperationType), value);
+                value = destElements.at(i);
+            std::fill(iterator, iterator+sizeof(OperationType), value);
+            iterator += sizeof(OperationType);
         }
     }
     return predicate;

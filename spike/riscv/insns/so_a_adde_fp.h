@@ -7,29 +7,31 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 // The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     auto elements = src.getElements(true);
-    auto validElementsIndex = elements.size();
+    auto destElements = dest.getElements(true);
+    auto validElementsIndex = src.getValidIndex();
     
-    std::deque<uint8_t> p = pred.getPredicate();
+    auto p = pred.getPredicate();
+    auto value = 0;
+    using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
+    using OperationType = decltype(extra);
+    std::vector<StorageType> out = destElements;
 
     // Grab used types for storage and operation
-    if (validElementsIndex) {
-        using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
-        using OperationType = decltype(extra);
-        std::deque<StorageType> out;
-        auto value = elements.size() > 0 ? *reinterpret_cast<OperationType *>(&elements.at(0)) : 0;
+    if (validElementsIndex) {        
         // std::cout << "\nADDE s1: " << elements.size() << "\n";
-        for (size_t i = 1; i < validElementsIndex; i++) {
+        for (size_t i = 0; i < validElementsIndex; i++) {
             if (p.at((i+1)*sizeof(OperationType)-1)){
-                auto e = *reinterpret_cast<OperationType *>(&elements.at(i));
+                auto e = readAS<OperationType>(elements.at(i));
                 value += e;
             }
             // std::cout << "Adde Iter: " << i << " element: " << e << " total sum: " << value << '\n';
         }
         //std::cout << "ADDE Total: " << value << '\n';
-        out.push_back(*reinterpret_cast<StorageType *>(&value));
-        dest.setElements(true, out);
         // std::cout << "\n\nOUT: " << out.size() << "\n\n";
     }
+    out.at(0) = readAS<StorageType>(value);
+    dest.setElements(true, out);
+    dest.setValidIndex(1);
 };
 
 // If the destination register is a temporary, we have to build it before the operation so that it's element size matches before any calculations are done

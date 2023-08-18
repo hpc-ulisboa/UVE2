@@ -49,20 +49,20 @@ void streamRegister_t<T>::endConfiguration() {
 }
 
 template <typename T>
-std::deque<T> streamRegister_t<T>::getElements(bool causesUpdate) {
+std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
     //assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
 
     if (causesUpdate) {
         updateStreamValues();
     }
 
-    std::deque<T> e = elements;
+    std::vector<T> e(elements.begin(), elements.end());
 
     return e;
 }
 
 template <typename T>
-void streamRegister_t<T>::setElements(bool causesUpdate, std::deque<T> e) {
+void streamRegister_t<T>::setElements(bool causesUpdate, std::vector<T> e) {
     assert_msg("Trying to set values to a load stream", type != RegisterConfig::Load);
 
     elements = e;
@@ -72,12 +72,19 @@ void streamRegister_t<T>::setElements(bool causesUpdate, std::deque<T> e) {
 }
 
 template <typename T>
+void streamRegister_t<T>::setValidIndex(const size_t i) {
+    assert_msg("Trying to set valid index to invalid value", i <= maxAmountElements);
+
+    validIndex = i;
+}
+
+template <typename T>
 bool streamRegister_t<T>::hasStreamFinished() const {
     return status == RegisterStatus::Finished;
 }
 
 template <typename T>
-void streamRegister_t<T>::clearEndOfDimensionOfDim(std::size_t i) {
+void streamRegister_t<T>::clearEndOfDimensionOfDim(size_t i) {
     assert_msg("Trying to clear eof of invalid dimension", i < dimensions.size());
     /* Cannot clear this flag when the stream has finished, it would prevent us from knowing that */
     if (isStreamDone())
@@ -86,17 +93,10 @@ void streamRegister_t<T>::clearEndOfDimensionOfDim(std::size_t i) {
 }
 
 template <typename T>
-bool streamRegister_t<T>::isEndOfDimensionOfDim(std::size_t i) const {
+bool streamRegister_t<T>::isEndOfDimensionOfDim(size_t i) const {
     assert_msg("Trying to check eof of invalid dimension", i < dimensions.size());
     return dimensions.at(i).isEndOfDimension();
 }
-
-/*void tryIterate()
-{
-  if (canIterate()) {
-    updateIteration();
-  }
-}*/
 
 template <typename T>
 RegisterStatus streamRegister_t<T>::getStatus() const {
@@ -104,13 +104,18 @@ RegisterStatus streamRegister_t<T>::getStatus() const {
 }
 
 template <typename T>
-std::size_t streamRegister_t<T>::getElementsWidth() const {
+size_t streamRegister_t<T>::getElementsWidth() const {
     return elementsWidth;
 }
 
 template <typename T>
-std::size_t streamRegister_t<T>::getMaxElements() const {
+size_t streamRegister_t<T>::getMaxElements() const {
     return maxAmountElements;
+}
+
+template <typename T>
+size_t streamRegister_t<T>::getValidIndex() const {
+    return validIndex;
 }
 
 template <typename T>
@@ -142,12 +147,14 @@ void streamRegister_t<T>::updateStreamValues() {
 }
 
 template <typename T>
-std::size_t streamRegister_t<T>::generateOffset() {
+size_t streamRegister_t<T>::generateOffset() {
     /* Result will be the final accumulation of all offsets calculated per dimension */
-    std::size_t init = 0;
+    size_t init = 0;
     return std::accumulate(dimensions.begin(), dimensions.end(), init, [](size_t acc, Dimension &dim) {
-        if (dim.isLastIteration())
+        if (dim.isLastIteration()){
+            //std::cout << "Last iteration of dimension." << std::endl;
             dim.setEndOfDimension(true);
+        }
         return acc + dim.calcOffset(elementsWidth);
     });
 }
@@ -165,20 +172,24 @@ bool streamRegister_t<T>::isStreamDone() const {
 }
 
 template <typename T>
-bool streamRegister_t<T>::tryGenerateOffset(std::size_t& address) {
-    /* There are three situations that prevent us from generating offsets/iterating a stream:
+bool streamRegister_t<T>::tryGenerateOffset(size_t& address) {
+    /* There are two situations that prevent us from generating offsets/iterating a stream:
     1) We are at the last iteration of the outermost dimension
     2) We just finished the last iteration of a dimension and there is a configure
     stream vector modifier at that same dimension. In these cases, the generation can
     only resume after an exterior call to setEndOfDimension(false) */
 
     /* The outermost dimension is the last one in the container */
-    if (isStreamDone())
+    if (isStreamDone()){
+        //std::cout << "Stream is done." << std::endl;
         return false;
+    }
         
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
-        if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1))
+        if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)){
+            //std::cout << "This should never be printed in saxpy kernel." << std::endl;
             return false;
+        }
     }
     address = generateOffset();
     return true;
@@ -228,20 +239,16 @@ void streamRegister_t<T>::updateIteration() {
     }
 }
 
-/*void clearEODFlags() {
-    std::for_each(dimensions.begin(), dimensions.end(), [](Dimension &dim) { dim.setEndOfDimension(false); });
-}*/
-
 template <typename T>
 void streamRegister_t<T>::updateAsLoad() {
     if (isStreamDone()) { // doesn't try to load if stream has finished
         return;
     }
 
-    elements.clear();
+    //elements.clear();
     //elements.reserve(maxAmountElements);
 
-    std::size_t eCount = maxAmountElements;
+    size_t eCount = 0;
 
     /*----------------------------------- Loading pipeline -----------------------------------
     ************************************* THIS IS OUTDATED ***********************************
@@ -258,9 +265,10 @@ void streamRegister_t<T>::updateAsLoad() {
      * This iterates the stream before their first load, skipping 1 iteration.
      *----------------------------------------------------------------------------------------*/
     
-    std::size_t offset;
+    size_t offset;
 
-    while (eCount && tryGenerateOffset(offset)){
+    while (eCount < maxAmountElements && tryGenerateOffset(offset)){
+        //std::cout << "Can generate offset before (eCount = " << eCount << ")" << std::endl;
         auto value = [this](auto address) -> ElementsType {
             if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint8_t>(address));
@@ -271,18 +279,24 @@ void streamRegister_t<T>::updateAsLoad() {
             else
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint64_t>(address));
         }(offset);
-        elements.push_back(value);
-        if(tryGenerateOffset(offset))
+        //elements.push_back(value);
+        elements.at(eCount) = value;
+        //std::cout << "Loaded Value: " << readAS<double>(value) << std::endl;
+        if(tryGenerateOffset(offset)){
+            //std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
             updateIteration(); // reset EOD flags and iterate stream
-        else
+            ++eCount;
+        } else
             break;
-        --eCount;
     }
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
-    if(eCount){ // iteration is already updated when register is full (e.g. counter = 0)
-        std::cout << "Updating iteration" << std::endl;
+    //std::cout << "eCount: " << eCount << std::endl;
+    //std::cout << "maxAmountElements: " << maxAmountElements << std::endl;
+    if(eCount < maxAmountElements){ // iteration is already updated when register is full
         updateIteration(); // reset EOD flags and iterate stream
-    }
+        validIndex = ++eCount;
+    } else 
+        validIndex = eCount;
 }
  
 template <typename T>
@@ -293,12 +307,14 @@ void streamRegister_t<T>::updateAsStore() {
     }
 
     // std::cout << "Storing " << elements.size() << " elements. eCount=" << maxAmountElements << std::endl;
-    std::size_t offset;
-    std::size_t eCount = std::min(maxAmountElements, elements.size());
-    while (eCount && tryGenerateOffset(offset)) {
-        auto value = elements.front();
+    size_t offset;
+    size_t eCount = 0;
+    while (eCount < validIndex && tryGenerateOffset(offset)) {
+        //auto value = elements.front();
         //elements.erase(elements.begin());
-        elements.pop_front(); //-- std::deque
+        //elements.pop_front(); //-- std::array
+        auto value = elements.at(eCount);
+        //std::cout << "Stored Value: " << readAS<ElementsType>(value) << std::endl;
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
             gMMU(su->p).template store<std::uint8_t>(offset, readAS<ElementsType>(value));
         else if constexpr (std::is_same_v<ElementsType, std::uint16_t>)
@@ -307,24 +323,23 @@ void streamRegister_t<T>::updateAsStore() {
             gMMU(su->p).template store<std::uint32_t>(offset, readAS<ElementsType>(value));
         else
             gMMU(su->p).template store<std::uint64_t>(offset, readAS<ElementsType>(value));
-        --eCount;
-        if(tryGenerateOffset(offset))
+        if(tryGenerateOffset(offset)){
             updateIteration(); // reset EOD flags and iterate stream
-        else
+            ++eCount;
+        } else
             break;
     }
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
-    if(eCount) // iteration is already updated when register is full (e.g. counter = 0)
+    if(eCount < validIndex) // iteration is already updated when register is full
         updateIteration(); // reset EOD flags and iterate stream    
-    elements.clear();
+    //elements.clear();
 }
 
-std::deque<uint8_t> PredRegister::getPredicate() const{
-
+std::vector<uint8_t> PredRegister::getPredicate() const{
     return elements;
 }
 
-void streamingUnit_t::updateEODTable(const std::size_t stream) {
+void streamingUnit_t::updateEODTable(const size_t stream) {
     int r = 0, d = 0;
     std::visit([&](const auto reg){
         int d = 0;
@@ -337,7 +352,7 @@ void streamingUnit_t::updateEODTable(const std::size_t stream) {
 }
 
 template <typename T>
-void streamingUnit_t::makeStreamRegister(RegisterConfig type, std::size_t streamRegister) {
+void streamingUnit_t::makeStreamRegister(RegisterConfig type, size_t streamRegister) {
     assert_msg("Tried to use a register index higher than the available register", streamRegister < registerCount);
     if constexpr (std::is_same_v<T, std::uint8_t>) {
         registers.at(streamRegister) = StreamReg8{this, type, streamRegister};
@@ -352,9 +367,10 @@ void streamingUnit_t::makeStreamRegister(RegisterConfig type, std::size_t stream
     }
 }
 
-void streamingUnit_t::makePredRegister(std::deque<uint8_t> elements, std::size_t predRegister) {
+void streamingUnit_t::makePredRegister(std::vector<uint8_t> elements, size_t predRegister) {
     assert_msg("Tried to alter p0 register, which is hardwired to 1", predRegister);
     assert_msg("Tried to use a predicate register index higher than the available predicate registers", predRegister < predRegCount);
+    assert_msg("Tried to create predicate with invalid size", elements.size() == predicates.at(predRegister).maxAmountElements);
     for (auto &p : elements)
         assert_msg("Invalid values for predicate (must be 0 or 1)", !p || p == 1);
     predicates.at(predRegister).elements = elements;
@@ -364,7 +380,7 @@ template class streamRegister_t<uint8_t>;
 template class streamRegister_t<uint16_t>;
 template class streamRegister_t<uint32_t>;
 template class streamRegister_t<uint64_t>;
-template void streamingUnit_t::makeStreamRegister<uint8_t>(RegisterConfig type, std::size_t streamRegister);
-template void streamingUnit_t::makeStreamRegister<uint16_t>(RegisterConfig type, std::size_t streamRegister);
-template void streamingUnit_t::makeStreamRegister<uint32_t>(RegisterConfig type, std::size_t streamRegister);
-template void streamingUnit_t::makeStreamRegister<uint64_t>(RegisterConfig type, std::size_t streamRegister);
+template void streamingUnit_t::makeStreamRegister<uint8_t>(RegisterConfig type, size_t streamRegister);
+template void streamingUnit_t::makeStreamRegister<uint16_t>(RegisterConfig type, size_t streamRegister);
+template void streamingUnit_t::makeStreamRegister<uint32_t>(RegisterConfig type, size_t streamRegister);
+template void streamingUnit_t::makeStreamRegister<uint64_t>(RegisterConfig type, size_t streamRegister);
