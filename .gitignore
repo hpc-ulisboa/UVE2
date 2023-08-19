@@ -52,8 +52,8 @@ Mkfile.old
 dkms.conf
 
 # Spike Tools
-UVE-Testing/spike-test/spike 
-UVE-Testing/spike-test/pk
+/UVE-Testing/spike-test/spike 
+/UVE-Testing/spike-test/pk
 
 # Log files that may be too big to commit
 log*
