@@ -54,3 +54,7 @@ dkms.conf
 # Spike Tools
 spike 
 pk
+
+# Log files that may be too big to commit
+log*
+*.log
