@@ -139,7 +139,7 @@ void streamRegister_t<T>::updateStreamValues() {
         updateAsLoad();
     } else if (this->type == RegisterConfig::Store) {
         updateAsStore();
-    } else if (this->type == RegisterConfig::Temporary) {
+    } else if (this->type == RegisterConfig::NoStream) {
         // do nothing
     } else {
         assert_msg("Unhandled type of stream was asked to update", false);

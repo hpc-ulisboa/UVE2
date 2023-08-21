@@ -7,8 +7,8 @@ auto& predReg = P.SU.predicates[insn.uve_pred()];
 auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto extra) {
     /* Each stream's elements must have the same width for content to be
      * operated on */
-    const bool src1Check = src1.getType() == RegisterConfig::Load || src1.getType() == RegisterConfig::Temporary;
-    const bool src2Check = src2.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Temporary;
+    const bool src1Check = src1.getType() == RegisterConfig::Load || src1.getType() == RegisterConfig::NoStream;
+    const bool src2Check = src2.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::NoStream;
     if (src1Check && src2Check)
         assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
     /* We can only operate on the first available values of the stream */
@@ -32,7 +32,7 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
                 auto e2 = readAS<OperationType>(elements2.at(i));
                 value = e1 < e2;
             } else
-                value = destElements.at(i);
+                value = readAS<OperationType>(destElements.at(i));
             std::fill(iterator, iterator+sizeof(OperationType), value);
             iterator += sizeof(OperationType);
         }

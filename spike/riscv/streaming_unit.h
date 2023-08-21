@@ -22,7 +22,7 @@ class streamingUnit_t;
 
 /* --- Streaming Registers --- */
 
-enum class RegisterConfig { Temporary,
+enum class RegisterConfig { NoStream,
                             Load,
                             Store };
 enum class RegisterStatus { NotConfigured,
@@ -59,7 +59,7 @@ struct streamRegister_t {
     // static constexpr size_t maxDimensions = 8;
     // static constexpr size_t maxModifiers = su->maxDimensions - 1;
 
-    streamRegister_t(streamingUnit_t *su = nullptr, RegisterConfig t = RegisterConfig::Temporary, size_t regN = -1) : su(su), registerN(regN), type(t) {
+    streamRegister_t(streamingUnit_t *su = nullptr, RegisterConfig t = RegisterConfig::NoStream, size_t regN = -1) : su(su), registerN(regN), type(t) {
         status = RegisterStatus::NotConfigured;
         validIndex = maxAmountElements;
     }
@@ -169,7 +169,7 @@ struct streamingUnit_t {
     }
 
     template <typename T>
-    void makeStreamRegister(RegisterConfig type = RegisterConfig::Temporary, size_t streamRegister = -1);
+    void makeStreamRegister(RegisterConfig type = RegisterConfig::NoStream, size_t streamRegister = -1);
 
     void makePredRegister(std::vector<uint8_t> elements, size_t predRegister = -1);
 

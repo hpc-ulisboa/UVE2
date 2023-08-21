@@ -10,8 +10,8 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto extra) {
     /* Each stream's elements must have the same width for content to be
      * operated on */
-    const bool src1Check = src1.getType() == RegisterConfig::Load || src1.getType() == RegisterConfig::Temporary;
-    const bool src2Check = src2.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Temporary;
+    const bool src1Check = src1.getType() == RegisterConfig::Load || src1.getType() == RegisterConfig::NoStream;
+    const bool src2Check = src2.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::NoStream;
     if (src1Check && src2Check) {
         assert_msg("Given streams have different widths",
                    src1.getElementsWidth() == src2.getElementsWidth());
@@ -44,7 +44,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
                 auto e2 = readAS<OperationType>(elements2.at(i));
                 value = e1 / e2;
             } else
-                value = destElements.at(i);
+                value = readAS<OperationType>(destElements.at(i));
             out.at(i) = readAS<StorageType>(value);
         }
         dest.setElements(true, out);
@@ -52,19 +52,19 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     dest.setValidIndex(validElementsIndex);
 };
 
-/* If the destination register is a temporary, we have to build it before the
+/* If the destination register is not configured, we have to build it before the
 operation so that it's element size matches before any calculations are done */
 std::visit([&](auto &dest) {
-    if (dest.getStatus() != RegisterStatus::Running) {
+    if (dest.getStatus() == RegisterStatus::NotConfigured) {
         // std::cout << "\n\nMaking temporary add\n\n";
         if (std::holds_alternative<StreamReg64>(src1Reg)) {
-            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::Temporary, streamReg);
+            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::NoStream, streamReg);
             /*operateRegister(P.SU, streamReg, [=](auto& reg) {
               reg.endConfiguration();
             });*/
             dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg32>(src1Reg)) {
-            P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::Temporary, streamReg);
+            P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::NoStream, streamReg);
             /*operateRegister(P.SU, streamReg, [=](auto& reg) {
               reg.endConfiguration();
             });*/

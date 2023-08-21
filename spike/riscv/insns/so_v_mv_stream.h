@@ -13,7 +13,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     //     dest.getStatus() != RegisterStatus::Finished);
     // }
     /* We can only operate on the first available values of the stream */
-    auto elements = src.getElements(true);
+    auto elements = src.getElements(false); // doesn't iterate the stream
     /* Grab used types for storage and operation */
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     using OperationType = ComputationTypeFp<StorageType>;
@@ -23,7 +23,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
         auto outPreStore = readAS<StorageType>(e);
         out.push_back(outPreStore);
     }
-    dest.setElements(true, out);
+    dest.setElements(false, out); // doesn't iterate the stream ???
 };
 
 /* If the destination register is a temporary, we have to build it before the

@@ -36,16 +36,16 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 
 // If the destination register is a temporary, we have to build it before the operation so that it's element size matches before any calculations are done
 std::visit([&](auto &dest) {
-    if (dest.getStatus() != RegisterStatus::Running) {
+    if (dest.getStatus() == RegisterStatus::NotConfigured) {
         // std::cout << "\n\nMaking temporary add\n\n";
         if (std::holds_alternative<StreamReg64>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::Temporary, streamReg);
+            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::NoStream, streamReg);
             /*operateRegister(P.SU, streamReg, [=](auto& reg) {
               reg.endConfiguration();
             });*/
             dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg32>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::Temporary, streamReg);
+            P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::NoStream, streamReg);
             /*operateRegister(P.SU, streamReg, [=](auto& reg) {
               reg.endConfiguration();
             });*/

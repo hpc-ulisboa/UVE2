@@ -11,8 +11,8 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     /* Each stream's elements must have the same width for content to be
      * operated on */
     // print pred elements
-    const bool src1Check = src1.getType() == RegisterConfig::Load || src1.getType() == RegisterConfig::Temporary;
-    const bool src2Check = src2.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Temporary;
+    const bool src1Check = src1.getType() == RegisterConfig::Load || src1.getType() == RegisterConfig::NoStream;
+    const bool src2Check = src2.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::NoStream;
     if (src1Check && src2Check)
         assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
     /* We can only operate on the first available values of the stream */
@@ -21,7 +21,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     auto destElements = dest.getElements(false);
     auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
 
-    auto p = pred.getPredicate();
+    auto pi = pred.getPredicate();
 
     // std::cout << "\nADD s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
     //   print elements1
@@ -39,21 +39,20 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
         // auto destValidIndex = dest.getValidIndex();
         OperationType value = 0;
         for (size_t i = 0; i < validElementsIndex; i++) {
-            // print p from i to i+sizeof(OperationType)-1
-            /*std::cout << "ADD p: ";
+            // print pi from i to i+sizeof(OperationType)-1
+            /*std::cout << "ADD pi: ";
             for (size_t j = i*sizeof(OperationType); j < (i+1)*sizeof(OperationType); j++) {
-                std::cout << (int)p.at(j);
+                std::cout << (int)pi.at(j);
             }
             std::cout << "\n";
             */
-            if (p.at((i + 1) * sizeof(OperationType) - 1)) {
+            if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
                 auto e1 = readAS<OperationType>(elements1.at(i));
                 auto e2 = readAS<OperationType>(elements2.at(i));
                 value = e1 + e2;
                 //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
             } else
-                // value =  i < destValidIndex ? readAS<OperationType>(destElements.at(i)) : 0;
-                value = destElements.at(i);
+                value = readAS<OperationType>(destElements.at(i));
             out.at(i) = readAS<StorageType>(value);
         }
         dest.setElements(true, out);
@@ -62,15 +61,15 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     dest.setValidIndex(validElementsIndex);
 };
 
-/* If the destination register is a temporary, we have to build it before the
+/* If the destination register is not configured, we have to build it before the
 operation so that it's element size matches before any calculations are done */
 std::visit([&](auto &dest) {
-    if (dest.getStatus() != RegisterStatus::Running) {
+    if (dest.getStatus() == RegisterStatus::NotConfigured) {
         if (std::holds_alternative<StreamReg64>(src1Reg)) {
-            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::Temporary, streamReg);
+            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::NoStream, streamReg);
             dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg32>(src1Reg)) {
-            P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::Temporary, streamReg);
+            P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::NoStream, streamReg);
             dest.endConfiguration();
         } else
             assert_msg("Trying to run so.a.add.fp with invalid src type", false);
