@@ -52,7 +52,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
 };
 
 /* If the destination register is not configured, we have to build it before the
-operation so that it's element size matches before any calculations are done */
+operation so that its element size matches before any calculations are done */
 std::visit([&](auto &dest) {
     if (dest.getStatus() == RegisterStatus::NotConfigured) {
         // std::cout << "\n\nMaking temporary add\n\n";

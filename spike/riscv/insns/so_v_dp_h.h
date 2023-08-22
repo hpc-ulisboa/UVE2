@@ -19,7 +19,7 @@ auto baseBehaviour = [](auto &dest, auto &pred, const auto value) {
     dest.setValidIndex(destValidIndex);
 };
 
-// If the destination register is a temporary, we have to build it before the operation so that its element size matches before any calculations are done
+// If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done
 std::visit([&](auto &dest) {
     if (dest.getStatus() == RegisterStatus::NotConfigured) {
         P.SU.makeStreamRegister<std::uint16_t>(RegisterConfig::NoStream, streamReg);

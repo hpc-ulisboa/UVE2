@@ -37,26 +37,27 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 // If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done
 std::visit([&](auto &dest) {
     if (dest.getStatus() == RegisterStatus::NotConfigured) {
-        // std::cout << "\n\nMaking temporary add\n\n";
-        if (std::holds_alternative<StreamReg64>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::NoStream, streamReg);
-            /*operateRegister(P.SU, streamReg, [=](auto& reg) {
-              reg.endConfiguration();
-            });*/
+        if (std::holds_alternative<StreamReg8>(srcReg)) {
+            P.SU.makeStreamRegister<std::uint8_t>(RegisterConfig::NoStream, streamReg);
+            dest.endConfiguration();
+        } else if (std::holds_alternative<StreamReg16>(srcReg)) {
+            P.SU.makeStreamRegister<std::uint16_t>(RegisterConfig::NoStream, streamReg);
             dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg32>(srcReg)) {
             P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::NoStream, streamReg);
-            /*operateRegister(P.SU, streamReg, [=](auto& reg) {
-              reg.endConfiguration();
-            });*/
+            dest.endConfiguration();
+        } else if (std::holds_alternative<StreamReg64>(srcReg)) {
+            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::NoStream, streamReg);
             dest.endConfiguration();
         } else
-            assert_msg("Trying to run so.a.adde.fp with invalid src type", false);
+            assert_msg("Trying to run so.a.adde.us with invalid src type", false);
     }
 }, destReg);
 
 std::visit(overloaded{
-    [&](StreamReg64 &dest, StreamReg64 &src) { baseBehaviour(dest, src, predReg, double{}); },
-    [&](StreamReg32 &dest, StreamReg32 &src) { baseBehaviour(dest, src, predReg, float{}); },
-    [&](auto &dest, auto &src) { assert_msg("Invoking so.a.adde.fp with invalid parameter sizes", false); }
+    [&](StreamReg8 &dest, StreamReg8 &src) { baseBehaviour(dest, src, predReg, (unsigned char){}); },
+    [&](StreamReg16 &dest, StreamReg16 &src) { baseBehaviour(dest, src, predReg, (unsigned short int){}); },
+    [&](StreamReg32 &dest, StreamReg32 &src) { baseBehaviour(dest, src, predReg, (unsigned int){}); },
+    [&](StreamReg64 &dest, StreamReg64 &src) { baseBehaviour(dest, src, predReg, (unsigned long int){}); },
+    [&](auto &dest, auto &src) { assert_msg("Invoking so.a.adde.us with invalid parameter sizes", false); }
 }, destReg, srcReg);

@@ -10,7 +10,6 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto extra) {
     /* Each stream's elements must have the same width for content to be
      * operated on */
-    // print pred elements
     assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements(true);
@@ -59,7 +58,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
 };
 
 /* If the destination register is not configured, we have to build it before the
-operation so that it's element size matches before any calculations are done */
+operation so that its element size matches before any calculations are done */
 std::visit([&](auto &dest) {
     if (dest.getStatus() == RegisterStatus::NotConfigured) {
         if (std::holds_alternative<StreamReg64>(src1Reg)) {

@@ -18,7 +18,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     dest.setValidIndex(validElementsIndex);
 };
 
-/* If the destination register is a temporary, we have to build it before the
+/* If the destination register is not configured, we have to build it before the
 operation so that its element size matches before any calculations are done */
 std::visit([&](auto &dest) {
     if (dest.getStatus() == RegisterStatus::NotConfigured) {

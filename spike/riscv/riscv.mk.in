@@ -1311,10 +1311,20 @@ riscv_insn_ext_cmo = \
 
 riscv_insn_ext_uve = \
 	so_a_add_fp \
+	so_a_add_sg \
+	so_a_add_us \
 	so_a_adde_fp \
+	so_a_adde_sg \
+	so_a_adde_us \
 	so_a_div_fp \
+	so_a_div_sg \
+	so_a_div_us \
 	so_a_mul_fp \
+	so_a_mul_sg \
+	so_a_mul_us \
 	so_a_sub_fp \
+	so_a_sub_sg \
+	so_a_sub_us \
 	so_b_nc \
 	so_b_ndc_1 \
 	so_p_cv_b \
