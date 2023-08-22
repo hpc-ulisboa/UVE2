@@ -1,29 +1,21 @@
 auto streamReg = insn.uve_rd();
 auto &destReg = P.SU.registers[streamReg];
 auto &srcReg = P.SU.registers[insn.uve_rs1()];
-auto &predReg = P.SU.predicates[insn.uve_pred()];
+auto &predReg = P.SU.predicates[insn.uve_v_pred()];
 
 
 auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
-    /* Streams can only output/input values if they are in the running status */
-    // const bool runningcheck = src.getStatus() != RegisterStatus::Finished;
-    // assert_msg("Stream was not configured to be running", runningcheck);
-    // if (dest.getType() == RegisterConfig::Store) {
-    //   assert_msg("Store destination stream was not running",
-    //     dest.getStatus() != RegisterStatus::Finished);
-    // }
+    using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     /* We can only operate on the first available values of the stream */
     auto elements = src.getElements(true);
-    /* Grab used types for storage and operation */
-    using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
-    using OperationType = ComputationTypeFp<StorageType>;
-    std::vector<StorageType> out;
-    for (size_t i = 0; i < elements.size(); i++) {
-        auto e = readAS<OperationType>(elements.at(i));
-        auto outPreStore = readAS<StorageType>(e);
-        out.push_back(outPreStore);
-    }
+    auto destElements = dest.getElements(false); // doesn't iterate the stream
+    auto validElementsIndex = src.getValidIndex();
+    std::vector<StorageType> out(dest.getMaxElements());
+    auto pi = pred.getPredicate();
+    for (size_t i = 0; i < validElementsIndex; ++i)
+        out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
     dest.setElements(true, out);
+    dest.setValidIndex(validElementsIndex);
 };
 
 /* If the destination register is a temporary, we have to build it before the

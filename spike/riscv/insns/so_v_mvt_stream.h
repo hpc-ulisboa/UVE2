@@ -8,10 +8,12 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     /* We can only operate on the first available values of the stream */
     auto elements = src.getElements(false); // doesn't iterate the stream
+    std::reverse(elements.begin(), elements.end()); // reverse the source elements
     auto destElements = dest.getElements(false); // doesn't iterate the stream
     auto validElementsIndex = src.getValidIndex();
     std::vector<StorageType> out(dest.getMaxElements());
     auto pi = pred.getPredicate();
+    std::reverse(pi.begin(), pi.end()); // reverse the instruction predicate
     for (size_t i = 0; i < validElementsIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
     dest.setElements(false, out); // doesn't iterate the stream ???

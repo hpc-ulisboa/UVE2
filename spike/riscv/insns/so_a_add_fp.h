@@ -11,10 +11,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     /* Each stream's elements must have the same width for content to be
      * operated on */
     // print pred elements
-    const bool src1Check = src1.getType() == RegisterConfig::Load || src1.getType() == RegisterConfig::NoStream;
-    const bool src2Check = src2.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::NoStream;
-    if (src1Check && src2Check)
-        assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
+    assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);

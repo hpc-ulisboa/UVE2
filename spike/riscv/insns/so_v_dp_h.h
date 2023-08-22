@@ -12,7 +12,7 @@ auto baseBehaviour = [](auto &dest, auto &pred, const auto value) {
     auto pi = pred.getPredicate();
     auto destElements = dest.getElements(false);
     auto destValidIndex = dest.getMaxElements();
-    std::vector<uint16_t> out(destValidIndex, value);
+    std::vector<uint16_t> out(destValidIndex);
     for (size_t i = 0; i < destValidIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(uint16_t)-1) ? value : destElements.at(i);
     dest.setElements(true, out);
