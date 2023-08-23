@@ -16,7 +16,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     std::reverse(pi.begin(), pi.end()); // reverse the instruction predicate
     for (size_t i = 0; i < validElementsIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
-    dest.setElements(false, out); // doesn't iterate the stream ???
+    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
 };
 
