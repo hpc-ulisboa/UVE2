@@ -1310,6 +1310,8 @@ riscv_insn_ext_cmo = \
 	cbo_zero \
 
 riscv_insn_ext_uve = \
+	so_a_abs_fp \
+	so_a_abs_sg \
 	so_a_add_fp \
 	so_a_add_sg \
 	so_a_add_us \
@@ -1319,6 +1321,18 @@ riscv_insn_ext_uve = \
 	so_a_div_fp \
 	so_a_div_sg \
 	so_a_div_us \
+	so_a_max_fp \
+	so_a_max_sg \
+	so_a_max_us \
+	so_a_maxe_fp \
+	so_a_maxe_sg \
+	so_a_maxe_us \
+	so_a_min_fp \
+	so_a_min_sg \
+	so_a_min_us \
+	so_a_mine_fp \
+	so_a_mine_sg \
+	so_a_mine_us \
 	so_a_mul_fp \
 	so_a_mul_sg \
 	so_a_mul_us \

@@ -12,12 +12,6 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
      * operated on */
     assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
     /* We can only operate on the first available values of the stream */
-    auto elements1 = src1.getElements(true);
-    auto elements2 = src2.getElements(true);
-    auto destElements = dest.getElements(false);
-    auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
-
-    auto pi = pred.getPredicate();
 
     // std::cout << "\nADD s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
     //   print elements1
@@ -27,33 +21,36 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
         std::cout << i << ": " << *reinterpret_cast<Operation *>(&elements1.at(i)) << '\n';
     }
     std::cout << "\n";*/
-    if (validElementsIndex) {
-        /* Grab used types for storage and operation */
-        using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
-        using OperationType = decltype(extra);
-        std::vector<StorageType> out(dest.getMaxElements());
-        // auto destValidIndex = dest.getValidIndex();
-        OperationType value = 0;
-        for (size_t i = 0; i < validElementsIndex; i++) {
-            // print pi from i to i+sizeof(OperationType)-1
-            /*std::cout << "ADD pi: ";
-            for (size_t j = i*sizeof(OperationType); j < (i+1)*sizeof(OperationType); j++) {
-                std::cout << (int)pi.at(j);
-            }
-            std::cout << "\n";
-            */
-            if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
-                auto e1 = readAS<OperationType>(elements1.at(i));
-                auto e2 = readAS<OperationType>(elements2.at(i));
-                value = e1 + e2;
-                //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
-            } else
-                value = readAS<OperationType>(destElements.at(i));
-            out.at(i) = readAS<StorageType>(value);
+    
+    auto elements1 = src1.getElements(true);
+    auto elements2 = src2.getElements(true);
+    auto destElements = dest.getElements(false);
+    auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
+
+    auto pi = pred.getPredicate();
+
+    /* Grab used types for storage and operation */
+    using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
+    using OperationType = decltype(extra);
+    std::vector<StorageType> out = destElements;
+
+    for (size_t i = 0; i < validElementsIndex; i++) {
+        // print pi from i to i+sizeof(OperationType)-1
+        /*std::cout << "ADD pi: ";
+        for (size_t j = i*sizeof(OperationType); j < (i+1)*sizeof(OperationType); j++) {
+            std::cout << (int)pi.at(j);
         }
-        dest.setElements(true, out);
-        // std::cout << "\n\nOUT: " << out.size() << "\n\n";
+        std::cout << "\n";
+        */
+        if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
+            auto e1 = readAS<OperationType>(elements1.at(i));
+            auto e2 = readAS<OperationType>(elements2.at(i));
+            out.at(i) = readAS<StorageType>(e1 + e2);
+            //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
+        }
     }
+    dest.setElements(true, out);
+    // std::cout << "\n\nOUT: " << out.size() << "\n\n";
     dest.setValidIndex(validElementsIndex);
 };
 

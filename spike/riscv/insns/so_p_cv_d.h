@@ -16,7 +16,7 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
     auto destElements = destP.getPredicate();
     auto validElementsIndex = std::min(elements1.size(), elements2.size());
 
-    auto p = pred.getPredicate();
+    auto pi = pred.getPredicate();
     std::vector<uint8_t> predicate(pred.maxAmountElements);
 
     using Operation = decltype(extra);
@@ -26,7 +26,7 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
         auto destValidIndex = destElements.size();
         uint8_t value = 0;
         for (size_t i = 0; i < validElementsIndex; i++) {
-            if(p.at(i)){
+            if(pi.at(i)){
                 auto e1 = readAS<OperationType>(elements1.at(i));
                 auto e2 = readAS<OperationType>(elements2.at(i));
                 value = e1 >= e2;

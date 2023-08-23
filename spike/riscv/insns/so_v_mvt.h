@@ -7,13 +7,13 @@ auto &predReg = P.SU.predicates[insn.uve_v_pred()];
 auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     /* We can only operate on the first available values of the stream */
-    auto elements = src.getElements(true);
-    std::reverse(elements.begin(), elements.end()); // reverse the source elements
-    auto destElements = dest.getElements(false); // doesn't iterate the stream
     auto validElementsIndex = src.getValidIndex();
+    auto elements = src.getElements(true);
+    std::reverse(elements.begin(), elements.begin()+validElementsIndex); // reverse the valid source elements
+    auto destElements = dest.getElements(false); // doesn't iterate the stream
     std::vector<StorageType> out(dest.getMaxElements());
     auto pi = pred.getPredicate();
-    std::reverse(pi.begin(), pi.end()); // reverse the instruction predicate
+    std::reverse(pi.begin(), pi.begin()+validElementsIndex*sizeof(StorageType)); // reverse the necessary instruction predicate
     for (size_t i = 0; i < validElementsIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
     dest.setElements(true, out);
@@ -37,7 +37,7 @@ std::visit([&](auto &dest) {
             P.SU.makeStreamRegister<std::uint8_t>(RegisterConfig::NoStream, streamReg);
 			dest.endConfiguration();
         } else {
-            assert_msg("Trying to run so.v.mv with invalid src type", false);
+            assert_msg("Trying to run so.v.mvt with invalid src type", false);
         }
     }
 }, destReg);
@@ -47,5 +47,5 @@ std::visit(overloaded{
                [&](StreamReg32 &dest, StreamReg32 &src) { baseBehaviour(dest, src, predReg); },
                [&](StreamReg16 &dest, StreamReg16 &src) { baseBehaviour(dest, src, predReg); },
                [&](StreamReg8 &dest, StreamReg8 &src) { baseBehaviour(dest, src, predReg); },
-               [&](auto &dest, auto &src) { assert_msg("Invoking so.v.mv with invalid parameter sizes", false); }},
+               [&](auto &dest, auto &src) { assert_msg("Invoking so.v.mvt with invalid parameter sizes", false); }},
            destReg, srcReg);

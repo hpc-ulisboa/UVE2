@@ -12,8 +12,6 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto extra) {
     /* Each stream's elements must have the same width for content to be
      * operated on */
-
-    
     assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements(true);
@@ -21,27 +19,21 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     auto destElements = dest.getElements(false);
     auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
 
-    auto p = pred.getPredicate();
+    auto pi = pred.getPredicate();
 
-    if (validElementsIndex) {
-        /* Grab used types for storage and operation */
-        using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
-        using OperationType = decltype(extra);
-        std::vector<StorageType> out(dest.getMaxElements());
-        OperationType value = 0;
-        for (size_t i = 0; i < validElementsIndex; i++) {
-            if (p.at((i + 1) * sizeof(OperationType) - 1)) {
-                auto e1 = readAS<OperationType>(elements1.at(i));
-                auto e2 = readAS<OperationType>(elements2.at(i));
-                value = e1 * e2;
-                std::cout << "MUL element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
-            } else
-                value = readAS<OperationType>(destElements.at(i));
-            out.at(i) = readAS<StorageType>(value);
-            std::cout << "MUL out: " << readAS<OperationType>(out.at(i)) << "\n";
+    /* Grab used types for storage and operation */
+    using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
+    using OperationType = decltype(extra);
+    std::vector<StorageType> out = destElements;
+
+    for (size_t i = 0; i < validElementsIndex; i++) {
+        if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
+            auto e1 = readAS<OperationType>(elements1.at(i));
+            auto e2 = readAS<OperationType>(elements2.at(i));
+            out.at(i) = readAS<StorageType>(e1 * e2);
         }
-        dest.setElements(true, out);
     }
+    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
 };
 

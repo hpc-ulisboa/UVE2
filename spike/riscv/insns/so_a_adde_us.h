@@ -1,4 +1,3 @@
-// std::cout << "\n---ADDE---" << "\n";
 auto streamReg = insn.uve_rd();
 auto &destReg = P.SU.registers[streamReg];
 auto &srcReg = P.SU.registers[insn.uve_rs1()];
@@ -7,28 +6,22 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 // The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     auto elements = src.getElements(true);
-    auto destElements = dest.getElements(true);
+    auto destElements = dest.getElements(false);
+    auto pi = pred.getPredicate();
     auto validElementsIndex = src.getValidIndex();
-    
-    auto p = pred.getPredicate();
-    auto value = 0;
+
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     using OperationType = decltype(extra);
-    std::vector<StorageType> out = destElements;
 
-    // Grab used types for storage and operation
-    if (validElementsIndex) {        
-        // std::cout << "\nADDE s1: " << elements.size() << "\n";
-        for (size_t i = 0; i < validElementsIndex; i++) {
-            if (p.at((i+1)*sizeof(OperationType)-1)){
-                auto e = readAS<OperationType>(elements.at(i));
-                value += e;
-            }
-            // std::cout << "Adde Iter: " << i << " element: " << e << " total sum: " << value << '\n';
-        }
-        //std::cout << "ADDE Total: " << value << '\n';
-        // std::cout << "\n\nOUT: " << out.size() << "\n\n";
+    OperationType value = 0;
+
+    std::vector<StorageType> out = destElements; // ??
+ 
+    for (size_t i = 0; i < validElementsIndex; i++) {
+        if (pi.at((i+1)*sizeof(OperationType)-1))
+            value += readAS<OperationType>(elements.at(i));
     }
+    
     out.at(0) = readAS<StorageType>(value);
     dest.setElements(true, out);
     dest.setValidIndex(1);

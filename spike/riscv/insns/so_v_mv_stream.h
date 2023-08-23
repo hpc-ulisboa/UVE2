@@ -35,7 +35,7 @@ std::visit([&](auto &dest) {
             P.SU.makeStreamRegister<std::uint8_t>(RegisterConfig::NoStream, streamReg);
 			dest.endConfiguration();
         } else {
-            assert_msg("Trying to run so.v.mv with invalid src type", false);
+            assert_msg("Trying to run so.v.mv.stream with invalid src type", false);
         }
     }
 }, destReg);
@@ -45,5 +45,5 @@ std::visit(overloaded{
                [&](StreamReg32 &dest, StreamReg32 &src) { baseBehaviour(dest, src, predReg); },
                [&](StreamReg16 &dest, StreamReg16 &src) { baseBehaviour(dest, src, predReg); },
                [&](StreamReg8 &dest, StreamReg8 &src) { baseBehaviour(dest, src, predReg); },
-               [&](auto &dest, auto &src) { assert_msg("Invoking so.v.mv with invalid parameter sizes", false); }},
+               [&](auto &dest, auto &src) { assert_msg("Invoking so.v.mv.stream with invalid parameter sizes", false); }},
            destReg, srcReg);

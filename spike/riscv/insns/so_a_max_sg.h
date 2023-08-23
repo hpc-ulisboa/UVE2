@@ -25,15 +25,13 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     std::vector<StorageType> out = destElements;
 
     for (size_t i = 0; i < validElementsIndex; i++) {
-        if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
-            auto e1 = readAS<OperationType>(elements1.at(i));
-            auto e2 = readAS<OperationType>(elements2.at(i));
-            out.at(i) = readAS<StorageType>(e1 / e2);
-        }
+        if (pi.at((i + 1) * sizeof(OperationType) - 1))
+            out.at(i) = readAS<StorageType>(std::max(readAS<OperationType>(elements1.at(i)), readAS<OperationType>(elements2.at(i))));
     }
     dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
 };
+
 
 /* If the destination register is not configured, we have to build it before the
 operation so that its element size matches before any calculations are done */
@@ -52,14 +50,14 @@ std::visit([&](auto &dest) {
             P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::NoStream, streamReg);
             dest.endConfiguration();
         } else  
-            assert_msg("Trying to run so.a.div.us with invalid src type", false);
+            assert_msg("Trying to run so.a.max.sg with invalid src type", false);
     }
 }, destReg);
 
 std::visit(overloaded{
-               [&](StreamReg8 &dest, StreamReg8 &src1, StreamReg8 &src2) { baseBehaviour(dest, src1, src2, predReg, (unsigned char){}); },
-               [&](StreamReg16 &dest, StreamReg16 &src1, StreamReg16 &src2) { baseBehaviour(dest, src1, src2, predReg, (unsigned short int){}); },
-               [&](StreamReg32 &dest, StreamReg32 &src1, StreamReg32 &src2) { baseBehaviour(dest, src1, src2, predReg, (unsigned int){}); },
-               [&](StreamReg64 &dest, StreamReg64 &src1, StreamReg64 &src2) { baseBehaviour(dest, src1, src2, predReg, (unsigned long int){}); },
-               [&](auto &dest, auto &src1, auto &src2) { assert_msg("Invoking so.a.div.us with invalid parameter sizes", false); }
+               [&](StreamReg8 &dest, StreamReg8 &src1, StreamReg8 &src2) { baseBehaviour(dest, src1, src2, predReg, (signed char){}); },
+               [&](StreamReg16 &dest, StreamReg16 &src1, StreamReg16 &src2) { baseBehaviour(dest, src1, src2, predReg, (short int){}); },
+               [&](StreamReg32 &dest, StreamReg32 &src1, StreamReg32 &src2) { baseBehaviour(dest, src1, src2, predReg, int{}); },
+               [&](StreamReg64 &dest, StreamReg64 &src1, StreamReg64 &src2) { baseBehaviour(dest, src1, src2, predReg, (long int){}); },
+               [&](auto &dest, auto &src1, auto &src2) { assert_msg("Invoking so.a.max.sg with invalid parameter sizes", false); }
 }, destReg, src1Reg, src2Reg);

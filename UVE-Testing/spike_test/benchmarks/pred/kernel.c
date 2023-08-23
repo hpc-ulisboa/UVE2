@@ -16,21 +16,16 @@ void core(DataType dest[SIZE], DataType src1[SIZE], DataType src2[SIZE]) {
 		[stride] "r" (1));
 	asm volatile(
 		"so.p.one p2, p0 \t\n"
-		"so.p.egt.fp p5, u2, u3, p0 \t\n"
-		"so.v.dp.w u6, %[three], p2 \t\n"
-		"so.v.mv.stream u1, u6, p0 \t\n"
-		".uve_loop%= : \t\n"
-            "so.a.add.fp u1, u4, u5, p5 \t\n"
-		"so.b.nc u4, .uve_loop%= \t\n"
+		"so.a.abs.sg u1, u2, p2 \t\n"
 		 :: [three] "r" ((float)3.0));
 }
 #endif // RUN_UVE
 
 
 #ifdef RUN_SIMPLE
-void core(DataType dest[SIZE], DataType src[SIZE]) {
+void core(DataType dest[SIZE], DataType src1[SIZE], DataType src2[SIZE]) {
 	for (int i = 0; i < SIZE; ++i) {
-		dest[i] = src[i]*3;
+		dest[i] = src1[i] > 0 ? src1[i] : -src1[i];
 	}
 }
 #endif // RUN_SIMPLE

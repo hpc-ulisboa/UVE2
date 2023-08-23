@@ -52,9 +52,8 @@ template <typename T>
 std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
     //assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
 
-    if (causesUpdate) {
+    if (causesUpdate)
         updateStreamValues();
-    }
 
     std::vector<T> e(elements.begin(), elements.end());
 

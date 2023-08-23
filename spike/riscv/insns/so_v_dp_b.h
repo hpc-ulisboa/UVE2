@@ -9,12 +9,12 @@ auto &predReg = P.SU.predicates[insn.uve_v_pred()];
 const uint8_t value = readRegAS(uint8_t, baseReg);
 
 auto baseBehaviour = [](auto &dest, auto &pred, const auto value) {
-    auto p = pred.getPredicate();
+    auto pi = pred.getPredicate();
     auto destElements = dest.getElements(false);
     auto destValidIndex = dest.getMaxElements();
     std::vector<uint8_t> out(destValidIndex);
     for (size_t i = 0; i < destValidIndex; ++i)
-        out.at(i) = p.at((i+1)*sizeof(uint64_t)-1) ? value : destElements.at(i);
+        out.at(i) = pi.at((i+1)*sizeof(uint64_t)-1) ? value : destElements.at(i);
     dest.setElements(true, out);
     dest.setValidIndex(destValidIndex);
 };
