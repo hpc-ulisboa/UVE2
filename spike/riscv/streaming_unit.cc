@@ -37,7 +37,6 @@ void streamRegister_t<T>::startConfiguration(Dimension dim) {
     dimensions.clear();
     dimensions.push_back(dim);
     vecCfg.push_back(false);
-    getElements(false);
 }
 
 template <typename T>
@@ -241,6 +240,7 @@ void streamRegister_t<T>::updateIteration() {
 template <typename T>
 void streamRegister_t<T>::updateAsLoad() {
     if (isStreamDone()) { // doesn't try to load if stream has finished
+        status = RegisterStatus::Finished;
         return;
     }
 
@@ -302,6 +302,7 @@ template <typename T>
 void streamRegister_t<T>::updateAsStore() {
     // std::cout << "Updating as store" << std::endl;
     if (isStreamDone()) {
+        status = RegisterStatus::Finished;
         return;
     }
 

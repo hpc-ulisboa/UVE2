@@ -3,8 +3,7 @@
 
 extern void core(DataType A[SIZE], DataType B[SIZE], DataType ct);
 
-int main()
-{
+int main() {
   DataType A[SIZE];
   DataType B[SIZE];
   DataType ct = 3;
@@ -16,4 +15,6 @@ int main()
   
   for (int i = 0; i < SIZE; i++)
     printf(DataFormat("", "\n"), A[i]);
+
+  return 0;
 }

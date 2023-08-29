@@ -6,32 +6,54 @@ Disassembly of section .text:
 
 0000000000000000 <core>:
    0:	7179                	addi	sp,sp,-48
-   2:	f422                	sd	s0,40(sp)
-   4:	1800                	addi	s0,sp,48
-   6:	fea43423          	sd	a0,-24(s0)
-   a:	feb43023          	sd	a1,-32(s0)
-   e:	fcc43c23          	sd	a2,-40(s0)
-  12:	fe843783          	ld	a5,-24(s0)
-  16:	fe043703          	ld	a4,-32(s0)
-  1a:	fd843683          	ld	a3,-40(s0)
-  1e:	4621                	li	a2,8
-  20:	4585                	li	a1,1
-  22:	5ec7a08b          	ss.st.w	u1,a5,a2,a1
-  26:	5ec7610b          	ss.ld.w	u2,a4,a2,a1
-  2a:	5ec6e18b          	ss.ld.w	u3,a3,a2,a1
-  2e:	5ec7620b          	ss.ld.w	u4,a4,a2,a1
-  32:	5ec6e28b          	ss.ld.w	u5,a3,a2,a1
-  36:	000007b7          	lui	a5,0x0
-  3a:	0007b783          	ld	a5,0(a5) # 0 <core>
-  3e:	8000092b          	so.p.one	p2,p0
-  42:	80315aab          	so.p.egt.fp	p5,u2,u3,p0
-  46:	ac27a32b          	so.v.dp.w	u6,a5,p2
-  4a:	a80340ab          	so.v.mv.stream	u1,u6,p0
+   2:	f406                	sd	ra,40(sp)
+   4:	f022                	sd	s0,32(sp)
+   6:	1800                	addi	s0,sp,48
+   8:	fea43423          	sd	a0,-24(s0)
+   c:	feb43023          	sd	a1,-32(s0)
+  10:	fca43c27          	fsd	fa0,-40(s0)
+  14:	000007b7          	lui	a5,0x0
+  18:	00078513          	mv	a0,a5
+  1c:	00000097          	auipc	ra,0x0
+  20:	000080e7          	jalr	ra # 1c <core+0x1c>
+  24:	fe843783          	ld	a5,-24(s0)
+  28:	06078793          	addi	a5,a5,96 # 60 <core+0x60>
+  2c:	fe843703          	ld	a4,-24(s0)
+  30:	04870713          	addi	a4,a4,72
+  34:	fe843683          	ld	a3,-24(s0)
+  38:	07868693          	addi	a3,a3,120
+  3c:	fe843603          	ld	a2,-24(s0)
+  40:	0a860613          	addi	a2,a2,168
+  44:	fe843583          	ld	a1,-24(s0)
+  48:	05e1                	addi	a1,a1,24
+  4a:	fe043503          	ld	a0,-32(s0)
+  4e:	06050513          	addi	a0,a0,96
+  52:	4805                	li	a6,1
+  54:	4885                	li	a7,1
+  56:	fd843303          	ld	t1,-40(s0)
+  5a:	8d07f08b          	ss.sta.ld.d	u1,a5,a6,a7
+  5e:	8300008b          	ss.end	u1,zero,a6,a6
+  62:	8d07710b          	ss.sta.ld.d	u2,a4,a6,a7
+  66:	8300010b          	ss.end	u2,zero,a6,a6
+  6a:	8d06f18b          	ss.sta.ld.d	u3,a3,a6,a7
+  6e:	8300018b          	ss.end	u3,zero,a6,a6
+  72:	8d06720b          	ss.sta.ld.d	u4,a2,a6,a7
+  76:	8300020b          	ss.end	u4,zero,a6,a6
+  7a:	8d05f28b          	ss.sta.ld.d	u5,a1,a6,a7
+  7e:	8300028b          	ss.end	u5,zero,a6,a6
+  82:	8d05330b          	ss.sta.st.d	u6,a0,a6,a7
+  86:	8300030b          	ss.end	u6,zero,a6,a6
+  8a:	ac0333ab          	so.v.dp.d	u7,t1,p0
 
-000000000000004e <.uve_loop20>:
-  4e:	0a5210ab          	so.a.add.fp	u1,u4,u5,p5
-  52:	fff26eab          	so.b.nc	u4,4e <.uve_loop20>
-  56:	0001                	nop
-  58:	7422                	ld	s0,40(sp)
-  5a:	6145                	addi	sp,sp,48
-  5c:	8082                	ret
+000000000000008e <.loop_32>:
+  8e:	0020942b          	so.a.add.fp	u8,u1,u2,p0
+  92:	004194ab          	so.a.add.fp	u9,u3,u4,p0
+  96:	0054152b          	so.a.add.fp	u10,u8,u5,p0
+  9a:	009515ab          	so.a.add.fp	u11,u10,u9,p0
+  9e:	1075932b          	so.a.mul.fp	u6,u11,u7,p0
+  a2:	fff0e6ab          	so.b.nc	u1,8e <.loop_32>
+  a6:	0001                	nop
+  a8:	70a2                	ld	ra,40(sp)
+  aa:	7402                	ld	s0,32(sp)
+  ac:	6145                	addi	sp,sp,48
+  ae:	8082                	ret

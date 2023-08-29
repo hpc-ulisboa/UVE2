@@ -16,4 +16,6 @@ int main()
 
   for (int i = 0; i < SIZE; i++)
     printf( DataFormat("", "\n"), dest[i]);
+
+  return 0;
 }

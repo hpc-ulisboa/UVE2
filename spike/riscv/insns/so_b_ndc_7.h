@@ -1,5 +1,5 @@
 auto regN = insn.uve_branch_rs();
-//auto& streamReg = P.SU.registers[regN];
+auto& streamReg = P.SU.registers[regN];
 auto branchIMM = insn.uve_branch_imm();
 
 /*
@@ -17,5 +17,5 @@ const bool notComplete = operateRegister(P.SU, streamReg, [=](auto &reg) {
 
 //if (notComplete)
 
-if (!P.SU.EODTable.at(regN).at(0))
+if (!P.SU.EODTable.at(regN).at(6))
     set_pc(pc + branchIMM);

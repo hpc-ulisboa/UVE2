@@ -8,6 +8,7 @@ void core_uve(DataType A[SIZE], DataType B[SIZE], DataType ct)
       "ss.ld.d    u2, %[src1b], %[sn], %[one] \t\n"
       "ss.ld.d    u3, %[src1c], %[sn], %[one] \t\n"
       "ss.st.d    u4, %[src2],  %[sn], %[one] \t\n"
+
       "so.v.dp.d  u5, %[ct], p0\t\n"
       :
       : [src1a] "r"(A), [src1b] "r"(A + 1),
@@ -16,9 +17,9 @@ void core_uve(DataType A[SIZE], DataType B[SIZE], DataType ct)
       :);
   asm volatile(
       ".uve_loop%=: \t\n"
-      "so.a.add.fp   u10, u1,  u2,  p0 \t\n"
-      "so.a.add.fp   u10, u10, u3,  p0 \t\n"
-      "so.a.mul.fp   u4,  u10, u5, p0 \t\n"
+		"so.a.add.fp   u10, u1,  u2,  p0 \t\n"
+		"so.a.add.fp   u10, u10, u3,  p0 \t\n"
+		"so.a.mul.fp   u4,  u10, u5, p0 \t\n"
       "so.b.nc       u1,  .uve_loop%= \t\n" 
       :::);
 }

@@ -1348,8 +1348,22 @@ riscv_insn_ext_uve = \
 	so_a_sub_fp \
 	so_a_sub_sg \
 	so_a_sub_us \
+	so_b_c \
+	so_b_dc_1 \
+	so_b_dc_2 \
+	so_b_dc_3 \
+	so_b_dc_4 \
+	so_b_dc_5 \
+	so_b_dc_6 \
+	so_b_dc_7 \
 	so_b_nc \
 	so_b_ndc_1 \
+	so_b_ndc_2 \
+	so_b_ndc_3 \
+	so_b_ndc_4 \
+	so_b_ndc_5 \
+	so_b_ndc_6 \
+	so_b_ndc_7 \
 	so_p_cv_b \
 	so_p_cv_h \
 	so_p_cv_w \
@@ -1385,9 +1399,14 @@ riscv_insn_ext_uve = \
 	ss_st_d \
 	ss_st_h \
 	ss_st_w \
+	ss_sta_ld_b \
 	ss_sta_ld_d \
+	ss_sta_ld_h \
 	ss_sta_ld_w \
+	ss_sta_st_b \
 	ss_sta_st_d \
+	ss_sta_st_h \
+	ss_sta_st_w \
 	
 
 riscv_insn_list = \

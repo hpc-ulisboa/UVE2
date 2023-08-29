@@ -13,7 +13,6 @@ void initArray2D(DataType *array) {
   for (int i = 0; i < SIZE; ++i) {
     for (int j = 0; j < SIZE; ++j) {
       array[i*SIZE+j] = values[i*SIZE+j];
-      printf("%d ", array[i*SIZE+j]);
     }
   }
 }
