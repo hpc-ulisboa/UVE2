@@ -179,7 +179,7 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t& address) {
 
     /* The outermost dimension is the last one in the container */
     if (isStreamDone()){
-        //std::cout << "Stream is done." << std::endl;
+        status = RegisterStatus::Finished;
         return false;
     }
         
@@ -314,7 +314,7 @@ void streamRegister_t<T>::updateAsStore() {
         //elements.erase(elements.begin());
         //elements.pop_front(); //-- std::array
         auto value = elements.at(eCount);
-        //std::cout << "Stored Value: " << readAS<ElementsType>(value) << std::endl;
+        //std::cout << "Stored Value: " << readAS<float>(value) << " ";
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
             gMMU(su->p).template store<std::uint8_t>(offset, readAS<ElementsType>(value));
         else if constexpr (std::is_same_v<ElementsType, std::uint16_t>)
@@ -329,6 +329,7 @@ void streamRegister_t<T>::updateAsStore() {
         } else
             break;
     }
+    //std::cout << std::endl;
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     if(eCount < validIndex) // iteration is already updated when register is full
         updateIteration(); // reset EOD flags and iterate stream    

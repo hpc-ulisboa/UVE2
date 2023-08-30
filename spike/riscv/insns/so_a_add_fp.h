@@ -12,16 +12,6 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
      * operated on */
     assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
     /* We can only operate on the first available values of the stream */
-
-    // std::cout << "\nADD s1: " << elements1.size() << "\t s2: " << elements2.size() << "\n";
-    //   print elements1
-    // using Operation = decltype(extra);
-    // std::cout << "\nADD loaded elements (u3 - b(i))\n";
-    /*for (size_t i = 0; i < elements1.size(); i++) {
-        std::cout << i << ": " << *reinterpret_cast<Operation *>(&elements1.at(i)) << '\n';
-    }
-    std::cout << "\n";*/
-    
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
     auto destElements = dest.getElements(false);
@@ -35,22 +25,13 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     std::vector<StorageType> out = destElements;
 
     for (size_t i = 0; i < validElementsIndex; i++) {
-        // print pi from i to i+sizeof(OperationType)-1
-        /*std::cout << "ADD pi: ";
-        for (size_t j = i*sizeof(OperationType); j < (i+1)*sizeof(OperationType); j++) {
-            std::cout << (int)pi.at(j);
-        }
-        std::cout << "\n";
-        */
         if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
             auto e1 = readAS<OperationType>(elements1.at(i));
             auto e2 = readAS<OperationType>(elements2.at(i));
             out.at(i) = readAS<StorageType>(e1 + e2);
-            //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
         }
     }
     dest.setElements(true, out);
-    // std::cout << "\n\nOUT: " << out.size() << "\n\n";
     dest.setValidIndex(validElementsIndex);
 };
 
