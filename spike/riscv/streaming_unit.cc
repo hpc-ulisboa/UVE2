@@ -354,7 +354,7 @@ void streamingUnit_t::updateEODTable(const size_t stream) {
     std::visit([&](const auto reg){
         int d = 0;
         for (const auto dim : reg.dimensions) {
-            EODTable.at(stream).at(d) = reg.vecCfg.at(d) && dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
+            EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
             //fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
             ++d;
         }

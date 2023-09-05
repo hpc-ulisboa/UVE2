@@ -1318,6 +1318,9 @@ riscv_insn_ext_uve = \
 	so_a_adde_fp \
 	so_a_adde_sg \
 	so_a_adde_us \
+	so_a_adds_fp \
+	so_a_adds_sg \
+	so_a_adds_us \
 	so_a_div_fp \
 	so_a_div_sg \
 	so_a_div_us \
@@ -1390,6 +1393,7 @@ riscv_insn_ext_uve = \
 	ss_app \
 	ss_cfg_vec \
 	ss_end \
+	ss_end_mod_siz_dec \
 	ss_end_mod_siz_inc \
 	ss_ld_b \
 	ss_ld_d \

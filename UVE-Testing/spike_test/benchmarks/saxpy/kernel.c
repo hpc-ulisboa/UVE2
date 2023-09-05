@@ -4,10 +4,10 @@
 #ifdef RUN_UVE
 void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
   asm volatile(
-    "ss.ld.d u1, %[src1], %[size], %[stride] \t\n"
-    "ss.ld.d u10, %[src2], %[size], %[stride] \t\n"
-    "ss.st.d u3, %[dest], %[size], %[stride] \t\n"
-    "so.v.dp.d u4, %[value], p0\t\n"
+    "ss.ld.w u1, %[src1], %[size], %[stride] \t\n"
+    "ss.ld.w u10, %[src2], %[size], %[stride] \t\n"
+    "ss.st.w u3, %[dest], %[size], %[stride] \t\n"
+    "so.v.dp.w u4, %[value], p0\t\n"
     : 
     : [src1] "r"(src),
       [src2] "r"(dest),
