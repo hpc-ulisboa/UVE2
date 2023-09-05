@@ -73,7 +73,7 @@ struct streamRegister_t {
     void setElements(bool causesUpdate, std::vector<ElementsType> e);
     void setValidIndex(const size_t i);
     bool hasStreamFinished() const;
-    void clearEndOfDimensionOfDim(size_t i);
+    //void clearEndOfDimensionOfDim(size_t i);
     bool isEndOfDimensionOfDim(size_t i) const;
 
     RegisterStatus getStatus() const;

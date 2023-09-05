@@ -81,14 +81,16 @@ bool streamRegister_t<T>::hasStreamFinished() const {
     return status == RegisterStatus::Finished;
 }
 
+/*
 template <typename T>
 void streamRegister_t<T>::clearEndOfDimensionOfDim(size_t i) {
     assert_msg("Trying to clear eof of invalid dimension", i < dimensions.size());
-    /* Cannot clear this flag when the stream has finished, it would prevent us from knowing that */
+    // Cannot clear this flag when the stream has finished, it would prevent us from knowing that
     if (isStreamDone())
         return;
     dimensions.at(i).setEndOfDimension(false);
 }
+*/
 
 template <typename T>
 bool streamRegister_t<T>::isEndOfDimensionOfDim(size_t i) const {
@@ -148,11 +150,14 @@ template <typename T>
 size_t streamRegister_t<T>::generateOffset() {
     /* Result will be the final accumulation of all offsets calculated per dimension */
     size_t init = 0;
-    return std::accumulate(dimensions.begin(), dimensions.end(), init, [](size_t acc, Dimension &dim) {
-        if (dim.isLastIteration()){
-            //std::cout << "Last iteration of dimension." << std::endl;
+    int counter = 0;
+    return std::accumulate(dimensions.begin(), dimensions.end(), init, [&](size_t acc, Dimension &dim) {
+        if (dim.isLastIteration() && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + counter)){
+            //std::cout << "Last iteration of dimension " << counter << std::endl;
             dim.setEndOfDimension(true);
         }
+        ++counter;
+        //std::cout << "Accumulating dimension " << ++counter << std::endl;
         return acc + dim.calcOffset(elementsWidth);
     });
 }
@@ -185,7 +190,7 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t& address) {
         
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
         if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)){
-            //std::cout << "This should never be printed in saxpy kernel." << std::endl;
+            //std::cout << "Stop dimension loading " << i+1 << std::endl;
             return false;
         }
     }
@@ -201,6 +206,7 @@ void streamRegister_t<T>::updateIteration() {
     }
 
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
+    //std::cout << "Advancing dimension no 1" << std::endl;
     dimensions.at(0).advance();
 
     /* No extra processing is needed if there is only 1 dimension */
@@ -214,7 +220,10 @@ void streamRegister_t<T>::updateIteration() {
         last iteration of a dimension */
 
         if (!currDim.isEndOfDimension())
+        //if (!isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1))
             continue;
+        
+        //std::cout << "Dimension " << i + 1 << " is fully done" << std::endl;
 
         //std::cout << "Looking for modifiers of dimension " << i << std::endl;
         auto currentModifierIter = modifiers.find(i);
@@ -222,7 +231,7 @@ void streamRegister_t<T>::updateIteration() {
 
         // currDim.resetIndex();
         //printRegN("Updating EOD of dimension.");
-
+        //std::cout << "Advancing dimension no " << i + 2 << std::endl;
         dimensions.at(i + 1).advance();
         currDim.setEndOfDimension(false);
         if (modifierExists) {
@@ -280,7 +289,7 @@ void streamRegister_t<T>::updateAsLoad() {
         }(offset);
         //elements.push_back(value);
         elements.at(eCount) = value;
-        //std::cout << "Loaded Value: " << readAS<double>(value) << std::endl;
+        //std::cout << "Loaded Value: " << readAS<float>(value) << std::endl;
         if(tryGenerateOffset(offset)){
             //std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
             updateIteration(); // reset EOD flags and iterate stream

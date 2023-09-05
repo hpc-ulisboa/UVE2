@@ -1,12 +1,12 @@
 #include <stdio.h>
-#include "Commun.h"
+#include "Functions.h"
 
 
-extern void core(DataType path[SIZE][SIZE]);
+extern void core(DataType *path);
 
 int main()
 {
-	DataType path[SIZE][SIZE];
+	DataType path[SIZE*SIZE];
 
   initArray2D(path);
 
@@ -14,7 +14,7 @@ int main()
 
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
-      printf( DataFormat("", "\n"), path[i][j]);
+      printf( DataFormat("", "\n"), path[i*SIZE+j]);
     }
   }
 

@@ -15,6 +15,26 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
     auto destElements = dest.getElements(false);
+
+    /* print elements1
+    std::cout << "elements1: ";
+    for (auto e : elements1) {
+        std::cout << readAS<float>(e) << " ";
+    }
+    std::cout << std::endl;
+    // print elements2
+    std::cout << "elements2: ";
+    for (auto e : elements2) {
+        std::cout << readAS<float>(e) << " ";
+    }
+    std::cout << std::endl;
+    // print elements3
+    std::cout << "destElements: ";
+    for (auto e : destElements) {
+        std::cout << readAS<float>(e) << " ";
+    }
+    std::cout << std::endl;
+    */
     auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
 
     auto pi = pred.getPredicate();
@@ -30,6 +50,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             auto e2 = readAS<OperationType>(elements2.at(i));
             auto e3 = readAS<OperationType>(destElements.at(i));
             out.at(i) = readAS<StorageType>(e1 * e2 + e3);
+            //std::cout << "MAC e1: " << e1 << " e2: " << e2 << " e3: " << e3 << " result: " << readAS<OperationType>(out.at(i)) << std::endl;
         }
     }
     dest.setElements(true, out);
