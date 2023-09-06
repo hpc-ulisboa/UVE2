@@ -66,6 +66,7 @@ log*
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+*.code_workspace
 
 # Local History for Visual Studio Code
 .history/
