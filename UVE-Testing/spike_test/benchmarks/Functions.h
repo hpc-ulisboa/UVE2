@@ -37,13 +37,13 @@
 #elif TYPE == 4
 #define DataType float
 #define DataSet fDataset
-#define DataFormat(start, end) start "%3.4f" end
+#define DataFormat(start, end) start "%3.6f" end
 
 // Using doubles
 #elif TYPE == 5
 #define DataType double
 #define DataSet fDataset
-#define DataFormat(start, end) start "%3.4lf" end
+#define DataFormat(start, end) start "%3.6lf" end
 
 #else
 #error *Did not pass a type of value 1, 2, 3, 4 or 5*

@@ -1,7 +1,7 @@
 #include "Functions.h"
 #include <stdio.h>
 
-extern void core(DataType L[SIZE][SIZE], DataType b[SIZE], DataType x[SIZE]);
+extern void core(DataType *L, DataType *b, DataType *x);
 
 int main() {
     DataType L[SIZE * SIZE];
@@ -11,8 +11,9 @@ int main() {
     initArray2D(L);
     initArray(b);
     initArray(x);
+
+    /*
     
-/*
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j)
             L[i * SIZE + j] = i + 1;
@@ -22,6 +23,7 @@ int main() {
 
     // print all the arrays
 
+    
     printf("L:\n");
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++)
@@ -41,13 +43,13 @@ int main() {
     }
 
     printf("\n\nResults (x):\n");
-*/
+    */
 
-    //core(L, b, x);
+    core(L, b, x);
 
-    /*for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < SIZE; i++) {
         printf(DataFormat("", "\n"), x[i]);
-    }*/
+    }
 
     return 0;
 }

@@ -29,10 +29,11 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             auto e1 = readAS<OperationType>(elements1.at(i));
             auto e2 = readAS<OperationType>(elements2.at(i));
             out.at(i) = readAS<StorageType>(e1 - e2);
+            //std::cout << "SUB   " << e1 << " - " << e2 << " = " << readAS<OperationType>(out.at(i)) << "\n";
         }
     }
-    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
 };
 
 /* If the destination register is not configured, we have to build it before the

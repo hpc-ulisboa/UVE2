@@ -1,0 +1,252 @@
+= RISC-V Unlimited Vector Extension (UVE)
+Version 2.0-draft
+:doctype: article
+:encoding: utf-8
+:lang: en
+:toc: left
+:numbered:
+:stem: latexmath
+:le: &#8804;
+:ge: &#8805;
+:ne: &#8800;
+:approx: &#8776;
+:inf: &#8734;
+
+Contributors include: 
+
+//:sectnums!:
+
+//== Changes from v1.0
+
+//===
+
+:sectnums:
+
+== Introduction
+
+This document is version 2.0-draft of the RISC-V unlimited vector extension.
+
+//This spec includes the complete set of currently frozen vector instructions. Other instructions that have been considered during development but are not present in this document are not included in the review and ratification process, and may be completely revised or abandoned. Section Standard Vector Extensions lists the standard vector extensions and which instructions and element widths are supported by each extension.
+
+== UVE Programmer's Model
+
+The unlimited vector extension adds 32 vector/stream registers, and 16 predicate registers to a base scalar RISC-V ISA.
+
+NOTE: A streaming register is a common vector register that is associated with a stream through 
+a special configuration instruction and until all the requested data is streamed. Otherwise, a 
+register is a common vector register.
+
+//, and seven unprivileged CSRs (`vstart`, `vxsat`, `vxrm`, `vcsr`, `vtype`, `vl`, `vlenb`)
+
+////
+.New vector CSRs
+[cols="2,2,2,10"]
+[%autowidth]
+|===
+| Address | Privilege | Name   | Description
+
+| 0x008 | URW | vstart | Vector start position
+| 0x009 | URW | vxsat  | Fixed-Point Saturate Flag
+| 0x00A | URW | vxrm   | Fixed-Point Rounding Mode
+| 0x00F | URW | vcsr   | Vector control and status register
+| 0xC20 | URO | vl     | Vector length
+| 0xC21 | URO | vtype  | Vector data type register
+| 0xC22 | URO | vlenb  | VLEN/8 (vector register length in bytes)
+|===
+
+NOTE: The four CSR numbers `0x00B`-`0x00E` are tentatively reserved
+for future vector CSRs, some of which may be mirrored into `vcsr`.
+////
+=== Vector/Stream Registers
+
+UVE Vector Registers are scalable (undefined size at compile time), 
+and range from `u0` to `u31`.
+
+The minimum size of a implemented vector is XLEN.
+
+NOTE: XLEN is the maximum implemented register/data size of RISC-V. E.g., RV64 implements 
+XLEN=64, RV32 implements XLEN=32.
+
+Vector registers can be indefinitely large, as long as the size is multiple of XLEN. 
+Each vector register is appended with additional information, such as an indicator of how
+many data elements are valid, the width of the data elements and the stream state.
+
+=== Configuration Info
+
+[[sec-valid-bits]]
+==== Valid Bits
+
+Valid bits are useful to mark empty/inactive register elements during application execution.
+
+==== Width
+
+The data elements can be of widths up to XLEN, starting at 8 bits (1B). Supported widths are:
+
+.Element width encoding
+[cols="1,1,1,1"]
+[%autowidth]
+|===
+4+| Width
+
+| 0 | 0 | B |  8 bits
+| 0 | 1 | H |  16 bits
+| 1 | 0 | W |  32 bits
+| 1 | 1 | D |  64 bits
+
+|===
+
+E.g., XLEN=32 ⇒ Supported widths:{8, 16, 32}
+
+NOTE: While the stated widths may be available for unsigned and signed operations, depending on 
+XLEN, 8-bits and 16-bits floating-point is unavailable in most architectures and ISAs.
+
+==== Stream State
+
+The stream state contains info on a current running and coupled stream. 
+Information on when a dimension ends or the stream ends is contained here. 
+The Stream State does not provide information on whether the respective stream is or isn't 
+running.
+
+NOTE: A vector register without an associated stream is a common vector register,
+and the Stream State does not contain valid information.
+
+=== Predicate Registers
+
+Predicate registers control instruction execution through selective disabling/enabling of 
+corresponding vector execution lanes (a predicate register is therefore similar to an array of 
+booleans). 
+UVE provides 16 predicate registers, of which `p0` to `p7` are Ready Predicates and `p8` to 
+`p15` are standby predicates. 
+Ready predicates (`p0` to `p15`) can be used by most data processing instructions, whereas 
+Standby predicates can only be used as backup and moved to Ready Predicates through a special 
+predicate move instruction. 
+There is no exchange instruction. The special register `p0` (true predicate) is always set to 
+activate all lanes (hardwired to 1), and any write to it is disregarded.
+
+
+There is additional info associated with each vector register similar to predication resulting 
+from the streaming paradigm, the `valid` bits (Section <<sec-valid-bits>>). The interaction of 
+the `valid` bits with the operation associated predicate register defines the final operation 
+predicate (Section <<pred-rules>>), which also corresponds to the result `valid` bits. However, 
+the policy of predication (what to do with inactive elements) is first defined.
+
+[[pred-policy]]
+==== Predication policies
+Predicate registers indicate the valid operation on active lanes of the vectors.
+UVE defines two different policies to modify the behavior of destination inactive lanes during 
+the execution of vector instructions: `zeroing` or `merging`.
+
+NOTE: The policy is encoded in the predicate register, not in the operation.
+
+If the predicate policy is `zeroing`, then the operation does zeroing to the results of the 
+corresponding elements of the destination vector, where the predicate elements are zero.
+
+If the predicate policy is `merging`, the inactive element will maintain its original value after 
+the operation.
+
+By default, the predication policy in the predicate registers is `merging`. There are* (TODO) 
+specific instructions to define/change a given predicate register policy (Section 
+<<pred-Instructions>>).
+
+
+[[pred-rules]]
+==== Predication Rules
+
+When performing an operation, the active lanes of the result are given by the AND between the 
+associated predicate register with the `valid` bits of the operands. The policy is then applied to the lanes (`zeroing` puts the inactive lanes to zero and `merging` mantains the values in the inactive lanes). The `valid` bits of the result register depend on the policy.
+
+The behavior of destination inactive lanes during the execution of vector instructions follows
+the `zeroing` policy (without the need to explicitly change it) when at least one of 
+the register operands has an associated stream. If no operands are streams, the 
+`merging` policy is applied.
+
+== UVE Instruction Formats
+
+The instructions in the UVE fit under two custom major
+opcodes (custom-0 and custom-1).
+
+
+Stream configurations are encoded within the custom-0 major opcodes. 
+This instructions allow to configure memory accesses (Load and store operations) in the preamble 
+of the loop. 
+Their objective is to describe the location of the data and its shape in memory.
+
+
+Vector instructions can have scalar or vector source operands and
+produce scalar or vector results, and most vector instructions can be
+performed either unconditionally or conditionally according to
+the associated predicate register.
+
+Stream configuration instructions set memory access description to vector registers that move 
+bit patterns between vector register elements and memory. 
+Vector arithmetic instructions operate on values held in vector register elements.
+
+=== Encoding organization
+
+.Encoding Organization
+//[%autowidth]
+|===
+2.2+^.^| StreamOps   4+^| inst[30:29]	
+                     ^| 00 ^| 01 ^| 10 ^| 11
+
+1.2+^.^| inst[31] ^| 0 2+^| Arithmetic                           ^| Misc      ^| Empty
+                ^.^| 1 ^.^| Predicate  ^| Vector/Stream Config ^.^| Logical ^.^| Branch
+|===
+
+=== Scalar Operands
+
+////
+Scalar operands can be immediates, or taken from the `x` registers,
+the `f` registers, or element 0 of a vector register.  Scalar results
+are written to an `x` or `f` register or to element 0 of a vector
+register.  Any vector register can be used to hold a scalar regardless
+of the current LMUL setting.
+
+NOTE: Zfinx ("F in X") is a proposed new ISA extension where
+floating-point instructions take their arguments from the integer
+register file.  The vector extension is also compatible with Zfinx,
+where the Zfinx vector extension has vector-scalar floating-point
+instructions taking their scalar argument from the `x` registers.
+
+NOTE: We considered but did not pursue overlaying the `f` registers on
+`v` registers.  The adopted approach reduces vector register pressure,
+avoids interactions with the standard calling convention, simplifies
+high-performance scalar floating-point design, and provides
+compatibility with the Zfinx ISA option.  Overlaying `f` with `v`
+would provide the advantage of lowering the number of state bits in
+some implementations, but complicates high-performance designs and
+would prevent compatibility with the proposed Zfinx ISA option.
+
+////
+
+[[sec-vec-operands]]
+=== Vector Operands
+
+=== Predication
+
+//Predication using the Ready Predicate registers is supported on many vector instructions. 
+//The destination vector register elements corresponding to inactive lanes are handled with either a `zeroing` or `merging` predication policy depending on the setting of the predicate register (Section <<pred-policy>>).
+
+
+
+== Arithmetic Instructions
+
+== Logic Instructions
+
+== Register Configuration Instructions
+
+=== Pattern description
+
+== Register manipulation Instructions
+
+== Loop Control Branching Instructions
+
+[[pred-Instructions]]
+== Predicate Instructions
+////
+Arithmetic
+Logic
+register Configuration
+register manipulation
+Loop Control Branching
+////

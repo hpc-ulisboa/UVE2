@@ -30,7 +30,7 @@ void core(void *src1, void *src2, void *src3) {
                  :
                  : [src1] "r"(src1), [src2] "r"(src2), [src3] "r"(src3),
                    [sn] "r"(SIZE), [snm1] "r"(SIZE - 1), [snp1] "r"(SIZE + 1), [one] "r"(1),
-                   [vl] "r"(v_len), [iv] "r"(SIZE / v_len), [sndx] "r"(SIZE / 2)
+                   [vl] "r"(v_len)
     );
 
     asm volatile(
@@ -38,16 +38,16 @@ void core(void *src1, void *src2, void *src3) {
 
         ".fLoop1%=: \t\n"
 
-        "so.v.dp.w  u6, zero, p0\n\t" // u6 = 0
+            "so.v.dp.w  u6, zero, p0\n\t" // u6 = 0
 
-        ".jloop1%= : \t\n"
-        "so.a.mul.fp u7, u1, u2, p0\n\t" // u7 = L(i,j) * x(j)
-        "so.a.sub.fp u6, u6, u7, p0\n\t" // u6 = u6 - u7
-        "so.b.ndc.1 u1, .jloop1%= \n\t"
+            ".jloop1%= : \t\n"
+                "so.a.mul.fp u7, u1, u2, p0\n\t" // u7 = L(i,j) * x(j)
+                "so.a.sub.fp u6, u6, u7, p0\n\t" // u6 = u6 - u7
+            "so.b.ndc.1 u1, .jloop1%= \n\t"
 
-        "so.a.adde.fp   u7, u6, p0      \n\t" // reduce vector
-        "so.a.add.fp    u7, u3, u7, p0  \n\t" //  t = b + red
-        "so.a.div.fp    u5, u7, u4, p0  \n\t" //  x = t / L
+            "so.a.adde.fp   u7, u6, p0      \n\t" // reduce vector
+            "so.a.add.fp    u7, u3, u7, p0  \n\t" //  t = b + red
+            "so.a.div.fp    u5, u7, u4, p0  \n\t" //  x = t / L
 
         "so.b.nc	u1, .fLoop1%= \n\t" 
         :::

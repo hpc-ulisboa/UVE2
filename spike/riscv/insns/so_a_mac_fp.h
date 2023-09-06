@@ -53,8 +53,9 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             //std::cout << "MAC e1: " << e1 << " e2: " << e2 << " e3: " << e3 << " result: " << readAS<OperationType>(out.at(i)) << std::endl;
         }
     }
-    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
+
 };
 
 /* If the destination register is not configured, we have to build it before the

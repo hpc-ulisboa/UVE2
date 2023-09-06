@@ -16,8 +16,9 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     std::reverse(pi.begin(), pi.begin()+validElementsIndex*sizeof(StorageType)); // reverse the necessary instruction predicate
     for (size_t i = 0; i < validElementsIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
-    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
+
 };
 
 /* If the destination register is not configured, we have to build it before the

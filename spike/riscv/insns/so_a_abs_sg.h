@@ -19,8 +19,9 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
         if (pi.at((i+1)*sizeof(OperationType)-1))
             out.at(i) = readAS<StorageType>(std::abs(readAS<OperationType>(elements.at(i))));
     }
-    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
+
 };
 
 // If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done

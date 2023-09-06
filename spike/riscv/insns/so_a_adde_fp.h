@@ -22,10 +22,10 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
         if (pi.at((i+1)*sizeof(OperationType)-1))
             value += readAS<OperationType>(elements.at(i));
     }
-    
+    //std::cout << "ADDE   " << value << "\n";
     out.at(0) = readAS<StorageType>(value);
-    dest.setElements(true, out);
     dest.setValidIndex(1);
+    dest.setElements(true, out);
 };
 
 // If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done

@@ -31,8 +31,9 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             out.at(i) = readAS<StorageType>(e1 / e2);
         }
     }
-    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
+
 };
 
 /* If the destination register is not configured, we have to build it before the

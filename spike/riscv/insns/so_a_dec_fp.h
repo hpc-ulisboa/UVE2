@@ -21,8 +21,9 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
             out.at(i) = readAS<StorageType>(e);
         }
     }
-    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
+
 };
 
 // If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done

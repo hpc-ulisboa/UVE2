@@ -28,8 +28,9 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
         if (pi.at((i + 1) * sizeof(OperationType) - 1))
             out.at(i) = readAS<StorageType>(std::max(readAS<OperationType>(elements1.at(i)), readAS<OperationType>(elements2.at(i))));
     }
-    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
+
 };
 
 /* If the destination register is not configured, we have to build it before the

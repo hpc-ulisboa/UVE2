@@ -16,6 +16,12 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
+    // print elements2
+    /*std::cout << "MUL elements2: ";
+    for (auto e : elements2) {
+        std::cout << readAS<float>(e) << " ";
+    }*/
+    //std::cout << "\nValid index: " << src2.getValidIndex() << "\n";
     auto destElements = dest.getElements(false);
     auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
 
@@ -31,10 +37,11 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             auto e1 = readAS<OperationType>(elements1.at(i));
             auto e2 = readAS<OperationType>(elements2.at(i));
             out.at(i) = readAS<StorageType>(e1 * e2);
+            //std::cout << "MUL   " << e1 << " * " << e2 << " = " << readAS<OperationType>(out.at(i)) << "\n";
         }
     }
-    dest.setElements(true, out);
     dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
 };
 
 /* If the destination register is not configured, we have to build it before the

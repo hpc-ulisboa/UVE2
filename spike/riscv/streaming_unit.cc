@@ -257,6 +257,7 @@ void streamRegister_t<T>::updateAsLoad() {
     //elements.reserve(maxAmountElements);
 
     size_t eCount = 0;
+    validIndex = 0; // reset valid index
 
     /*----------------------------------- Loading pipeline -----------------------------------
     ************************************* THIS IS OUTDATED ***********************************
@@ -289,6 +290,7 @@ void streamRegister_t<T>::updateAsLoad() {
         }(offset);
         //elements.push_back(value);
         elements.at(eCount) = value;
+        ++validIndex;
         //std::cout << "Loaded Value: " << readAS<float>(value) << std::endl;
         if(tryGenerateOffset(offset)){
             //std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
@@ -300,11 +302,8 @@ void streamRegister_t<T>::updateAsLoad() {
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     //std::cout << "eCount: " << eCount << std::endl;
     //std::cout << "maxAmountElements: " << maxAmountElements << std::endl;
-    if(eCount < maxAmountElements){ // iteration is already updated when register is full
+    if(eCount < maxAmountElements) // iteration is already updated when register is full
         updateIteration(); // reset EOD flags and iterate stream
-        validIndex = ++eCount;
-    } else 
-        validIndex = eCount;
 }
  
 template <typename T>
