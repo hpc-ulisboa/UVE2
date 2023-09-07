@@ -28,6 +28,8 @@ enum class RegisterConfig { NoStream,
 enum class RegisterStatus { NotConfigured,
                             Running,
                             Finished };
+enum class RegisterMode { Vectorial,
+                          Scalar };
 
 /* T is one of std::uint8_t, std::uint16_t, std::uint32_t or std::uint64_t and
   represents the type of the elements of a stream at a given moment. It is the
@@ -59,8 +61,10 @@ struct streamRegister_t {
     // static constexpr size_t maxDimensions = 8;
     // static constexpr size_t maxModifiers = su->maxDimensions - 1;
 
-    streamRegister_t(streamingUnit_t *su = nullptr, RegisterConfig t = RegisterConfig::NoStream, size_t regN = -1) : su(su), registerN(regN), type(t) {
+    streamRegister_t(streamingUnit_t *su = nullptr, RegisterConfig t = RegisterConfig::NoStream, size_t regN = -1) :
+     su(su), registerN(regN), type(t) {
         status = RegisterStatus::NotConfigured;
+        mode = RegisterMode::Vectorial;
         validIndex = vLen;
     }
 
@@ -72,16 +76,18 @@ struct streamRegister_t {
     std::vector<ElementsType> getElements(bool causesUpdate);
     void setElements(bool causesUpdate, std::vector<ElementsType> e);
     void setValidIndex(const size_t i);
+    void setMode(const RegisterMode m);
     bool hasStreamFinished() const;
     //void clearEndOfDimensionOfDim(size_t i);
     bool isEndOfDimensionOfDim(size_t i) const;
 
-    RegisterStatus getStatus() const;
     size_t getElementsWidth() const;
-    size_t getMaxElements() const;
+    size_t getVLen() const;
     size_t getValidIndex() const;
     size_t getRegisterLength() const;
     RegisterConfig getType() const;
+    RegisterStatus getStatus() const;
+    RegisterMode getMode() const;
 
     /* FOR DEBUGGING*/
     void printRegN(char *str = "");
@@ -104,6 +110,7 @@ private:
     std::unordered_map<int, Modifier> modifiers;
     RegisterConfig type;
     RegisterStatus status;
+    RegisterMode mode;
     /* This structure holds an array of bits indicating whether the corresponding dimension
     is configured to only load elements while the current dimension is not over or not. It
     is controlled using the instruction ss_cfg_vec */
@@ -169,7 +176,7 @@ struct streamingUnit_t {
     }
 
     template <typename T>
-    void makeStreamRegister(RegisterConfig type = RegisterConfig::NoStream, size_t streamRegister = -1);
+    void makeStreamRegister(size_t streamRegister = -1, RegisterConfig type = RegisterConfig::NoStream);
 
     void makePredRegister(std::vector<uint8_t> elements, size_t predRegister = -1);
 

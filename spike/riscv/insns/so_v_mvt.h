@@ -11,7 +11,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     auto elements = src.getElements(true);
     std::reverse(elements.begin(), elements.begin()+validElementsIndex); // reverse the valid source elements
     auto destElements = dest.getElements(false); // doesn't iterate the stream
-    std::vector<StorageType> out(dest.getMaxElements());
+    std::vector<StorageType> out(dest.getVLen());
     auto pi = pred.getPredicate();
     std::reverse(pi.begin(), pi.begin()+validElementsIndex*sizeof(StorageType)); // reverse the necessary instruction predicate
     for (size_t i = 0; i < validElementsIndex; ++i)
@@ -26,16 +26,16 @@ operation so that its element size matches before any calculations are done */
 std::visit([&](auto &dest) {
     if (dest.getStatus() == RegisterStatus::NotConfigured) {
         if (std::holds_alternative<StreamReg64>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint64_t>(streamReg);
 			dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg32>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint32_t>(streamReg);
 			dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg16>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint16_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint16_t>(streamReg);
 			dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg8>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint8_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint8_t>(streamReg);
 			dest.endConfiguration();
         } else {
             assert_msg("Trying to run so.v.mvt with invalid src type", false);

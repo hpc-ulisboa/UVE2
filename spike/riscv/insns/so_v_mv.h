@@ -10,7 +10,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     auto elements = src.getElements(true);
     auto destElements = dest.getElements(false); // doesn't iterate the stream
     auto validElementsIndex = src.getValidIndex();
-    std::vector<StorageType> out(dest.getMaxElements());
+    std::vector<StorageType> out(dest.getVLen());
     auto pi = pred.getPredicate();
     for (size_t i = 0; i < validElementsIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
@@ -24,16 +24,16 @@ operation so that its element size matches before any calculations are done */
 std::visit([&](auto &dest) {
     if (dest.getStatus() == RegisterStatus::NotConfigured) {
         if (std::holds_alternative<StreamReg64>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint64_t>(streamReg);
 			dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg32>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint32_t>(streamReg);
 			dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg16>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint16_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint16_t>(streamReg);
 			dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg8>(srcReg)) {
-            P.SU.makeStreamRegister<std::uint8_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint8_t>(streamReg);
 			dest.endConfiguration();
         } else {
             assert_msg("Trying to run so.v.mv with invalid src type", false);

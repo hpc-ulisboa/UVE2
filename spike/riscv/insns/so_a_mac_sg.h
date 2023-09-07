@@ -42,16 +42,16 @@ operation so that its element size matches before any calculations are done */
 std::visit([&](auto &dest) {
     if (dest.getStatus() == RegisterStatus::NotConfigured) {
         if (std::holds_alternative<StreamReg8>(src1Reg)) {
-            P.SU.makeStreamRegister<std::uint8_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint8_t>(streamReg);
             dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg16>(src1Reg)) {
-            P.SU.makeStreamRegister<std::uint16_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint16_t>(streamReg);
             dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg32>(src1Reg)) {
-            P.SU.makeStreamRegister<std::uint32_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint32_t>(streamReg);
             dest.endConfiguration();
         } else if (std::holds_alternative<StreamReg64>(src1Reg)) {
-            P.SU.makeStreamRegister<std::uint64_t>(RegisterConfig::NoStream, streamReg);
+            P.SU.makeStreamRegister<std::uint64_t>(streamReg);
             dest.endConfiguration();
         } else  
             assert_msg("Trying to run so.a.mac.sg with invalid src type", false);

@@ -30,7 +30,7 @@ for (int32_t i = 0; i < size; i++) {
 }
 */
 
-P.SU.makeStreamRegister<std::uint16_t>(RegisterConfig::Load, streamReg);
+P.SU.makeStreamRegister<std::uint16_t>(streamReg, RegisterConfig::Load);
 /*operateRegister(P.SU, streamReg, [=](auto& reg) {
     reg.startConfiguration({ base, size, stride });
     reg.endConfiguration();

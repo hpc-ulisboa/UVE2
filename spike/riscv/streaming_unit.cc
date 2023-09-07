@@ -77,6 +77,11 @@ void streamRegister_t<T>::setValidIndex(const size_t i) {
 }
 
 template <typename T>
+void streamRegister_t<T>::setMode(const RegisterMode m) {
+    mode = m;
+}
+
+template <typename T>
 bool streamRegister_t<T>::hasStreamFinished() const {
     return status == RegisterStatus::Finished;
 }
@@ -99,17 +104,12 @@ bool streamRegister_t<T>::isEndOfDimensionOfDim(size_t i) const {
 }
 
 template <typename T>
-RegisterStatus streamRegister_t<T>::getStatus() const {
-    return status;
-}
-
-template <typename T>
 size_t streamRegister_t<T>::getElementsWidth() const {
     return elementsWidth;
 }
 
 template <typename T>
-size_t streamRegister_t<T>::getMaxElements() const {
+size_t streamRegister_t<T>::getVLen() const {
     return vLen;
 }
 
@@ -119,8 +119,18 @@ size_t streamRegister_t<T>::getValidIndex() const {
 }
 
 template <typename T>
+RegisterStatus streamRegister_t<T>::getStatus() const {
+    return status;
+}
+
+template <typename T>
 RegisterConfig streamRegister_t<T>::getType() const {
     return type;
+}
+
+template <typename T>
+RegisterMode streamRegister_t<T>::getMode() const {
+    return mode;
 }
 
 /* FOR DEBUGGING*/
@@ -361,7 +371,7 @@ void streamingUnit_t::updateEODTable(const size_t stream) {
 }
 
 template <typename T>
-void streamingUnit_t::makeStreamRegister(RegisterConfig type, size_t streamRegister) {
+void streamingUnit_t::makeStreamRegister(size_t streamRegister, RegisterConfig type) {
     assert_msg("Tried to use a register index higher than the available register", streamRegister < registerCount);
     if constexpr (std::is_same_v<T, std::uint8_t>) {
         registers.at(streamRegister) = StreamReg8{this, type, streamRegister};
@@ -389,7 +399,7 @@ template class streamRegister_t<uint8_t>;
 template class streamRegister_t<uint16_t>;
 template class streamRegister_t<uint32_t>;
 template class streamRegister_t<uint64_t>;
-template void streamingUnit_t::makeStreamRegister<uint8_t>(RegisterConfig type, size_t streamRegister);
-template void streamingUnit_t::makeStreamRegister<uint16_t>(RegisterConfig type, size_t streamRegister);
-template void streamingUnit_t::makeStreamRegister<uint32_t>(RegisterConfig type, size_t streamRegister);
-template void streamingUnit_t::makeStreamRegister<uint64_t>(RegisterConfig type, size_t streamRegister);
+template void streamingUnit_t::makeStreamRegister<uint8_t>(size_t streamRegister, RegisterConfig type);
+template void streamingUnit_t::makeStreamRegister<uint16_t>(size_t streamRegister, RegisterConfig type);
+template void streamingUnit_t::makeStreamRegister<uint32_t>(size_t streamRegister, RegisterConfig type);
+template void streamingUnit_t::makeStreamRegister<uint64_t>(size_t streamRegister, RegisterConfig type);

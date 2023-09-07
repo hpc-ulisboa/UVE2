@@ -11,7 +11,7 @@ size_t size   = READ_REG(sizeReg);
 size_t stride = READ_REG(strideReg);
 
 
-P.SU.makeStreamRegister<std::uint8_t>(RegisterConfig::Store, streamReg);
+P.SU.makeStreamRegister<std::uint8_t>(streamReg, RegisterConfig::Store);
 /*operateRegister(P.SU, streamReg, [=](auto& reg) {
     reg.startConfiguration({ base, size, stride });
     reg.endConfiguration();
