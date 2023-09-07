@@ -11,10 +11,17 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     /* Each stream's elements must have the same width for content to be
      * operated on */
     assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
-
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
-    auto destElements = dest.getElements(false);
+
+    /* Grab used types for storage and operation */
+    using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
+    using OperationType = decltype(extra);
+
+    if (src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load)
+        std::vector<StorageType> out(dest.vLen); // zeroing predication
+    else 
+        auto out = dest.getElements(false); // merging predication 
 
     /* print elements1
     std::cout << "elements1: ";
@@ -35,14 +42,10 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     }
     std::cout << std::endl;
     */
+    
     auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
 
     auto pi = pred.getPredicate();
-
-    /* Grab used types for storage and operation */
-    using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
-    using OperationType = decltype(extra);
-    std::vector<StorageType> out = destElements;
 
     for (size_t i = 0; i < validElementsIndex; i++) {
         if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
@@ -50,12 +53,11 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             auto e2 = readAS<OperationType>(elements2.at(i));
             auto e3 = readAS<OperationType>(destElements.at(i));
             out.at(i) = readAS<StorageType>(e1 * e2 + e3);
-            //std::cout << "MAC e1: " << e1 << " e2: " << e2 << " e3: " << e3 << " result: " << readAS<OperationType>(out.at(i)) << std::endl;
+            //std::cout << "MAC   e1: " << e1 << " e2: " << e2 << " e3: " << e3 << " result: " << readAS<OperationType>(out.at(i)) << std::endl;
         }
     }
-    dest.setValidIndex(validElementsIndex);
+    dest.setValidIndex(dest.vLen);
     dest.setElements(true, out);
-
 };
 
 /* If the destination register is not configured, we have to build it before the

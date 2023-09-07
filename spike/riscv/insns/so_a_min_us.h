@@ -28,7 +28,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
         if (pi.at((i + 1) * sizeof(OperationType) - 1))
             out.at(i) = readAS<StorageType>(std::min(readAS<OperationType>(elements1.at(i)), readAS<OperationType>(elements2.at(i))));
     }
-    dest.setValidIndex(validElementsIndex);
+    dest.setValidIndex(dest.vLen);
     dest.setElements(true, out);
 
 };

@@ -2,5 +2,5 @@ auto dest = insn.uve_pred_rd();
 auto& destPReg = P.SU.predicates[dest];
 auto &predReg = P.SU.predicates[insn.uve_pred()];
 
-std::vector<uint8_t> predicate(destPReg.maxAmountElements, 1);
+std::vector<uint8_t> predicate(destPReg.vLen, 1);
 P.SU.makePredRegister(predicate, dest);

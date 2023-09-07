@@ -6,7 +6,7 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 auto pi = predReg.getPredicate(); // instruction predicate
 
 auto predicate = srcPReg.getPredicate();
-size_t size = srcPReg.maxAmountElements;
+size_t size = srcPReg.vLen;
 
 auto destPredicate = destPReg.getPredicate();
 

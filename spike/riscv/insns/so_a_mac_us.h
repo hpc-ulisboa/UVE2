@@ -32,7 +32,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             out.at(i) = readAS<StorageType>(e1 * e2 + e3);
         }
     }
-    dest.setValidIndex(validElementsIndex);
+    dest.setValidIndex(dest.vLen);
     dest.setElements(true, out);
 
 };

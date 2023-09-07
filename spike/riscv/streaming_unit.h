@@ -44,7 +44,7 @@ struct streamRegister_t {
     static constexpr size_t elementsWidth = sizeof(ElementsType);
     /* This property limits how many elements can be manipulated during a
     computation and also how many can be loaded/stored at a time */
-    static constexpr size_t maxAmountElements = registerLength / elementsWidth;
+    static constexpr size_t vLen = registerLength / elementsWidth;
 
     /* In this implementation, the concept of a stream and register are heavily
     intertwined. As such, stream attributes, such as dimensions, modifiers, EOD flags,
@@ -61,7 +61,7 @@ struct streamRegister_t {
 
     streamRegister_t(streamingUnit_t *su = nullptr, RegisterConfig t = RegisterConfig::NoStream, size_t regN = -1) : su(su), registerN(regN), type(t) {
         status = RegisterStatus::NotConfigured;
-        validIndex = maxAmountElements;
+        validIndex = vLen;
     }
 
     void addModifier(Modifier mod);
@@ -92,7 +92,7 @@ private:
     streamingUnit_t *su;
     /* FOR DEBUGGING */
     size_t registerN;
-    std::vector<ElementsType> elements = std::vector<ElementsType>(maxAmountElements);
+    std::vector<ElementsType> elements = std::vector<ElementsType>(vLen);
     size_t validIndex;
     /* Same ordeal as above. Although the amount of dimensions is capped, we can avoid
     indexing by just calling the size method */
@@ -124,16 +124,16 @@ private:
 struct PredRegister {
     static constexpr size_t registerLength = 64; // in Bytes
     static constexpr size_t elementsWidth = sizeof(uint8_t);
-    static constexpr size_t maxAmountElements = registerLength / elementsWidth;
+    static constexpr size_t vLen = registerLength / elementsWidth;
 
-    PredRegister(std::vector<uint8_t> e = std::vector<uint8_t>(maxAmountElements)) {
+    PredRegister(std::vector<uint8_t> e = std::vector<uint8_t>(vLen)) {
         elements = e;
     }
 
     std::vector<uint8_t> getPredicate() const;
 
 private:
-    std::vector<uint8_t> elements = std::vector<uint8_t>(maxAmountElements);
+    std::vector<uint8_t> elements = std::vector<uint8_t>(vLen);
 
     friend class streamingUnit_t;
 };
@@ -165,7 +165,7 @@ struct streamingUnit_t {
     std::array<PredRegister, predRegCount> predicates;
 
     streamingUnit_t() {
-        predicates.at(0).elements = std::vector<uint8_t>(predicates.at(0).maxAmountElements, 1);
+        predicates.at(0).elements = std::vector<uint8_t>(predicates.at(0).vLen, 1);
     }
 
     template <typename T>

@@ -32,7 +32,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             //std::cout << "DIV   " << e1 << " / " << e2 << " = " << readAS<OperationType>(out.at(i)) << "\n";
         }
     }
-    dest.setValidIndex(validElementsIndex);
+    dest.setValidIndex(dest.vLen);
     dest.setElements(true, out);
 };
 

@@ -17,7 +17,7 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
     auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
 
     auto pi = pred.getPredicate();
-    std::vector<uint8_t> predicate(pred.maxAmountElements);
+    std::vector<uint8_t> predicate(pred.vLen);
 
     auto iterator = predicate.begin();
 

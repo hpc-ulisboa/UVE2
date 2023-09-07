@@ -71,7 +71,7 @@ void streamRegister_t<T>::setElements(bool causesUpdate, std::vector<T> e) {
 
 template <typename T>
 void streamRegister_t<T>::setValidIndex(const size_t i) {
-    assert_msg("Trying to set valid index to invalid value", i <= maxAmountElements);
+    assert_msg("Trying to set valid index to invalid value", i <= vLen);
 
     validIndex = i;
 }
@@ -110,7 +110,7 @@ size_t streamRegister_t<T>::getElementsWidth() const {
 
 template <typename T>
 size_t streamRegister_t<T>::getMaxElements() const {
-    return maxAmountElements;
+    return vLen;
 }
 
 template <typename T>
@@ -254,7 +254,7 @@ void streamRegister_t<T>::updateAsLoad() {
     }
 
     //elements.clear();
-    //elements.reserve(maxAmountElements);
+    //elements.reserve(vLen);
 
     size_t eCount = 0;
     validIndex = 0; // reset valid index
@@ -276,7 +276,7 @@ void streamRegister_t<T>::updateAsLoad() {
     
     size_t offset;
 
-    while (eCount < maxAmountElements && tryGenerateOffset(offset)){
+    while (eCount < vLen && tryGenerateOffset(offset)){
         //std::cout << "Can generate offset before (eCount = " << eCount << ")" << std::endl;
         auto value = [this](auto address) -> ElementsType {
             if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
@@ -301,8 +301,8 @@ void streamRegister_t<T>::updateAsLoad() {
     }
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     //std::cout << "eCount: " << eCount << std::endl;
-    //std::cout << "maxAmountElements: " << maxAmountElements << std::endl;
-    if(eCount < maxAmountElements) // iteration is already updated when register is full
+    //std::cout << "vLen: " << vLen << std::endl;
+    if(eCount < vLen) // iteration is already updated when register is full
         updateIteration(); // reset EOD flags and iterate stream
 }
  
@@ -314,7 +314,7 @@ void streamRegister_t<T>::updateAsStore() {
         return;
     }
 
-    // std::cout << "Storing " << elements.size() << " elements. eCount=" << maxAmountElements << std::endl;
+    // std::cout << "Storing " << elements.size() << " elements. eCount=" << vLen << std::endl;
     size_t offset;
     size_t eCount = 0;
     while (eCount < validIndex && tryGenerateOffset(offset)) {
@@ -379,7 +379,7 @@ void streamingUnit_t::makeStreamRegister(RegisterConfig type, size_t streamRegis
 void streamingUnit_t::makePredRegister(std::vector<uint8_t> elements, size_t predRegister) {
     assert_msg("Tried to alter p0 register, which is hardwired to 1", predRegister);
     assert_msg("Tried to use a predicate register index higher than the available predicate registers", predRegister < predRegCount);
-    assert_msg("Tried to create predicate with invalid size", elements.size() == predicates.at(predRegister).maxAmountElements);
+    assert_msg("Tried to create predicate with invalid size", elements.size() == predicates.at(predRegister).vLen);
     for (auto &p : elements)
         assert_msg("Invalid values for predicate (must be 0 or 1)", !p || p == 1);
     predicates.at(predRegister).elements = elements;

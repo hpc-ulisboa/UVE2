@@ -14,7 +14,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     auto pi = pred.getPredicate();
     for (size_t i = 0; i < validElementsIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
-    dest.setValidIndex(validElementsIndex);
+    dest.setValidIndex(dest.vLen);
     dest.setElements(true, out);
 
 };

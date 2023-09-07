@@ -17,7 +17,7 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
     auto validElementsIndex = std::min(elements1.size(), elements2.size());
 
     auto pi = pred.getPredicate();
-    std::vector<uint8_t> predicate(pred.maxAmountElements);
+    std::vector<uint8_t> predicate(pred.vLen);
 
     using Operation = decltype(extra);
     if (validElementsIndex) {

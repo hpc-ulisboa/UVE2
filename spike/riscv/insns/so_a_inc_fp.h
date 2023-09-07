@@ -21,7 +21,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
             out.at(i) = readAS<StorageType>(e);
         }
     }
-    dest.setValidIndex(validElementsIndex);
+    dest.setValidIndex(dest.vLen);
     dest.setElements(true, out);
 
 };

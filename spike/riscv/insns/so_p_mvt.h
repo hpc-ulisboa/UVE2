@@ -8,7 +8,7 @@ std::reverse(pi.begin(), pi.end()); // reverse the instruction predicate
 
 auto predicate = srcPReg.getPredicate();
 std::reverse(predicate.begin(), predicate.end()); // reverse the source predicate
-size_t size = srcPReg.maxAmountElements;
+size_t size = srcPReg.vLen;
 
 auto destPredicate = destPReg.getPredicate();
 

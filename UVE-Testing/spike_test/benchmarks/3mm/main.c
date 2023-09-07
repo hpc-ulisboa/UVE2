@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Functions.h"
 
-extern void core(DataType *src1, DataType *src2, DataType *src3);
+extern void core(void* src1, void* src2, void* src3, unsigned long int sizeI, unsigned long int sizeJ, unsigned long int sizeK);
 
 
 int main() {
@@ -13,7 +13,7 @@ int main() {
   initArray2D(src2);
   initArray2D(src3);
 
-  core(src1, src2, src3);
+  core(src1, src2, src3, SIZE, SIZE, SIZE);
 
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++)

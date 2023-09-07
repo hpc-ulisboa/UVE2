@@ -51,7 +51,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     }
     dest.setElements(true, out);
     // std::cout << "\n\nOUT: " << out.size() << "\n\n";
-    dest.setValidIndex(validElementsIndex);
+    dest.setValidIndex(dest.vLen);
 };
 
 /* If the destination register is not configured, we have to build it before the
