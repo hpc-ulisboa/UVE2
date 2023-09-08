@@ -7,8 +7,8 @@ int main() {
   DataType A[SIZE*SIZE];
   DataType B[SIZE*SIZE];
 
-  initArray2D(A);
-  initArray2D(B);
+  initArray2D(A, SIZE, SIZE);
+  initArray2D(B, SIZE, SIZE);
 
   core(A, B);
 

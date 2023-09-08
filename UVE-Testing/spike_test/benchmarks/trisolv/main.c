@@ -8,9 +8,9 @@ int main() {
     DataType b[SIZE];
     DataType x[SIZE];
     
-    initArray2D(L);
-    initArray(b);
-    initArray(x);
+    initArray2D(L, SIZE, SIZE);
+    initArray(b, SIZE);
+    initArray(x, SIZE);
 
     /*
     

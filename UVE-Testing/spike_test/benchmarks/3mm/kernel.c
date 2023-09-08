@@ -1,9 +1,8 @@
 #include "Functions.h"
-#define v_len 16
 
 #ifdef RUN_UVE
 void
-uve_config(void* src1, void* src2, void* src3, unsigned long int sizeI, unsigned long int sizeJ, unsigned long int sizeK) {
+uve_config(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t sizeJ, uint64_t sizeK) {
     asm volatile(                        /*offset, size, stride*/
 		// B stream (KxJ)
 		"ss.sta.ld.d           u2, %[src2], %[sk], %[sj] \t\n"    // D1: slide verticaly stride sizeJ ('sizeK' times)
@@ -32,7 +31,9 @@ uve_kernel() {
         "iLoop1: \t\n"    
             "so.v.dp.d u21, zero, p0 \t\n"
             "kloop1: \t\n"
-              "so.a.mac.fp u21, u1, u2, p0\n\t" // tmp += (.A) * B
+              //"so.a.mac.fp u21, u1, u2, p0\n\t" // tmp += (.A) * B
+			  "so.a.mul.fp u22, u1, u2, p0\n\t" // tmp1 = (.A) * B
+			  "so.a.add.fp u21, u21, u22, p0\n\t" // tmp += tmp1
             "so.b.ndc.1 u2, kloop1 \n\t"
             "so.a.adde.fp  u4, u21, p0 \n\t" // store tmp to C 
         "so.b.nc	u2, iLoop1 \n\t"
@@ -40,8 +41,12 @@ uve_kernel() {
 }
 
 void
-core(void* src1, void* src2, void* src3, unsigned long int sizeI, unsigned long int sizeJ, unsigned long int sizeK){
-	uve_config(src1, src2, src3, sizeI, sizeJ, sizeK);
+core(void* A, void* B, void* C, void* D, void* E, void* F, void* G, uint64_t I, uint64_t J, uint64_t K, uint64_t L, uint64_t M) {
+	uve_config(A, B, E, I, J, K);
+	uve_kernel();
+	uve_config(C, D, F, J, L, M);
+	uve_kernel();
+	uve_config(E, F, G, I, L, J);
 	uve_kernel();
 }
 
@@ -83,7 +88,7 @@ core(void* src1, void* src2, void* src3, unsigned long int sizeI, unsigned long 
 
 #ifdef RUN_SIMPLE
 void
-core(void* src1, void* src2, void* src3, unsigned long int sizeI, unsigned long int sizeJ, unsigned long int sizeK) {
+core_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t sizeJ, uint64_t sizeK) {
     DataType *A = (DataType *)src1; /* IxK */
     DataType *B = (DataType *)src2; /* KxJ */
     DataType *C = (DataType *)src3; /* IxJ */
@@ -97,6 +102,12 @@ core(void* src1, void* src2, void* src3, unsigned long int sizeI, unsigned long 
             	C[i*sizeJ+j] += (DataType) A[i*sizeK+k] * (DataType) B[k*sizeJ+j];
     	}
 	}
+}
 
+void
+core(void* A, void* B, void* C, void* D, void* E, void* F, void* G, uint64_t I, uint64_t J, uint64_t K, uint64_t L, uint64_t M){
+	core_kernel(A, B, E, I, J, K);
+	core_kernel(C, D, F, J, L, M);
+	core_kernel(E, F, G, I, L, J);
 }
 #endif // RUN_SIMPLE

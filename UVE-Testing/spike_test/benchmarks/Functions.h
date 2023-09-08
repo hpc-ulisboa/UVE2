@@ -1,6 +1,7 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include <stdint.h>
 #include "Dataset.h"
 
 
@@ -49,11 +50,11 @@
 #error *Did not pass a type of value 1, 2, 3, 4 or 5*
 #endif // TYPE
 
-void initArray(DataType *array);
-void initArray2D(DataType *array);
+void initArray(DataType *array, int N);
+void initArray2D(DataType *array, int N, int M);
 
-void initZero(DataType *array);
-void initConstant(DataType *array, DataType m);
+void initZero(DataType *array, int N);
+void initConstant(DataType *array, int N, DataType m);
 
 
 #endif // FUNCTIONS_H

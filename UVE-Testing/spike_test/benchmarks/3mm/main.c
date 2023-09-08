@@ -1,23 +1,33 @@
 #include <stdio.h>
 #include "Functions.h"
 
-extern void core(void* src1, void* src2, void* src3, unsigned long int sizeI, unsigned long int sizeJ, unsigned long int sizeK);
-
+extern void core(void* A, void* B, void* C, void* D, void* E, void* F, void* G, uint64_t I, uint64_t J, uint64_t K, uint64_t L, uint64_t M);
 
 int main() {
-  DataType src1[SIZE*SIZE];
-  DataType src2[SIZE*SIZE];
-  DataType src3[SIZE*SIZE];
+  size_t I = SIZE;
+  size_t J = SIZE;
+  size_t K = SIZE;
+  size_t L = SIZE;
+  size_t M = SIZE;
 
-  initArray2D(src1);
-  initArray2D(src2);
-  initArray2D(src3);
+  DataType A[I*K];
+  DataType B[K*J];
+  DataType C[J*M];
+  DataType D[M*L];
+  DataType E[I*J];
+  DataType F[J*L];
+  DataType G[I*L];
 
-  core(src1, src2, src3, SIZE, SIZE, SIZE);
+  initArray2D(A, I, K);
+  initArray2D(B, K, J);
+  initArray2D(C, J, M);
+  initArray2D(D, M, L);
 
-  for (int i = 0; i < SIZE; i++) {
-    for (int j = 0; j < SIZE; j++)
-      printf( DataFormat("", "\n"), src3[i*SIZE+j]);
+  core(A, B, C, D, E, F, G, I, J, K, L, M);
+
+  for (int i = 0; i < I; i++) {
+    for (int j = 0; j < L; j++)
+      printf( DataFormat("", "\n"), G[i*SIZE+j]);
   }
 
   return 0;

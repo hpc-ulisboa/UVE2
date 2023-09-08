@@ -25,6 +25,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     //std::cout << "ADDE   " << value << "\n";
     out.at(0) = readAS<StorageType>(value);
     dest.setValidIndex(1);
+    dest.setMode(RegisterMode::Scalar);
     dest.setElements(true, out);
 };
 

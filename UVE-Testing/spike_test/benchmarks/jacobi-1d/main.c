@@ -8,8 +8,8 @@ int main() {
   DataType B[SIZE];
   DataType ct = 3;
 
-  initArray(A);
-  initArray(B);
+  initArray(A, SIZE);
+  initArray(B, SIZE);
 
   core(A, B, ct);
   

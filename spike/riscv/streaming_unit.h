@@ -28,7 +28,7 @@ enum class RegisterConfig { NoStream,
 enum class RegisterStatus { NotConfigured,
                             Running,
                             Finished };
-enum class RegisterMode { Vectorial,
+enum class RegisterMode { Vector,
                           Scalar };
 
 /* T is one of std::uint8_t, std::uint16_t, std::uint32_t or std::uint64_t and
@@ -64,7 +64,7 @@ struct streamRegister_t {
     streamRegister_t(streamingUnit_t *su = nullptr, RegisterConfig t = RegisterConfig::NoStream, size_t regN = -1) :
      su(su), registerN(regN), type(t) {
         status = RegisterStatus::NotConfigured;
-        mode = RegisterMode::Vectorial;
+        mode = RegisterMode::Vector;
         validIndex = vLen;
     }
 

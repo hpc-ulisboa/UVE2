@@ -9,8 +9,8 @@ int main()
   DataType dest[SIZE];
   DataType value = 3;
 
-  initArray(src);
-  initZero(dest);
+  initArray(src, SIZE);
+  initZero(dest, SIZE);
 
   core(dest, src, value);
 
