@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # UVE 2.0 - Spike Simulator
 
 
@@ -90,3 +91,7 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+=======
+# UVE2
+UVE 2.0 Specification and tools
+>>>>>>> 0e8b0b817f2976cdefe41de11d7b829396b3cc7e
