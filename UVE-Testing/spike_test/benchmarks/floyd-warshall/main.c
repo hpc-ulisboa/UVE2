@@ -8,7 +8,7 @@ int main()
 {
 	DataType path[SIZE*SIZE];
 
-  initArray2D(path);
+  initArray2D(path, SIZE, SIZE);
 
   core(path);
 

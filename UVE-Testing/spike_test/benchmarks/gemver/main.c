@@ -17,15 +17,15 @@ int main() {
   DataType alpha = 1.5;
   DataType beta = 1.2;
 
-  initArray2D(src_1);
-  initArray(src_2);
-  initArray(src_3);
-  initArray(src_4);
-  initArray(src_5);
-  initArray(src_6);
-  initArray(src_7);
-  initArray(src_8);
-  initArray(src_9);
+  initArray2D(src_1, SIZE, SIZE);
+  initArray(src_2, SIZE);
+  initArray(src_3, SIZE);
+  initArray(src_4, SIZE);
+  initArray(src_5, SIZE);
+  initArray(src_6, SIZE);
+  initArray(src_7, SIZE);
+  initArray(src_8, SIZE);
+  initArray(src_9, SIZE);
 
 
   core(src_1, src_2, src_3, src_4, src_5, src_6, src_7, src_8, src_9, alpha, beta);

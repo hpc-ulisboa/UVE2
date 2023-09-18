@@ -9,9 +9,9 @@ int main() {
   DataType src_2[SIZE*SIZE];
   DataType src_3[SIZE];
 
-  initArray2D(src_1);
-  initArray2D(src_2);
-  initZero(src_3);
+  initArray2D(src_1, SIZE, SIZE);
+  initArray2D(src_2, SIZE, SIZE);
+  initZero(src_3, SIZE);
 
 
   core(src_1, src_2, src_3);
