@@ -37,7 +37,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             auto e1 = readAS<OperationType>(elements1.at(i));
             auto e2 = readAS<OperationType>(elements2.at(i));
             out.at(i) = readAS<StorageType>(e1 + e2);
-            //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << (e1 + e2) << "\n";
+            std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << (e1 + e2) << "\n";
         }
     }
     dest.setElements(true, out);

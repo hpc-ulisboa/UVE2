@@ -1,7 +1,7 @@
 #ifndef STREAMING_UNIT_HPP
 #define STREAMING_UNIT_HPP
 
-#include "dimension.h"
+#include "descriptors.h"
 // #include "processor.h"
 #include "helpers.h"
 #include <algorithm>

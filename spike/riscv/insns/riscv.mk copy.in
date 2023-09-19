@@ -38,7 +38,7 @@ riscv_install_hdrs = \
 	trap.h \
 	triggers.h \
 	vector_unit.h \
-	dimension.h \
+	descriptors.h \
 	streaming_unit.h \
 
 riscv_precompiled_hdrs = \
@@ -67,7 +67,7 @@ riscv_srcs = \
 	csrs.cc \
 	triggers.cc \
 	vector_unit.cc \
-	dimension.cc \
+	descriptors.cc \
 	streaming_unit.cc \
 	socketif.cc \
 	cfg.cc \

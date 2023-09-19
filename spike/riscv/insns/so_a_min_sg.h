@@ -25,8 +25,10 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     std::vector<StorageType> out = destElements;
 
     for (size_t i = 0; i < validElementsIndex; i++) {
-        if (pi.at((i + 1) * sizeof(OperationType) - 1))
+        if (pi.at((i + 1) * sizeof(OperationType) - 1)){
             out.at(i) = readAS<StorageType>(std::min(readAS<OperationType>(elements1.at(i)), readAS<OperationType>(elements2.at(i))));
+            std::cout << "MIN element1: " << readAS<OperationType>(elements1.at(i)) << " element2: " << readAS<OperationType>(elements2.at(i)) << " result: " << readAS<OperationType>(out.at(i)) << "\n";
+        }
     }
     dest.setValidIndex(dest.vLen);
     dest.setElements(true, out);
