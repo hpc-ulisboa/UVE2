@@ -1,9 +1,8 @@
 #include "streaming_unit.h"
-#include "processor.h"
 #include "mmu.h"
+#include "processor.h"
 
 #define gMMU(p) (*(p->get_mmu()))
-
 
 template <typename T>
 void streamRegister_t<T>::addModifier(Modifier mod) {
@@ -49,7 +48,7 @@ void streamRegister_t<T>::endConfiguration() {
 
 template <typename T>
 std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
-    //assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
+    // assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
 
     if (causesUpdate)
         updateStreamValues();
@@ -162,12 +161,12 @@ size_t streamRegister_t<T>::generateOffset() {
     size_t init = 0;
     int counter = 0;
     return std::accumulate(dimensions.begin(), dimensions.end(), init, [&](size_t acc, Dimension &dim) {
-        if (dim.isLastIteration() && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + counter)){
-            //std::cout << "Last iteration of dimension " << counter << std::endl;
+        if (dim.isLastIteration() && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + counter)) {
+            // std::cout << "Last iteration of dimension " << counter << std::endl;
             dim.setEndOfDimension(true);
         }
         ++counter;
-        //std::cout << "Accumulating dimension " << ++counter << std::endl;
+        // std::cout << "Accumulating dimension " << ++counter << std::endl;
         return acc + dim.calcOffset(elementsWidth);
     });
 }
@@ -185,7 +184,7 @@ bool streamRegister_t<T>::isStreamDone() const {
 }
 
 template <typename T>
-bool streamRegister_t<T>::tryGenerateOffset(size_t& address) {
+bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
     /* There are two situations that prevent us from generating offsets/iterating a stream:
     1) We are at the last iteration of the outermost dimension
     2) We just finished the last iteration of a dimension and there is a configure
@@ -193,14 +192,14 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t& address) {
     only resume after an exterior call to setEndOfDimension(false) */
 
     /* The outermost dimension is the last one in the container */
-    if (isStreamDone()){
+    if (isStreamDone()) {
         status = RegisterStatus::Finished;
         return false;
     }
-        
+
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
-        if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)){
-            //std::cout << "Stop dimension loading " << i+1 << std::endl;
+        if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)) {
+            // std::cout << "Stop dimension loading " << i+1 << std::endl;
             return false;
         }
     }
@@ -210,13 +209,13 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t& address) {
 
 template <typename T>
 void streamRegister_t<T>::updateIteration() {
-    if (isStreamDone()){
+    if (isStreamDone()) {
         status = RegisterStatus::Finished;
         return;
     }
 
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
-    //std::cout << "Advancing dimension no 1" << std::endl;
+    // std::cout << "Advancing dimension no 1" << std::endl;
     dimensions.at(0).advance();
 
     /* No extra processing is needed if there is only 1 dimension */
@@ -230,28 +229,28 @@ void streamRegister_t<T>::updateIteration() {
         last iteration of a dimension */
 
         if (!currDim.isEndOfDimension())
-        //if (!isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1))
+            // if (!isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1))
             continue;
-        
-        //std::cout << "Dimension " << i + 1 << " is fully done" << std::endl;
 
-        //std::cout << "Looking for modifiers of dimension " << i << std::endl;
+        // std::cout << "Dimension " << i + 1 << " is fully done" << std::endl;
+
+        // std::cout << "Looking for modifiers of dimension " << i << std::endl;
         auto currentModifierIter = modifiers.find(i);
         const bool modifierExists = currentModifierIter != modifiers.end();
 
         // currDim.resetIndex();
-        //printRegN("Updating EOD of dimension.");
-        //std::cout << "Advancing dimension no " << i + 2 << std::endl;
+        // printRegN("Updating EOD of dimension.");
+        // std::cout << "Advancing dimension no " << i + 2 << std::endl;
         dimensions.at(i + 1).advance();
         currDim.setEndOfDimension(false);
         if (modifierExists) {
-            //printRegN("Applying modifier.");
+            // printRegN("Applying modifier.");
             currentModifierIter->second.modDimension(currDim);
         }
 
         // The values at lower dimensions might have been modified. As such, we need to reset them before next iteration
         for (size_t j = 0; j < i; j++) {
-          dimensions.at(j).resetIterValues();
+            dimensions.at(j).resetIterValues();
         }
     }
 }
@@ -263,31 +262,31 @@ void streamRegister_t<T>::updateAsLoad() {
         return;
     }
 
-    //elements.clear();
-    //elements.reserve(vLen);
+    // elements.clear();
+    // elements.reserve(vLen);
 
     size_t eCount = 0;
     validIndex = 0; // reset valid index
 
     /*----------------------------------- Loading pipeline -----------------------------------
     ************************************* THIS IS OUTDATED ***********************************
-     * Iterate stream
-     * Try to load 1 element if not EOD of vector coupled dimension and stream is not finished
-     *      Generate offset
-     *      Push element to register
-     *      Break if:
-     *          EOD if vector coupled
-     *          Register limit reached
-     *      Iterate stream
-     * End
-     *
-     * This iterates the stream before their first load, skipping 1 iteration.
-     *----------------------------------------------------------------------------------------*/
-    
+    * Iterate stream
+    * Try to load 1 element if not EOD of vector coupled dimension and stream is not finished
+    *      Generate offset
+    *      Push element to register
+    *      Break if:
+    *          EOD if vector coupled
+    *          Register limit reached
+    *      Iterate stream
+    * End
+    *
+    * This iterates the stream before their first load, skipping 1 iteration.
+    *----------------------------------------------------------------------------------------*/
+
     size_t offset;
 
-    while (eCount < vLen && tryGenerateOffset(offset)){
-        //std::cout << "Can generate offset before (eCount = " << eCount << ")" << std::endl;
+    while (eCount < vLen && tryGenerateOffset(offset)) {
+        // std::cout << "Can generate offset before (eCount = " << eCount << ")" << std::endl;
         auto value = [this](auto address) -> ElementsType {
             if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint8_t>(address));
@@ -298,24 +297,24 @@ void streamRegister_t<T>::updateAsLoad() {
             else
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint64_t>(address));
         }(offset);
-        //elements.push_back(value);
+        // elements.push_back(value);
         elements.at(eCount) = value;
         ++validIndex;
-        //std::cout << "Loaded Value: " << readAS<float>(value) << std::endl;
-        if(tryGenerateOffset(offset)){
-            //std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
+        // std::cout << "Loaded Value: " << readAS<float>(value) << std::endl;
+        if (tryGenerateOffset(offset)) {
+            // std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;
         } else
             break;
     }
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
-    //std::cout << "eCount: " << eCount << std::endl;
-    //std::cout << "vLen: " << vLen << std::endl;
-    if(eCount < vLen) // iteration is already updated when register is full
+    // std::cout << "eCount: " << eCount << std::endl;
+    // std::cout << "vLen: " << vLen << std::endl;
+    if (eCount < vLen)     // iteration is already updated when register is full
         updateIteration(); // reset EOD flags and iterate stream
 }
- 
+
 template <typename T>
 void streamRegister_t<T>::updateAsStore() {
     // std::cout << "Updating as store" << std::endl;
@@ -328,11 +327,11 @@ void streamRegister_t<T>::updateAsStore() {
     size_t offset;
     size_t eCount = 0;
     while (eCount < validIndex && tryGenerateOffset(offset)) {
-        //auto value = elements.front();
-        //elements.erase(elements.begin());
-        //elements.pop_front(); //-- std::array
+        // auto value = elements.front();
+        // elements.erase(elements.begin());
+        // elements.pop_front(); //-- std::array
         auto value = elements.at(eCount);
-        //std::cout << "Stored Value: " << readAS<double>(value) << " ";
+        //std::cout << "Stored Value: " << readAS<int>(value) << " ";
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
             gMMU(su->p).template store<std::uint8_t>(offset, readAS<ElementsType>(value));
         else if constexpr (std::is_same_v<ElementsType, std::uint16_t>)
@@ -341,7 +340,7 @@ void streamRegister_t<T>::updateAsStore() {
             gMMU(su->p).template store<std::uint32_t>(offset, readAS<ElementsType>(value));
         else
             gMMU(su->p).template store<std::uint64_t>(offset, readAS<ElementsType>(value));
-        if(tryGenerateOffset(offset)){
+        if (tryGenerateOffset(offset)) {
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;
         } else
@@ -349,25 +348,26 @@ void streamRegister_t<T>::updateAsStore() {
     }
     //std::cout << std::endl;
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
-    if(eCount < validIndex) // iteration is already updated when register is full
-        updateIteration(); // reset EOD flags and iterate stream    
-    //elements.clear();
+    if (eCount < validIndex)       // iteration is already updated when register is full
+        updateIteration();         // reset EOD flags and iterate stream
+    // elements.clear();
 }
 
-std::vector<uint8_t> PredRegister::getPredicate() const{
+std::vector<uint8_t> PredRegister::getPredicate() const {
     return elements;
 }
 
 void streamingUnit_t::updateEODTable(const size_t stream) {
     int r = 0, d = 0;
-    std::visit([&](const auto reg){
+    std::visit([&](const auto reg) {
         int d = 0;
         for (const auto dim : reg.dimensions) {
             EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
-            //fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
+            // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
             ++d;
         }
-    }, registers.at(stream));
+    },
+               registers.at(stream));
 }
 
 template <typename T>

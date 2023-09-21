@@ -2,12 +2,15 @@
 
 const { spawnSync }= require("child_process");
 
-//const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" ];
-const kernels = [ "floyd-warshall" ]; //-- doesn't return same results
+//const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" , "gemm" ];
+
+//const kernels = [ "floyd-warshall" ]; //-- doesn't return same results
 //const kernels = [ "gemver" ]; //-- doesn't return same results and stream store seems to be broken
 //const kernels = [ "covariance" ];
 
-const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=3", "-DSIZE=4" ];
+const kernels = [ "mvt" ];
+
+const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=4", "-DSIZE=16" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "./pk";

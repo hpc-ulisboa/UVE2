@@ -1351,6 +1351,17 @@ riscv_insn_ext_uve = \
 	so_a_sub_fp \
 	so_a_sub_sg \
 	so_a_sub_us \
+	so_a_and \
+	so_a_nand \
+	so_a_nor \
+	so_a_not \
+	so_a_sll \
+	so_a_slls \
+	so_a_sra \
+	so_a_sras \
+	so_a_srl \
+	so_a_srls \
+	so_a_xor \
 	so_b_c \
 	so_b_dc_1 \
 	so_b_dc_2 \

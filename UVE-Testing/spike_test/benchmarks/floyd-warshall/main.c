@@ -10,6 +10,13 @@ int main()
 
   initArray2D(path, SIZE, SIZE);
 
+  printf("path:\n");
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++)
+      printf( DataFormat("", " "), path[i*SIZE+j] );
+    printf("\n");
+  }
+
   core(path);
 
   for (int i = 0; i < SIZE; i++) {
