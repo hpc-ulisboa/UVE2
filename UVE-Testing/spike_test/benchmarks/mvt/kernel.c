@@ -2,88 +2,100 @@
 
 #ifdef RUN_UVE
 
-void core(void *src1, void *src2, void *src3, void *src4, void *src5, int sizeN) {
-	int v_len = 16;
+void configuration1(DataType *A, DataType *x_1, DataType *y_1, uint64_t sizeN){
     asm volatile(
 		// A stream load
-		"ss.sta.ld.w           u1, %[src1], %[sn], %[one] \t\n" // D1: vector - linear access size V_len
-		"ss.cfg.vec            u1 \t\n"
-		"ss.end                u1, zero, %[sn], %[sn] \t\n"     // D2: slide verticaly stride N access size N
+		"ss.sta.ld.w u4, %[A], %[sizeN], %[one] \t\n"
+		"ss.cfg.vec u4 \t\n"
+		"ss.end u4, zero,  %[sizeN], %[sizeN] \t\n"
 
-		// y_1 stream load (could be simplified to a linear access if vector fill is assured)
-		"ss.sta.ld.w           u2, %[src3], %[sn], %[one] \t\n"    // D1: vector - linear access size V_len
-		"ss.end                u2, zero, %[sn], zero \t\n"      // repeat: 'i' times
+		// y_1 stream load
+		"ss.sta.ld.w u5, %[y_1], %[sizeN], %[one] \t\n"
+		"ss.cfg.vec u5 \t\n"
+		"ss.end u5, zero, %[sizeN], zero \t\n"
 
 		// x_1 stream load
-		"ss.sta.ld.w           u3, %[src2], %[vl], zero \t\n"      // D1: slide horizontaly by 1
-		"ss.end                u3, zero, %[sn], %[one] \t\n"    // D1: slide horizontaly by 1
+		//"ss.ld.w u7, %[x_1], %[sizeN], %[one] \t\n"
+		
+		//until scalar streams are defined:
+		"ss.ld.w u7, %[x_1], %[one], zero \t\n"
+		"ss.cfg.vec u7 \t\n"
+		"ss.end u7, zero, %[sizeN], %[one] \t\n"
 
 		// x_1 stream store
-		"ss.st.w           u4, %[src2], %[sn], %[one] \t\n"    // D1: slide horizontaly by 1
+		"ss.st.w u1, %[x_1], %[sizeN], %[one] \t\n"
 
 		:
-		: [src1] "r"(src1), [src3] "r"(src3), [src2] "r"(src2), 
-		[sn] "r"(sizeN), [one] "r" (1),
-		[vl] "r" (v_len), [nv] "r" (sizeN/v_len)
+		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
+		[sizeN] "r"(sizeN), [one] "r" (1)
 	);
+}
 
+void configuration2(DataType *A, DataType *x_2, DataType *y_2, uint64_t sizeN){
 	asm volatile(
 		// A stream load
-		"ss.sta.ld.w           u1, %[src1], %[sn], %[sn] \t\n" // D1: vector - slide verticaly by N
-		"ss.cfg.vec            u1 \t\n"
-		"ss.end                u1, zero, %[sn], %[one] \t\n"     // D2: slide verticaly by 1
+		"ss.sta.ld.w u4, %[A], %[sizeN], %[sizeN] \t\n"
+		"ss.cfg.vec u4 \t\n"
+		"ss.end u4, zero, %[sizeN], %[one] \t\n"
 
-		// y_2 stream load (could be simplified to a linear access if vector fill is assured)
-		"ss.sta.ld.w           u2, %[src5], %[sn], %[one] \t\n"    // D1: vector - linear access size V_len
-		"ss.end                u2, zero, %[sn], zero \t\n"      // repeat: 'i' times
+		// y_2 stream load
+		"ss.sta.ld.w u5, %[y_2], %[sizeN], %[one] \t\n"
+		"ss.cfg.vec u5 \t\n"
+		"ss.end u5, zero, %[sizeN], zero \t\n"
 
 		// x_2 stream load
-		"ss.sta.ld.w           u3, %[src4], %[vl], zero \t\n"      // D1: slide horizontaly by 1
-		"ss.end                u3, zero, %[sn], %[one] \t\n"    // D2: slide horizontaly by 1
+		//"ss.ld.w u7, %[x_2], %[sizeN], %[one] \t\n"
+
+		//until scalar streams are defined:
+		"ss.ld.w u7, %[x_2], %[one], zero \t\n"
+		"ss.cfg.vec u7 \t\n"
+		"ss.end u7, zero, %[sizeN], %[one] \t\n"
 
 		// x_2 stream store
-		"ss.st.w               u4, %[src4], %[sn], %[one] \t\n"    // D1: slide horizontaly by 1
+		"ss.st.w u1, %[x_2], %[sizeN], %[one] \t\n"
+
 		:
-		: [src1] "r" (src1), [src5] "r" (src5), [src4] "r" (src4), 
-		[sn] "r"(sizeN), [one] "r" (1),
-		[vl] "r" (v_len), [nv] "r" (sizeN/v_len)
+		: [A] "r" (A), [y_2] "r" (y_2), [x_2] "r" (x_2), 
+		[sizeN] "r"(sizeN), [one] "r" (1)
 	);
+}
 
+void computation(){
 	asm volatile(
-        ".fLoop1%=: \t\n"
-			"so.v.dp.w  u5, zero, p0\n\t"
+        ".SLOOP_1%=: \t\n"
+			"so.v.dp.w u2, zero, p0 \t\n"
 
-			".jloop1%=: \t\n"
-				"so.a.mac.fp  u5, u1, u2, p0  \n\t" // inner prod A[i][] * j[]
-			"so.b.ndc.1 u1, .jloop1%= \n\t"
+			".SLOOP_1_0%=: \t\n"
+				"so.a.mul.fp  u3, u4, u5, p0 \t\n"
+				"so.a.add.fp  u2, u2, u3, p0 \t\n"
+			"so.b.ndc.1 u4, .SLOOP_1_0%= \t\n"
 
-			"so.v.mv        u6, u3, p0      \n\t" // load x[i]
-			"so.a.adde.fp   u5, u5, p0      \n\t" // reduce vector
-			"so.a.add.fp    u4, u5, u6, p0  \n\t" //  x = red + x
-
-        "so.b.nc	u1, .fLoop1%= \n\t"
+			"so.a.adde.fp  u3, u2, p0 \t\n"
+			"so.a.add.fp  u1, u7, u3, p0 \t\n"
+		"so.b.nc u1, .SLOOP_1%= \t\n"
 		:::
     );
-
 }
+
+void core(DataType *src1, DataType *src2, DataType *src3, DataType *src4, DataType *src5, uint64_t sizeN) {
+	configuration1(src1, src2, src4, sizeN);
+	computation();
+	configuration2(src1, src3, src5, sizeN);
+	computation();
+}
+
 #endif // RUN_UVE
 
 
 #ifdef RUN_SIMPLE
-void core(void* src1, void* src2, void* src3, void* src4, void* src5, uint64_t sizeN) {
-    DataType *A = (DataType *)src1; /* NxN */
-    DataType *x1 = (DataType *)src2; /* N */
-    DataType *y_1 = (DataType *)src3; /* N */
-    DataType *x2 = (DataType *)src4; /* N */
-    DataType *y_2 = (DataType *)src5; /* N */
+void core(DataType* A, DataType* x_1, DataType* x_2, DataType* y_1, DataType* y_2, uint64_t sizeN) {
+    for (int i = 0; i < sizeN; i++)
+      for (int j = 0; j < sizeN; j++)
+        x_1[i] = x_1[i] + A[i*sizeN+j] * y_1[j];
 
     for (int i = 0; i < sizeN; i++)
       for (int j = 0; j < sizeN; j++)
-        x1[i] = x1[i] + A[i*sizeN+j] * y_1[j];
-
-    for (int i = 0; i < sizeN; i++)
-      for (int j = 0; j < sizeN; j++)
-        x2[i] = x2[i] + A[j*sizeN+i] * y_2[j];
+        x_2[i] = x_2[i] + A[j*sizeN+i] * y_2[j];
 }
 
 #endif // RUN_SIMPLE

@@ -4,17 +4,17 @@
 #define v_len 8
 static inline void __config_1(void *A, void *u1, void *v1, void *u2, void *v2) {
     asm volatile(                                              /*offset, size, stride*/
-		"ss.sta.ld.d  u1, %[A],  %[sn],  %[one] \t\n" // A[i][j]
+		"ss.sta.ld.w  u1, %[A],  %[sn],  %[one] \t\n" // A[i][j]
 		"ss.end       u1, zero,  %[sn],  %[sn]  \t\n"
-		"ss.sta.ld.d  u2, %[u1], %[vl],  zero   \t\n" //.u1[i]
+		"ss.sta.ld.w  u2, %[u1], %[vl],  zero   \t\n" //.u1[i]
 		"ss.end       u2, zero,  %[sn],  %[one] \t\n"
-		"ss.sta.ld.d  u3, %[v1], %[sn],  %[one] \t\n" // v1*[j]
+		"ss.sta.ld.w  u3, %[v1], %[sn],  %[one] \t\n" // v1*[j]
 		"ss.end       u3, zero,  %[sn],  zero   \t\n"
-		"ss.sta.ld.d  u4, %[u2], %[vl],  zero   \t\n" //.u2[i]
+		"ss.sta.ld.w  u4, %[u2], %[vl],  zero   \t\n" //.u2[i]
 		"ss.end       u4, zero,  %[sn],  %[one] \t\n"
-		"ss.sta.ld.d  u5, %[v2], %[sn],  %[one] \t\n" // v2*[j]
+		"ss.sta.ld.w  u5, %[v2], %[sn],  %[one] \t\n" // v2*[j]
 		"ss.end       u5, zero,  %[sn],  zero   \t\n"
-		"ss.sta.st.d  u30, %[A],  %[sn],  %[one] \t\n" // A[i][j]
+		"ss.sta.st.w  u30, %[A],  %[sn],  %[one] \t\n" // A[i][j]
 		"ss.end       u30, zero,  %[sn],  %[sn]  \t\n"
 		::[A] "r"(A), [u1] "r"(u1), [v1] "r"(v1), [u2] "r"(u2), 
 		[v2] "r"(v2), [sn] "r"(SIZE), [one] "r"(1), [vl] "r"(v_len)
@@ -37,14 +37,14 @@ static inline void __execute_1() {
 
 static inline void __config_2(void *A, void *x, void *y, double b) {
     asm volatile(                                             /*offset, size, stride*/
-		"ss.sta.ld.d  u1, %[A],  %[sn],  %[sn] \t\n" // A[i][]
+		"ss.sta.ld.w  u1, %[A],  %[sn],  %[sn] \t\n" // A[i][]
 		"ss.end       u1, zero,  %[sn],  %[one]  \t\n"
-		"ss.sta.ld.d  u2, %[y],  %[sn],  %[one] \t\n" // y*[j]
+		"ss.sta.ld.w  u2, %[y],  %[sn],  %[one] \t\n" // y*[j]
 		"ss.end       u2, zero,  %[sn],  zero   \t\n"
-		"ss.sta.ld.d  u3, %[x],  %[vl],  zero   \t\n" //.x[i]
+		"ss.sta.ld.w  u3, %[x],  %[vl],  zero   \t\n" //.x[i]
 		"ss.end       u3, zero,  %[sn],  %[one] \t\n"
-		"ss.st.d      u30, %[x],  %[sn],  %[one] \t\n" //.x[i]
-		"so.v.dp.d    u10, %[cb], p0 \t\n"
+		"ss.st.w      u30, %[x],  %[sn],  %[one] \t\n" //.x[i]
+		"so.v.dp.w    u10, %[cb], p0 \t\n"
 		:: [A] "r"(A),
 		[x] "r"(x), [y] "r"(y),
 		[cb] "r"(b),
@@ -66,9 +66,9 @@ static inline void __execute_2() {
 
 static inline void __config_3(void *x, void *z) {
     asm volatile(                                           /*offset, size, stride*/
-		"ss.ld.d  u1,  %[z],  %[sn],  %[one] \t\n" // z[i]
-		"ss.ld.d  u2,  %[x],  %[sn],  %[one] \t\n" // x[i]
-		"ss.st.d  u30, %[x],  %[sn],  %[one] \t\n" // x[i]
+		"ss.ld.w  u1,  %[z],  %[sn],  %[one] \t\n" // z[i]
+		"ss.ld.w  u2,  %[x],  %[sn],  %[one] \t\n" // x[i]
+		"ss.st.w  u30, %[x],  %[sn],  %[one] \t\n" // x[i]
 		::[x] "r"(x),
 		[z] "r"(z),
 		[sn] "r"(SIZE), [one] "r"(1));
@@ -82,14 +82,14 @@ static inline void __execute_3() {
 
 static inline void __config_4(void *A, void *x, void *w, double a) {
     asm volatile(                                              /*offset, size, stride*/
-		"ss.sta.ld.d  u1, %[A],  %[sn],  %[one] \t\n" // A[i][]
+		"ss.sta.ld.w  u1, %[A],  %[sn],  %[one] \t\n" // A[i][]
 		"ss.end       u1, zero,  %[sn],  %[sn]  \t\n"
-		"ss.sta.ld.d  u2, %[x],  %[sn],  %[one] \t\n" // y*[j]
+		"ss.sta.ld.w  u2, %[x],  %[sn],  %[one] \t\n" // y*[j]
 		"ss.end       u2, zero,  %[sn],  zero   \t\n"
-		"ss.sta.ld.d  u3, %[w],  %[vl],  zero   \t\n" //.x[i]
+		"ss.sta.ld.w  u3, %[w],  %[vl],  zero   \t\n" //.x[i]
 		"ss.end       u3, zero,  %[sn],  %[one] \t\n"
-		"ss.st.d      u30, %[w],  %[sn],  %[one] \t\n" //.x[i]
-		"so.v.dp.d    u10, %[ca], p0 \t\n"
+		"ss.st.w      u30, %[w],  %[sn],  %[one] \t\n" //.x[i]
+		"so.v.dp.w    u10, %[ca], p0 \t\n"
 		:: [A] "r"(A), [x] "r"(x), [w] "r"(w),
 		[ca] "r"(a), [sn] "r"(SIZE), [one] "r"(1), [vl] "r"(v_len));
 }
@@ -102,7 +102,7 @@ static inline void __execute_4() {
 
 			"so.a.mul.fp  u21,u10 ,u20,p0  \n\t"    // aAx["][i] = b * Ax[i][""]
 			"so.a.adde.fp   u22, u21, p0      \n\t" // reduce vector
-			"so.a.add.fp  u30,u3  ,u22,p0  \n\t"    // .d[i] += bAx[i][]
+			"so.a.add.fp  u30,u3  ,u22,p0  \n\t"    // .w[i] += bAx[i][]
         "so.b.nc	u1, 1b  \n\t");
 }
 
@@ -154,7 +154,7 @@ core(void* _A, void* _u1, void* _v1, void* _u2, void* _v2, void* _w, void* _x, v
         x[i] = x[i] + z[i];
 
     //Same as MVT (Matrix Vector mult):
-    // .d = .d + alpha*red(A[i][]*x[])
+    // .w = .w + alpha*red(A[i][]*x[])
     for (i = 0; i < SIZE; i++)
         for (j = 0; j < SIZE; j++)
         w[i] = w[i] + alpha * A[i*SIZE + j] * x[j];

@@ -2,33 +2,33 @@
 #include "Functions.h"
 
 
-extern void core(void *src1, void *src2, void *src3, void *src4, void *src5, uint64_t sizeN);
+extern void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN);
 
 int main()
 {
   uint64_t N = SIZE;
 
-  DataType src1[N*N];
-  DataType src2[N];
-  DataType src3[N];
-  DataType src4[N];
-  DataType src5[N];
+  DataType A[N*N];
+  DataType x_1[N];
+  DataType x_2[N];
+  DataType y_1[N];
+  DataType y_2[N];
 
-  initArray2D(src1, N, N);
-  initArray(src2, N);
-  initArray(src3, N);
-  initArray(src4, N);
-  initArray(src5, N);
+  initArray2D(A, N, N);
+  initArray(x_1, N);
+  initArray(x_2, N);
+  initArray(y_1, N);
+  initArray(y_2, N);
 
-  core(src1, src2, src3, src4, src5, N);
+  core(A, x_1, x_2, y_1, y_2, N);
 
-  for (int i = 0; i < N*N; i++)
-    printf( DataFormat("", "\n"), src2[i]);
+  for (int i = 0; i < N; i++)
+    printf( DataFormat("", "\n"), x_1[i]);
 
   printf("\n");
 
-  for (int i = 0; i < N*N; i++)
-    printf( DataFormat("", "\n"), src4[i]);
+  for (int i = 0; i < N; i++)
+    printf( DataFormat("", "\n"), x_2[i]);
 
   return 0;
 }

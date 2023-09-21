@@ -331,7 +331,7 @@ void streamRegister_t<T>::updateAsStore() {
         // elements.erase(elements.begin());
         // elements.pop_front(); //-- std::array
         auto value = elements.at(eCount);
-        //std::cout << "Stored Value: " << readAS<int>(value) << " ";
+        //std::cout << "Stored Value: " << readAS<float>(value) << " ";
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
             gMMU(su->p).template store<std::uint8_t>(offset, readAS<ElementsType>(value));
         else if constexpr (std::is_same_v<ElementsType, std::uint16_t>)
