@@ -15,12 +15,12 @@ void configuration1(DataType *A, DataType *x_1, DataType *y_1, uint64_t sizeN){
 		"ss.end u5, zero, %[sizeN], zero \t\n"
 
 		// x_1 stream load
-		//"ss.ld.w u7, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.ld.w u7, %[x_1], %[sizeN], %[one] \t\n"
 		
-		//until scalar streams are defined:
+		/*until scalar streams are defined:
 		"ss.ld.w u7, %[x_1], %[one], zero \t\n"
 		"ss.cfg.vec u7 \t\n"
-		"ss.end u7, zero, %[sizeN], %[one] \t\n"
+		"ss.end u7, zero, %[sizeN], %[one] \t\n"*/
 
 		// x_1 stream store
 		"ss.st.w u1, %[x_1], %[sizeN], %[one] \t\n"
@@ -44,12 +44,12 @@ void configuration2(DataType *A, DataType *x_2, DataType *y_2, uint64_t sizeN){
 		"ss.end u5, zero, %[sizeN], zero \t\n"
 
 		// x_2 stream load
-		//"ss.ld.w u7, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.ld.w u7, %[x_2], %[sizeN], %[one] \t\n"
 
-		//until scalar streams are defined:
+		/*until scalar streams are defined:
 		"ss.ld.w u7, %[x_2], %[one], zero \t\n"
 		"ss.cfg.vec u7 \t\n"
-		"ss.end u7, zero, %[sizeN], %[one] \t\n"
+		"ss.end u7, zero, %[sizeN], %[one] \t\n"*/
 
 		// x_2 stream store
 		"ss.st.w u1, %[x_2], %[sizeN], %[one] \t\n"
@@ -76,7 +76,7 @@ void computation(){
 		:::
     );
 }
-
+//core(A, x_1, x_2, y_1, y_2, N);
 void core(DataType *src1, DataType *src2, DataType *src3, DataType *src4, DataType *src5, uint64_t sizeN) {
 	configuration1(src1, src2, src4, sizeN);
 	computation();

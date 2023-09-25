@@ -5,19 +5,19 @@ void
 uve_config(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t sizeJ, uint64_t sizeK) {
     asm volatile(                        /*offset, size, stride*/
 		// B stream (KxJ)
-		"ss.sta.ld.d           u2, %[src2], %[sk], %[sj] \t\n"    // D1: slide verticaly stride sizeJ ('sizeK' times)
+		"ss.sta.ld.w           u2, %[src2], %[sk], %[sj] \t\n"    // D1: slide verticaly stride sizeJ ('sizeK' times)
 		"ss.cfg.vec            u2                        \t\n"
 		"ss.app                u2, zero, %[sj], %[one] \t\n"      // D2: slide horizontaly by 1, access size sizeJ
 		"ss.end                u2, zero, %[si], zero \t\n"        // repeat: for each 'i'
 
 		// A stream (IxK)
-		"ss.sta.ld.d           u1, %[src1], %[sk], %[one] \t\n"    // D1: slide horizontaly by 1, access size sizeK
+		"ss.sta.ld.w           u1, %[src1], %[sk], %[one] \t\n"    // D1: slide horizontaly by 1, access size sizeK
 		"ss.cfg.vec            u1                         \t\n"
 		"ss.app                u1, zero, %[sj], zero \t\n"        // repeat: for each 'j'
 		"ss.end                u1, zero, %[si], %[sk] \t\n"       // D2: slide verticaly stride sizeK access size sizeI
 
 		// C stream store (IxJ)
-		"ss.sta.st.d           u4, %[src3], %[sj], %[one] \t\n"   // D1: slide horizontaly by 1, access size sizeJ
+		"ss.sta.st.w           u4, %[src3], %[sj], %[one] \t\n"   // D1: slide horizontaly by 1, access size sizeJ
 		"ss.end                u4, zero, %[si], %[sj] \t\n"        // D2: slide verticaly stride sizeJ access size sizeI
 
 		:
@@ -29,7 +29,7 @@ void
 uve_kernel() {
     asm volatile(
         "iLoop1: \t\n"    
-            "so.v.dp.d u21, zero, p0 \t\n"
+            "so.v.dp.w u21, zero, p0 \t\n"
             "kloop1: \t\n"
               //"so.a.mac.fp u21, u1, u2, p0\n\t" // tmp += (.A) * B
 			  "so.a.mul.fp u22, u1, u2, p0\n\t" // tmp1 = (.A) * B

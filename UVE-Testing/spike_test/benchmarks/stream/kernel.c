@@ -5,7 +5,9 @@
 static inline void __kernel_copy(void * c, void * a, uint64_t N){
     asm volatile(                        /*offset, size, stride*/
         "ss.ld.w  u1,  %[a],  %[sn],  %[one] \t\n" //z[i]
+        "ss.cfg.vec u1 \t\n"
         "ss.st.w  u30, %[c],  %[sn],  %[one] \t\n" //x[i]
+        "ss.cfg.vec u30 \t\n"
 
         "1: \t\n"
           "so.v.mv  u30,u1 ,p0  \n\t" // c[] = a[]
@@ -18,7 +20,9 @@ static inline void __kernel_copy(void * c, void * a, uint64_t N){
 static inline void __kernel_scale(void * b, void * c, uint64_t N, float scalar){
     asm volatile(                        /*offset, size, stride*/
         "ss.ld.w  u1,  %[c],  %[sn],  %[one] \t\n" //z[i]
+        "ss.cfg.vec u1 \t\n"
         "ss.st.w  u30, %[b],  %[sn],  %[one] \t\n" //x[i]
+        "ss.cfg.vec u30 \t\n"
         "so.v.dp.w    u10, %[sc], p0 \t\n"
 
         "1: \t\n"
@@ -34,8 +38,11 @@ static inline void __kernel_scale(void * b, void * c, uint64_t N, float scalar){
 static inline void __kernel_add(void * c, void * a, void * b, uint64_t N){
     asm volatile(                        /*offset, size, stride*/
         "ss.ld.w  u1,  %[a], %[sn], %[one] \t\n" //z[i]
+        "ss.cfg.vec u1 \t\n"
         "ss.ld.w  u2,  %[b], %[sn], %[one] \t\n" //z[i]
+        "ss.cfg.vec u2 \t\n"
         "ss.st.w  u30, %[c], %[sn], %[one] \t\n" //x[i]
+        "ss.cfg.vec u30 \t\n"
 
         "1: \t\n"
           "so.a.add.fp  u30,u1 ,u2 ,p0  \n\t" // c[] = a[] + c[]
@@ -48,8 +55,11 @@ static inline void __kernel_add(void * c, void * a, void * b, uint64_t N){
 static inline void __kernel_triad(void * a, void * b, void * c, uint64_t N, float scalar){
     asm volatile(                        /*offset, size, stride*/
         "ss.ld.w  u1,  %[b],  %[sn], %[one] \t\n" //z[i]
+        "ss.cfg.vec u1 \t\n"
         "ss.ld.w  u2,  %[c],  %[sn], %[one] \t\n" //z[i]
+        "ss.cfg.vec u2 \t\n"
         "ss.st.w  u30, %[a],  %[sn], %[one] \t\n" //x[i]
+        "ss.cfg.vec u30 \t\n"
         "so.v.dp.w    u10, %[sc], p0 \t\n"
 
         "1: \t\n"

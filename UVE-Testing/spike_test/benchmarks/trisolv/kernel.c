@@ -1,36 +1,32 @@
 #include "Functions.h"
 #ifdef RUN_UVE
-#define v_len 8
 void core(void *src1, void *src2, void *src3) {
     asm volatile(/*offset, size, stride*/ /*mod-> size, disp*/
 
                  // L(i,j) stream load
-                 "ss.sta.ld.d           u1, %[src1], zero, %[one] \t\n" // D1: linear access (initial size: 0)
+                 "ss.sta.ld.w           u1, %[src1], zero, %[one] \t\n" // D1: linear access (initial size: 0)
                  "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
                  "ss.app                u1, zero, %[sn], %[sn] \t\n"  // D2: slide verticaly stride N access size N-1
                  "ss.end.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // Modifier->D1: increment D1 size N-1
 
                  // x(j) stream load
-                 "ss.sta.ld.d           u2, %[src3], zero, %[one] \t\n" // D1: vector - linear access (initial size: 0)
+                 "ss.sta.ld.w           u2, %[src3], zero, %[one] \t\n" // D1: vector - linear access (initial size: 0)
                  "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
                  "ss.app                u2, zero, %[sn], zero \t\n"   // D2: Repeat N-1 times [dummy dimension]
                  "ss.end.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // Modifier->D1: increment D1 size N-1
 
                  // b stream scalar load (?)
-                 "ss.sta.ld.d           u3, %[src2], %[vl], zero \t\n"  // D1: scalar access
-                 "ss.end                u3, zero, %[sn], %[one] \t\n" // D2: vector - linear access
+                 "ss.ld.w               u3, %[src2], %[sn], %[one] \t\n"  // D1: scalar access
 
                  // L(i,i) stream scalar load (?)
-                 "ss.sta.ld.d               u4, %[src1], %[vl], zero \t\n"   // D1: scalar access
-                 "ss.end                    u4, zero, %[sn], %[snp1] \t\n" // D2: diagonal access size N  
+                 "ss.ld.w               u4, %[src1], %[sn], %[snp1] \t\n"   // D1: scalar access
 
                  // x stream scalar store (?)
-                 "ss.st.d               u5, %[src3], %[sn], %[one] \t\n" // D1: vector - linear access
+                 "ss.st.w               u5, %[src3], %[sn], %[one] \t\n" // D1: vector - linear access
 
                  :
                  : [src1] "r"(src1), [src2] "r"(src2), [src3] "r"(src3),
-                   [sn] "r"(SIZE), [snm1] "r"(SIZE - 1), [snp1] "r"(SIZE + 1), [one] "r"(1),
-                   [vl] "r"(v_len)
+                   [sn] "r"(SIZE), [snm1] "r"(SIZE - 1), [snp1] "r"(SIZE + 1), [one] "r"(1)
     );
 
     asm volatile(
@@ -38,7 +34,7 @@ void core(void *src1, void *src2, void *src3) {
 
         ".fLoop1%=: \t\n"
 
-            "so.v.dp.d  u6, zero, p0\n\t" // u6 = 0
+            "so.v.dp.w  u6, zero, p0\n\t" // u6 = 0
 
             ".jloop1%= : \t\n"
                 "so.a.mul.fp u7, u1, u2, p0\n\t" // u7 = L(i,j) * x(j)

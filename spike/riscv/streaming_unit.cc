@@ -26,6 +26,8 @@ void streamRegister_t<T>::addDimension(Dimension dim) {
 
 template <typename T>
 void streamRegister_t<T>::configureDim() {
+    mode = RegisterMode::Vector;
+    validIndex = vLen;
     const auto cfgIndex = dimensions.size() - 1;
     vecCfg.at(cfgIndex) = true;
 }
@@ -33,6 +35,8 @@ void streamRegister_t<T>::configureDim() {
 template <typename T>
 void streamRegister_t<T>::startConfiguration(Dimension dim) {
     status = RegisterStatus::NotConfigured;
+    mode = RegisterMode::Scalar;
+    validIndex = 1;
     dimensions.clear();
     dimensions.push_back(dim);
     vecCfg.push_back(false);
@@ -285,7 +289,9 @@ void streamRegister_t<T>::updateAsLoad() {
 
     size_t offset;
 
-    while (eCount < vLen && tryGenerateOffset(offset)) {
+    size_t max = mode == RegisterMode::Vector ? vLen : 1;
+
+    while (eCount < max && tryGenerateOffset(offset)) {
         // std::cout << "Can generate offset before (eCount = " << eCount << ")" << std::endl;
         auto value = [this](auto address) -> ElementsType {
             if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
@@ -300,9 +306,8 @@ void streamRegister_t<T>::updateAsLoad() {
         // elements.push_back(value);
         elements.at(eCount) = value;
         ++validIndex;
-        // std::cout << "Loaded Value: " << readAS<float>(value) << std::endl;
         if (tryGenerateOffset(offset)) {
-            // std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
+            //std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;
         } else
@@ -311,7 +316,7 @@ void streamRegister_t<T>::updateAsLoad() {
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     // std::cout << "eCount: " << eCount << std::endl;
     // std::cout << "vLen: " << vLen << std::endl;
-    if (eCount < vLen)     // iteration is already updated when register is full
+    if (eCount < max)     // iteration is already updated when register is full
         updateIteration(); // reset EOD flags and iterate stream
 }
 

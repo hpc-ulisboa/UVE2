@@ -1,37 +1,38 @@
 #include <stdio.h>
 #include "Functions.h"
 
-extern void core(void *A, void *u1, void *v1, void *u2, void *v2, void *w, void *x, void *y, void *z, float a, float b);
+extern void core(void *A, void *u1, void *v1, void *u2, void *v2, void *w, void *x, void *y, void *z, DataType a, DataType b, uint64_t N);
 
 
 int main() {
-  DataType src_1[SIZE*SIZE];
-  DataType src_2[SIZE];
-  DataType src_3[SIZE];
-  DataType src_4[SIZE];
-  DataType src_5[SIZE];
-  DataType src_6[SIZE];
-  DataType src_7[SIZE];
-  DataType src_8[SIZE];
-  DataType src_9[SIZE];
+  uint64_t N = SIZE;
+  DataType src_1[N*N];
+  DataType src_2[N];
+  DataType src_3[N];
+  DataType src_4[N];
+  DataType src_5[N];
+  DataType src_6[N];
+  DataType src_7[N];
+  DataType src_8[N];
+  DataType src_9[N];
   DataType alpha = 1.5;
   DataType beta = 1.2;
 
-  initArray2D(src_1, SIZE, SIZE);
-  initArray(src_2, SIZE);
-  initArray(src_3, SIZE);
-  initArray(src_4, SIZE);
-  initArray(src_5, SIZE);
-  initArray(src_6, SIZE);
-  initArray(src_7, SIZE);
-  initArray(src_8, SIZE);
-  initArray(src_9, SIZE);
+  initArray2D(src_1, N, N);
+  initArray(src_2, N);
+  initArray(src_3, N);
+  initArray(src_4, N);
+  initArray(src_5, N);
+  initArray(src_6, N);
+  initArray(src_7, N);
+  initArray(src_8, N);
+  initArray(src_9, N);
 
 
-  core(src_1, src_2, src_3, src_4, src_5, src_6, src_7, src_8, src_9, alpha, beta);
+  core(src_1, src_2, src_3, src_4, src_5, src_6, src_7, src_8, src_9, alpha, beta, N);
 
 
-  for (int i = 0; i < SIZE; i++) {
+  for (int i = 0; i < N; i++) {
     printf( DataFormat("", "\n"), src_6[i]);
   }
 

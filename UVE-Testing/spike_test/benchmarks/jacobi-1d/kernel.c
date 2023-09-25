@@ -3,12 +3,16 @@
 #ifdef RUN_UVE
 void core_uve(DataType A[SIZE], DataType B[SIZE], DataType ct) {
     asm volatile(
-        "ss.ld.d    u1, %[src1a], %[sn], %[one] \t\n"
-        "ss.ld.d    u2, %[src1b], %[sn], %[one] \t\n"
-        "ss.ld.d    u3, %[src1c], %[sn], %[one] \t\n"
-        "ss.st.d    u4, %[src2],  %[sn], %[one] \t\n"
+        "ss.ld.w    u1, %[src1a], %[sn], %[one] \t\n"
+        "ss.cfg.vec u1 \t\n"
+        "ss.ld.w    u2, %[src1b], %[sn], %[one] \t\n"
+        "ss.cfg.vec u2 \t\n"
+        "ss.ld.w    u3, %[src1c], %[sn], %[one] \t\n"
+        "ss.cfg.vec u3 \t\n"
+        "ss.st.w    u4, %[src2],  %[sn], %[one] \t\n"
+        "ss.cfg.vec u4 \t\n"
 
-        "so.v.dp.d  u5, %[ct], p0\t\n"
+        "so.v.dp.w  u5, %[ct], p0\t\n"
         :
         : [src1a] "r"(A), [src1b] "r"(A + 1),
           [src1c] "r"(A + 2), [sn] "r"(SIZE - 2),

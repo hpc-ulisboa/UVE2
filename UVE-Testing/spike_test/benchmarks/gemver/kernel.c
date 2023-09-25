@@ -1,163 +1,159 @@
 #include "Functions.h"
 
 #ifdef RUN_UVE
-#define v_len 8
-static inline void __config_1(void *A, void *u1, void *v1, void *u2, void *v2) {
-    asm volatile(                                              /*offset, size, stride*/
-		"ss.sta.ld.w  u1, %[A],  %[sn],  %[one] \t\n" // A[i][j]
-		"ss.end       u1, zero,  %[sn],  %[sn]  \t\n"
-		"ss.sta.ld.w  u2, %[u1], %[vl],  zero   \t\n" //.u1[i]
-		"ss.end       u2, zero,  %[sn],  %[one] \t\n"
-		"ss.sta.ld.w  u3, %[v1], %[sn],  %[one] \t\n" // v1*[j]
-		"ss.end       u3, zero,  %[sn],  zero   \t\n"
-		"ss.sta.ld.w  u4, %[u2], %[vl],  zero   \t\n" //.u2[i]
-		"ss.end       u4, zero,  %[sn],  %[one] \t\n"
-		"ss.sta.ld.w  u5, %[v2], %[sn],  %[one] \t\n" // v2*[j]
-		"ss.end       u5, zero,  %[sn],  zero   \t\n"
-		"ss.sta.st.w  u30, %[A],  %[sn],  %[one] \t\n" // A[i][j]
-		"ss.end       u30, zero,  %[sn],  %[sn]  \t\n"
+void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
+	asm volatile(
+		"ss.sta.st.w u1, %[A], %[sizeN], %[one] \n\t"
+		"ss.end u1, zero, %[sizeN], %[sizeN] \n\t"
+
+		"ss.sta.ld.w u10, %[u2], %[sizeN], %[one] \n\t"
+		"ss.cfg.vec u10 \n\t"
+		"ss.end u10, zero, %[sizeN], zero \n\t"
+
+		"ss.sta.ld.w u9, %[v2], %[sizeN], zero \n\t"
+		"ss.cfg.vec u9 \n\t"
+		"ss.end u9, zero, %[sizeN], %[one] \n\t"
+
+		"ss.sta.ld.w u7, %[v1], %[sizeN], %[one] \n\t"
+		"ss.cfg.vec u7 \n\t"
+		"ss.end u7, zero, %[sizeN], zero \n\t"
+
+		"ss.sta.ld.w u6, %[u1],%[sizeN], zero \n\t"
+		"ss.cfg.vec u6 \n\t"
+		"ss.end u6, zero,  %[sizeN], %[one] \n\t"
+
+		"ss.sta.ld.w u4, %[A], %[sizeN], %[one] \n\t"
+		"ss.cfg.vec u4 \n\t"
+		"ss.end u4, zero,  %[sizeN], %[sizeN] \n\t"
+
 		::[A] "r"(A), [u1] "r"(u1), [v1] "r"(v1), [u2] "r"(u2), 
-		[v2] "r"(v2), [sn] "r"(SIZE), [one] "r"(1), [vl] "r"(v_len)
+		[v2] "r"(v2), [sizeN] "r"(sizeN), [one] "r"(1)
 	);
-}
-static inline void __execute_1() {
+
+	asm volatile(
+        ".SLOOP_1%=: \n\t"
+			"so.a.mul.fp  u5, u6, u7, p0 \n\t"
+			"so.a.add.fp  u3, u4, u5, p0 \n\t"
+			"so.a.mul.fp  u8, u9, u10, p0 \n\t"
+			"so.a.add.fp  u1, u3, u8, p0 \n\t"
+		"so.b.nc u1, .SLOOP_1%= \n\t"
+		:::
+	);
+
     asm volatile(
-        "1: \t\n"
-			"so.v.mv      u20,u2 ,p0  \n\t" //.u1[i]
-			"so.v.mv      u21,u4 ,p0  \n\t" //.u2[i]
-			"2: \t\n"
-				"so.a.mul.fp  u22,u20, u3,p0  \n\t" // uv1[i] = .u1[i] + v1[]
-				"so.a.mul.fp  u23,u21, u5,p0  \n\t" // uv2[i] = .u2[i] + v2[]
-				"so.a.mul.fp  u24,u22,u23,p0  \n\t" // uv12[i] = uv1[i] + uv2[i]
-				"so.a.add.fp  u30,u1 ,u24,p0  \n\t" // A[i][] += uv12[i]
-			"so.b.ndc.1	u1, 2b \n\t"
-        "so.b.nc	u1, 1b \n\t"
+		"ss.sta.ld.w u7, %[y], %[sizeN], %[one] \n\t"
+		"ss.cfg.vec u7 \n\t"
+		"ss.end u7, zero, %[sizeN], zero \n\t"
+
+		"ss.sta.ld.w u5, %[A], %[sizeN], %[sizeN] \n\t"
+		"ss.cfg.vec u5 \n\t"
+		"ss.end u5, zero, %[sizeN], %[one] \n\t"
+
+		"ss.st.w u1, %[x], %[sizeN], %[one] \n\t"
+
+		"ss.ld.w u9, %[x], %[sizeN], %[one] \n\t"
+
+		"so.v.dp.w u17, %[beta], p0 \n\t"
+
+		:: [A] "r"(A), [x] "r"(x), [y] "r"(y),
+		[beta] "r"(b), [sizeN] "r"(sizeN), [one] "r"(1)
 	);
-}
 
-static inline void __config_2(void *A, void *x, void *y, double b) {
-    asm volatile(                                             /*offset, size, stride*/
-		"ss.sta.ld.w  u1, %[A],  %[sn],  %[sn] \t\n" // A[i][]
-		"ss.end       u1, zero,  %[sn],  %[one]  \t\n"
-		"ss.sta.ld.w  u2, %[y],  %[sn],  %[one] \t\n" // y*[j]
-		"ss.end       u2, zero,  %[sn],  zero   \t\n"
-		"ss.sta.ld.w  u3, %[x],  %[vl],  zero   \t\n" //.x[i]
-		"ss.end       u3, zero,  %[sn],  %[one] \t\n"
-		"ss.st.w      u30, %[x],  %[sn],  %[one] \t\n" //.x[i]
-		"so.v.dp.w    u10, %[cb], p0 \t\n"
-		:: [A] "r"(A),
-		[x] "r"(x), [y] "r"(y),
-		[cb] "r"(b),
-		[sn] "r"(SIZE), [one] "r"(1), [vl] "r"(v_len)
+	asm volatile(
+		".SLOOP_1%=: \n\t"
+			"so.v.dp.w u11, zero, p0 \n\t"
+
+			".SLOOP_1_0%=: \n\t"
+				"so.a.mul.fp  u16, u5, u17, p0 \n\t"
+				"so.a.mul.fp  u17, u16, u7, p0 \n\t"
+				"so.a.add.fp  u11, u11, u17, p0 \n\t"
+			"so.b.ndc.1 u5, .SLOOP_1_0%= \n\t"
+
+			"so.a.adde.fp  u17, u11, p0 \n\t"
+			"so.a.add.fp  u1, u9, u17, p0 \n\t"
+		"so.b.nc u1, .SLOOP_1%= \n\t"
+		:::
 	);
-}
-static inline void __execute_2() {
-    asm volatile(
-        "1: \t\n"
-			"2: \t\n"
-				"so.a.mac.fp  u20,u2 ,u1,p0  \n\t" // Ay["][i] += y[] * A[][i]
-			"so.b.ndc.1   u1, 2b  \n\t"
 
-			"so.a.mul.fp  u21,u10 ,u20,p0  \n\t"    // bAy["][i] = b * Ay["][i]
-			"so.a.adde.fp   u22, u21, p0      \n\t" // reduce vector
-			"so.a.add.fp  u30,u3  ,u22,p0  \n\t"    // .x[i] += bAy[][i]
-        "so.b.nc	u1, 1b  \n\t");
-}
+	asm volatile(
+		"ss.st.w u1, %[x], %[sizeN], %[one] \n\t"
 
-static inline void __config_3(void *x, void *z) {
-    asm volatile(                                           /*offset, size, stride*/
-		"ss.ld.w  u1,  %[z],  %[sn],  %[one] \t\n" // z[i]
-		"ss.ld.w  u2,  %[x],  %[sn],  %[one] \t\n" // x[i]
-		"ss.st.w  u30, %[x],  %[sn],  %[one] \t\n" // x[i]
+		"ss.ld.w u4, %[z], %[sizeN], %[one] \n\t"
+		"ss.cfg.vec u4 \n\t"
+
+		"ss.ld.w u3, %[x], %[sizeN], %[one] \n\t"
+		"ss.cfg.vec u3 \n\t"
+
 		::[x] "r"(x),
 		[z] "r"(z),
-		[sn] "r"(SIZE), [one] "r"(1));
-}
-static inline void __execute_3() {
-    asm volatile(
-        "1: \t\n"
-        	"so.a.add.fp  u30,u2 ,u1,p0  \n\t" // x[] += z[]
-        "so.b.nc	u1, 1b  \n\t");
-}
+		[sizeN] "r"(sizeN), [one] "r"(1)
+	);
 
-static inline void __config_4(void *A, void *x, void *w, double a) {
-    asm volatile(                                              /*offset, size, stride*/
-		"ss.sta.ld.w  u1, %[A],  %[sn],  %[one] \t\n" // A[i][]
-		"ss.end       u1, zero,  %[sn],  %[sn]  \t\n"
-		"ss.sta.ld.w  u2, %[x],  %[sn],  %[one] \t\n" // y*[j]
-		"ss.end       u2, zero,  %[sn],  zero   \t\n"
-		"ss.sta.ld.w  u3, %[w],  %[vl],  zero   \t\n" //.x[i]
-		"ss.end       u3, zero,  %[sn],  %[one] \t\n"
-		"ss.st.w      u30, %[w],  %[sn],  %[one] \t\n" //.x[i]
-		"so.v.dp.w    u10, %[ca], p0 \t\n"
+	asm volatile(
+		".SLOOP_1%=: \n\t"
+			"so.a.add.fp  u1, u3, u4, p0 \n\t"
+		"so.b.nc u1, .SLOOP_1%= \n\t"
+		:::
+	);
+
+	asm volatile(
+		"ss.sta.ld.w u7, %[x], %[sizeN], %[one] \n\t"
+		"ss.cfg.vec u7 \n\t"
+		"ss.end u7, zero,  %[sizeN], zero \n\t"
+
+		"ss.sta.ld.w u5, %[A], %[sizeN], %[one] \n\t"
+		"ss.cfg.vec u5 \n\t"
+		"ss.end u5, zero, %[sizeN], %[sizeN] \n\t"
+
+		"ss.st.w u1, %[w], %[sizeN], %[one] \n\t"
+
+		"ss.ld.w u9, %[w], %[sizeN], %[one] \n\t"
+
+		"so.v.dp.w u12, %[alpha], p0 \n\t"
+
 		:: [A] "r"(A), [x] "r"(x), [w] "r"(w),
-		[ca] "r"(a), [sn] "r"(SIZE), [one] "r"(1), [vl] "r"(v_len));
-}
-static inline void __execute_4() {
-    asm volatile(
-        "1: \t\n"
-			"2: \t\n"
-				"so.a.mac.fp  u20,u2 ,u1,p0  \n\t" // Ax["][i] += x[] * A[i][j]
-			"so.b.ndc.1   u1, 2b  \n\t"
+		[alpha] "r"(a), [sizeN] "r"(sizeN), [one] "r"(1)
+	);
 
-			"so.a.mul.fp  u21,u10 ,u20,p0  \n\t"    // aAx["][i] = b * Ax[i][""]
-			"so.a.adde.fp   u22, u21, p0      \n\t" // reduce vector
-			"so.a.add.fp  u30,u3  ,u22,p0  \n\t"    // .w[i] += bAx[i][]
-        "so.b.nc	u1, 1b  \n\t");
-}
+	asm volatile(
+		".SLOOP_1%=: \n\t"
+			"so.v.dp.w u13, zero, p0 \n\t"
 
-void core(void *A, void *u1, void *v1, void *u2, void *v2, void *w, void *x, void *y, void *z, double a, double b) {
+			".SLOOP_1_0%=: \n\t"
+				"so.a.mul.fp  u14, u5, u12, p0 \n\t"
+				"so.a.mul.fp  u15, u14, u7, p0 \n\t"
+				"so.a.add.fp  u13, u13, u15, p0 \n\t"
+			"so.b.ndc.1 u5, .SLOOP_1_0%= \n\t"
 
-    __config_1(A, u1, v1, u2, v2);
-    __execute_1();
-
-    __config_2(A, x, y, b);
-    __execute_2();
-
-    __config_3(x, z);
-    __execute_3();
-
-    __config_4(A, x, w, a);
-    __execute_4();
+			"so.a.adde.fp  u15, u13, p0 \n\t"
+			"so.a.add.fp  u1, u9, u15, p0 \n\t"
+		"so.b.nc u1, .SLOOP_1%= \n\t"
+		:::
+	);
 }
 
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE
-core(void* _A, void* _u1, void* _v1, void* _u2, void* _v2, void* _w, void* _x, void* _y, void* _z, double alpha, double beta) {
-    DataType *A   = (DataType *)_A;  /* SIZExSIZE */
-    DataType *u1  = (DataType *)_u1; /* SIZE   */
-    DataType *v1  = (DataType *)_v1; /* SIZE   */
-    DataType *u2  = (DataType *)_u2; /* SIZE   */
-    DataType *v2  = (DataType *)_v2; /* SIZE   */
-    DataType *w   = (DataType *)_w;  /* SIZE   */
-    DataType *x   = (DataType *)_x;  /* SIZE   */
-    DataType *y   = (DataType *)_y;  /* SIZE   */
-    DataType *z   = (DataType *)_z;  /* SIZE   */
+core(DataType* A, DataType* u1, DataType* v1, DataType* u2, DataType* v2, DataType* w, DataType* x, DataType* y, DataType* z, DataType alpha, DataType beta, uint64_t sizeN) {
     int i,j;
-    
-    //Simple Vectorization in J
-    // A[i][] = A[i][] + .u1 * v1[] + .u2 * v2[]
-    for (i = 0; i < SIZE; i++)
-        for (j = 0; j < SIZE; j++)
-        A[i*SIZE + j] = A[i*SIZE + j] + u1[i] * v1[j] + u2[i] * v2[j];
 
-    //Same as MVT (Matrix Vector mult) -- can be optimized with band processing
-    // .x = .x + beta*red(A[][i]*x[])
-    for (i = 0; i < SIZE; i++)
-        for (j = 0; j < SIZE; j++)
-        x[i] = x[i] + beta * A[j*SIZE + i] * y[j];
+    for (i = 0; i < sizeN; i++)
+        for (j = 0; j < sizeN; j++)
+        A[i*sizeN + j] = A[i*sizeN + j] + u1[i] * v1[j] + u2[i] * v2[j];
 
-    //Simple Vectorization ... merge with above?
-    // x[] = x[] + z[] 
-    for (i = 0; i < SIZE; i++)
+    for (i = 0; i < sizeN; i++)
+        for (j = 0; j < sizeN; j++)
+        x[i] = x[i] + beta * A[j*sizeN + i] * y[j];
+
+    for (i = 0; i < sizeN; i++)
         x[i] = x[i] + z[i];
 
-    //Same as MVT (Matrix Vector mult):
-    // .w = .w + alpha*red(A[i][]*x[])
-    for (i = 0; i < SIZE; i++)
-        for (j = 0; j < SIZE; j++)
-        w[i] = w[i] + alpha * A[i*SIZE + j] * x[j];
+    for (i = 0; i < sizeN; i++)
+        for (j = 0; j < sizeN; j++)
+        w[i] = w[i] + alpha * A[i*sizeN + j] * x[j];
 }
 
 #endif // RUN_SIMPLE
+
+
