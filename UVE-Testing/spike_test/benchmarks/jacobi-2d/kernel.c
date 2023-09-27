@@ -5,31 +5,31 @@
 void core_uve(DataType *A, DataType *B) {
   asm volatile(
     // A1 stream load
-    "ss.sta.ld.w           u1, %[src1a], %[snm2], %[one] \t\n"
+    "ss.sta.ld.d           u1, %[src1a], %[snm2], %[one] \t\n"
     "ss.end                u1, zero, %[snm2], %[sn] \t\n"
     "ss.cfg.vec            u1 \t\n"
     // A2 stream load
-    "ss.sta.ld.w           u2, %[src1b], %[snm2], %[one] \t\n"
+    "ss.sta.ld.d           u2, %[src1b], %[snm2], %[one] \t\n"
     "ss.end                u2, zero, %[snm2], %[sn] \t\n"
     "ss.cfg.vec            u2 \t\n"
     // A3 stream load
-    "ss.sta.ld.w           u3, %[src1c], %[snm2], %[one] \t\n"
+    "ss.sta.ld.d           u3, %[src1c], %[snm2], %[one] \t\n"
     "ss.end                u3, zero, %[snm2], %[sn] \t\n"
     "ss.cfg.vec            u3 \t\n"
     // A4 stream load
-    "ss.sta.ld.w           u4, %[src1d], %[snm2], %[one] \t\n"
+    "ss.sta.ld.d           u4, %[src1d], %[snm2], %[one] \t\n"
     "ss.end                u4, zero, %[snm2], %[sn] \t\n"
     "ss.cfg.vec            u4 \t\n"
     // A5 stream load
-    "ss.sta.ld.w           u5, %[src1e], %[snm2], %[one] \t\n"
+    "ss.sta.ld.d           u5, %[src1e], %[snm2], %[one] \t\n"
     "ss.end                u5, zero, %[snm2], %[sn] \t\n"
     "ss.cfg.vec            u5 \t\n"
     // B stream store
-    "ss.sta.st.w           u6, %[src2], %[snm2], %[one] \t\n"
+    "ss.sta.st.d           u6, %[src2], %[snm2], %[one] \t\n"
     "ss.end                u6, zero, %[snm2], %[sn] \t\n"
     "ss.cfg.vec            u6 \t\n"
 
-    "so.v.dp.w  u7, %[fval], p0\t\n"
+    "so.v.dp.d  u7, %[fval], p0\t\n"
     :
     : [src1a] "r" (A+SIZE+1),
       [src1b] "r" (A+SIZE),

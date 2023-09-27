@@ -2,7 +2,6 @@
 #include "Functions.h"
 
 extern void core(void *src1, void *src2, void *src3, uint64_t sizeN, DataType cscalar);
-extern void core(void *src1, void *src2, void *src3, uint64_t sizeN, float cscalar);
 
 int main() {
 

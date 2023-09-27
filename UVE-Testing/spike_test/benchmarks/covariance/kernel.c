@@ -5,14 +5,14 @@ void uve_config_1(void *src1 /*data*/, void *src3 /*mean*/) {
     int v_len = 16;
     asm volatile(/*offset, size, stride*/
         // data stream load
-        "ss.sta.ld.w           u1, %[src1], %[vl], %[one] \t\n" // D1: vector - linear access size V_len
+        "ss.sta.ld.d           u1, %[src1], %[vl], %[one] \t\n" // D1: vector - linear access size V_len
         "ss.app                u1, zero, %[sn], %[sm] \t\n"  // D2: slide verticaly stride M access size N
         "ss.end                u1, zero, %[mv], %[vl] \t\n"  // D3: slide horizontaly by V_len, access size M/V_len
 
         // mean stream store
-        "ss.st.w               u2, %[src3], %[sm], %[one] \t\n" // D1: linear access size M (should build vector automatically)
+        "ss.st.d               u2, %[src3], %[sm], %[one] \t\n" // D1: linear access size M (should build vector automatically)
 
-        "so.v.dp.w  u3, %[floatN], p0\t\n"
+        "so.v.dp.d  u3, %[floatN], p0\t\n"
         :
         : [src1] "r"(src1), [src3] "r"(src3),
         [sn] "r"(SIZE), [sm] "r"(SIZE), [zero] "r"(0), [one] "r"(1),
@@ -25,7 +25,7 @@ void uve_config_1(void *src1 /*data*/, void *src3 /*mean*/) {
 void uve_kernel_1() {
     asm volatile(
         "aLoop1: \t\n"
-            "so.v.dp.w  u4, zero, p0\n\t"
+            "so.v.dp.d  u4, zero, p0\n\t"
 
             "add x12, x0, %[sn]\t\n"
             "bloop1: \t\n"
@@ -44,15 +44,15 @@ void uve_config_2(void *src1 /*data*/, void *src3 /*mean*/) {
     // NOTE: Should vectorize automatically
     asm volatile(/*offset, size, stride*/
         // mean stream load
-        "ss.sta.ld.w           u1, %[src3], %[sm], %[one] \t\n"  // D1: linear access size M
+        "ss.sta.ld.d           u1, %[src3], %[sm], %[one] \t\n"  // D1: linear access size M
         "ss.end                u1, zero, %[sn], zero \t\n" // repeat N times
 
         // data stream load
-        "ss.sta.ld.w           u2, %[src1], %[sm], %[one] \t\n" // D1: linear access size M
+        "ss.sta.ld.d           u2, %[src1], %[sm], %[one] \t\n" // D1: linear access size M
         "ss.end                u2, zero, %[sm], %[sm] \t\n"  // D2: strided M access size N
 
         // data stream store
-        "ss.sta.st.w           u3, %[src1], %[sm], %[one] \t\n" // D1: linear access size M
+        "ss.sta.st.d           u3, %[src1], %[sm], %[one] \t\n" // D1: linear access size M
         "ss.end                u3, zero, %[sm], %[sm] \t\n"  // D2: strided M access size N
 
         :
@@ -74,14 +74,14 @@ void uve_config_3(void *src1 /*data*/) {
     int v_len = 16;
     asm volatile( // offset, size, stride
         // data1 stream load - left column repeat
-        "ss.sta.ld.w           u1, %[src1], %[vl], %[sm] \t\n"   // d1: strided m access size v_len
+        "ss.sta.ld.d           u1, %[src1], %[vl], %[sm] \t\n"   // d1: strided m access size v_len
         "ss.app                u1, zero, %[mv], %[vm] \t\n"   // d2: slide vertically m/v_len times by m*v_len
         "ss.app                u1, zero, %[sm], zero  \t\n" // repeat j = m...0 times
         "ss.app                u1, zero, %[sm], %[one] \t\n"  // d3: new column stride 1
         "ss.end.mod.siz.dec    u1, %[sm], %[one] \t\n"           // decrement 'j'
 
         // data2 stream load - swipe all right columns
-        "ss.sta.ld.w           u2, %[src1], %[vl], %[sm] \t\n"  // d1: strided m access size v_len
+        "ss.sta.ld.d           u2, %[src1], %[vl], %[sm] \t\n"  // d1: strided m access size v_len
         "ss.app                u2, zero, %[mv], %[vm] \t\n"  // d2: slide vertically m/v_len times by m*v_len
         "ss.app                u2, zero, %[sm], %[one] \t\n" // d3: linear access size j = m...0
         "ss.app                u2, zero, %[sm], %[one] \t\n" // new column start stride 1
@@ -116,7 +116,7 @@ void uve_kernel_3(void *src1, void *src2 /*cov*/) {
         "add x13, zero, zero\t\n" // j
         "fLoop1: \t\n"
 
-            "so.v.dp.w  u7, zero, p0\n\t"
+            "so.v.dp.d  u7, zero, p0\n\t"
             "add x9, zero, %[mv]\t\n"
             "kloop1: \t\n"
                 "so.a.mac.fp u7, u1, u2, p0\n\t"

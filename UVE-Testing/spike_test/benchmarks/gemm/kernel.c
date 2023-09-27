@@ -5,41 +5,41 @@
 void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, int sizeI, int sizeJ, int sizeK){
 	asm volatile(
 		// C_ij Store
-		"ss.sta.st.w u1, %[C], %[sizeJ], %[one] \t\n"
+		"ss.sta.st.d u1, %[C], %[sizeJ], %[one] \t\n"
 		"ss.cfg.vec u1 \t\n"
 		"ss.end u1, zero, %[sizeI], %[sizeJ]\t\n"
 
 		// C_ij Load
-		"ss.sta.ld.w u3, %[C], %[sizeJ], %[one] \t\n"
+		"ss.sta.ld.d u3, %[C], %[sizeJ], %[one] \t\n"
 		"ss.cfg.vec u3 \t\n"
 		"ss.end u3, zero, %[sizeI], %[sizeJ] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.w u5, %[C], %[sizeJ], %[one]\t\n"
+		"ss.sta.st.d u5, %[C], %[sizeJ], %[one]\t\n"
 		"ss.cfg.vec u5 \t\n"
 		"ss.app u5, zero, %[sizeK], zero \t\n"
 		"ss.end u5, zero, %[sizeI], %[sizeJ] \t\n"
 
 		// C_ij Load
-		"ss.sta.ld.w u12, %[C], %[sizeJ], %[one] \t\n"
+		"ss.sta.ld.d u12, %[C], %[sizeJ], %[one] \t\n"
 		"ss.cfg.vec u12 \t\n"
 		"ss.app u12, zero, %[sizeK], zero \t\n"
 		"ss.end u12, zero, %[sizeI], %[sizeJ] \t\n"
 
 		// B_kj
-		"ss.sta.ld.w u11, %[B], %[sizeJ], %[one] \t\n"
+		"ss.sta.ld.d u11, %[B], %[sizeJ], %[one] \t\n"
 		"ss.cfg.vec u11 \t\n"
 		"ss.app u11, zero, %[sizeK], %[sizeJ] \t\n"
 		"ss.end u11, zero, %[sizeI], zero \t\n"
 
 		// A_ik
-		"ss.sta.ld.w u9, %[A], %[sizeJ], zero \t\n"
+		"ss.sta.ld.d u9, %[A], %[sizeJ], zero \t\n"
 		"ss.cfg.vec u9 \t\n"
 		"ss.app u9, zero, %[sizeK], %[one]\t\n"
 		"ss.end u9, zero, %[sizeI], %[sizeK] \t\n"
 
-		"so.v.dp.w u4, %[beta], p0 \t\n"
-		"so.v.dp.w u10, %[alpha], p0 \t\n"
+		"so.v.dp.d u4, %[beta], p0 \t\n"
+		"so.v.dp.d u10, %[alpha], p0 \t\n"
 		: 
 		: [sizeI] "r" (sizeI), [sizeJ] "r" (sizeJ), [sizeK] "r" (sizeK),
 		[alpha] "r" (alpha), [beta] "r" (beta),

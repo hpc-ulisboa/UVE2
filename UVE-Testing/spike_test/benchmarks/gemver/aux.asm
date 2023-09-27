@@ -15,6 +15,7 @@ $10   %14 = zext i32 %0 to i64
 Assembly Code:
 ss.sta.st.w u1, %[A], %[sizeN], %[sizeN]
 ss.end u1, zero, %[sizeN], %[one]
+ss.cfg.vec u1
 
 ss.sta.ld.w u10, %[u2], %[sizeN], zero
 ss.end u10, zero, %[sizeN], %[one]

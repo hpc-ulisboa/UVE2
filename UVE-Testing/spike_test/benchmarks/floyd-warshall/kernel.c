@@ -6,28 +6,28 @@ void core(DataType *path) {
     /*asm volatile(
          //offset, size, stride
         // path_ij stream load
-        "ss.sta.ld.w           u1, %[path], %[sn], %[one] \t\n" // D1: vector - linear access size SN
+        "ss.sta.ld.d           u1, %[path], %[sn], %[one] \t\n" // D1: vector - linear access size SN
         "ss.cfg.vec            u1 \t\n"
         "ss.app                u1, zero, %[sn], %[sn] \t\n"     // D2: slide verticaly stride N (for i)
         "ss.cfg.vec            u1 \t\n"
         "ss.end                u1, zero, %[sn], zero \t\n"      // repeat: for each 'k'
 
         // path_ik stream load
-        "ss.sta.ld.w           u2, %[path], %[sn], zero \t\n" // D1: vector element - replicate (for j)
+        "ss.sta.ld.d           u2, %[path], %[sn], zero \t\n" // D1: vector element - replicate (for j)
         "ss.cfg.vec            u2 \t\n"
         "ss.app                u2, zero, %[sn], %[sn] \t\n"   // D2: slide verticaly stride N access size N (for i)
         "ss.cfg.vec            u2 \t\n"
         "ss.end                u2, zero, %[sn], %[one] \t\n"  // D3: slide horizontaly N times (for k)
 
         // path_kj stream load
-        "ss.sta.ld.w           u3, %[path], %[sn], %[one] \t\n" // D1: vector - linear access size V_len
+        "ss.sta.ld.d           u3, %[path], %[sn], %[one] \t\n" // D1: vector - linear access size V_len
         "ss.cfg.vec            u3 \t\n"
         "ss.app                u3, zero, %[sn], zero \t\n"  // repeat: for each 'i'
         "ss.cfg.vec            u3 \t\n"
         "ss.end                u3, zero, %[sn], %[sn] \t\n" // D3: slide verticaly stride N access size N (for k)
 
         // path_ij stream store
-        "ss.sta.st.w           u4, %[path], %[sn], %[one] \t\n" // D1: vector - linear access size V_len
+        "ss.sta.st.d           u4, %[path], %[sn], %[one] \t\n" // D1: vector - linear access size V_len
         "ss.cfg.vec            u4 \t\n"
         "ss.app                u4, zero, %[sn], %[sn] \t\n"     // D2: slide verticaly stride N ('N' times)
         "ss.cfg.vec            u4 \t\n"
@@ -39,25 +39,25 @@ void core(DataType *path) {
 
     asm volatile(                        /*offset, size, stride*/
             // path_ij stream load
-            "ss.sta.ld.w           u1, %[src1], %[vl], %[one] \t\n"    // D1: vector - linear access size V_len
+            "ss.sta.ld.d           u1, %[src1], %[vl], %[one] \t\n"    // D1: vector - linear access size V_len
             "ss.app                u1, zero, %[nv], %[vl] \t\n"     // D2: slide verticaly stride N ('' times)
             "ss.app                u1, zero, %[sn], %[sn] \t\n"     // D2: slide verticaly stride N ('' times)
             "ss.end                u1, zero, %[sn], zero \t\n"      // repeat: for each 'k'
 
             // path_ik stream load 
-            "ss.sta.ld.w           u2, %[src1], %[vl], zero \t\n"      // D1: vector element - replicate 
+            "ss.sta.ld.d           u2, %[src1], %[vl], zero \t\n"      // D1: vector element - replicate 
             "ss.app                u2, zero, %[sn], %[sn] \t\n"     // D2: slide verticaly stride N access size N
             "ss.end                u2, zero, %[sn], %[one] \t\n"    // D3: slide horizontaly N times (for k)
 
             // path_kj stream load 
-            "ss.sta.ld.w           u3, %[src1], %[vl], %[one] \t\n"    // D1: vector - linear access size V_len
+            "ss.sta.ld.d           u3, %[src1], %[vl], %[one] \t\n"    // D1: vector - linear access size V_len
             "ss.app                u3, zero, %[nv], %[vl] \t\n"     // D2: slide verticaly stride N ('' times)
             "ss.cfg.vec            u3 \t\n"
             "ss.app                u3, zero, %[sn], zero \t\n"   // repeat: for each 'i'
             "ss.end                u3, zero, %[sn], %[sn] \t\n"     // D3: slide verticaly stride N access size N (for k)
 
             // path_ij stream store
-            "ss.sta.st.w           u4, %[src1], %[vl], %[one] \t\n"    // D1: vector - linear access size V_len
+            "ss.sta.st.d           u4, %[src1], %[vl], %[one] \t\n"    // D1: vector - linear access size V_len
             "ss.app                u4, zero, %[nv], %[vl] \t\n"     // D2: slide verticaly stride N ('' times)
             "ss.app                u4, zero, %[sn], %[sn] \t\n"     // D2: slide verticaly stride N ('' times)
             "ss.end                u4, zero, %[sn], zero \t\n"      // repeat: for each 'k'
@@ -89,7 +89,7 @@ void core(DataType *path) {
                 int sum = path[i * SIZE + k] + path[k * SIZE + j];
                 printf("ADD element1: %d element2: %d result: %d\n", path[i * SIZE + k], path[k * SIZE + j], sum);
                 int min = path[i * SIZE + j] < sum ? path[i * SIZE + j] : sum;
-                printf("MIN element1: %d element2: %d result: %d\n", path[i * SIZE +j], sum, min);
+                printf("MIN element1: %d element2: %d result: %d\n", path[i * SIZE + j], sum, min);
                 
                 path[i * SIZE + j] = min;
             }

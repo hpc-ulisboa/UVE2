@@ -2,15 +2,15 @@
 
 const { spawnSync }= require("child_process");
 
-const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" , "gemm" , "mvt" ];
+//const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" , "gemm" , "mvt" ];
 
 //const kernels = [ "floyd-warshall" ]; //-- doesn't return same results
 //const kernels = [ "gemver" ]; //-- doesn't return same results and stream store seems to be broken
 //const kernels = [ "covariance" ];
 
-//const kernels = [ "trisolv" ];
+const kernels = [ "gemver" ];
 
-const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=4", "-DSIZE=20" ];
+const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "./pk";
@@ -69,11 +69,11 @@ for (let kernel of kernels) {
   compileKernel(compilerPath, [...compileFlags, "-O3", "benchmarks/Functions.c", "-c"]);
   compileKernel(compilerPath, [...compileFlags, "-O3", "-Ibenchmarks/", `benchmarks/${kernel}/main.c`, "-c"]);
   /* Compile and link each kernel file */
-  compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-Ibenchmarks/", "-O0", `benchmarks/${kernel}/kernel.c`, "-c" ]);
-  compileKernel(compilerPath, [...linkFlags, "-O0", "Functions.o", `kernel.o`, `main.o`, "-o", bin_simple]);
+  compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-Ibenchmarks/", "-O3", `benchmarks/${kernel}/kernel.c`, "-c" ]);
+  compileKernel(compilerPath, [...linkFlags, "-O3", "Functions.o", `kernel.o`, `main.o`, "-o", bin_simple]);
   
-  compileKernel(compilerPath, [...compileFlags, "-DRUN_UVE", "-Ibenchmarks/", "-O0", `benchmarks/${kernel}/kernel.c`, "-c" ]);
-  compileKernel(compilerPath, [...linkFlags, "-O0", "Functions.o", `kernel.o`, `main.o`, "-o", bin_uve]);
+  compileKernel(compilerPath, [...compileFlags, "-DRUN_UVE", "-Ibenchmarks/", "-O3", `benchmarks/${kernel}/kernel.c`, "-c" ]);
+  compileKernel(compilerPath, [...linkFlags, "-O3", "Functions.o", `kernel.o`, `main.o`, "-o", bin_uve]);
 
   /* Run each kernel file */
   const execSimple = executableRun(spikePath, [pkPath, bin_simple]);
