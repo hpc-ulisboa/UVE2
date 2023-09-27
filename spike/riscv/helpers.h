@@ -18,8 +18,6 @@ inline constexpr bool always_false_v = false;
   and vice-versa. */
 template <typename Out, typename In>
 Out readAS(In src) {
-    /* Due to weird type convertions with types of size 1 and 2, the following line
-      is commented although the code works as intended, but is expected care from the caller */
     assert_msg("Size mismatch between Out and In types", sizeof(In) == sizeof(Out));
     // return *reinterpret_cast<Out *>(&src);
     // return std::bit_cast<Out>(src); C++ 20 :(
@@ -32,7 +30,7 @@ Out readAS(In src) {
   computation type.
   WARNING: After many tries and a lot of time spent here, I wasn't able to cause
   a compilation error if a non supported storage type was given. My implementation
-  was to test each suppoerted case and return a void in other instances; however this
+  was to test each supported case and return a void in other instances; however this
   helper is used inside a lambda given to a std::visit on a std::variant. As such, I
   *believe* all possibilities of the helper must be able to instanciante for the
   code to compile. As defining a variable with type void is impossible the compilation

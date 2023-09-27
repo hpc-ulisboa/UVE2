@@ -11,38 +11,34 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     /* Each stream's elements must have the same width for content to be
      * operated on */
     assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
+    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar? 1 : dest.getVLen();
     /* We can only operate on the first available values of the stream */
-    
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
-    auto destElements = dest.getElements(false);
-    auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
-
-    auto pi = pred.getPredicate();
 
     /* Grab used types for storage and operation */
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     using OperationType = decltype(extra);
-    std::vector<StorageType> out = destElements;
+    std::vector<StorageType> out = dest.getElements(false); // for merging predication 
 
-    for (size_t i = 0; i < validElementsIndex; i++) {
-        // print pi from i to i+sizeof(OperationType)-1
-        /*std::cout << "ADD pi: ";
-        for (size_t j = i*sizeof(OperationType); j < (i+1)*sizeof(OperationType); j++) {
-            std::cout << (int)pi.at(j);
-        }
-        std::cout << "\n";
-        */
-        if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
-            auto e1 = readAS<OperationType>(elements1.at(i));
-            auto e2 = readAS<OperationType>(elements2.at(i));
-            out.at(i) = readAS<StorageType>(e1 + e2);
-            //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << (e1 + e2) << "\n";
-        }
+    auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
+
+    auto pi = pred.getPredicate();
+
+    for (size_t i = 0; i < vLen; i++) {
+        if (i < validElementsIndex){
+            if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
+                auto e1 = readAS<OperationType>(elements1.at(i));
+                auto e2 = readAS<OperationType>(elements2.at(i));
+                out.at(i) = readAS<StorageType>(e1 + e2);
+                //std::cout << "ADD   " << e1 << " + " << e2 << " = " << readAS<OperationType>(out.at(i)) << "\n";
+            }
+        } else
+            out.at(i) = 0; // zeroing out the rest of the elements
     }
+    dest.setValidIndex(vLen);
+    dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
     dest.setElements(true, out);
-    // std::cout << "\n\nOUT: " << out.size() << "\n\n";
-    dest.setValidIndex(dest.vLen);
 };
 
 /* If the destination register is not configured, we have to build it before the

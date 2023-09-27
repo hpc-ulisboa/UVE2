@@ -41,6 +41,7 @@ struct streamRegister_t {
     It can be changed to another value that is a power of 2, with atleast 8 bytes
     to support at the 64-bit operations */
     static constexpr size_t registerLength = 64; // in Bytes
+    //static constexpr size_t registerLength = 16; // in Bytes
     /* During computations, we test if two streams have the same element width
     using this property */
     static constexpr size_t elementsWidth = sizeof(ElementsType);

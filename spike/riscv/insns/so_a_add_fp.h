@@ -31,7 +31,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
                 auto e1 = readAS<OperationType>(elements1.at(i));
                 auto e2 = readAS<OperationType>(elements2.at(i));
                 out.at(i) = readAS<StorageType>(e1 + e2);
-               // std::cout << "ADD   " << e1 << " + " << e2 << " = " << readAS<OperationType>(out.at(i)) << "\n";
+                //std::cout << "ADD   " << e1 << " + " << e2 << " = " << readAS<OperationType>(out.at(i)) << "\n";
             }
         } else
             out.at(i) = 0; // zeroing out the rest of the elements

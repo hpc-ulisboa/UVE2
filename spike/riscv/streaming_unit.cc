@@ -371,8 +371,7 @@ void streamingUnit_t::updateEODTable(const size_t stream) {
             // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
             ++d;
         }
-    },
-               registers.at(stream));
+    },registers.at(stream));
 }
 
 template <typename T>
