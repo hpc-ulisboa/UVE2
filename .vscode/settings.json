@@ -81,6 +81,7 @@
         "memory_resource": "cpp",
         "thread": "cpp",
         "functions.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "__functional_base_03": "cpp"
     }
 }

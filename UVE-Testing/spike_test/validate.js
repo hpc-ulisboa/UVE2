@@ -12,8 +12,8 @@ const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv",
 const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
-const pkPath = "./pk";
-const spikePath = "./spike";
+const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
+const spikePath = "/home/afernandes/uve-dev/UVE-Testing/spike";
 const bin_simple = "./run_simple";
 const bin_uve = "./run_uve";
 
@@ -76,14 +76,14 @@ for (let kernel of kernels) {
   console.log(`\n### Attempting to compile and run kernel ${kernel}...\n`);
 
   /* Compile Functions source files */
-  compileKernel(compilerPath, [...compileFlags, "-O3", "benchmarks/Functions.c", "-c"]);
-  compileKernel(compilerPath, [...compileFlags, "-O3", "-Ibenchmarks/", `benchmarks/${kernel}/main.c`, "-c"]);
+  compileKernel(compilerPath, [...compileFlags, "-O3", "-Wall", "-I..", "../Functions.c", "-c"]);
+  compileKernel(compilerPath, [...compileFlags, "-O3", "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
 
   /* Compile and link each kernel file */
-  compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-Ibenchmarks/", "-O3", `benchmarks/${kernel}/kernel.c`, "-c" ]);
+  compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-I..", "-O3", `benchmarks/${kernel}/kernel.c`, "-c" ]);
   compileKernel(compilerPath, [...linkFlags, "-O3", "Functions.o", `kernel.o`, `main.o`, "-o", bin_simple]);
   
-  compileKernel(compilerPath, [...compileFlags, "-DRUN_UVE", "-Ibenchmarks/", "-O3", `benchmarks/${kernel}/kernel.c`, "-c" ]);
+  compileKernel(compilerPath, [...compileFlags, "-DRUN_UVE", "-I..", "-O3", `benchmarks/${kernel}/kernel.c`, "-c" ]);
   compileKernel(compilerPath, [...linkFlags, "-O3", "Functions.o", `kernel.o`, `main.o`, "-o", bin_uve]);
 
   /* Run each kernel file */
@@ -99,9 +99,9 @@ for (let kernel of kernels) {
   }
 
   // Delete executables for next kernel
- /* const del = spawnSync("rm", ["-f", bin_simple, bin_uve, 'main.o', 'kernel.o', 'Functions.o']);
+  const del = spawnSync("rm", ["-f", bin_simple, bin_uve, 'main.o', 'kernel.o', 'Functions.o']);
   if (del.error) {
     console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
     break;
-  }*/
+  }
 }

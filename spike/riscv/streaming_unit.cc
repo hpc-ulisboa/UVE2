@@ -215,6 +215,7 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
     /* The outermost dimension is the last one in the container */
     if (isStreamDone()) {
         status = RegisterStatus::Finished;
+        type = RegisterConfig::NoStream;
         return false;
     }
 
@@ -232,6 +233,7 @@ template <typename T>
 void streamRegister_t<T>::updateIteration() {
     if (isStreamDone()) {
         status = RegisterStatus::Finished;
+        type = RegisterConfig::NoStream;
         return;
     }
 
@@ -280,6 +282,7 @@ template <typename T>
 void streamRegister_t<T>::updateAsLoad() {
     if (isStreamDone()) { // doesn't try to load if stream has finished
         status = RegisterStatus::Finished;
+        type = RegisterConfig::NoStream;
         return;
     }
 
@@ -342,6 +345,7 @@ void streamRegister_t<T>::updateAsStore() {
     // std::cout << "Updating as store" << std::endl;
     if (isStreamDone()) {
         status = RegisterStatus::Finished;
+        type = RegisterConfig::NoStream;
         return;
     }
 
@@ -392,13 +396,18 @@ std::vector<uint8_t> PredRegister::getPredicate() const {
 void streamingUnit_t::updateEODTable(const size_t stream) {
     int r = 0, d = 0;
     std::visit([&](const auto reg) {
-        int d = 0;
-        for (const auto dim : reg.dimensions) {
-            EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
-            // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
-            ++d;
+        if (reg.type != RegisterConfig::NoStream){
+            int d = 0;
+            for (const auto dim : reg.dimensions) {
+                EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
+                // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
+                ++d;
+            }
+        } else { // reset EOD flags
+            for (auto &eod : EODTable.at(stream))
+                eod = false;
         }
-    },registers.at(stream));
+    }, registers.at(stream));
 }
 
 template <typename T>
