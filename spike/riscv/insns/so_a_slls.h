@@ -13,6 +13,7 @@ const uint64_t shiftValue = readRegAS(uint64_t, src2);
     later on infer its type and know the storage we need to use */
 auto baseBehaviour = [](auto &dest, auto &src, uint64_t shiftValue, auto &pred, auto extra) {
     /* We can only operate on the first available values of the stream */
+    size_t vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     auto values = src.getElements(true);
     auto destElements = dest.getElements(false);
     auto validElementsIndex = src.getValidIndex();
@@ -24,16 +25,19 @@ auto baseBehaviour = [](auto &dest, auto &src, uint64_t shiftValue, auto &pred, 
     using OperationType = decltype(extra);
     std::vector<StorageType> out = destElements;
 
-    for (size_t i = 0; i < validElementsIndex; i++) {
-        if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
-            auto value = readAS<OperationType>(values.at(i));
-            out.at(i) = readAS<StorageType>(value << shiftValue);
-            //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
-        }
+    for (size_t i = 0; i < vLen; i++) {
+        if (i < validElementsIndex){
+            if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
+                auto value = readAS<OperationType>(values.at(i));
+                out.at(i) = readAS<StorageType>(value << shiftValue);
+            }
+        } else
+            out.at(i) = 0; // zeroing out the rest of the elements
     }
+    dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
     dest.setElements(true, out);
     // std::cout << "\n\nOUT: " << out.size() << "\n\n";
-    dest.setValidIndex(dest.vLen);
+    //dest.setValidIndex(dest.vLen);
 };
 
 /* If the destination register is not configured, we have to build it before the

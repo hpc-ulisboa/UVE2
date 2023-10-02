@@ -7,7 +7,9 @@
 template <typename T>
 void streamRegister_t<T>::addModifier(Modifier mod) {
     /* A recently added modifier alters the dimension inserted before the last one */
-    const auto modIndex = dimensions.size() - 2;
+    //const auto modIndex = dimensions.size() - 2;
+    assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
+    const auto modIndex = -1; // next dimension to be added (will increment as dimensions are added)
     auto iter = modifiers.find(modIndex);
     assert_msg("Trying to add a modifier, when one already exists in this index", iter == modifiers.end());
     modifiers.insert({modIndex, mod});
@@ -16,8 +18,18 @@ void streamRegister_t<T>::addModifier(Modifier mod) {
 template <typename T>
 void streamRegister_t<T>::addDimension(Dimension dim) {
     assert_msg("Cannot append more dimensions as the max value was reached", dimensions.size() < su->maxDimensions);
-    dimensions.push_back(dim);
-    vecCfg.push_back(false);
+    //dimensions.push_back(dim);
+    //vecCfg.push_back(false);
+    dimensions.push_front(dim);
+    vecCfg.push_front(false);
+
+    // Increment all modifiers' indexes
+    for (auto &m : modifiers) {
+        auto n = modifiers.extract(m.first);
+        ++n.key();
+        modifiers.insert(std::move(n));
+    }
+
     // print dimensions
     // std::cout << "Added dimension with offset " << dim.offset << ", size " << dim.size << " and stride " << dim.stride << std::endl;
     // print dimensions size
@@ -28,7 +40,8 @@ template <typename T>
 void streamRegister_t<T>::configureDim() {
     mode = RegisterMode::Vector;
     validIndex = vLen;
-    const auto cfgIndex = dimensions.size() - 1;
+    //const auto cfgIndex = dimensions.size() - 1;
+    const auto cfgIndex = 0;
     vecCfg.at(cfgIndex) = true;
 }
 
@@ -82,6 +95,10 @@ void streamRegister_t<T>::setValidIndex(const size_t i) {
 template <typename T>
 void streamRegister_t<T>::setMode(const RegisterMode m) {
     mode = m;
+    if (m == RegisterMode::Scalar)
+        validIndex = 1;
+    else
+        validIndex = vLen;
 }
 
 template <typename T>
@@ -176,7 +193,7 @@ size_t streamRegister_t<T>::generateOffset() {
 }
 
 template <typename T>
-bool streamRegister_t<T>::isDimensionFullyDone(const std::vector<Dimension>::const_iterator start, const std::vector<Dimension>::const_iterator end) const {
+bool streamRegister_t<T>::isDimensionFullyDone(const std::deque<Dimension>::const_iterator start, const std::deque<Dimension>::const_iterator end) const {
     return std::accumulate(start, end, true, [](bool acc, const Dimension &dim) {
         return acc && dim.isEndOfDimension();
     });
@@ -331,12 +348,22 @@ void streamRegister_t<T>::updateAsStore() {
     // std::cout << "Storing " << elements.size() << " elements. eCount=" << vLen << std::endl;
     size_t offset;
     size_t eCount = 0;
+
+    /*
+    std::cout << "Storing " << validIndex << " elements." << std::endl;
+    // print vecCfg
+    printRegN("\nvecCfg: ");
+    for (auto &v : vecCfg)
+        std::cout << v << " ";
+    std::cout << std::endl;
+    */
+
     while (eCount < validIndex && tryGenerateOffset(offset)) {
         // auto value = elements.front();
         // elements.erase(elements.begin());
         // elements.pop_front(); //-- std::array
         auto value = elements.at(eCount);
-        //std::cout << "Stored Value: " << readAS<float>(value) << " ";
+        //std::cout << "\nStored Values: " << readAS<double>(value) << " ";
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
             gMMU(su->p).template store<std::uint8_t>(offset, readAS<ElementsType>(value));
         else if constexpr (std::is_same_v<ElementsType, std::uint16_t>)

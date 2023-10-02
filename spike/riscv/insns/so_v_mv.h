@@ -12,11 +12,12 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     auto validElementsIndex = src.getValidIndex();
     std::vector<StorageType> out(dest.getVLen());
     auto pi = pred.getPredicate();
+
     for (size_t i = 0; i < validElementsIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
-    dest.setValidIndex(dest.vLen);
-    dest.setElements(true, out);
 
+    dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
 };
 
 /* If the destination register is not configured, we have to build it before the

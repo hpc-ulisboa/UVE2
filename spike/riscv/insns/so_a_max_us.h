@@ -11,6 +11,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     /* Each stream's elements must have the same width for content to be
      * operated on */
     assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
+    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
@@ -24,13 +25,16 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     using OperationType = decltype(extra);
     std::vector<StorageType> out = destElements;
 
-    for (size_t i = 0; i < validElementsIndex; i++) {
-        if (pi.at((i + 1) * sizeof(OperationType) - 1))
-            out.at(i) = readAS<StorageType>(std::max(readAS<OperationType>(elements1.at(i)), readAS<OperationType>(elements2.at(i))));
+    for (size_t i = 0; i < vLen; i++) {
+        if (i < validElementsIndex){
+            if (pi.at((i + 1) * sizeof(OperationType) - 1))
+                out.at(i) = readAS<StorageType>(std::max(readAS<OperationType>(elements1.at(i)), readAS<OperationType>(elements2.at(i))));
+        } else
+            out.at(i) = 0; // zeroing out the rest of the elements
     }
-    dest.setValidIndex(dest.vLen);
+    //dest.setValidIndex(dest.vLen);
+    dest.setMode(dest.getVLen() == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
     dest.setElements(true, out);
-
 };
 
 /* If the destination register is not configured, we have to build it before the

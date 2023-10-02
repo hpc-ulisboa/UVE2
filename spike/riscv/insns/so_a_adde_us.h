@@ -21,9 +21,9 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
         if (pi.at((i+1)*sizeof(OperationType)-1))
             value += readAS<OperationType>(elements.at(i));
     }
-    
+    //std::cout << "ADDE   " << value << "\n";
     out.at(0) = readAS<StorageType>(value);
-    dest.setValidIndex(1);
+    dest.setMode(RegisterMode::Scalar);
     dest.setElements(true, out);
 };
 

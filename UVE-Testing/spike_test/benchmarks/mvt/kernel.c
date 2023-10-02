@@ -5,23 +5,18 @@
 void configuration1(DataType *A, DataType *x_1, DataType *y_1, uint64_t sizeN){
     asm volatile(
 		// A stream load
-		"ss.sta.ld.d u4, %[A], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.d u4, %[A], %[sizeN], %[sizeN] \t\n"
+		"ss.end u4, zero, %[sizeN], %[one]  \t\n"
 		"ss.cfg.vec u4 \t\n"
-		"ss.end u4, zero,  %[sizeN], %[sizeN] \t\n"
 
 		// y_1 stream load
-		"ss.sta.ld.d u5, %[y_1], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.d u5, %[y_1], %[sizeN], zero \t\n"
+		"ss.end u5, zero, %[sizeN], %[one] \t\n"
 		"ss.cfg.vec u5 \t\n"
-		"ss.end u5, zero, %[sizeN], zero \t\n"
 
 		// x_1 stream load
 		"ss.ld.d u7, %[x_1], %[sizeN], %[one] \t\n"
 		
-		/*until scalar streams are defined:
-		"ss.ld.d u7, %[x_1], %[one], zero \t\n"
-		"ss.cfg.vec u7 \t\n"
-		"ss.end u7, zero, %[sizeN], %[one] \t\n"*/
-
 		// x_1 stream store
 		"ss.st.d u1, %[x_1], %[sizeN], %[one] \t\n"
 
@@ -34,22 +29,17 @@ void configuration1(DataType *A, DataType *x_1, DataType *y_1, uint64_t sizeN){
 void configuration2(DataType *A, DataType *x_2, DataType *y_2, uint64_t sizeN){
 	asm volatile(
 		// A stream load
-		"ss.sta.ld.d u4, %[A], %[sizeN], %[sizeN] \t\n"
+		"ss.sta.ld.d u4, %[A], %[sizeN], %[one] \t\n"
+		"ss.end u4, zero, %[sizeN], %[sizeN] \t\n"
 		"ss.cfg.vec u4 \t\n"
-		"ss.end u4, zero, %[sizeN], %[one] \t\n"
 
 		// y_2 stream load
-		"ss.sta.ld.d u5, %[y_2], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.d u5, %[y_2], %[sizeN], zero \t\n"
+		"ss.end u5, zero, %[sizeN], %[one] \t\n"
 		"ss.cfg.vec u5 \t\n"
-		"ss.end u5, zero, %[sizeN], zero \t\n"
 
 		// x_2 stream load
 		"ss.ld.d u7, %[x_2], %[sizeN], %[one] \t\n"
-
-		/*until scalar streams are defined:
-		"ss.ld.d u7, %[x_2], %[one], zero \t\n"
-		"ss.cfg.vec u7 \t\n"
-		"ss.end u7, zero, %[sizeN], %[one] \t\n"*/
 
 		// x_2 stream store
 		"ss.st.d u1, %[x_2], %[sizeN], %[one] \t\n"

@@ -3,29 +3,29 @@
 #ifdef RUN_UVE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
 	asm volatile(
-		"ss.sta.st.d u1, %[A], %[sizeN], %[one] \n\t"
+		"ss.sta.st.d u1, %[A], %[sizeN], %[sizeN] \n\t"
+		"ss.end u1, zero, %[sizeN], %[one] \n\t"
 		"ss.cfg.vec u1 \n\t"
-		"ss.end u1, zero, %[sizeN], %[sizeN] \n\t"
 
-		"ss.sta.ld.d u10, %[v2], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.d u10, %[v2], %[sizeN], zero \n\t"
+		"ss.end u10, zero, %[sizeN], %[one] \n\t"
 		"ss.cfg.vec u10 \n\t"
-		"ss.end u10, zero, %[sizeN], zero \n\t"
 
-		"ss.sta.ld.d u9, %[u2], %[sizeN], zero \n\t"
+		"ss.sta.ld.d u9, %[u2], %[sizeN], %[one] \n\t"
+		"ss.end u9, zero, %[sizeN], zero \n\t"
 		"ss.cfg.vec u9 \n\t"
-		"ss.end u9, zero, %[sizeN], %[one] \n\t"
 
-		"ss.sta.ld.d u7, %[v1], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.d u7, %[v1], %[sizeN], zero \n\t"
+		"ss.end u7, zero, %[sizeN], %[one] \n\t"
 		"ss.cfg.vec u7 \n\t"
-		"ss.end u7, zero, %[sizeN], zero \n\t"
 
-		"ss.sta.ld.d u6, %[u1],%[sizeN], zero \n\t"
+		"ss.sta.ld.d u6, %[u1], %[sizeN], %[one] \n\t"
+		"ss.end u6, zero, %[sizeN], zero \n\t"
 		"ss.cfg.vec u6 \n\t"
-		"ss.end u6, zero,  %[sizeN], %[one] \n\t"
 
-		"ss.sta.ld.d u4, %[A], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.d u4, %[A], %[sizeN], %[sizeN]\n\t"
+		"ss.end u4, zero, %[sizeN], %[one] \n\t"
 		"ss.cfg.vec u4 \n\t"
-		"ss.end u4, zero,  %[sizeN], %[sizeN] \n\t"
 
 		::[A] "r"(A), [u1] "r"(u1), [v1] "r"(v1), [u2] "r"(u2), 
 		[v2] "r"(v2), [sizeN] "r"(sizeN), [one] "r"(1)
@@ -42,13 +42,13 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 	);
 
     asm volatile(
-		"ss.sta.ld.d u7, %[y], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.d u7, %[y], %[sizeN], zero \n\t"
+		"ss.end u7, zero, %[sizeN], %[one] \n\t"
 		"ss.cfg.vec u7 \n\t"
-		"ss.end u7, zero, %[sizeN], zero \n\t"
 
-		"ss.sta.ld.d u5, %[A], %[sizeN], %[sizeN] \n\t"
+		"ss.sta.ld.d u5, %[A], %[sizeN], %[one] \n\t"
+		"ss.end u5, zero, %[sizeN], %[sizeN] \n\t"
 		"ss.cfg.vec u5 \n\t"
-		"ss.end u5, zero, %[sizeN], %[one] \n\t"
 
 		"ss.st.d u1, %[x], %[sizeN], %[one] \n\t"
 
@@ -100,13 +100,13 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 	);
 
 	asm volatile(
-		"ss.sta.ld.d u7, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.d u7, %[x], %[sizeN], zero \n\t"
+		"ss.end u7, zero,  %[sizeN], %[one] \n\t"
 		"ss.cfg.vec u7 \n\t"
-		"ss.end u7, zero,  %[sizeN], zero \n\t"
 
-		"ss.sta.ld.d u5, %[A], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.d u5, %[A], %[sizeN], %[sizeN] \n\t"
+		"ss.end u5, zero, %[sizeN], %[one] \n\t"
 		"ss.cfg.vec u5 \n\t"
-		"ss.end u5, zero, %[sizeN], %[sizeN] \n\t"
 
 		"ss.st.d u1, %[w], %[sizeN], %[one] \n\t"
 

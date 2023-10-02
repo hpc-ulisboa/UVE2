@@ -16,6 +16,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     /* Each stream's elements must have the same width for content to be
      * operated on */
     assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
+    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
@@ -29,17 +30,18 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     using OperationType = decltype(extra);
     std::vector<StorageType> out = destElements;
 
-    for (size_t i = 0; i < validElementsIndex; i++) {
-        if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
-            auto e1 = readAS<OperationType>(elements1.at(i));
-            auto e2 = readAS<OperationType>(elements2.at(i));
-            out.at(i) = readAS<StorageType>(e1 | e2);
-            //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
-        }
+    for (size_t i = 0; i < vLen; i++) {
+        if (i < validElementsIndex){
+            if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
+                auto e1 = readAS<OperationType>(elements1.at(i));
+                auto e2 = readAS<OperationType>(elements2.at(i));
+                out.at(i) = readAS<StorageType>(e1 | e2);
+            }
+        } else
+            out.at(i) = 0; // zeroing out the rest of the elements
     }
+    dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
     dest.setElements(true, out);
-    // std::cout << "\n\nOUT: " << out.size() << "\n\n";
-    dest.setValidIndex(dest.vLen);
 };
 
 /* If the destination register is not configured, we have to build it before the

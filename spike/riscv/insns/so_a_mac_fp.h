@@ -11,7 +11,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     /* Each stream's elements must have the same width for content to be
      * operated on */
     assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
-    size_t vLen = src1.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
+    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
         
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
@@ -58,8 +58,8 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
         } else
             out.at(i) = 0; // zeroing out the rest of the elements
     }
-    dest.setValidIndex(vLen);
-    dest.setMode(src1.getMode());
+    //dest.setValidIndex(dest.vLen);
+    dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
     dest.setElements(true, out);
 };
 

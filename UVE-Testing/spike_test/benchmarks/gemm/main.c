@@ -17,7 +17,7 @@ int main() {
   initArray2D(A, sizeI, sizeK);
   initArray2D(B, sizeK, sizeJ);
   initArray2D(C, sizeI, sizeJ);
-
+  
   core(alpha, beta, C, A, B, sizeI, sizeJ, sizeK);
 
   for (int i = 0; i < sizeI; i++) {

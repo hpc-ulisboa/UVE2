@@ -5,6 +5,7 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 
 // The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
+    auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     auto elements = src.getElements(true);
     auto destElements = dest.getElements(false);
     auto validElementsIndex = src.getValidIndex();
@@ -15,13 +16,15 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     using OperationType = decltype(extra);
     std::vector<StorageType> out = destElements;
 
-    for (size_t i = 0; i < validElementsIndex; i++) {
-        if (pi.at((i+1)*sizeof(OperationType)-1))
-            out.at(i) = readAS<StorageType>(std::abs(readAS<OperationType>(elements.at(i))));
+    for (size_t i = 0; i < vLen; i++) {
+        if (i < validElementsIndex){
+            if (pi.at((i+1)*sizeof(OperationType)-1))
+                out.at(i) = readAS<StorageType>(std::abs(readAS<OperationType>(elements.at(i))));
+        } else
+            out.at(i) = 0; // zeroing out the rest of the elements
     }
-    dest.setValidIndex(dest.vLen);
+    dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
     dest.setElements(true, out);
-
 };
 
 // If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done

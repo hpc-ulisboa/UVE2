@@ -1,3 +1,5 @@
+#define readRegAS(T, reg) static_cast<T>( READ_REG(reg) )
+
 auto destReg = insn.uve_rd();
 auto &srcReg = P.SU.registers[insn.uve_rs1()];
 auto &predReg = P.SU.predicates[insn.uve_pred()];
@@ -17,7 +19,7 @@ auto baseBehaviour = [](auto &value, auto &src, auto &pred, auto extra) {
 };
 
 std::visit(overloaded{
-    [&](StreamReg64 &src) { double value = 0; baseBehaviour(value, src, predReg, double{}); WRITE_REG(destReg, value); },
-    [&](StreamReg32 &src) { float value = 0; baseBehaviour(value, src, predReg, float{}); WRITE_REG(destReg, value);},
-    [&](auto &src) { assert_msg("Invoking so.a.adds.fp with invalid parameter sizes", false); }
+    [&](StreamReg64 &src) { double value = readRegAS(double, destReg); baseBehaviour(value, src, predReg, double{}); WRITE_REG(destReg, value); },
+    [&](StreamReg32 &src) { float value = readRegAS(float, destReg); baseBehaviour(value, src, predReg, float{}); WRITE_REG(destReg, value);},
+    [&](auto &src) { assert_msg("Invoking so.a.adds.acc.fp with invalid parameter sizes", false); }
 }, srcReg);

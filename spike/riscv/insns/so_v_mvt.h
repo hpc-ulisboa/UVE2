@@ -8,17 +8,22 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     /* We can only operate on the first available values of the stream */
     auto validElementsIndex = src.getValidIndex();
+
     auto elements = src.getElements(true);
     std::reverse(elements.begin(), elements.begin()+validElementsIndex); // reverse the valid source elements
+
     auto destElements = dest.getElements(false); // doesn't iterate the stream
+
     std::vector<StorageType> out(dest.getVLen());
+
     auto pi = pred.getPredicate();
     std::reverse(pi.begin(), pi.begin()+validElementsIndex*sizeof(StorageType)); // reverse the necessary instruction predicate
+
     for (size_t i = 0; i < validElementsIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
-    dest.setValidIndex(dest.vLen);
-    dest.setElements(true, out);
 
+    dest.setValidIndex(validElementsIndex);
+    dest.setElements(true, out);
 };
 
 /* If the destination register is not configured, we have to build it before the

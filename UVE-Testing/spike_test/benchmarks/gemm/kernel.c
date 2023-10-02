@@ -2,41 +2,41 @@
 
 
 #ifdef RUN_UVE
-void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, int sizeI, int sizeJ, int sizeK){
+void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, uint64_t sizeI, uint64_t sizeJ, uint64_t sizeK){
 	asm volatile(
 		// C_ij Store
-		"ss.sta.st.d u1, %[C], %[sizeJ], %[one] \t\n"
+		"ss.sta.st.d u1, %[C], %[sizeI], %[sizeJ] \t\n"
+		"ss.end u1, zero, %[sizeJ], %[one]\t\n"
 		"ss.cfg.vec u1 \t\n"
-		"ss.end u1, zero, %[sizeI], %[sizeJ]\t\n"
 
 		// C_ij Load
-		"ss.sta.ld.d u3, %[C], %[sizeJ], %[one] \t\n"
+		"ss.sta.ld.d u3, %[C], %[sizeI], %[sizeJ] \t\n"
+		"ss.end u3, zero, %[sizeJ], %[one] \t\n"
 		"ss.cfg.vec u3 \t\n"
-		"ss.end u3, zero, %[sizeI], %[sizeJ] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.d u5, %[C], %[sizeJ], %[one]\t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.st.d u5, %[C], %[sizeI], %[sizeJ]\t\n"
 		"ss.app u5, zero, %[sizeK], zero \t\n"
-		"ss.end u5, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end u5, zero, %[sizeJ], %[one] \t\n"
+		"ss.cfg.vec u5 \t\n"
 
 		// C_ij Load
-		"ss.sta.ld.d u12, %[C], %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u12 \t\n"
+		"ss.sta.ld.d u12, %[C], %[sizeI], %[sizeJ] \t\n"
 		"ss.app u12, zero, %[sizeK], zero \t\n"
-		"ss.end u12, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end u12, zero, %[sizeJ], %[one] \t\n"
+		"ss.cfg.vec u12 \t\n"
 
 		// B_kj
-		"ss.sta.ld.d u11, %[B], %[sizeJ], %[one] \t\n"
+		"ss.sta.ld.d u11, %[B], %[sizeI], zero \t\n"
+		"ss.end u11, zero, %[sizeK], %[sizeJ] \t\n"
+		"ss.app u11, zero, %[sizeJ], %[one] \t\n"
 		"ss.cfg.vec u11 \t\n"
-		"ss.app u11, zero, %[sizeK], %[sizeJ] \t\n"
-		"ss.end u11, zero, %[sizeI], zero \t\n"
 
 		// A_ik
-		"ss.sta.ld.d u9, %[A], %[sizeJ], zero \t\n"
-		"ss.cfg.vec u9 \t\n"
+		"ss.sta.ld.d u9, %[A], %[sizeI], %[sizeK] \t\n"
 		"ss.app u9, zero, %[sizeK], %[one]\t\n"
-		"ss.end u9, zero, %[sizeI], %[sizeK] \t\n"
+		"ss.end u9, zero, %[sizeJ], zero \t\n"
+		"ss.cfg.vec u9 \t\n"
 
 		"so.v.dp.d u4, %[beta], p0 \t\n"
 		"so.v.dp.d u10, %[alpha], p0 \t\n"
@@ -65,7 +65,7 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 
 
 #ifdef RUN_SIMPLE
-void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, int sizeI, int sizeJ, int sizeK){
+void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, uint64_t sizeI, uint64_t sizeJ, uint64_t sizeK){
   
   // C (sizeI x sizeJ) * beta  += alpha * A (sizeI x sizeK) * B (sizeK x sizeJ)
 

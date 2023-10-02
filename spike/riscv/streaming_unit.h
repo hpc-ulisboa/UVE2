@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <array>
 #include <cstddef> // size_t
+#include <deque>
 #include <iostream>
 #include <numeric>
 #include <type_traits>
@@ -103,23 +104,23 @@ private:
     size_t validIndex;
     /* Same ordeal as above. Although the amount of dimensions is capped, we can avoid
     indexing by just calling the size method */
-    std::vector<Dimension> dimensions;
+    std::deque<Dimension> dimensions;
     /* Modifiers are different in that they don't have to scale linearly in a stream
     configuration. As such, it is better to have a container that maps a dimension's
     index to its modifier. When updating stream the iterators, we can test if a dimension
     for the given index exists before the calculations */
-    std::unordered_map<int, Modifier> modifiers;
+    std::unordered_multimap<int, Modifier> modifiers;
     RegisterConfig type;
     RegisterStatus status;
     RegisterMode mode;
     /* This structure holds an array of bits indicating whether the corresponding dimension
     is configured to only load elements while the current dimension is not over or not. It
     is controlled using the instruction ss_cfg_vec */
-    std::vector<bool> vecCfg;
+    std::deque<bool> vecCfg;
 
     void updateStreamValues();
     size_t generateOffset();
-    bool isDimensionFullyDone(const std::vector<Dimension>::const_iterator start, const std::vector<Dimension>::const_iterator end) const;
+    bool isDimensionFullyDone(const std::deque<Dimension>::const_iterator start, const std::deque<Dimension>::const_iterator end) const;
     bool isStreamDone() const;
     bool tryGenerateOffset(size_t &address);
     void updateIteration();

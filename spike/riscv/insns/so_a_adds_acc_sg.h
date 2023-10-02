@@ -1,3 +1,5 @@
+#define readRegAS(T, reg) static_cast<T>( READ_REG(reg) )
+
 auto destReg = insn.uve_rd();
 auto &srcReg = P.SU.registers[insn.uve_rs1()];
 auto &predReg = P.SU.predicates[insn.uve_pred()];
@@ -17,7 +19,9 @@ auto baseBehaviour = [](auto &value, auto &src, auto &pred, auto extra) {
 };
 
 std::visit(overloaded{
-    [&](StreamReg64 &src) { double value = 0; baseBehaviour(value, src, predReg, double{}); WRITE_REG(destReg, value); },
-    [&](StreamReg32 &src) { float value = 0; baseBehaviour(value, src, predReg, float{}); WRITE_REG(destReg, value);},
-    [&](auto &src) { assert_msg("Invoking so.a.adds.fp with invalid parameter sizes", false); }
+    [&](StreamReg8 &src) { signed char value = value = readRegAS(signed char, destReg); baseBehaviour(destReg, src, predReg, (signed char){}); WRITE_REG(destReg, value); },
+    [&](StreamReg16 &src) { short int value = value = readRegAS(short int, destReg); baseBehaviour(destReg, src, predReg, (short int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg32 &src) { int value = value = readRegAS(int, destReg); baseBehaviour(destReg, src, predReg, int{}); WRITE_REG(destReg, value); },
+    [&](StreamReg64 &src) { long int value = value = readRegAS(long int, destReg); baseBehaviour(destReg, src, predReg, (long int){}); WRITE_REG(destReg, value); },
+    [&](auto &src) { assert_msg("Invoking so.a.adds.acc.sg with invalid parameter sizes", false); }
 }, srcReg);

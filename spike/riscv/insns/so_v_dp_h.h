@@ -13,10 +13,12 @@ auto baseBehaviour = [](auto &dest, auto &pred, const auto value) {
     auto destElements = dest.getElements(false);
     auto destValidIndex = dest.getVLen();
     std::vector<uint16_t> out(destValidIndex);
+
     for (size_t i = 0; i < destValidIndex; ++i)
         out.at(i) = pi.at((i+1)*sizeof(uint16_t)-1) ? value : destElements.at(i);
-    dest.setElements(true, out);
+
     dest.setValidIndex(destValidIndex);
+    dest.setElements(true, out);
 };
 
 // If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done
