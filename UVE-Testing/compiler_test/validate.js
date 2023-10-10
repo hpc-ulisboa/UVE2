@@ -86,7 +86,7 @@ for (let kernel of kernels) {
   compileKernel(clangPath, [...compileFlags, `--sysroot=${compilerPath}`, `--gcc-toolchain=${gccTCPath}`, "--target=riscv64", "-march=rv64gcxuve0p1", "-menable-experimental-extensions", "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
 
   /* Compile and link each kernel file */
-  compileKernel(clangPath, [...compileFlags, "-DRUN_UVE", "-I..", "-O2", "-fno-unroll-loops", "-fno-vectorize", "-fno-slp-vectorize", "-fdiscard-value-names", "-ffp-contract=off", "-emit-llvm", `benchmarks/${kernel}/kernel.c`, "-S", "-o", "kernel.ll" ]);
+  compileKernel(clangPath, [...compileFlags, "-DRUN_SIMPLE", "-I..", "-O2", "-fno-unroll-loops", "-fno-vectorize", "-fno-slp-vectorize", "-fdiscard-value-names", "-ffp-contract=off", "-emit-llvm", `benchmarks/${kernel}/kernel.c`, "-S", "-o", "kernel.ll" ]);
   compileKernel(optPath, ["-enable-new-pm=0", `-load=${streamAnalysisPath}`, "-loop-simplify", "-legacy-stream-analysis", "kernel.ll" ]);
   compileKernel(llcPath, ["--march=riscv64", "--mcpu=generic-rv64", "-mattr=+experimental-xuve", "kernel.ll"]);
   compileKernel(objPath, ["-mattr=experimental-xuve", "-D", bin_uve]);
@@ -94,8 +94,8 @@ for (let kernel of kernels) {
   compileKernel(clangPath, ["-O2", "Functions.o", `kernel.o`, `main.o`, "-o", bin_uve]);
   compileKernel(clangPath, [...compileFlags, `--sysroot=${compilerPath}`, `--gcc-toolchain=${gccTCPath}`, "--target=riscv64", "-march=rv64gcxuve0p1", "-menable-experimental-extensions", "-I..", `benchmarks/${kernel}/kernel.c`, "-o", bin_uve, "-S", "-o", `benchmarks/${kernel}/uve.ll`]);
   
-  compileKernel(clangPath, [...compileFlags, "-DRUN_SIMPLE", "-I..", "-O2", `benchmarks/${kernel}/kernel.c`, "-c" ]);
-  compileKernel(clangPath, ["-O2", "Functions.o", `kernel.o`, `main.o`, "-o", bin_simple]);
+  //compileKernel(clangPath, [...compileFlags, "-DRUN_SIMPLE", "-I..", "-O2", `benchmarks/${kernel}/kernel.c`, "-c" ]);
+  //compileKernel(clangPath, ["-O2", "Functions.o", `kernel.o`, `main.o`, "-o", bin_simple]);
 
 
   /* Run each kernel file */

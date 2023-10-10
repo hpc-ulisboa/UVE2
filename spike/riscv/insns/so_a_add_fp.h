@@ -10,8 +10,9 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto extra) {
     /* Each stream's elements must have the same width for content to be
      * operated on */
-    assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
-    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
+    assert_msg("Given vectors have different widths", src1.getElementsWidth() == src2.getElementsWidth());
+    size_t vLen = src1.getMode() == RegisterMode::Scalar || src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
+    // std::bool zeroing = src1.getType() == RegisterType::Stream || src2.getType() == RegisterType::Stream
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
@@ -26,7 +27,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     auto pi = pred.getPredicate();
 
     for (size_t i = 0; i < vLen; i++) {
-        if (i < validElementsIndex){
+        if (i < validElementsIndex /*&& !zeroing*/){
             if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
                 auto e1 = readAS<OperationType>(elements1.at(i));
                 auto e2 = readAS<OperationType>(elements2.at(i));

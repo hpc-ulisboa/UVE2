@@ -491,6 +491,8 @@ struct : public arg_t {
   }
 } rcon;
 
+/*=== UVE ===*/
+
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
     return ur_name[insn.uve_rd()];
@@ -505,9 +507,21 @@ struct : public arg_t {
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
+    return xpr_name[insn.uve_rs1()];
+  }
+} uxrs1;
+
+struct : public arg_t {
+  std::string to_string(insn_t insn) const {
     return ur_name[insn.uve_rs2()];
   }
 } urs2;
+
+struct : public arg_t {
+  std::string to_string(insn_t insn) const {
+    return xpr_name[insn.uve_rs2()];
+  }
+} uxrs2;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
@@ -517,31 +531,37 @@ struct : public arg_t {
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return ur_name[insn.uve_conf_base()];
+    return xpr_name[insn.uve_rs3()];
+  }
+} uxrs3;
+
+struct : public arg_t {
+  std::string to_string(insn_t insn) const {
+    return xpr_name[insn.uve_conf_base()];
   }
 } ubase;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return ur_name[insn.uve_conf_size()];
+    return xpr_name[insn.uve_conf_size()];
   }
 } usize;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return ur_name[insn.uve_conf_stride()];
+    return xpr_name[insn.uve_conf_stride()];
   }
 } ustride;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return ur_name[insn.uve_mod_size()];
+    return xpr_name[insn.uve_mod_size()];
   }
 } umod_size;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return ur_name[insn.uve_mod_disp()];
+    return xpr_name[insn.uve_mod_disp()];
   }
 } umod_disp;
 
@@ -785,6 +805,13 @@ static void NOINLINE add_vector_vim_insn(disassembler_t* d, const char* name, ui
   d->add_insn(new disasm_insn_t(name, match, mask, {&vd, &vs2, &v_simm5, &v0}));
 }
 
+/*=== UVE ===*/
+
+static void NOINLINE add_uve_ld_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&urd, &ubase, &usize, &ustride}));
+}
+
 static void NOINLINE add_unknown_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
 {
   std::string s = name;
@@ -857,6 +884,8 @@ void disassembler_t::add_instructions(const isa_parser_t* isa)
   #define DEFINE_FX2TYPE(code) add_fx2type_insn(this, #code, match_##code, mask_##code);
   #define DEFINE_XFTYPE(code) add_xftype_insn(this, #code, match_##code, mask_##code);
   #define DEFINE_SFENCE_TYPE(code) add_sfence_insn(this, #code, match_##code, mask_##code);
+  /*=== UVE ===*/
+  #define DEFINE_UVE_LD(code) add_uve_ld_insn(this, #code, match_##code, mask_##code);
 
   add_insn(new disasm_insn_t("unimp", match_csrrw|(CSR_CYCLE<<20), 0xffffffff, {}));
   add_insn(new disasm_insn_t("c.unimp", 0, 0xffff, {}));
@@ -2318,6 +2347,9 @@ void disassembler_t::add_instructions(const isa_parser_t* isa)
     DEFINE_R1TYPE(sm3p0);
     DEFINE_R1TYPE(sm3p1);
   }
+
+  /*=== UVE ===*/
+  DEFINE_UVE_LD(ss_ld_d);
 
 }
 

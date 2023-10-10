@@ -2,12 +2,12 @@
 const fs = require('node:fs');
 const { spawnSync }= require("child_process");
 
-const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" , "mvt" , "gemver", "gemm"];
+//const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" , "mvt" , "gemver", "gemm"];
 
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "covariance" ];
 
-//const kernels = [ "" ];
+const kernels = [ "saxpy" ];
 
 const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
@@ -99,9 +99,9 @@ for (let kernel of kernels) {
   }
 
   // Delete executables for next kernel
-  const del = spawnSync("rm", ["-f", bin_simple, bin_uve, 'main.o', 'kernel.o', 'Functions.o']);
-  if (del.error) {
-    console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
-    break;
-  }
+  //const del = spawnSync("rm", ["-f", bin_simple, bin_uve, 'main.o', 'kernel.o', 'Functions.o']);
+  //if (del.error) {
+  //  console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
+  //  break;
+  //}
 }

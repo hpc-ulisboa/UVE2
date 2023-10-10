@@ -2,7 +2,7 @@ clang --sysroot=riscv64-unknown-elf --gcc-toolchain=RISCV --target=riscv64 -marc
 clang --sysroot=riscv64-unknown-elf --gcc-toolchain=RISCV --target=riscv64 -march=rv64gcxuve0p1 -menable-experimental-extensions main.c -c
 
 clang -O2 -fno-unroll-loops -fno-vectorize -fno-slp-vectorize -fdiscard-value-names -ffp-contract=off -emit-llvm kernel.c -S -o kernel.ll
-opt -enable-new-pm=0 -load /home/afernandes/pass/build/StreamAnalysis/libStreamAnalysis.so -loop-simplify -legacy-stream-analysis kernel.ll
+opt -enable-new-pm=0 -load /home/afernandes/LLVM-Compiler/build/StreamAnalysis/libStreamAnalysis.so -loop-simplify -legacy-stream-analysis kernel.ll
 
 llc --march=riscv64 --mcpu=generic-rv64 -mattr=+experimental-xuve kernel.ll
 llvm-objdump --mattr=experimental-xuve -D run_uve

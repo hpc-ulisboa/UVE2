@@ -27,8 +27,8 @@ typedef unsigned __int128 uint128_t;
 const int NXPR = 32;
 const int NFPR = 32;
 const int NVPR = 32;
-const int NUPR = 32;
-const int NPR = 16;
+const int NUPR = 32; // UVE vector registers
+const int NPR = 16;  // UVE predicate registers
 const int NCSR = 4096;
 
 #define X_RA 1
@@ -153,7 +153,7 @@ public:
   uint64_t p_imm4() { return x(20, 4); }
   uint64_t p_imm5() { return x(20, 5); }
   uint64_t p_imm6() { return x(20, 6); }
-
+  /*=== UVE ===*/
   uint64_t uve_rd() { return x(7, 5); }
   int64_t uve_rs1() { return x(15, 5); }
   int64_t uve_rs2() { return x(20, 5); }

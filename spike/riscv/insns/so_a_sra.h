@@ -12,7 +12,7 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto extra) {
     /* Each stream's elements must have the same width for content to be
      * operated on */
-    assert_msg("Given streams have different widths", src1.getElementsWidth() == src2.getElementsWidth());
+    assert_msg("Given vectors have different widths", src1.getElementsWidth() == src2.getElementsWidth());
     size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     /* We can only operate on the first available values of the stream */
     auto values = src1.getElements(true);
