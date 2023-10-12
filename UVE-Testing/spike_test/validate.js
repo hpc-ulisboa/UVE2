@@ -7,7 +7,7 @@ const { spawnSync }= require("child_process");
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "covariance" ];
 
-const kernels = [ "saxpy" ];
+const kernels = [ "jacobi-2d" ];
 
 const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];

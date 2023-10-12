@@ -501,6 +501,12 @@ struct : public arg_t {
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
+    return xpr_name[insn.uve_rd()];
+  }
+} uxrd;
+
+struct : public arg_t {
+  std::string to_string(insn_t insn) const {
     return ur_name[insn.uve_rs1()];
   }
 } urs1;
@@ -539,19 +545,19 @@ struct : public arg_t {
   std::string to_string(insn_t insn) const {
     return xpr_name[insn.uve_conf_base()];
   }
-} ubase;
+} uconf_rs1;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
     return xpr_name[insn.uve_conf_size()];
   }
-} usize;
+} uconf_rs2;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
     return xpr_name[insn.uve_conf_stride()];
   }
-} ustride;
+} uconf_rs3;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
@@ -597,6 +603,12 @@ struct : public arg_t {
     return ur_name[insn.uve_pred_rs2()];
   }
 } up_rs2;
+
+struct : public arg_t {
+  std::string to_string(insn_t insn) const {
+    return xpr_name[insn.uve_pred_rs2()];
+  }
+} up_xrs2;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
@@ -807,9 +819,64 @@ static void NOINLINE add_vector_vim_insn(disassembler_t* d, const char* name, ui
 
 /*=== UVE ===*/
 
-static void NOINLINE add_uve_ld_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+static void NOINLINE add_uve_conf_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
 {
-  d->add_insn(new disasm_insn_t(name, match, mask, {&urd, &ubase, &usize, &ustride}));
+  d->add_insn(new disasm_insn_t(name, match, mask, {&urd, &uconf_rs1, &uconf_rs2, &uconf_rs3}));
+}
+
+static void NOINLINE add_uve_mod_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&urd, &uconf_rs1, &uconf_rs3}));
+}
+
+static void NOINLINE add_uve_branch_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&ub_rs1, &ub_imm}));
+}
+
+static void NOINLINE add_uve_vmv_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&urd, &urs1, &uv_pred}));
+}
+
+static void NOINLINE add_uve_vdp_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&urd, &uxrs1, &uv_pred}));
+}
+
+static void NOINLINE add_uve_arith_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&urd, &urs1, &urs2, &upred}));
+}
+
+static void NOINLINE add_uve_arith1_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&urd, &urs1, &upred}));
+}
+
+static void NOINLINE add_uve_arith2_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&uxrd, &urs1, &upred}));
+}
+
+static void NOINLINE add_uve_arith3_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&urd, &urs1, &uxrs2, &upred}));
+}
+
+static void NOINLINE add_uve_pred_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&up_rd, &up_rs1, &upred}));
+}
+
+static void NOINLINE add_uve_pred_comp_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&up_rd, &up_rs1, &up_rs2, &upred}));
+}
+
+static void NOINLINE add_uve_pred_comp1_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
+{
+  d->add_insn(new disasm_insn_t(name, match, mask, {&up_rd, &up_vs1, &up_xrs2, &upred}));
 }
 
 static void NOINLINE add_unknown_insn(disassembler_t* d, const char* name, uint32_t match, uint32_t mask)
@@ -885,7 +952,18 @@ void disassembler_t::add_instructions(const isa_parser_t* isa)
   #define DEFINE_XFTYPE(code) add_xftype_insn(this, #code, match_##code, mask_##code);
   #define DEFINE_SFENCE_TYPE(code) add_sfence_insn(this, #code, match_##code, mask_##code);
   /*=== UVE ===*/
-  #define DEFINE_UVE_LD(code) add_uve_ld_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UCONF(code) add_uve_conf_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UMOD(code) add_uve_mod_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UBTYPE(code) add_uve_branch_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UVTYPE_MOVE(code) add_uve_vmv_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UVTYPE_DP(code) add_uve_vdp_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UATYPE(code) add_uve_arith_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UA1TYPE(code) add_uve_arith1_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UA2TYPE(code) add_uve_arith2_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UA3TYPE(code) add_uve_arith3_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UPRED(code) add_uve_pred_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UPRED_COMP(code) add_uve_pred_comp_insn(this, #code, match_##code, mask_##code);
+  #define DEFINE_UPRED_COMP1(code) add_uve_pred_comp1_insn(this, #code, match_##code, mask_##code);
 
   add_insn(new disasm_insn_t("unimp", match_csrrw|(CSR_CYCLE<<20), 0xffffffff, {}));
   add_insn(new disasm_insn_t("c.unimp", 0, 0xffff, {}));
@@ -2349,8 +2427,125 @@ void disassembler_t::add_instructions(const isa_parser_t* isa)
   }
 
   /*=== UVE ===*/
-  DEFINE_UVE_LD(ss_ld_d);
+  DEFINE_UCONF(ss_ld_d);
+  DEFINE_UCONF(ss_ld_w);
+  DEFINE_UCONF(ss_ld_h);
+  DEFINE_UCONF(ss_ld_b);
+  DEFINE_UCONF(ss_st_d);
+  DEFINE_UCONF(ss_sta_ld_d);
+  DEFINE_UCONF(ss_sta_ld_w);
+  DEFINE_UCONF(ss_sta_ld_h);
+  DEFINE_UCONF(ss_sta_ld_b);
+  DEFINE_UCONF(ss_sta_st_d);
+  DEFINE_UCONF(ss_sta_st_w);
+  DEFINE_UCONF(ss_sta_st_h);
+  DEFINE_UCONF(ss_sta_st_b);
+  DEFINE_UCONF(ss_st_w);
+  DEFINE_UCONF(ss_st_h);
+  DEFINE_UCONF(ss_st_b);
+  DEFINE_UCONF(ss_app);
+  DEFINE_UCONF(ss_app_mod_siz_dec);
+  DEFINE_UCONF(ss_app_mod_siz_inc);
+  DEFINE_UCONF(ss_end);
+  DISASM_INSN("ss.cfg.vec", ss_cfg_vec, 0, {&urd});
 
+  DEFINE_UBTYPE(so_b_c); 
+  DEFINE_UBTYPE(so_b_dc_1);
+  DEFINE_UBTYPE(so_b_dc_2);
+  DEFINE_UBTYPE(so_b_dc_3);
+  DEFINE_UBTYPE(so_b_dc_4);
+  DEFINE_UBTYPE(so_b_dc_5);
+  DEFINE_UBTYPE(so_b_dc_6);
+  DEFINE_UBTYPE(so_b_dc_7);
+  DEFINE_UBTYPE(so_b_nc);
+  DEFINE_UBTYPE(so_b_ndc_1);
+  DEFINE_UBTYPE(so_b_ndc_2);
+  DEFINE_UBTYPE(so_b_ndc_3);
+  DEFINE_UBTYPE(so_b_ndc_4);
+  DEFINE_UBTYPE(so_b_ndc_5);
+  DEFINE_UBTYPE(so_b_ndc_6);
+  DEFINE_UBTYPE(so_b_ndc_7);
+
+  DEFINE_UVTYPE_MOVE(so_v_mv);
+  DEFINE_UVTYPE_MOVE(so_v_mv_stream);
+  DEFINE_UVTYPE_MOVE(so_v_mvt);
+  DEFINE_UVTYPE_MOVE(so_v_mvt_stream);
+  DEFINE_UVTYPE_DP(so_v_dp_d);
+  DEFINE_UVTYPE_DP(so_v_dp_w);
+  DEFINE_UVTYPE_DP(so_v_dp_h);
+  DEFINE_UVTYPE_DP(so_v_dp_b);
+
+  DEFINE_UATYPE(so_a_add_fp);
+  DEFINE_UATYPE(so_a_add_us);
+  DEFINE_UATYPE(so_a_add_sg);
+  DEFINE_UATYPE(so_a_sub_fp);
+  DEFINE_UATYPE(so_a_sub_us);
+  DEFINE_UATYPE(so_a_sub_sg);
+  DEFINE_UATYPE(so_a_mul_fp);
+  DEFINE_UATYPE(so_a_mul_us);
+  DEFINE_UATYPE(so_a_mul_sg);
+  DEFINE_UATYPE(so_a_div_fp);
+  DEFINE_UATYPE(so_a_div_us);
+  DEFINE_UATYPE(so_a_div_sg);
+  DEFINE_UATYPE(so_a_mac_fp);
+  DEFINE_UATYPE(so_a_mac_us);
+  DEFINE_UATYPE(so_a_mac_sg);
+  DEFINE_UATYPE(so_a_min_fp);
+  DEFINE_UATYPE(so_a_min_us);
+  DEFINE_UATYPE(so_a_min_sg);
+  DEFINE_UATYPE(so_a_max_fp);
+  DEFINE_UATYPE(so_a_max_us);
+  DEFINE_UATYPE(so_a_max_sg);
+  DEFINE_UA1TYPE(so_a_abs_fp);
+  DEFINE_UA1TYPE(so_a_abs_sg);
+  DEFINE_UA1TYPE(so_a_inc_fp);
+  DEFINE_UA1TYPE(so_a_inc_us);
+  DEFINE_UA1TYPE(so_a_inc_sg);
+  DEFINE_UA1TYPE(so_a_dec_fp);
+  DEFINE_UA1TYPE(so_a_dec_us);
+  DEFINE_UA1TYPE(so_a_dec_sg);
+  DEFINE_UA1TYPE(so_a_adde_fp);
+  DEFINE_UA1TYPE(so_a_adde_us);
+  DEFINE_UA1TYPE(so_a_adde_sg);
+  DEFINE_UA1TYPE(so_a_adde_acc_fp);
+  DEFINE_UA1TYPE(so_a_adde_acc_us);
+  DEFINE_UA1TYPE(so_a_adde_acc_sg);
+  DEFINE_UA1TYPE(so_a_mine_fp);
+  DEFINE_UA1TYPE(so_a_mine_us);
+  DEFINE_UA1TYPE(so_a_mine_sg);
+  DEFINE_UA1TYPE(so_a_maxe_fp);
+  DEFINE_UA1TYPE(so_a_maxe_us);
+  DEFINE_UA1TYPE(so_a_maxe_sg);  
+  DEFINE_UA2TYPE(so_a_adds_fp);
+  DEFINE_UA2TYPE(so_a_adds_us);
+  DEFINE_UA2TYPE(so_a_adds_sg);
+  DEFINE_UA2TYPE(so_a_adds_acc_fp);
+  DEFINE_UA2TYPE(so_a_adds_acc_us);
+  DEFINE_UA2TYPE(so_a_adds_acc_sg);
+  DEFINE_UATYPE(so_a_nand);
+  DEFINE_UATYPE(so_a_and);
+  DEFINE_UATYPE(so_a_nor);
+  DEFINE_UATYPE(so_a_or);
+  DEFINE_UA1TYPE(so_a_not);
+  DEFINE_UATYPE(so_a_xor);
+  DEFINE_UATYPE(so_a_sll);
+  DEFINE_UATYPE(so_a_srl);
+  DEFINE_UATYPE(so_a_sra);
+  DEFINE_UA3TYPE(so_a_slls);
+  DEFINE_UA3TYPE(so_a_srls);
+  DEFINE_UA3TYPE(so_a_sras);
+
+  DEFINE_UPRED(so_p_not);
+  DEFINE_UPRED(so_p_mv);
+  DEFINE_UPRED(so_p_mvt);
+  DEFINE_UPRED_COMP(so_p_eq_fp);
+  DEFINE_UPRED_COMP(so_p_egt_fp);
+  DEFINE_UPRED_COMP(so_p_lt_fp);
+  DEFINE_UPRED_COMP1(so_p_eqs_fp);
+  DEFINE_UPRED_COMP1(so_p_egts_fp);
+  DEFINE_UPRED_COMP1(so_p_lts_fp);
+  DISASM_INSN("so.p.zero", so_p_zero, 0, {&up_rd});
+  DISASM_INSN("so.p.one", so_p_one, 0, {&up_rd});
 }
 
 disassembler_t::disassembler_t(const isa_parser_t *isa)
