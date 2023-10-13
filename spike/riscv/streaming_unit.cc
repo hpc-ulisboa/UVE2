@@ -396,16 +396,11 @@ std::vector<uint8_t> PredRegister::getPredicate() const {
 void streamingUnit_t::updateEODTable(const size_t stream) {
     int r = 0, d = 0;
     std::visit([&](const auto reg) {
-        if (reg.type != RegisterConfig::NoStream){
-            int d = 0;
-            for (const auto dim : reg.dimensions) {
-                EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
-                // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
-                ++d;
-            }
-        } else { // reset EOD flags
-            for (auto &eod : EODTable.at(stream))
-                eod = false;
+        int d = 0;
+        for (const auto dim : reg.dimensions) {
+            EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
+            // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
+            ++d;
         }
     }, registers.at(stream));
 }
