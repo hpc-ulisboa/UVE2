@@ -7,9 +7,9 @@ const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv",
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "covariance" ];
 
-//const kernels = [ "" ];
+//const kernels = [ "gemver" ];
 
-const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=9" ];
+const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";

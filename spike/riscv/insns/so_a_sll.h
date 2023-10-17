@@ -16,6 +16,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
      * operated on */
     assert_msg("Given vectors have different widths", src1.getElementsWidth() == src2.getElementsWidth());
     size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
     /* We can only operate on the first available values of the stream */
     auto values = src1.getElements(true);
     auto shiftValues = src2.getElements(true);
@@ -36,7 +37,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
                 auto shift = readAS<OperationType>(shiftValues.at(i));
                 out.at(i) = readAS<StorageType>(value << shift);
             }
-        } else
+        } else if (zeroing)
             out.at(i) = 0; // zeroing out the rest of the elements
     }
     dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);

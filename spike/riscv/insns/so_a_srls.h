@@ -14,6 +14,7 @@ const uint64_t shiftValue = readRegAS(uint64_t, src2);
 auto baseBehaviour = [](auto &dest, auto &src, uint64_t shiftValue, auto &pred, auto extra) {
     /* We can only operate on the first available values of the stream */
     size_t vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
+bool zeroing = src.getType() == RegisterConfig::Load;
     auto values = src.getElements(true);
     auto destElements = dest.getElements(false);
     auto validElementsIndex = src.getValidIndex();
@@ -32,7 +33,7 @@ auto baseBehaviour = [](auto &dest, auto &src, uint64_t shiftValue, auto &pred, 
                 out.at(i) = readAS<StorageType>(value >> shiftValue);
                 //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
             }
-        } else
+        } else if (zeroing)
             out.at(i) = 0; // zeroing out the rest of the elements
     }
     dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);

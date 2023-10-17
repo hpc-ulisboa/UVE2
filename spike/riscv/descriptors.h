@@ -43,46 +43,70 @@ private:
 
 struct Modifier
 {
-  enum class Type
+  /*enum class Type
   {
     Static,
     Indirect
-  };
+  };*/
+
   enum class Target
   {
-    None, // necessary?
     Offset,
     Size,
     Stride
   };
+
   enum class Behaviour
   {
-    None, // necessary?
     Increment,
-    Decrement
-    //add "set-value" behaviour
+    Decrement,
+    //SetValue,
+    //Add,
+    //Subtract
   };
 
-  Modifier(Type type, Target target = Target::None, Behaviour behaviour = Behaviour::None, size_t displacement = 0, size_t size = 0)
-    : type(type), target(target), behaviour(behaviour), displacement(displacement), size(size)
+  Modifier(Type type, Target target, Behaviour behaviour, size_t displacement = 0, size_t size = 0)
+    : target(target), behaviour(behaviour)
   {}
 
   void modDimension(Dimension& dim) const;
 
   void printModifier() const;
 
-  Type getType() const;
+  //Type getType() const;
 
 private:
-  const Type type;
+  //const Type type;
   const Target target;
   const Behaviour behaviour;
+  //const size_t displacement;
+  //const size_t size;
+
+  //void modStatic(Dimension& dim) const;
+
+  //void modIndirect(Dimension& dim) const;
+};
+
+struct StaticModifier : public Modifier
+{
+  StaticModifier(Type type, Target target, Behaviour behaviour, size_t displacement = 0, size_t size = 0)
+    : type(type), target(target), behaviour(behaviour), displacement(displacement), size(size)
+  {}
+
+private:
   const size_t displacement;
   const size_t size;
+};
 
-  void modStatic(Dimension& dim) const;
+struct StaticModifier : public Modifier
+{
+  StaticModifier(Type type, Target target, Behaviour behaviour, size_t displacement = 0, size_t size = 0)
+    : type(type), target(target), behaviour(behaviour), displacement(displacement), size(size)
+  {}
 
-  void modIndirect(Dimension& dim) const;
+private:
+  const size_t displacement;
+  const size_t size;
 };
 
 #endif // DIMENSION_HPP
