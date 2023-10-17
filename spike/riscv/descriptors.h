@@ -47,7 +47,7 @@ struct Modifier
   {
     Static,
     Indirect
-  };*/
+  };
 
   enum class Target
   {
@@ -60,26 +60,25 @@ struct Modifier
   {
     Increment,
     Decrement,
-    //SetValue,
-    //Add,
-    //Subtract
+    SetValue,
+    Add,
+    Subtract
   };
-
-  Modifier(Type type, Target target, Behaviour behaviour, size_t displacement = 0, size_t size = 0)
-    : target(target), behaviour(behaviour)
+  */
+  Modifier(size_t d = 1)
+    : displacement(d)
   {}
 
-  void modDimension(Dimension& dim) const;
+  virtual void modDimension(Dimension& dim) const;
 
-  void printModifier() const;
-
+  //void printModifier() const;
   //Type getType() const;
 
 private:
   //const Type type;
-  const Target target;
-  const Behaviour behaviour;
-  //const size_t displacement;
+  //const Target target;
+  //const Behaviour behaviour;
+  size_t displacement;
   //const size_t size;
 
   //void modStatic(Dimension& dim) const;
@@ -89,24 +88,25 @@ private:
 
 struct StaticModifier : public Modifier
 {
-  StaticModifier(Type type, Target target, Behaviour behaviour, size_t displacement = 0, size_t size = 0)
-    : type(type), target(target), behaviour(behaviour), displacement(displacement), size(size)
-  {}
+  StaticModifier(Target t, Behaviour b, size_t d = 0, size_t s = 0)
+    : Modifier(t, b), displacement(d), size(s) {
+    assert_msg(b == Behaviour::Decrement ||  b == Behaviour::Increment, "Static modifier must be of type Increment or Decrement");
+    }
 
 private:
   const size_t displacement;
   const size_t size;
 };
 
-struct StaticModifier : public Modifier
+struct DynamicModifier : public Modifier
 {
-  StaticModifier(Type type, Target target, Behaviour behaviour, size_t displacement = 0, size_t size = 0)
-    : type(type), target(target), behaviour(behaviour), displacement(displacement), size(size)
+  DynamicModifier(Target target, Behaviour behaviour, size_t streamSource)
+    : target(target), behaviour(behaviour), streamSource(streamSource)
   {}
 
 private:
-  const size_t displacement;
-  const size_t size;
+  const size_t streamSource;
+
 };
 
 #endif // DIMENSION_HPP

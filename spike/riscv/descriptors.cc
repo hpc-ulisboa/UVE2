@@ -105,7 +105,7 @@ Modifier::Type Modifier::getType() const {
     return type;
 }
 
-void Modifier::printModifier() const {
+/*void Modifier::printModifier() const {
     // print modifier
     std::cout << "Modifier: ";
     switch (type) {
@@ -150,4 +150,4 @@ void Modifier::printModifier() const {
         assert_msg("Unhandled Behaviour case in modifiers's printModifier", false);
     }
     std::cout << ", displacement: " << displacement << ", size: " << size;
-}
+}*/
