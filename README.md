@@ -31,4 +31,4 @@ $ sudo make install
 
 ## Compiling and running the benchmarks
 
-Run the `validate.js` script, after editing the relevant path variables and choosing the desired benchmarks from the available ones, in folder `UVE-testing/spike-test/benchmarks``.
+Run the `validate.js` script, after editing the relevant path variables and choosing the desired benchmarks from the available ones, in folder `UVE-testing/spike-test/benchmarks`.
