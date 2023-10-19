@@ -13,7 +13,7 @@ For work related to the compiler, check our paper here: https://ieeexplore.ieee.
 
 If you use this in your work, please cite as:
 
-    > N. Neves, J. M. Domingos, N. Roma, P. Tomás and G. Falcao, "Compiling for Vector Extensions With Stream-Based Specialization," in IEEE Micro, vol. 42, no. 5, pp. 49-58, 1 Sept.-Oct. 2022, doi: 10.1109/MM.2022.3173405.
+   > N. Neves, J. M. Domingos, N. Roma, P. Tomás and G. Falcao, "Compiling for Vector Extensions With Stream-Based Specialization," in IEEE Micro, vol. 42, no. 5, pp. 49-58, 1 Sept.-Oct. 2022, doi: 10.1109/MM.2022.3173405.
 
 To see the sources and documentation, refer to the following branches:
 
@@ -37,4 +37,4 @@ $ sudo make install
 
 ## Compiling and running the benchmarks
 
-Run the `validate.js` script, after editing the relevant path variables and choosing thedesired benchmarks from the available ones, in folder UVE-testing/spike-test/benchmarks.
+Run the `validate.js` script, after editing the relevant path variables and choosing the desired benchmarks from the available ones, in folder `UVE-testing/spike-test/benchmarks``.
