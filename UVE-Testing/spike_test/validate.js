@@ -2,12 +2,12 @@
 const fs = require('node:fs');
 const { spawnSync }= require("child_process");
 
-const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" , "mvt" , "gemver", "gemm"];
+//const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" , "mvt" , "gemver", "gemm"];
 
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "covariance" ];
 
-//const kernels = [ "gemver" ];
+const kernels = [ "saxpy" ];
 
 const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
