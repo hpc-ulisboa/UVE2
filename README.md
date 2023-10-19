@@ -7,13 +7,13 @@ Alternatively you can also take a look at the ISCA presentation: https://youtu.b
 
 If you use this in your work, please cite as:
 
-    J. M. Domingos, N. Neves, N. Roma and P. Tomás, "Unlimited Vector Extension with Data Streaming Support," 2021 ACM/IEEE 48th Annual International Symposium on Computer Architecture (ISCA), 2021, pp. 209-222, doi: 10.1109/ISCA52012.2021.00025.
+   > J. M. Domingos, N. Neves, N. Roma and P. Tomás, "Unlimited Vector Extension with Data Streaming Support," 2021 ACM/IEEE 48th Annual International Symposium on Computer Architecture (ISCA), 2021, pp. 209-222, doi: 10.1109/ISCA52012.2021.00025.
 
 For work related to the compiler, check our paper here: https://ieeexplore.ieee.org/document/9772328.
 
 If you use this in your work, please cite as:
 
-    N. Neves, J. M. Domingos, N. Roma, P. Tomás and G. Falcao, "Compiling for Vector Extensions With Stream-Based Specialization," in IEEE Micro, vol. 42, no. 5, pp. 49-58, 1 Sept.-Oct. 2022, doi: 10.1109/MM.2022.3173405.
+    > N. Neves, J. M. Domingos, N. Roma, P. Tomás and G. Falcao, "Compiling for Vector Extensions With Stream-Based Specialization," in IEEE Micro, vol. 42, no. 5, pp. 49-58, 1 Sept.-Oct. 2022, doi: 10.1109/MM.2022.3173405.
 
 To see the sources and documentation, refer to the following branches:
 
