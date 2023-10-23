@@ -70,8 +70,10 @@ UVE-Testing/spike_test/floyd-warshall
 UVE-Testing/spike_test/pred
 
 ### VisualStudioCode ###
+vscode
 .vscode
 .vscode/*
+.vscode/settings.json
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
