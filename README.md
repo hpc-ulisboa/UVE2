@@ -55,7 +55,7 @@ Note that this is a work-in-progress version and some bugs may still exist.
    │   │   ├── descriptors.h        # UVE descriptors header file
    │   │   ├── helpers.h            # Helper functions header file
    │   │   ├── insns
-           |   └── ...              # RISC-V Instructions source code
+   |   |   |   └── ...              # RISC-V Instructions source code
    │   │   ├── streaming_unit.cc    # Streaming Unit source code
    │   │   ├── streaming_unit.h     # Streaming Unit header file
    │   │   └── ...
