@@ -104,8 +104,8 @@ Run the `validate.js` script, after editing the relevant path variables and choo
    * `TYPE 4` - word (float)
    * `TYPE 5` - double (DEFAULT)
 
-* `SIZE` - size of the dataset (usually a matrix SIZE $\times$ SIZE)
-   * `SIZE 64` - $64 \times 64$ matrix (DEFAULT)
+* `SIZE` - size of the dataset (usually a matrix SIZE$\times$SIZE)
+   * `SIZE 64` - 64$\times$64 matrix (DEFAULT)
 
 Alternatively, each benchmark directory contains the executables with and without UVE (`run_uve` and `run_simple`, respectively, with `SIZE=50` and `TYPE=5`), which can be ran on Spike with the following commands:
 
