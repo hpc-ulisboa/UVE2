@@ -9,7 +9,8 @@ const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv",
 
 //const kernels = [ "" ];
 
-/* DTYPE 1: byte (hexadecimal int)
+/* DTYPE: dataset datatype
+ * DTYPE 1: byte (hexadecimal int)
  * DTYPE 2: half-word (short int)
  * DTYPE 3: word (int)
  * DTYPE 4: word (float)
