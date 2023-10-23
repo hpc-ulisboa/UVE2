@@ -45,6 +45,7 @@ Or in BibTeX:
 Note that this is a work-in-progress version and some bugs may still exist.
 
 ## Directory layout
+```
    .
    ├── spike                        # Modified RISC-V ISA Simulator (Spike) with UVE support
    │   ├── ...
@@ -76,7 +77,7 @@ Note that this is a work-in-progress version and some bugs may still exist.
           │   │   └── uve.log       # (automatically generated) Execution log (with UVE)
           │   └── ...               # Other benchmarks
           └── validate.js           # Benchmark validation script
-
+```
 ## Setup
 
 A cross-compiler familiar with UVE is needed, install it from here: https://github.com/hpc-ulisboa/UVE/tree/uve_compiler.
