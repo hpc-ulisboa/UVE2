@@ -84,7 +84,7 @@ A cross-compiler familiar with UVE is needed, install it from here: https://gith
 
 You should also install the RISC-V Proxy Kernel, available at: https://github.com/riscv-software-src/riscv-pk.
 
-In order to install Spike, run these commands, assuming that the RISCV environment variable is set to the RISC-V tools install path:
+In order to install Spike, run these commands, assuming that the `RISCV` environment variable is set to the RISC-V tools install path:
 
 ```sh
 $ cd spike/build
