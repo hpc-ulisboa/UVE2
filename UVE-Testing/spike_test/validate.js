@@ -18,6 +18,7 @@ const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv",
  * DSIZE: size of the dataset (usually a matrix SIZE*SIZE)
  * DSIZE 64: 64x64 matrix (DEFAULT)
 */
+
 const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
