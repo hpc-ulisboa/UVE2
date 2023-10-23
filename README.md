@@ -44,6 +44,39 @@ Or in BibTeX:
 
 Note that this is a work-in-progress version and some bugs may still exist.
 
+## Directory layout
+   .
+   ├── spike                        # Modified RISC-V ISA Simulator (Spike) with UVE support
+   │   ├── ...
+   │   ├── build                    # Build directory
+   │   ├── riscv                    # RISC-V source code
+   │   │   ├── descriptors.cc       # UVE descriptors source code
+   │   │   ├── descriptors.h        # UVE descriptors header file
+   │   │   ├── helpers.h            # Helper functions header file
+   │   │   ├── insns
+           |   └── ...              # RISC-V Instructions source code
+   │   │   ├── streaming_unit.cc    # Streaming Unit source code
+   │   │   ├── streaming_unit.h     # Streaming Unit header file
+   │   │   └── ...
+   │   └── ...
+   └── UVE-Testing                  # Testing directory
+       ├── ...
+       ├── Dataset.h                # Float and integer datasets
+       ├── Functions.c              # Benchmark support source code
+       ├── Functions.h              # Benchmark support header file
+       ├── generateData.js          # Dataset generation script
+       └── spike_test
+          ├── benchmarks
+          │   ├── saxpy             # Saxpy benchmark
+          │   │   ├── kernel.c      # Kernel source code
+          │   │   ├── main.c        # Source code
+          │   │   ├── run_simple    # (automatically generated) Executable (without UVE)
+          │   │   ├── run_uve       # (automatically generated) Executable (witt UVE)
+          │   │   ├── simple.log    # (automatically generated) Execution log (without UVE)
+          │   │   └── uve.log       # (automatically generated) Execution log (with UVE)
+          │   └── ...               # Other benchmarks
+          └── validate.js           # Benchmark validation script
+
 ## Setup
 
 A cross-compiler familiar with UVE is needed, install it from here: https://github.com/hpc-ulisboa/UVE/tree/uve_compiler.
