@@ -97,17 +97,17 @@ $ sudo make install
 
 Run the `validate.js` script, after editing the relevant path variables and choosing the desired benchmarks from the available ones, in folder `UVE-testing/spike-test/benchmarks`. Compilation flags can be altered in this script:
 
-* **DTYPE**: dataset datatype
-   * DTYPE 1: byte (hexadecimal int)
-   * DTYPE 2: half-word (short int)
-   * DTYPE 3: word (int)
-   * DTYPE 4: word (float)
-   * DTYPE 5: double (DEFAULT)
+* `DYPE` dataset datatype
+   * `TYPE 1` byte (hexadecimal int)
+   * `TYPE 2` half-word (short int)
+   * `TYPE 3` word (int)
+   * `TYPE 4` word (float)
+   * `TYPE 5` double (DEFAULT)
 
-* **DSIZE**: size of the dataset (usually a matrix SIZE*SIZE)
-   * DSIZE 64: 64*64 matrix (DEFAULT)
+* `SIZE`: size of the dataset (usually a matrix SIZE*SIZE)
+   * `SIZE 64` 64*64 matrix (DEFAULT)
 
-Alternatively, each benchmark directory contains the executables with and without UVE (`run_uve` and `run_simple`, respectively), which can be ran on Spike with the following commands:
+Alternatively, each benchmark directory contains the executables with and without UVE (`run_uve` and `run_simple`, respectively, with `SIZE=50` and `TYPE=5`), which can be ran on Spike with the following commands:
 
 ```sh
 $ (path_to_spike) (path_to_pk) (executable_name)
