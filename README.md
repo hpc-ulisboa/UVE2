@@ -9,11 +9,38 @@ If you use this in your work, please cite as:
 
    > J. M. Domingos, N. Neves, N. Roma and P. Tomás, "Unlimited Vector Extension with Data Streaming Support," 2021 ACM/IEEE 48th Annual International Symposium on Computer Architecture (ISCA), 2021, pp. 209-222, doi: 10.1109/ISCA52012.2021.00025.
 
+Or in BibTeX:
+
+```bibtex
+@inproceedings{domingos2021,
+  author={Domingos, Joao Mario and Neves, Nuno and Roma, Nuno and Tomás, Pedro},
+  booktitle={2021 ACM/IEEE 48th Annual International Symposium on Computer Architecture (ISCA)}, 
+  title={Unlimited Vector Extension with Data Streaming Support}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={209-222},
+  doi={10.1109/ISCA52012.2021.00025}}
+```
 For work related to the compiler, check our paper here: https://ieeexplore.ieee.org/document/9772328.
 
 If you use this in your work, please cite as:
 
    > N. Neves, J. M. Domingos, N. Roma, P. Tomás and G. Falcao, "Compiling for Vector Extensions With Stream-Based Specialization," in IEEE Micro, vol. 42, no. 5, pp. 49-58, 1 Sept.-Oct. 2022, doi: 10.1109/MM.2022.3173405.
+
+Or in BibTeX:
+
+```bibtex
+@article{neves2022,
+  author={Neves, Nuno and Domingos, Joao Mario and Roma, Nuno and Tomás, Pedro and Falcao, Gabriel},
+  journal={IEEE Micro}, 
+  title={Compiling for Vector Extensions With Stream-Based Specialization}, 
+  year={2022},
+  volume={42},
+  number={5},
+  pages={49-58},
+  doi={10.1109/MM.2022.3173405}}
+```
 
 Note that this is a work-in-progress version and some bugs may still exist.
 
@@ -24,7 +51,8 @@ A cross-compiler familiar with UVE is needed, install it from here: https://gith
 You should also install the RISC-V Proxy Kernel, available at: https://github.com/riscv-software-src/riscv-pk.
 
 In order to install Spike, run these commands, assuming that the RISCV environment variable is set to the RISC-V tools install path:
-```
+
+```sh
 $ cd spike/build
 $ ../configure --prefix=$RISCV
 $ sudo make -j$(nproc) -B
@@ -37,13 +65,13 @@ Run the `validate.js` script, after editing the relevant path variables and choo
 
 Alternatively, each benchmark directory contains the executables with and without UVE (`run_uve` and `run_simple`, respectively), which can be ran on Spike with the following commands:
 
-```
+```sh
 $ (path_to_spike) (path_to_pk) (executable_name)
 $ (path_to_spike) -d (path_to_pk) (executable_name) # spike debugger
 ```
 
 It is recommended that, when using the debugger, the output is redirected to a file, for example:
 
-```
+```sh
 $ (path_to_spike) -d (path_to_pk) (executable_name) &> log
 ```
