@@ -13,7 +13,7 @@
 /* Becase we might wanna test different properties, we can define here a diferent build type */
 // Using doubles
 #ifndef TYPE
-#define TYPE 1
+#define TYPE 5
 #endif // TYPE
 
 // Using bytes

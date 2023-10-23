@@ -9,7 +9,16 @@ const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv",
 
 //const kernels = [ "" ];
 
-const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=9" ];
+/* DTYPE 1: byte (hexadecimal int)
+ * DTYPE 2: half-word (short int)
+ * DTYPE 3: word (int)
+ * DTYPE 4: word (float)
+ * DTYPE 5: double (DEFAULT)
+ * 
+ * DSIZE: size of the dataset (usually a matrix SIZE*SIZE)
+ * DSIZE 64: 64x64 matrix (DEFAULT)
+*/
+const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
@@ -81,14 +90,14 @@ for (let kernel of kernels) {
 
   /* Compile and link each kernel file */
   compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-I..", "-O3", `benchmarks/${kernel}/kernel.c`, "-c" ]);
-  compileKernel(compilerPath, [...linkFlags, "-O3", "Functions.o", `kernel.o`, `main.o`, "-o", bin_simple]);
+  compileKernel(compilerPath, [...linkFlags, "-O3", "Functions.o", `kernel.o`, `main.o`, "-o", `benchmarks/${kernel}/${bin_simple}`]);
   
   compileKernel(compilerPath, [...compileFlags, "-DRUN_UVE", "-I..", "-O3", `benchmarks/${kernel}/kernel.c`, "-c" ]);
-  compileKernel(compilerPath, [...linkFlags, "-O3", "Functions.o", `kernel.o`, `main.o`, "-o", bin_uve]);
+  compileKernel(compilerPath, [...linkFlags, "-O3", "Functions.o", `kernel.o`, `main.o`, "-o", `benchmarks/${kernel}/${bin_uve}`]);
 
   /* Run each kernel file */
-  const execSimple = executableRun(spikePath, [pkPath, bin_simple, kernel]);
-  const execUVE = executableRun(spikePath, [pkPath, bin_uve, kernel]);
+  const execSimple = executableRun(spikePath, [pkPath, `benchmarks/${kernel}/${bin_simple}`, kernel]);
+  const execUVE = executableRun(spikePath, [pkPath, `benchmarks/${kernel}/${bin_uve}`, kernel]);
 
   /* Test if generated values are similar */
   if (aproximateEqual(execSimple.stdout.toString(), execUVE.stdout.toString(), kernel)) {
@@ -98,10 +107,12 @@ for (let kernel of kernels) {
     break;
   }
 
+  /*
   // Delete executables for next kernel
   const del = spawnSync("rm", ["-f", bin_simple, bin_uve, 'main.o', 'kernel.o', 'Functions.o']);
   if (del.error) {
     console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
     break;
   }
+  */
 }
