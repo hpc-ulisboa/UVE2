@@ -21,6 +21,8 @@ Note that this is a work-in-progress version and some bugs may still exist.
 
 A cross-compiler familiar with UVE is needed, install it from here: https://github.com/hpc-ulisboa/UVE/tree/uve_compiler.
 
+You should also install the RISC-V Proxy Kernel, available at: https://github.com/riscv-software-src/riscv-pk.
+
 In order to install Spike, run these commands, assuming that the RISCV environment variable is set to the RISC-V tools install path:
 ```
 $ cd spike/build
@@ -32,3 +34,16 @@ $ sudo make install
 ## Compiling and running the benchmarks
 
 Run the `validate.js` script, after editing the relevant path variables and choosing the desired benchmarks from the available ones, in folder `UVE-testing/spike-test/benchmarks`.
+
+Alternatively, each benchmark directory contains the executables with and without UVE (`run_uve` and `run_simple`, respectively), which can be ran on Spike with the following commands:
+
+```
+$ (path_to_spike) (path_to_pk) (executable_name)
+$ (path_to_spike) -d (path_to_pk) (executable_name) # spike debugger
+```
+
+It is recommended that, when using the debugger, the output is redirected to a file, for example:
+
+```
+$ (path_to_spike) -d (path_to_pk) (executable_name) &> log
+```
