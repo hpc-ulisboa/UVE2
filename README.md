@@ -22,7 +22,7 @@ Or in BibTeX:
   pages={209-222},
   doi={10.1109/ISCA52012.2021.00025}}
 ```
-For work related to the compiler, check our paper here: https://ieeexplore.ieee.org/document/9772328.
+Compilation support is currently under development, check our paper here: https://ieeexplore.ieee.org/document/9772328.
 
 If you use this in your work, please cite as:
 
