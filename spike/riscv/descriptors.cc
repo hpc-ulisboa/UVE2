@@ -2,7 +2,7 @@
 #include <iostream>
 
 /* Start of Dimension function definitions */
-Dimension::Dimension(size_t offset, size_t size, size_t stride)
+Dimension::Dimension(uint64_t offset, unsigned int size, int stride)
     : offset(offset), size(size), stride(stride) {
     iter_offset = offset;
     iter_size = size;
@@ -51,6 +51,7 @@ void Dimension::setEndOfDimension(bool b) {
 }
 
 size_t Dimension::calcOffset(size_t width) const {
+    //std::cout << "iter_offset: " << iter_offset << ", iter_stride: " << iter_stride << ", iter_index: " << iter_index << ", width: " << width << std::endl;
     return iter_offset + iter_stride * iter_index * width;
 }
 

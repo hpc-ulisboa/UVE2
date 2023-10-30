@@ -6,7 +6,7 @@
 
 struct Dimension
 {
-  Dimension(size_t offset, size_t size, size_t stride);
+  Dimension(uint64_t offset, unsigned int size, int stride);
 
   //void resetIndex();
 
@@ -29,12 +29,12 @@ struct Dimension
   size_t getSize() const;
 
 private:
-  const size_t offset;
-  const size_t size;
-  const size_t stride;
-  size_t iter_offset;
-  size_t iter_size;
-  size_t iter_stride;
+  const uint64_t offset;
+  const unsigned int size;
+  const int stride;
+  uint64_t iter_offset;
+  unsigned int iter_size;
+  int iter_stride;
   size_t iter_index;
   bool endOfDimension;
 
@@ -63,7 +63,7 @@ struct Modifier
     //add "set-value" behaviour
   };
 
-  Modifier(Type type, Target target = Target::None, Behaviour behaviour = Behaviour::None, size_t displacement = 0, size_t size = 0)
+  Modifier(Type type, Target target = Target::None, Behaviour behaviour = Behaviour::None, size_t displacement = 0, unsigned int size = 0)
     : type(type), target(target), behaviour(behaviour), displacement(displacement), size(size)
   {}
 
@@ -78,7 +78,7 @@ private:
   const Target target;
   const Behaviour behaviour;
   const size_t displacement;
-  const size_t size;
+  const unsigned int size;
 
   void modStatic(Dimension& dim) const;
 

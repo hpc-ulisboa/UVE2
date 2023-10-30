@@ -124,8 +124,8 @@ bool streamRegister_t<T>::isEndOfDimensionOfDim(size_t i) const {
 }
 
 template <typename T>
-size_t streamRegister_t<T>::getElementsWidth() const {
-    return elementsWidth;
+size_t streamRegister_t<T>::getelementWidth() const {
+    return elementWidth;
 }
 
 template <typename T>
@@ -188,7 +188,7 @@ size_t streamRegister_t<T>::generateOffset() {
         }
         ++counter;
         // std::cout << "Accumulating dimension " << ++counter << std::endl;
-        return acc + dim.calcOffset(elementsWidth);
+        return acc + dim.calcOffset(elementWidth);
     });
 }
 
@@ -324,6 +324,7 @@ void streamRegister_t<T>::updateAsLoad() {
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint64_t>(address));
         }(offset);
         // elements.push_back(value);
+        //std::cout << "u"<< registerN << "   Loaded Value: " << readAS<double>(value) << std::endl;
         elements.at(eCount) = value;
         ++validIndex;
         if (tryGenerateOffset(offset)) {

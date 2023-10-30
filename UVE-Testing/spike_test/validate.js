@@ -2,7 +2,7 @@
 const fs = require('node:fs');
 const { spawnSync }= require("child_process");
 
-const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" , "mvt" , "gemver", "gemm"];
+const kernels = [ "saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream" , "mvt" , "gemver", "gemm", "convolution"];
 
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "covariance" ];

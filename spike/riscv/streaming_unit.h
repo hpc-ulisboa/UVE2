@@ -45,10 +45,10 @@ struct streamRegister_t {
     //static constexpr size_t registerLength = 16; // in Bytes
     /* During computations, we test if two streams have the same element width
     using this property */
-    static constexpr size_t elementsWidth = sizeof(ElementsType);
+    static constexpr size_t elementWidth = sizeof(ElementsType);
     /* This property limits how many elements can be manipulated during a
     computation and also how many can be loaded/stored at a time */
-    static constexpr size_t vLen = registerLength / elementsWidth;
+    static constexpr size_t vLen = registerLength / elementWidth;
 
     /* In this implementation, the concept of a stream and register are heavily
     intertwined. As such, stream attributes, such as dimensions, modifiers, EOD flags,
@@ -83,7 +83,7 @@ struct streamRegister_t {
     //void clearEndOfDimensionOfDim(size_t i);
     bool isEndOfDimensionOfDim(size_t i) const;
 
-    size_t getElementsWidth() const;
+    size_t getelementWidth() const;
     size_t getVLen() const;
     size_t getValidIndex() const;
     size_t getRegisterLength() const;
@@ -132,8 +132,8 @@ private:
 
 struct PredRegister {
     static constexpr size_t registerLength = 64; // in Bytes
-    static constexpr size_t elementsWidth = sizeof(uint8_t);
-    static constexpr size_t vLen = registerLength / elementsWidth;
+    static constexpr size_t elementWidth = sizeof(uint8_t);
+    static constexpr size_t vLen = registerLength / elementWidth;
 
     PredRegister(std::vector<uint8_t> e = std::vector<uint8_t>(vLen)) {
         elements = e;
