@@ -118,7 +118,6 @@ private:
     is controlled using the instruction ss_cfg_vec */
     std::deque<bool> vecCfg;
 
-    void updateStreamValues();
     size_t generateOffset();
     bool isDimensionFullyDone(const std::deque<Dimension>::const_iterator start, const std::deque<Dimension>::const_iterator end) const;
     bool isStreamDone() const;

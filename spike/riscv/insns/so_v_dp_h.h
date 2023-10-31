@@ -3,7 +3,6 @@
 auto streamReg = insn.uve_rd();
 auto& destReg = P.SU.registers[streamReg];
 auto baseReg = insn.uve_rs1();
-auto& srcReg = P.SU.registers[baseReg];
 auto &predReg = P.SU.predicates[insn.uve_v_pred()];
 
 const uint16_t value = readRegAS(uint16_t, baseReg);

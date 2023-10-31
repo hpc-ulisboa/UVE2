@@ -33,6 +33,12 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
                 auto e2 = readAS<OperationType>(elements2.at(i));
                 out.at(i) = readAS<StorageType>(e1 + e2);
                 //std::cout << "ADD   " << e1 << " + " << e2 << " = " << readAS<OperationType>(out.at(i)) << "\n";
+                /* create string  object with the values of the elements
+                std::string str = "ADD  " + std::to_string(e1) + " + " + std::to_string(e2) + " = " + std::to_string(readAS<OperationType>(out.at(i))) + "\n";
+                // to char array
+                char char_array[str.length() + 1];
+                strcpy(char_array, str.c_str());
+                dest.printRegN(char_array);*/
             }
         } else
             out.at(i) = 0; // zeroing out the rest of the elements

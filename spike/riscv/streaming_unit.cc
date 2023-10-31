@@ -67,8 +67,8 @@ template <typename T>
 std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
     // assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
 
-    if (causesUpdate)
-        updateStreamValues();
+    if (causesUpdate && this->type == RegisterConfig::Load)
+        updateAsLoad();
 
     std::vector<T> e(elements.begin(), elements.end());
 
@@ -81,8 +81,8 @@ void streamRegister_t<T>::setElements(bool causesUpdate, std::vector<T> e) {
 
     elements = e;
 
-    if (causesUpdate)
-        updateStreamValues();
+    if (causesUpdate && this->type == RegisterConfig::Store)
+        updateAsStore();
 }
 
 template <typename T>
@@ -156,24 +156,11 @@ RegisterMode streamRegister_t<T>::getMode() const {
 /* FOR DEBUGGING*/
 template <typename T>
 void streamRegister_t<T>::printRegN(char *str) {
-    if (registerN >= 0)
-        fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
-    else
+    if (registerN >= 0){
+        if(registerN == 1)
+            fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
+    } else
         fprintf(stderr, ">>> Register number not set for debugging. %s<<<", str);
-}
-
-template <typename T>
-void streamRegister_t<T>::updateStreamValues() {
-    // std::cout << "Updating stream values" << std::endl;
-    if (this->type == RegisterConfig::Load) {
-        updateAsLoad();
-    } else if (this->type == RegisterConfig::Store) {
-        updateAsStore();
-    } else if (this->type == RegisterConfig::NoStream) {
-        // do nothing
-    } else {
-        assert_msg("Unhandled type of stream was asked to update", false);
-    }
 }
 
 template <typename T>
@@ -280,6 +267,7 @@ void streamRegister_t<T>::updateIteration() {
 
 template <typename T>
 void streamRegister_t<T>::updateAsLoad() {
+    assert_msg("Trying to update as load a non-load stream", type == RegisterConfig::Load);
     if (isStreamDone()) { // doesn't try to load if stream has finished
         status = RegisterStatus::Finished;
         type = RegisterConfig::NoStream;
@@ -343,6 +331,8 @@ void streamRegister_t<T>::updateAsLoad() {
 
 template <typename T>
 void streamRegister_t<T>::updateAsStore() {
+    assert_msg("Trying to update as store a non-store stream", type == RegisterConfig::Store);
+
     // std::cout << "Updating as store" << std::endl;
     if (isStreamDone()) {
         status = RegisterStatus::Finished;

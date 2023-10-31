@@ -44,6 +44,8 @@
 #elif TYPE == 5
 #define DataType double
 #define DataSet fDataset
+#define sgdX sgdXDataset
+#define sgdY sgdYDataset
 #define DataFormat(start, end) start "%3.6lf" end
 
 #else

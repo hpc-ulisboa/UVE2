@@ -1407,6 +1407,10 @@ riscv_insn_ext_uve = \
 	so_v_mvt \
 	so_v_mv_stream \
 	so_v_mvt_stream \
+	so_v_mvsv_b \
+	so_v_mvsv_h \
+	so_v_mvsv_w \
+	so_v_mvsv_d \
 	ss_app \
 	ss_cfg_vec \
 	ss_end \
