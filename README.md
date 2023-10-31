@@ -72,7 +72,7 @@ Note that this is a work-in-progress version and some bugs may still exist.
           │   │   ├── kernel.c      # Kernel source code
           │   │   ├── main.c        # Source code
           │   │   ├── run_simple    # (automatically generated) Executable (without UVE)
-          │   │   ├── run_uve       # (automatically generated) Executable (witt UVE)
+          │   │   ├── run_uve       # (automatically generated) Executable (with UVE)
           │   │   ├── simple.log    # (automatically generated) Execution log (without UVE)
           │   │   └── uve.log       # (automatically generated) Execution log (with UVE)
           │   └── ...               # Other benchmarks
