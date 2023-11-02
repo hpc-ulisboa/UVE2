@@ -12,11 +12,11 @@
 
 #define PB_D 10
 #define PB_N 442
-#define BATCH_SIZE 50
+#define BATCH_SIZE PB_N
 #define NUM_BATCHES PB_N / BATCH_SIZE
 #define EPOCHS 100
 
-extern void core(void **x, void *y, void *y_err, void *sgd_model);
+extern void core(void **x, void *x_array, void *y, void *y_err, void *sgd_model);
 
 DataType intercept = 0.0;
 
@@ -35,13 +35,11 @@ static void init_array(DataType **x, DataType *y){
 
 void predict(DataType *y_fitted, DataType **x, DataType *sgd_model){
     DataType r;
-    for (int i = 0; i < PB_N; i++)
-    {
+    for (int i = 0; i < PB_N; i++){
         r = 0.0;
         for (int j = 0; j < PB_D; j++)
-        {
             r += x[i][j] * sgd_model[j];
-        }
+
         y_fitted[i] = r + intercept;
     }
 }
@@ -70,12 +68,14 @@ int main(int argc, char **argv){
 
     /* Variable declaration/allocation. */
 
+    DataType *x_array = (DataType *)malloc(PB_N * PB_D * sizeof(DataType));
     DataType **x = (DataType **)malloc(PB_N * sizeof(DataType *));
     for (i = 0; i < PB_N; i++)
-        x[i] = (DataType *)malloc(PB_D * sizeof(DataType));
+        x[i] = &(*(x_array + i * PB_D));
+
     DataType *y = (DataType *)malloc(PB_N * sizeof(DataType));
     DataType *y_fitted = (DataType *)malloc(PB_N * sizeof(DataType));
-    DataType *y_err = (DataType *)malloc(BATCH_SIZE * sizeof(DataType));
+    DataType *y_err = (DataType *)malloc(PB_N * sizeof(DataType));
     DataType *sgd_model = (DataType *)malloc(PB_D * sizeof(DataType));
 
     /* Initialize array(s). */
@@ -84,7 +84,7 @@ int main(int argc, char **argv){
     initConstant(sgd_model, PB_D, 1.0);
 
     /* Run kernel. */
-    core(x, y, y_err, sgd_model);
+    core(x, x_array, y, y_err, sgd_model);
     //predict(y_fitted, x, sgd_model);
 
     for (i = 0; i < PB_D; i++)

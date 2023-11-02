@@ -157,7 +157,7 @@ RegisterMode streamRegister_t<T>::getMode() const {
 template <typename T>
 void streamRegister_t<T>::printRegN(char *str) {
     if (registerN >= 0){
-        if(registerN == 1)
+        //if(registerN == 10)
             fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
     } else
         fprintf(stderr, ">>> Register number not set for debugging. %s<<<", str);
