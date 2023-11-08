@@ -4,13 +4,15 @@
 /* Start of Dimension function definitions */
 Dimension::Dimension(uint64_t offset, unsigned int size, int stride)
     : offset(offset), size(size), stride(stride) {
+
     iter_offset = offset;
     iter_size = size;
     iter_stride = stride;
     iter_index = 0;
     endOfDimension = iter_size == 0;
-    //endOfDimension = false;
-    //std::cout << "offset: " << offset << ", size: " << size << ", stride: " << stride << std::endl;
+    // endOfDimension = false;
+    // std::cout << "offset: " << offset << ", size: " << size << ", stride: "
+    // << stride << std::endl;
 }
 
 /*void Dimension::resetIndex() {
@@ -32,7 +34,8 @@ void Dimension::advance() {
 }
 
 bool Dimension::isLastIteration() const {
-    //std::cout << "iter_index: " << iter_index << ", iter_size: " << iter_size << std::endl;
+    // std::cout << "iter_index: " << iter_index << ", iter_size: " << iter_size
+    // << std::endl;
     return iter_index + 1 >= iter_size;
 }
 /*bool Dimension::triggerIterationUpdate() const {
@@ -51,7 +54,9 @@ void Dimension::setEndOfDimension(bool b) {
 }
 
 size_t Dimension::calcOffset(size_t width) const {
-    //std::cout << "iter_offset: " << iter_offset << ", iter_stride: " << iter_stride << ", iter_index: " << iter_index << ", width: " << width << std::endl;
+    // std::cout << "iter_offset: " << iter_offset << ", iter_stride: " <<
+    // iter_stride << ", iter_index: " << iter_index << ", width: " << width <<
+    // std::endl;
     return iter_offset + iter_stride * iter_index * width;
 }
 
@@ -89,7 +94,8 @@ void Modifier::modStatic(Dimension &dim) const {
         // std::cout << "iter_offset: " << dim.iter_offset << std::endl;
     } else if (target == Target::Size) {
         dim.iter_size += valueChange;
-        // std::cout << "valueChange: " << valueChange << " iter_size: " << dim.iter_size << std::endl;
+        // std::cout << "valueChange: " << valueChange << " iter_size: " <<
+        // dim.iter_size << std::endl;
     } else if (target == Target::Stride) {
         dim.iter_stride += valueChange;
         // std::cout << "iter_stride: " << dim.iter_stride << std::endl;
@@ -117,7 +123,8 @@ void Modifier::printModifier() const {
         std::cout << "Indirect";
         break;
     default:
-        assert_msg("Unhandled Type case in modifiers's printModifier", false);
+        assert_msg("Unhandled Type case in modifiers's printModifier",
+                   false);
     }
     std::cout << ", ";
     switch (target) {
@@ -134,7 +141,8 @@ void Modifier::printModifier() const {
         std::cout << "Stride";
         break;
     default:
-        assert_msg("Unhandled Target case in modifiers's printModifier", false);
+        assert_msg("Unhandled Target case in modifiers's printModifier",
+                   false);
     }
     std::cout << ", ";
     switch (behaviour) {
@@ -148,7 +156,8 @@ void Modifier::printModifier() const {
         std::cout << "Decrement";
         break;
     default:
-        assert_msg("Unhandled Behaviour case in modifiers's printModifier", false);
+        assert_msg("Unhandled Behaviour case in modifiers's printModifier",
+                   false);
     }
     std::cout << ", displacement: " << displacement << ", size: " << size;
 }

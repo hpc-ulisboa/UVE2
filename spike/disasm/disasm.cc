@@ -2450,8 +2450,10 @@ void disassembler_t::add_instructions(const isa_parser_t* isa)
   DEFINE_UCONF(ss_st_h);
   DEFINE_UCONF(ss_st_b);
   DEFINE_UCONF(ss_app);
-  DEFINE_UCONF(ss_app_mod_siz_dec);
-  DEFINE_UCONF(ss_app_mod_siz_inc);
+  DEFINE_UMOD(ss_app_mod_ofs_dec);
+  DEFINE_UMOD(ss_app_mod_ofs_inc);
+  DEFINE_UMOD(ss_app_mod_siz_dec);
+  DEFINE_UMOD(ss_app_mod_siz_inc);
   DEFINE_UCONF(ss_end);
   DISASM_INSN("ss.cfg.vec", ss_cfg_vec, 0, {&urd});
 

@@ -7,7 +7,7 @@
 template <typename T>
 void streamRegister_t<T>::addModifier(Modifier mod) {
     /* A recently added modifier alters the dimension inserted before the last one */
-    //const auto modIndex = dimensions.size() - 2;
+    // const auto modIndex = dimensions.size() - 2;
     assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
     const auto modIndex = -1; // next dimension to be added (will increment as dimensions are added)
     auto iter = modifiers.find(modIndex);
@@ -18,8 +18,8 @@ void streamRegister_t<T>::addModifier(Modifier mod) {
 template <typename T>
 void streamRegister_t<T>::addDimension(Dimension dim) {
     assert_msg("Cannot append more dimensions as the max value was reached", dimensions.size() < su->maxDimensions);
-    //dimensions.push_back(dim);
-    //vecCfg.push_back(false);
+    // dimensions.push_back(dim);
+    // vecCfg.push_back(false);
     dimensions.push_front(dim);
     vecCfg.push_front(false);
 
@@ -40,7 +40,7 @@ template <typename T>
 void streamRegister_t<T>::configureDim() {
     mode = RegisterMode::Vector;
     validIndex = vLen;
-    //const auto cfgIndex = dimensions.size() - 1;
+    // const auto cfgIndex = dimensions.size() - 1;
     const auto cfgIndex = 0;
     vecCfg.at(cfgIndex) = true;
 }
@@ -156,9 +156,9 @@ RegisterMode streamRegister_t<T>::getMode() const {
 /* FOR DEBUGGING*/
 template <typename T>
 void streamRegister_t<T>::printRegN(char *str) {
-    if (registerN >= 0){
-        //if(registerN == 10)
-            fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
+    if (registerN >= 0) {
+        // if(registerN == 10)
+        fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
     } else
         fprintf(stderr, ">>> Register number not set for debugging. %s<<<", str);
 }
@@ -312,11 +312,11 @@ void streamRegister_t<T>::updateAsLoad() {
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint64_t>(address));
         }(offset);
         // elements.push_back(value);
-        //std::cout << "u"<< registerN << "   Loaded Value: " << readAS<double>(value) << std::endl;
+        // std::cout << "u"<< registerN << "   Loaded Value: " << readAS<double>(value) << std::endl;
         elements.at(eCount) = value;
         ++validIndex;
         if (tryGenerateOffset(offset)) {
-            //std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
+            // std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;
         } else
@@ -325,7 +325,7 @@ void streamRegister_t<T>::updateAsLoad() {
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     // std::cout << "eCount: " << eCount << std::endl;
     // std::cout << "vLen: " << vLen << std::endl;
-    if (eCount < max)     // iteration is already updated when register is full
+    if (eCount < max)      // iteration is already updated when register is full
         updateIteration(); // reset EOD flags and iterate stream
 }
 
@@ -358,7 +358,7 @@ void streamRegister_t<T>::updateAsStore() {
         // elements.erase(elements.begin());
         // elements.pop_front(); //-- std::array
         auto value = elements.at(eCount);
-        //std::cout << "\nStored Values: " << readAS<double>(value) << " ";
+        // std::cout << "\nStored Values: " << readAS<double>(value) << " ";
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
             gMMU(su->p).template store<std::uint8_t>(offset, readAS<ElementsType>(value));
         else if constexpr (std::is_same_v<ElementsType, std::uint16_t>)
@@ -373,7 +373,7 @@ void streamRegister_t<T>::updateAsStore() {
         } else
             break;
     }
-    //std::cout << std::endl;
+    // std::cout << std::endl;
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     if (eCount < validIndex)       // iteration is already updated when register is full
         updateIteration();         // reset EOD flags and iterate stream
@@ -393,7 +393,8 @@ void streamingUnit_t::updateEODTable(const size_t stream) {
             // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
             ++d;
         }
-    }, registers.at(stream));
+    },
+               registers.at(stream));
 }
 
 template <typename T>

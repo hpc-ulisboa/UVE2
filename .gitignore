@@ -64,7 +64,6 @@ clang.txt
 # Directories
 UVE-Testing/compiler_test
 UVE-Testing/spike_test/others
-UVE-Testing/spike_test/covariance
 UVE-Testing/spike_test/floyd-warshall
 UVE-Testing/spike_test/pred
 
