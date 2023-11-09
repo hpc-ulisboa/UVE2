@@ -11,7 +11,7 @@ void streamRegister_t<T>::addModifier(Modifier mod) {
     assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
     const auto modIndex = -1; // next dimension to be added (will increment as dimensions are added)
     auto iter = modifiers.find(modIndex);
-    assert_msg("Trying to add a modifier, when one already exists in this index", iter == modifiers.end());
+    // assert_msg("Trying to add a modifier, when one already exists in this index", iter == modifiers.end());
     modifiers.insert({modIndex, mod});
 }
 
@@ -23,17 +23,19 @@ void streamRegister_t<T>::addDimension(Dimension dim) {
     dimensions.push_front(dim);
     vecCfg.push_front(false);
 
+    std::unordered_multimap<int, Modifier> updatedModifiers;
+
     // Increment all modifiers' indexes
     for (auto &m : modifiers) {
         auto n = modifiers.extract(m.first);
         ++n.key();
-        modifiers.insert(std::move(n));
+        updatedModifiers.insert(std::move(n));
     }
 
-    // print dimensions
-    // std::cout << "Added dimension with offset " << dim.offset << ", size " << dim.size << " and stride " << dim.stride << std::endl;
+    modifiers.swap(updatedModifiers);
+
     // print dimensions size
-    // std::cout << "Dimensions size: " << dimensions.size() << std::endl;
+    //std::cout << "Dimensions size: " << dimensions.size() << std::endl;
 }
 
 template <typename T>
@@ -245,17 +247,21 @@ void streamRegister_t<T>::updateIteration() {
         // std::cout << "Dimension " << i + 1 << " is fully done" << std::endl;
 
         // std::cout << "Looking for modifiers of dimension " << i << std::endl;
-        auto currentModifierIter = modifiers.find(i);
-        const bool modifierExists = currentModifierIter != modifiers.end();
-
-        // currDim.resetIndex();
-        // printRegN("Updating EOD of dimension.");
-        // std::cout << "Advancing dimension no " << i + 2 << std::endl;
+        auto currentModifierIters = modifiers.equal_range(i);
         dimensions.at(i + 1).advance();
         currDim.setEndOfDimension(false);
-        if (modifierExists) {
-            // printRegN("Applying modifier.");
-            currentModifierIter->second.modDimension(currDim);
+        for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+
+            const bool modifierExists = it != modifiers.end();
+
+            // currDim.resetIndex();
+            // printRegN("Updating EOD of dimension.");
+            // std::cout << "Advancing dimension no " << i + 2 << std::endl;
+            
+            if (modifierExists) {
+                // printRegN("Applying modifier.");
+                it->second.modDimension(currDim);
+            }
         }
 
         // The values at lower dimensions might have been modified. As such, we need to reset them before next iteration
