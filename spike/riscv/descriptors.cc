@@ -1,7 +1,9 @@
 #include "descriptors.h"
+#include "descriptors.h"
 #include <iostream>
 
 /* Start of Dimension function definitions */
+Dimension::Dimension(uint64_t offset, unsigned int size, int stride)
 Dimension::Dimension(uint64_t offset, unsigned int size, int stride)
     : offset(offset), size(size), stride(stride) {
 
