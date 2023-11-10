@@ -36,14 +36,14 @@ void core(DataType *src, DataType *dst, DataType *filter){
 
         ".SLOOP_1%=: \t\n"
 
-        "so.v.dp.d u4, zero, p0\t\n"
+            "so.v.dp.d u4, zero, p0\t\n"
 
-        ".SLOOP_1_0_0%=: \t\n"
-        "so.a.mul.fp  u5, u6, u7, p0\t\n"
-        "so.a.add.fp  u4, u4, u5, p0\t\n"
-        "so.b.ndc.2 u6, .SLOOP_1_0_0%=\t\n"
+            ".SLOOP_1_0_0%=: \t\n"
+                "so.a.mul.fp  u5, u6, u7, p0\t\n"
+                "so.a.add.fp  u4, u4, u5, p0\t\n"
+            "so.b.ndc.2 u6, .SLOOP_1_0_0%=\t\n"
 
-        "so.a.adde.fp  u3, u4, p0\t\n"
+            "so.a.adde.fp  u3, u4, p0\t\n"
 
         "so.b.nc u3, .SLOOP_1%= \t\n" :::);
 }
