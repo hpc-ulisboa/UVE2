@@ -1,7 +1,7 @@
 #include "Functions.h"
 
-#define PB_H 50 // 3840
-#define PB_W 50 // 2160
+#define PB_H SIZE // 3840
+#define PB_W SIZE // 2160
 #ifdef RUN_UVE
 // #define v_len 8 //inner loop is has lenght, might not be worth it
 // vectorization in k and j is possible?
