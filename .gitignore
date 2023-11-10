@@ -57,6 +57,7 @@ UVE-Testing/pk
 
 # Log files that may be too big to commit
 log*
+*/debug.log
 
 # Auxiliary files
 clang.txt
