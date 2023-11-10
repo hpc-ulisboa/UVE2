@@ -109,12 +109,12 @@ for (let kernel of kernels) {
     break;
   }
 
-  /*
+  
   // Delete executables for next kernel
   const del = spawnSync("rm", ["-f", bin_simple, bin_uve, 'main.o', 'kernel.o', 'Functions.o']);
   if (del.error) {
     console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
     break;
   }
-  */
+  
 }
