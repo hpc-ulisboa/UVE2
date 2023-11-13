@@ -1,9 +1,7 @@
 #include "descriptors.h"
-#include "descriptors.h"
 #include <iostream>
 
 /* Start of Dimension function definitions */
-Dimension::Dimension(uint64_t offset, unsigned int size, int stride)
 Dimension::Dimension(uint64_t offset, unsigned int size, int stride)
     : offset(offset), size(size), stride(stride) {
 
@@ -68,20 +66,20 @@ size_t Dimension::getSize() const {
 
 /* Start of Modifier function definitions */
 
-void Modifier::modDimension(Dimension &dim) const {
+void Modifier::modDimension(Dimension &dim, const size_t elementWidth) {
     switch (type) {
     case Type::Static:
-        modStatic(dim);
+        modStatic(dim, elementWidth);
         break;
     case Type::Indirect:
-        modIndirect(dim);
+        modIndirect(dim, elementWidth);
         break;
     default:
         assert_msg("Unhandled Type case in modifiers's modDimension", false);
     }
 }
 
-void Modifier::modStatic(Dimension &dim) const {
+void Modifier::modStatic(Dimension &dim, const size_t elementWidth) {
     size_t valueChange = displacement;
     if (behaviour == Behaviour::Increment) {
         /* Nothing changes */
@@ -92,21 +90,20 @@ void Modifier::modStatic(Dimension &dim) const {
     }
 
     if (target == Target::Offset) {
-        dim.iter_offset += valueChange;
-        // std::cout << "iter_offset: " << dim.iter_offset << std::endl;
+        dim.iter_offset += valueChange*elementWidth;
+        std::cout << "iter_offset: " << dim.iter_offset << std::endl;
     } else if (target == Target::Size) {
         dim.iter_size += valueChange;
-        // std::cout << "valueChange: " << valueChange << " iter_size: " <<
-        // dim.iter_size << std::endl;
+        std::cout << "valueChange: " << (int)valueChange << " iter_size: " << dim.iter_size << std::endl;
     } else if (target == Target::Stride) {
         dim.iter_stride += valueChange;
-        // std::cout << "iter_stride: " << dim.iter_stride << std::endl;
+        std::cout << "iter_stride: " << dim.iter_stride << std::endl;
     } else {
         assert_msg("Unexpected target for a static modifier", false);
     }
 }
 
-void Modifier::modIndirect(Dimension &dim) const {
+void Modifier::modIndirect(Dimension &dim, const size_t elementWidth) {
     // TO DO
 }
 

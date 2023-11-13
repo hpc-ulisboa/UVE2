@@ -12,7 +12,9 @@ int main()
   initArray(src, SIZE);
   initZero(dest, SIZE);
 
+printf("START\n");
   core(dest, src, value);
+printf("END\n");
 
   for (int i = 0; i < SIZE; i++)
     printf( DataFormat("", "\n"), dest[i]);

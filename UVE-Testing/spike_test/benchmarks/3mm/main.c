@@ -22,8 +22,10 @@ int main() {
   initArray2D(B, K, J);
   initArray2D(C, J, M);
   initArray2D(D, M, L);
-
+  
+printf("START\n");
   core(A, B, C, D, E, F, G, I, J, K, L, M);
+printf("END\n");
 
   for (int i = 0; i < I; i++) {
     for (int j = 0; j < L; j++)

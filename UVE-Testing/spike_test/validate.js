@@ -2,10 +2,10 @@
 const fs = require('node:fs');
 const { spawnSync } = require("child_process");
 
-const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd"];
+//const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd"];
 
 //const kernels = [ "floyd-warshall" ];
-//const kernels = [ "covariance" ];
+const kernels = ["covariance"];
 
 //const kernels = [ "" ];
 
@@ -20,7 +20,7 @@ const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", 
  * DSIZE 64: 64x64 matrix (DEFAULT)
 */
 
-const compileFlags = ["-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50"];
+const compileFlags = ["-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=3"];
 const linkFlags = ["-Wall", "-pedantic", "-static"];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
@@ -76,14 +76,12 @@ function aproximateEqual(stdout1, stdout2, kernel) {
 
     const diff = Math.abs(value1 - value2);
     if (diff > 0.1) {
-      if (diff > 0.1) {
-        console.error(`Values were ${str1[i]} and ${str2[i]} with difference of ${diff} at index ${i}`);
-        return false;
-      }
+      console.error(`Values were ${str1[i]} and ${str2[i]} with difference of ${diff} at index ${i}`);
+      return false;
     }
-
-    return true;
   }
+
+  return true;
 }
 
 for (let kernel of kernels) {

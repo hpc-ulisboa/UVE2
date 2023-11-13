@@ -67,7 +67,7 @@ struct Modifier
     : type(type), target(target), behaviour(behaviour), displacement(displacement), size(size)
   {}
 
-  void modDimension(Dimension& dim) const;
+  void modDimension(Dimension& dim, const size_t elementWidth);
 
   void printModifier() const;
 
@@ -80,9 +80,9 @@ private:
   const size_t displacement;
   const unsigned int size;
 
-  void modStatic(Dimension& dim) const;
+  void modStatic(Dimension& dim, const size_t elementWidth);
 
-  void modIndirect(Dimension& dim) const;
+  void modIndirect(Dimension& dim, const size_t elementWidth);
 };
 
 #endif // DIMENSION_HPP

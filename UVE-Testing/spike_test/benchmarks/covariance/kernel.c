@@ -15,7 +15,7 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
         :);
 
     asm volatile(
-        "so.v.mvsv.d u3, %[N] \t\n"
+        "so.v.mvsv.d u3, %[float_n] \t\n"
 
         ".SLOOP_1%=: \t\n"
             "so.v.dp.d      u4, zero, p0 \t\n"
@@ -28,7 +28,7 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
             "so.a.div.fp    u2, u5, u3, p0 \t\n"
         "so.b.nc u1, .SLOOP_1%= \t\n" 
         :
-        : [N] "r"(sizeN)
+        : [float_n] "r"(float_n)
         :);
 
     // kernel 2
