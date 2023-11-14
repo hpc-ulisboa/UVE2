@@ -14,7 +14,9 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     using OperationType = decltype(extra);
 
-    OperationType value = 0;
+    OperationType value = readAS<OperationType>(destElements.at(0));
+
+    //std::cout << "ADDE dest: " << (double)(destElements.at(0)) << "\n";
 
     std::vector<StorageType> out = destElements; // ??
  

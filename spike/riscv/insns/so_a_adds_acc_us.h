@@ -19,9 +19,9 @@ auto baseBehaviour = [](auto &value, auto &src, auto &pred, auto extra) {
 };
 
 std::visit(overloaded{
-    [&](StreamReg8 &src) { unsigned char value = value = readRegAS(unsigned char, destReg); baseBehaviour(destReg, src, predReg, (unsigned char){}); WRITE_REG(destReg, value); },
-    [&](StreamReg16 &src) { unsigned short int value = value = readRegAS(unsigned short int, destReg); baseBehaviour(destReg, src, predReg, (unsigned short int){}); WRITE_REG(destReg, value); },
-    [&](StreamReg32 &src) { unsigned int value = value = readRegAS(unsigned int, destReg); baseBehaviour(destReg, src, predReg, (unsigned int){}); WRITE_REG(destReg, value); },
-    [&](StreamReg64 &src) { unsigned long int value = value = readRegAS(unsigned long int, destReg); baseBehaviour(destReg, src, predReg, (unsigned long int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg8 &src) { unsigned char value = readRegAS(unsigned char, destReg); baseBehaviour(destReg, src, predReg, (unsigned char){}); WRITE_REG(destReg, value); },
+    [&](StreamReg16 &src) { unsigned short int value = readRegAS(unsigned short int, destReg); baseBehaviour(destReg, src, predReg, (unsigned short int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg32 &src) { unsigned int value = readRegAS(unsigned int, destReg); baseBehaviour(destReg, src, predReg, (unsigned int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg64 &src) { unsigned long int value = readRegAS(unsigned long int, destReg); baseBehaviour(destReg, src, predReg, (unsigned long int){}); WRITE_REG(destReg, value); },
     [&](auto &src) { assert_msg("Invoking so.a.adds.acc.us with invalid parameter sizes", false); }
 }, srcReg);

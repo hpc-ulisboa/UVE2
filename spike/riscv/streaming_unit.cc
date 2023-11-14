@@ -39,11 +39,11 @@ void streamRegister_t<T>::addDimension(Dimension dim) {
 
     modifiers.swap(updatedModifiers);
 
-    // print modifiers
-    std::cout << "\nModifiers: ";
+    /* print modifiers
+    std::cout << "Modifiers u" << registerN << ": ";
     for (auto &m : modifiers)
         std::cout << m.first << "  ";
-    std::cout << std::endl;
+    std::cout << std::endl;*/
 
     // print dimensions size
     //std::cout << "Dimensions size: " << dimensions.size() << std::endl;
@@ -174,7 +174,6 @@ RegisterMode streamRegister_t<T>::getMode() const {
 template <typename T>
 void streamRegister_t<T>::printRegN(char *str) {
     if (registerN >= 0) {
-        // if(registerN == 10)
         fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
     } else
         fprintf(stderr, ">>> Register number not set for debugging. %s<<<", str);
@@ -191,9 +190,6 @@ size_t streamRegister_t<T>::generateOffset() {
             // std::cout << "Last iteration of dimension " << counter << std::endl;
             dim.setEndOfDimension(true);
         }
-        ++counter;
-        // std::cout << "Accumulating dimension " << ++counter << std::endl;
-        return acc + dim.calcOffset(elementWidth);
         ++counter;
         // std::cout << "Accumulating dimension " << ++counter << std::endl;
         return acc + dim.calcOffset(elementWidth);
@@ -249,7 +245,6 @@ void streamRegister_t<T>::updateIteration() {
 
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
     // std::cout << "Advancing dimension no 1" << std::endl;
-    // std::cout << "Advancing dimension no 1" << std::endl;
     dimensions.at(0).advance();
 
     /* No extra processing is needed if there is only 1 dimension */
@@ -264,7 +259,6 @@ void streamRegister_t<T>::updateIteration() {
 
         if (!currDim.isEndOfDimension())
             // if (!isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1))
-            // if (!isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1))
             continue;
 
         // std::cout << "Dimension " << i + 1 << " is fully done" << std::endl;
@@ -274,22 +268,20 @@ void streamRegister_t<T>::updateIteration() {
         dimensions.at(i + 1).advance();
         currDim.setEndOfDimension(false);
         for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-            std::cout << "Applying modifier." << std::endl;
             const bool modifierExists = it != modifiers.end();
 
             // currDim.resetIndex();
             // printRegN("Updating EOD of dimension.");
             // std::cout << "Advancing dimension no " << i + 2 << std::endl;
             
-            if (modifierExists) {
-                std::cout << "Modifier exists." << std::endl;
+            if (modifierExists){
+                //std::cout << "Applying modifier to u" << registerN << std::endl;
                 it->second.modDimension(currDim, elementWidth);
             }
         }
 
         // The values at lower dimensions might have been modified. As such, we need to reset them before next iteration
         for (size_t j = 0; j < i; j++) {
-            dimensions.at(j).resetIterValues();
             dimensions.at(j).resetIterValues();
         }
     }

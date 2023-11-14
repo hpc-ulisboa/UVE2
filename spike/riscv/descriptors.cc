@@ -91,13 +91,13 @@ void Modifier::modStatic(Dimension &dim, const size_t elementWidth) {
 
     if (target == Target::Offset) {
         dim.iter_offset += valueChange*elementWidth;
-        std::cout << "iter_offset: " << dim.iter_offset << std::endl;
+        //std::cout << "iter_offset: " << dim.iter_offset << std::endl;
     } else if (target == Target::Size) {
         dim.iter_size += valueChange;
-        std::cout << "valueChange: " << (int)valueChange << " iter_size: " << dim.iter_size << std::endl;
+        //std::cout << "valueChange: " << (int)valueChange << " iter_size: " << dim.iter_size << std::endl;
     } else if (target == Target::Stride) {
         dim.iter_stride += valueChange;
-        std::cout << "iter_stride: " << dim.iter_stride << std::endl;
+        //std::cout << "iter_stride: " << dim.iter_stride << std::endl;
     } else {
         assert_msg("Unexpected target for a static modifier", false);
     }

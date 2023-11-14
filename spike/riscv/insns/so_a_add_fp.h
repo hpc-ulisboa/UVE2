@@ -12,7 +12,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
      * operated on */
     assert_msg("Given vectors have different widths", src1.getelementWidth() == src2.getelementWidth());
     size_t vLen = src1.getMode() == RegisterMode::Scalar || src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-    // std::bool zeroing = src1.getType() == RegisterType::Stream || src2.getType() == RegisterType::Stream
+    bool zeroing = src1.getType() != RegisterConfig::NoStream || src2.getType() != RegisterConfig::NoStream; // if any of the sources is a stream, we need to zero out the rest of the elements
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
@@ -27,7 +27,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     auto pi = pred.getPredicate();
 
     for (size_t i = 0; i < vLen; i++) {
-        if (i < validElementsIndex /*&& !zeroing*/){
+        if (i < validElementsIndex){
             if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
                 auto e1 = readAS<OperationType>(elements1.at(i));
                 auto e2 = readAS<OperationType>(elements2.at(i));
@@ -40,8 +40,8 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
                 strcpy(char_array, str.c_str());
                 dest.printRegN(char_array);*/
             }
-        } else
-            out.at(i) = 0; // zeroing out the rest of the elements
+        } else if (zeroing)
+            out.at(i) = 0; // zeroing out the rest of the elements if any of the sources is a stream
     }
     //std::cout << "ADD END\n\n";
     //dest.setValidIndex(dest.vLen);

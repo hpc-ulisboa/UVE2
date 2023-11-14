@@ -13,9 +13,12 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     std::vector<StorageType> out(dest.getVLen());
     auto pi = pred.getPredicate();
 
-    for (size_t i = 0; i < validElementsIndex; ++i)
+    //std::cout << "MV   ";
+    for (size_t i = 0; i < validElementsIndex; ++i){
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
-
+        //std::cout << readAS<double>(out.at(i)) << " ";
+    }
+    //std::cout << "\n";
     dest.setValidIndex(validElementsIndex);
     dest.setElements(true, out);
 };

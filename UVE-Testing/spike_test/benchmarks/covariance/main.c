@@ -21,8 +21,11 @@ int main() {
   core(sizeM, sizeN, n, data, cov, mean);
 
   // cov
-  for (int i = 0; i < sizeM*sizeM; i++) {
-    printf( DataFormat("", "\n"), cov[i]);
+  //printf("\ncov:\n");
+  for (int i = 0; i < sizeM; i++) {
+    for (int j = 0; j < sizeM; j++)
+      printf( DataFormat("", "\n"), cov[i*sizeM + j]);
+    //printf("\n");
   }
 
   return 0;
