@@ -1,8 +1,3 @@
-
-
-
-
-
 auto streamReg = insn.uve_rd();
 auto &destReg = P.SU.registers[streamReg];
 auto &src1Reg = P.SU.registers[insn.uve_rs1()];
