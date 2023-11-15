@@ -9,7 +9,7 @@
 
 /* Helper to make assert throwing contain a message. Value cond
   is expected to be an invariant. If it fails, the assert fails */
-#define assert_msg(msg, cond) assert(((void)msg, cond))
+#define assert_msg(msg, cond) assert(((void)msg, (bool)cond))
 
 template <class>
 inline constexpr bool always_false_v = false;

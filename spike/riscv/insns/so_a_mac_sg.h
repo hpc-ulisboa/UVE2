@@ -12,6 +12,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
      * operated on */
     assert_msg("Given vectors have different widths", src1.getelementWidth() == src2.getelementWidth());
     size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
         
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
@@ -35,7 +36,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
                 out.at(i) = readAS<StorageType>(e1 * e2 + e3);
                 //std::cout << "MAC   e1: " << e1 << " e2: " << e2 << " e3: " << e3 << " result: " << readAS<OperationType>(out.at(i)) << std::endl;
             }
-        } else
+        } else if (zeroing)
             out.at(i) = 0; // zeroing out the rest of the elements
     }
     //dest.setValidIndex(dest.vLen);

@@ -1,88 +1,90 @@
 #ifndef DIMENSION_HPP
 #define DIMENSION_HPP
 
-#include <cstddef> // size_t
 #include "helpers.h"
+#include <cstddef> // size_t
 
-struct Dimension
-{
-  Dimension(uint64_t offset, unsigned int size, int stride);
+struct Dimension {
+    Dimension(size_t offset, size_t size, size_t stride);
 
-  //void resetIndex();
+    // void resetIndex();
 
-  void resetIterValues();
+    void resetIterValues();
 
-  bool isEmpty() const;
+    bool isEmpty() const;
 
-  void advance();
+    void advance();
 
-  bool isLastIteration() const;
+    bool isLastIteration() const;
 
-  //bool triggerIterationUpdate() const;
+    // bool triggerIterationUpdate() const;
 
-  bool isEndOfDimension() const;
+    bool isEndOfDimension() const;
 
-  void setEndOfDimension(bool b);
+    void setEndOfDimension(bool b);
 
-  size_t calcOffset(size_t width) const;
+    size_t calcOffset(size_t width) const;
 
-  size_t getSize() const;
+    size_t getSize() const;
 
 private:
-  const uint64_t offset;
-  const unsigned int size;
-  const int stride;
-  uint64_t iter_offset;
-  unsigned int iter_size;
-  int iter_stride;
-  size_t iter_index;
-  bool endOfDimension;
+    const size_t offset;
+    const size_t size;
+    const size_t stride;
+    size_t iter_offset;
+    size_t iter_size;
+    size_t iter_stride;
+    size_t iter_index;
+    bool endOfDimension;
 
-  friend class Modifier;
+    friend class Modifier;
 };
 
-struct Modifier
-{
-  enum class Type
-  {
-    Static,
-    Indirect
-  };
-  enum class Target
-  {
-    None, // necessary?
+enum class Target {
     Offset,
     Size,
     Stride
-  };
-  enum class Behaviour
-  {
-    None, // necessary?
+};
+
+enum class Behaviour {
     Increment,
-    Decrement
-    //add "set-value" behaviour
-  };
+    Decrement,
+    SetValue,
+    Add,
+    Subtract
+};
 
-  Modifier(Type type, Target target = Target::None, Behaviour behaviour = Behaviour::None, size_t displacement = 0, unsigned int size = 0)
-    : type(type), target(target), behaviour(behaviour), displacement(displacement), size(size)
-  {}
+struct Modifier {
+    Modifier(Target target, Behaviour behaviour)
+        : target(target), behaviour(behaviour) {}
 
-  void modDimension(Dimension& dim, const size_t elementWidth);
-
-  void printModifier() const;
-
-  Type getType() const;
+    virtual void modDimension(Dimension &dim, const size_t elementWidth) = 0;
 
 private:
-  const Type type;
-  const Target target;
-  const Behaviour behaviour;
-  const size_t displacement;
-  const unsigned int size;
+    const Target target;
+    const Behaviour behaviour;
+    // void modStatic(Dimension& dim) const;
 
-  void modStatic(Dimension& dim, const size_t elementWidth);
+    // void modIndirect(Dimension& dim) const;
+};
 
-  void modIndirect(Dimension& dim, const size_t elementWidth);
+struct StaticModifier : public Modifier {
+    StaticModifier(Target t, Behaviour b, size_t d = 0, size_t s = 0)
+        : Modifier(t, b), displacement(d), size(s) {
+        assert_msg(((Behaviour)b == Behaviour::Decrement || (Behaviour)b == Behaviour::Increment), "Static modifier must be of type Increment or Decrement");
+    }
+
+private:
+    const size_t displacement;
+    const size_t size;
+};
+
+struct DynamicModifier : public Modifier {
+    DynamicModifier(Target t, Behaviour b, size_t src)
+        : Modifier(t, b), streamSource(src) {}
+
+private:
+    const size_t streamSource;
 };
 
 #endif // DIMENSION_HPP

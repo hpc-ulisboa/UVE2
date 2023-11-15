@@ -66,28 +66,8 @@ size_t Dimension::getSize() const {
 
 /* Start of Modifier function definitions */
 
-void Modifier::modDimension(Dimension &dim, const size_t elementWidth) {
-    switch (type) {
-    case Type::Static:
-        modStatic(dim, elementWidth);
-        break;
-    case Type::Indirect:
-        modIndirect(dim, elementWidth);
-        break;
-    default:
-        assert_msg("Unhandled Type case in modifiers's modDimension", false);
-    }
-}
-
-void Modifier::modStatic(Dimension &dim, const size_t elementWidth) {
-    size_t valueChange = displacement;
-    if (behaviour == Behaviour::Increment) {
-        /* Nothing changes */
-    } else if (behaviour == Behaviour::Decrement) {
-        valueChange *= -1;
-    } else {
-        assert_msg("Unexpected behaviour type for a static modifier", false);
-    }
+void StaticModifier::modDimension(Dimension &dim, const size_t elementWidth) {
+    size_t valueChange = behaviour == Behaviour::Increment ? displacement : -1*displacement;
 
     if (target == Target::Offset) {
         dim.iter_offset += valueChange*elementWidth;
@@ -103,15 +83,11 @@ void Modifier::modStatic(Dimension &dim, const size_t elementWidth) {
     }
 }
 
-void Modifier::modIndirect(Dimension &dim, const size_t elementWidth) {
+void DynamicModifier::modIndirect(Dimension &dim, const size_t elementWidth) {
     // TO DO
 }
 
-Modifier::Type Modifier::getType() const {
-    return type;
-}
-
-void Modifier::printModifier() const {
+/*void Modifier::printModifier() const {
     // print modifier
     std::cout << "Modifier: ";
     switch (type) {
@@ -159,4 +135,4 @@ void Modifier::printModifier() const {
                    false);
     }
     std::cout << ", displacement: " << displacement << ", size: " << size;
-}
+}*/

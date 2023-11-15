@@ -12,7 +12,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
      * operated on */
     assert_msg("Given vectors have different widths", src1.getelementWidth() == src2.getelementWidth());
     size_t vLen = src1.getMode() == RegisterMode::Scalar || src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-    bool zeroing = src1.getType() != RegisterConfig::NoStream || src2.getType() != RegisterConfig::NoStream; // if any of the sources is a stream, we need to zero out the rest of the elements
+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements(true);
     auto elements2 = src2.getElements(true);
@@ -41,7 +41,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
                 dest.printRegN(char_array);*/
             }
         } else if (zeroing)
-            out.at(i) = 0; // zeroing out the rest of the elements if any of the sources is a stream
+            out.at(i) = 0; // zeroing out the rest of the elements
     }
     //std::cout << "ADD END\n\n";
     //dest.setValidIndex(dest.vLen);

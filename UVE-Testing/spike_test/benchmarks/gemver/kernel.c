@@ -54,7 +54,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 
 		"ss.ld.d u9, %[x], %[sizeN], %[one] \n\t"
 
-		"so.v.dp.d u17, %[beta], p0 \n\t"
+		"so.v.dp.d u6, %[beta], p0 \n\t"
 
 		:: [A] "r"(A), [x] "r"(x), [y] "r"(y),
 		[beta] "r"(b), [sizeN] "r"(sizeN), [one] "r"(1)
@@ -65,7 +65,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			"so.v.dp.d u11, zero, p0 \n\t"
 
 			".SLOOP_1_0%=: \n\t"
-				"so.a.mul.fp  u16, u5, u17, p0 \n\t"
+				"so.a.mul.fp  u16, u5, u6, p0 \n\t"
 				"so.a.mul.fp  u29, u16, u7, p0 \n\t"
 				"so.a.add.fp  u11, u11, u29, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_1_0%= \n\t"
