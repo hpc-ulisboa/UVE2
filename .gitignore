@@ -64,11 +64,11 @@ clang.txt
 
 # Directories
 UVE-Testing/compiler_test
-UVE-Testing/spike_test/others
-UVE-Testing/spike_test/floyd-warshall
-UVE-Testing/spike_test/pred
-UVE-Testing/spike_test/ind
-UVE-Testing/spike_test/knn
+UVE-Testing/spike_test/benchmarks/others
+UVE-Testing/spike_test/benchmarks/floyd-warshall
+UVE-Testing/spike_test/benchmarks/pred
+UVE-Testing/spike_test/benchmarks/ind
+UVE-Testing/spike_test/benchmarks/knn
 
 ### VisualStudioCode ###
 vscode
