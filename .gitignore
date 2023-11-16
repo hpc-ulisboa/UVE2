@@ -67,6 +67,8 @@ UVE-Testing/compiler_test
 UVE-Testing/spike_test/others
 UVE-Testing/spike_test/floyd-warshall
 UVE-Testing/spike_test/pred
+UVE-Testing/spike_test/ind
+UVE-Testing/spike_test/knn
 
 ### VisualStudioCode ###
 vscode
