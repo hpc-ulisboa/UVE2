@@ -1415,6 +1415,11 @@ riscv_insn_ext_uve = \
 	ss_app \
 	ss_cfg_vec \
 	ss_end \
+	ss_app_indl_ofs_add \
+	ss_app_indl_ofs_dec \
+	ss_app_indl_ofs_inc \
+	ss_app_indl_ofs_set \
+	ss_app_indl_ofs_sub \
 	ss_app_mod_ofs_dec \
 	ss_app_mod_ofs_inc \
 	ss_app_mod_siz_dec \

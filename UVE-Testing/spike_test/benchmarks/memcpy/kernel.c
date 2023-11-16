@@ -6,6 +6,7 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
 		"ss.st.d  u1, %[dest], %[size], %[stride] \t\n"
 		"ss.cfg.vec u1 \t\n"
+		
 		"ss.ld.d  u2,  %[src], %[size], %[stride] \t\n"
 		"ss.cfg.vec u2 \t\n"
 		:: [dest] "r" (dest),

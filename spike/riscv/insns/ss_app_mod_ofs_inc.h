@@ -6,6 +6,5 @@ unsigned int size = READ_REG(sizeReg);
 int32_t disp = READ_REG(dispReg);
 
 std::visit([&](auto &reg) {
-    reg.addModifier(Modifier(Modifier::Type::Static, Modifier::Target::Offset, Modifier::Behaviour::Increment, disp, size));
-    reg.endConfiguration();
+    reg.addModifier(std::make_shared<StaticModifier>(Target::Offset, Behaviour::Increment, disp, size));
 }, destReg);

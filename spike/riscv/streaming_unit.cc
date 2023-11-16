@@ -5,7 +5,7 @@
 #define gMMU(p) (*(p->get_mmu()))
 
 template <typename T>
-void streamRegister_t<T>::addModifier(Modifier mod) {
+void streamRegister_t<T>::addModifier(std::shared_ptr<Modifier> mod) {
     /* A recently added modifier alters the dimension inserted before the last one */
     // const auto modIndex = dimensions.size() - 2;
     assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
@@ -13,13 +13,11 @@ void streamRegister_t<T>::addModifier(Modifier mod) {
     auto iter = modifiers.find(modIndex);
     // assert_msg("Trying to add a modifier, when one already exists in this index", iter == modifiers.end());
     modifiers.insert({modIndex, mod});
-
     /* print modifiers
     std::cout << "\nModifiers: ";
     for (auto &m : modifiers)
         std::cout << m.first << "  ";
     std::cout << std::endl;*/
-
 }
 
 template <typename T>
@@ -28,13 +26,21 @@ void streamRegister_t<T>::addDimension(Dimension dim) {
     // dimensions.push_back(dim);
     // vecCfg.push_back(false);
     dimensions.push_front(dim);
+    // if dynamic modifier has been added, then it must be applied to the new dimension
+    // find modifier of dimension 0
+    auto currentModifierIters = modifiers.equal_range(-1);
+    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+        if (it->second->isDynamic())
+            it->second->modDimension(dimensions.at(0), elementWidth);
+    }
+
     vecCfg.push_front(false);
 
-    std::unordered_multimap<int, Modifier> updatedModifiers;
+    std::unordered_multimap<int, std::shared_ptr<Modifier>> updatedModifiers;
 
     // Increment all modifiers' indexes
     for (auto &m : modifiers) {
-        updatedModifiers.insert({m.first+1, m.second});
+        updatedModifiers.insert(std::make_pair(m.first + 1, m.second));
     }
 
     modifiers.swap(updatedModifiers);
@@ -46,7 +52,7 @@ void streamRegister_t<T>::addDimension(Dimension dim) {
     std::cout << std::endl;*/
 
     // print dimensions size
-    //std::cout << "Dimensions size: " << dimensions.size() << std::endl;
+    // std::cout << "Dimensions size: " << dimensions.size() << std::endl;
 }
 
 template <typename T>
@@ -80,7 +86,6 @@ void streamRegister_t<T>::endConfiguration() {
 
 template <typename T>
 std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
-    // assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
     // assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
 
     if (causesUpdate && this->type == RegisterConfig::Load)
@@ -224,7 +229,6 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
         return false;
     }
 
-
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
         if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)) {
             // std::cout << "Stop dimension loading " << i+1 << std::endl;
@@ -273,10 +277,10 @@ void streamRegister_t<T>::updateIteration() {
             // currDim.resetIndex();
             // printRegN("Updating EOD of dimension.");
             // std::cout << "Advancing dimension no " << i + 2 << std::endl;
-            
-            if (modifierExists){
-                //std::cout << "Applying modifier to u" << registerN << std::endl;
-                it->second.modDimension(currDim, elementWidth);
+
+            if (modifierExists) {
+                // std::cout << "Applying modifier to u" << registerN << std::endl;
+                it->second->modDimension(currDim, elementWidth);
             }
         }
 
@@ -351,7 +355,6 @@ void streamRegister_t<T>::updateAsLoad() {
         updateIteration(); // reset EOD flags and iterate stream
 }
 
-
 template <typename T>
 void streamRegister_t<T>::updateAsStore() {
     assert_msg("Trying to update as store a non-store stream", type == RegisterConfig::Store);
@@ -417,12 +420,13 @@ void streamingUnit_t::updateEODTable(const size_t stream) {
             // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
             ++d;
         }
-    }, registers.at(stream));
+    },
+               registers.at(stream));
 }
 
 template <typename T>
 void streamingUnit_t::makeStreamRegister(size_t streamRegister, RegisterConfig type) {
-    assert_msg("Tried to use a register index higher than the available register", streamRegister < registerCount);
+    assert_msg("Tried to use a register index higher than the available registers", streamRegister < registerCount);
     if constexpr (std::is_same_v<T, std::uint8_t>) {
         registers.at(streamRegister) = StreamReg8{this, type, streamRegister};
     } else if constexpr (std::is_same_v<T, std::uint16_t>) {

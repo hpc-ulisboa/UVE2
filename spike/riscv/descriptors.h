@@ -2,10 +2,24 @@
 #define DIMENSION_HPP
 
 #include "helpers.h"
+//#include "streaming_unit.h"
 #include <cstddef> // size_t
 
+class streamingUnit_t;
+
 struct Dimension {
-    Dimension(size_t offset, size_t size, size_t stride);
+    Dimension(uint64_t offset, unsigned int size, int stride)
+        : offset(offset), size(size), stride(stride) {
+
+        iter_offset = offset;
+        iter_size = size;
+        iter_stride = stride;
+        iter_index = 0;
+        endOfDimension = iter_size == 0;
+        // endOfDimension = false;
+        // std::cout << "offset: " << offset << ", size: " << size << ", stride: "
+        // << stride << std::endl;
+    }
 
     // void resetIndex();
 
@@ -37,7 +51,9 @@ private:
     size_t iter_index;
     bool endOfDimension;
 
-    friend class Modifier;
+    //friend class Modifier;
+	friend class StaticModifier;
+	friend class DynamicModifier;
 };
 
 enum class Target {
@@ -49,7 +65,7 @@ enum class Target {
 enum class Behaviour {
     Increment,
     Decrement,
-    SetValue,
+    Set,
     Add,
     Subtract
 };
@@ -60,9 +76,16 @@ struct Modifier {
 
     virtual void modDimension(Dimension &dim, const size_t elementWidth) = 0;
 
-private:
+    virtual bool isDynamic() const {
+        return false;
+    }
+
+protected:
     const Target target;
     const Behaviour behaviour;
+
+    streamingUnit_t *su;
+
     // void modStatic(Dimension& dim) const;
 
     // void modIndirect(Dimension& dim) const;
@@ -71,8 +94,10 @@ private:
 struct StaticModifier : public Modifier {
     StaticModifier(Target t, Behaviour b, size_t d = 0, size_t s = 0)
         : Modifier(t, b), displacement(d), size(s) {
-        assert_msg(((Behaviour)b == Behaviour::Decrement || (Behaviour)b == Behaviour::Increment), "Static modifier must be of type Increment or Decrement");
+        assert_msg("Static modifier must be of type Increment or Decrement", b == Behaviour::Decrement || b == Behaviour::Increment);
     }
+
+	void modDimension(Dimension &dim, const size_t elementWidth) override;
 
 private:
     const size_t displacement;
@@ -80,11 +105,21 @@ private:
 };
 
 struct DynamicModifier : public Modifier {
-    DynamicModifier(Target t, Behaviour b, size_t src)
-        : Modifier(t, b), streamSource(src) {}
+    DynamicModifier(Target t, Behaviour b, const size_t src, streamingUnit_t *su)
+        : Modifier(t, b), streamSource(src), su(su) {}
+
+	void modDimension(Dimension &dim, const size_t elementWidth) override;
+
+    bool isDynamic() const override{
+        return true;
+    }
 
 private:
     const size_t streamSource;
+
+    void calculateValueChange(size_t &target, size_t baseValue, Behaviour behaviour, size_t valueChange);
+
+    streamingUnit_t *su;
 };
 
 #endif // DIMENSION_HPP

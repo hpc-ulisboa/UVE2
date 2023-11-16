@@ -2,13 +2,13 @@
 #define STREAMING_UNIT_HPP
 
 #include "descriptors.h"
-// #include "processor.h"
 #include "helpers.h"
 #include <algorithm>
 #include <array>
 #include <cstddef> // size_t
 #include <deque>
 #include <iostream>
+#include <memory>
 #include <numeric>
 #include <type_traits>
 #include <unordered_map>
@@ -17,7 +17,8 @@
 
 /* Necessary for using MMU */
 class processor_t;
-class streamingUnit_t;
+//class streamingUnit_t;
+
 // extern processor_t *globalProcessor;
 #define gMMU(p) (*(p->get_mmu()))
 
@@ -70,7 +71,7 @@ struct streamRegister_t {
         validIndex = vLen;
     }
 
-    void addModifier(Modifier mod);
+    void addModifier(std::shared_ptr<Modifier> mod);
     void addDimension(Dimension dim);
     void configureDim();
     void startConfiguration(Dimension dim);
@@ -109,7 +110,7 @@ private:
     configuration. As such, it is better to have a container that maps a dimension's
     index to its modifier. When updating stream the iterators, we can test if a dimension
     for the given index exists before the calculations */
-    std::unordered_multimap<int, Modifier> modifiers;
+    std::unordered_multimap<int, std::shared_ptr<Modifier>> modifiers;
     RegisterConfig type;
     RegisterStatus status;
     RegisterMode mode;

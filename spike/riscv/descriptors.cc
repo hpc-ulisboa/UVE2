@@ -1,19 +1,8 @@
 #include "descriptors.h"
+#include "streaming_unit.h"
 #include <iostream>
 
 /* Start of Dimension function definitions */
-Dimension::Dimension(uint64_t offset, unsigned int size, int stride)
-    : offset(offset), size(size), stride(stride) {
-
-    iter_offset = offset;
-    iter_size = size;
-    iter_stride = stride;
-    iter_index = 0;
-    endOfDimension = iter_size == 0;
-    // endOfDimension = false;
-    // std::cout << "offset: " << offset << ", size: " << size << ", stride: "
-    // << stride << std::endl;
-}
 
 /*void Dimension::resetIndex() {
     iter_index = 0;
@@ -67,24 +56,64 @@ size_t Dimension::getSize() const {
 /* Start of Modifier function definitions */
 
 void StaticModifier::modDimension(Dimension &dim, const size_t elementWidth) {
-    size_t valueChange = behaviour == Behaviour::Increment ? displacement : -1*displacement;
+    size_t valueChange = behaviour == Behaviour::Increment ? displacement : -1 * displacement;
 
     if (target == Target::Offset) {
-        dim.iter_offset += valueChange*elementWidth;
-        //std::cout << "iter_offset: " << dim.iter_offset << std::endl;
+        dim.iter_offset += valueChange * elementWidth;
+        // std::cout << "iter_offset: " << dim.iter_offset << std::endl;
     } else if (target == Target::Size) {
         dim.iter_size += valueChange;
-        //std::cout << "valueChange: " << (int)valueChange << " iter_size: " << dim.iter_size << std::endl;
+        // std::cout << "valueChange: " << (int)valueChange << " iter_size: " << dim.iter_size << std::endl;
     } else if (target == Target::Stride) {
         dim.iter_stride += valueChange;
-        //std::cout << "iter_stride: " << dim.iter_stride << std::endl;
+        // std::cout << "iter_stride: " << dim.iter_stride << std::endl;
     } else {
         assert_msg("Unexpected target for a static modifier", false);
     }
 }
 
-void DynamicModifier::modIndirect(Dimension &dim, const size_t elementWidth) {
-    // TO DO
+void DynamicModifier::calculateValueChange(size_t &target, size_t baseValue, Behaviour behaviour, size_t valueChange) {
+    switch (behaviour) {
+    case Behaviour::Add:
+        target = baseValue + valueChange;
+        break;
+    case Behaviour::Subtract:
+        target = baseValue - valueChange;
+        break;
+    case Behaviour::Set:
+        target = valueChange;
+        break;
+    case Behaviour::Increment:
+        target += valueChange;
+        break;
+    case Behaviour::Decrement:
+        target -= valueChange;
+        break;
+    default:
+        assert_msg("Unexpected behaviour for a dynamic modifier", false);
+    }
+}
+
+void DynamicModifier::modDimension(Dimension &dim, const size_t elementWidth) {
+    // size_t valueChange = behaviour == Behaviour::Increment ? displacement : -1*displacement;
+    auto &src = (su->registers).at(streamSource);
+    size_t valueChange;
+    std::visit([&](auto &reg) {
+        valueChange = (size_t)(reg.getElements(true).at(0));
+    }, src);
+
+    if (target == Target::Offset) {
+        calculateValueChange(dim.iter_offset, dim.offset, behaviour, valueChange * elementWidth);
+        // std::cout << "iter_offset: " << dim.iter_offset << std::endl;
+    } else if (target == Target::Size) {
+        calculateValueChange(dim.iter_size, dim.size, behaviour, valueChange);
+        // std::cout << "valueChange: " << (int)valueChange << " iter_size: " << dim.iter_size << std::endl;
+    } else if (target == Target::Stride) {
+        calculateValueChange(dim.iter_stride, dim.stride, behaviour, valueChange);
+        // std::cout << "iter_stride: " << dim.iter_stride << std::endl;
+    } else {
+        assert_msg("Unexpected target for a dynamic modifier", false);
+    }
 }
 
 /*void Modifier::printModifier() const {

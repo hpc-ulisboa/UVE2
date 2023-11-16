@@ -167,6 +167,8 @@ public:
   // Registers for modifier configuration instructions
   int64_t uve_mod_size() { return x(15, 5); } // RS1
   int64_t uve_mod_disp() { return x(27, 5); } // RS3
+  // Registers for dynamic modifier configuration instructions
+  int64_t uve_mod_origin() { return x(15, 5); } // RS1
   // Registers for branching instructions
   int64_t uve_branch_rs() { return x(15, 5); } // RS1
   // Calculate offset for UVE branching instruction
