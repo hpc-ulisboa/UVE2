@@ -2,27 +2,52 @@
 
 
 #ifdef RUN_UVE
-void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out) {
-	asm volatile(
-		"ss.st.d  u1, %[dest], %[size], %[stride] \t\n"
-		"ss.cfg.vec u1 \t\n"
-		"ss.ld.d  u2,  %[src], %[size], %[stride] \t\n"
-		"ss.cfg.vec u2 \t\n"
-		:: [dest] "r" (dest),
-      [src] "r" (src),
-      [size] "r" (SIZE),
-      [stride] "r" (1));
-	asm volatile(
-		".uve_loop%= : \t\n"
-			"so.v.mv u1, u2, p0 \n\t"
-		"so.b.nc u2, .uve_loop%= \n\t"
-		 :::);
+void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t N, int32_t L) {
+    asm volatile(
+        "ss.sta.ld.w     u1, %[cols], %[N], %[L] \t\n"
+        "ss.end          u1, zero, %[L], %[one] \t\n"
+        //"ss.cfg.ind      u1 \t\n"
+
+        "ss.sta.ld.d     u2, %[nzval], %[N], %[L] \t\n"
+        "ss.end          u2, zero, %[L], %[one] \t\n"
+        "ss.cfg.vec      u2 \t\n"
+
+        "ss.sta.ld.d            u3, %[vec], %[N], zero \t\n"
+        "ss.app		            u3, zero, %[L], zero \t\n"
+        "ss.app.indl.ofs.add    u3, u1 \t\n"
+        "ss.cfg.vec             u3 \t\n"
+        "ss.end                 u3, zero, %[one], zero \t\n"
+
+        "ss.st.d  u4, %[out], %[N], %[one] \t\n"
+
+        ::[cols] "r"(cols),
+        [nzval] "r"(nzval),
+        [vec] "r"(vec),
+        [out] "r"(out),
+        [N] "r"(N),
+        [L] "r"(L),
+        [one] "r"(1));
+
+     asm volatile(
+        ".iLoop1%=: \t\n"    
+            "so.v.dp.d u5, zero, p0 \t\n"
+
+            ".kloop1%=: \t\n"
+				//"so.a.mac.fp u5, u1, u2, p0\n\t"
+				"so.a.mul.fp u6, u2, u3, p0\n\t"
+				"so.a.add.fp u5, u5, u6, p0\n\t"
+            "so.b.ndc.1 u2, .kloop1%= \n\t"
+
+            "so.a.adde.fp  u4, u5, p0 \n\t" 
+        "so.b.nc	u2, .iLoop1%= \n\t"
+		:::
+        );
 }
 #endif // RUN_UVE
 
 
 #ifdef RUN_SIMPLE
-void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out)
+void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t N, int32_t L)
 {
     int i, j;
     DataType Si;
@@ -30,8 +55,8 @@ void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out)
     for (i=0; i<N; i++) {
         DataType sum = out[i];
         for (j=0; j<L; j++) {
-                Si = nzval[j + i*L] * vec[cols[j + i*L]];
-                sum += Si;
+            Si = nzval[i*L + j] * vec[cols[i*L + j]];
+            sum += Si;
         }
         out[i] = sum;
     }

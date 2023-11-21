@@ -1,0 +1,118 @@
+bbl loader
+
+Input (cols):
+1 2 2 2 
+0 2 2 2 
+1 1 2 2 
+2 2 2 2 
+
+Input (nzval):
+5.914905 3.784288 2.073821 3.401270 
+4.099069 3.194803 0.850048 1.025094 
+8.722893 6.924095 3.619152 8.585111 
+4.492589 6.062679 6.642857 4.384690 
+
+Input (vec):
+6.900010
+8.438519
+9.219778
+0.989845
+
+Input (out):
+0.000000
+0.000000
+0.000000
+0.000000
+iter_offset: 8
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 0
+Resetting dimension 0 of u3
+MUL   5.91491 * 8.43852 = 49.913
+MUL   3.78429 * 9.21978 = 34.8903
+MUL   2.07382 * 9.21978 = 19.1202
+MUL   3.40127 * 9.21978 = 31.359
+ADD   0 + 49.913 = 49.913
+ADD   0 + 34.8903 = 34.8903
+ADD   0 + 19.1202 = 19.1202
+ADD   0 + 31.359 = 31.359
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADDE   135.282
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 8
+Resetting dimension 0 of u3
+MUL   4.09907 * 6.90001 = 28.2836
+MUL   3.1948 * 9.21978 = 29.4554
+MUL   0.850048 * 9.21978 = 7.83725
+MUL   1.02509 * 9.21978 = 9.45114
+ADD   0 + 28.2836 = 28.2836
+ADD   0 + 29.4554 = 29.4554
+ADD   0 + 7.83725 = 7.83725
+ADD   0 + 9.45114 = 9.45114
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADDE   75.0274
+Applying modifier to dim 0 of u3
+iter_offset: 8
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Resetting dimension 0 of u3
+MUL   8.72289 * 6.90001 = 60.188
+MUL   6.92409 * 8.43852 = 58.4291
+MUL   3.61915 * 9.21978 = 33.3678
+MUL   8.58511 * 9.21978 = 79.1528
+ADD   0 + 60.188 = 60.188
+ADD   0 + 58.4291 = 58.4291
+ADD   0 + 33.3678 = 33.3678
+ADD   0 + 79.1528 = 79.1528
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADDE   231.138
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 16
+Applying modifier to dim 0 of u3
+iter_offset: 16
+
+
+Result (out):
+135.282465
+75.027386
+231.137742
+188.566990
+MUL   4.49259 * 6.90001 = 30.9989
+MUL   6.06268 * 9.21978 = 55.8966
+MUL   6.64286 * 9.21978 = 61.2457
+MUL   4.38469 * 9.21978 = 40.4259
+ADD   0 + 30.9989 = 30.9989
+ADD   0 + 55.8966 = 55.8966
+ADD   0 + 61.2457 = 61.2457
+ADD   0 + 40.4259 = 40.4259
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADD   0 + 0 = 0
+ADDE   188.567

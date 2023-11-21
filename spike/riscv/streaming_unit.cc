@@ -279,13 +279,14 @@ void streamRegister_t<T>::updateIteration() {
             // std::cout << "Advancing dimension no " << i + 2 << std::endl;
 
             if (modifierExists) {
-                // std::cout << "Applying modifier to u" << registerN << std::endl;
+                std::cout << "Applying modifier to dim " << i << " of u" << registerN << std::endl;
                 it->second->modDimension(currDim, elementWidth);
             }
         }
 
         // The values at lower dimensions might have been modified. As such, we need to reset them before next iteration
         for (size_t j = 0; j < i; j++) {
+            std::cout << "Resetting dimension " << j << " of u" << registerN << std::endl;
             dimensions.at(j).resetIterValues();
         }
     }

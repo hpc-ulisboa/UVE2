@@ -104,13 +104,13 @@ void DynamicModifier::modDimension(Dimension &dim, const size_t elementWidth) {
 
     if (target == Target::Offset) {
         calculateValueChange(dim.iter_offset, dim.offset, behaviour, valueChange * elementWidth);
-        // std::cout << "iter_offset: " << dim.iter_offset << std::endl;
+        std::cout << "iter_offset: " << dim.iter_offset << std::endl;
     } else if (target == Target::Size) {
         calculateValueChange(dim.iter_size, dim.size, behaviour, valueChange);
-        // std::cout << "valueChange: " << (int)valueChange << " iter_size: " << dim.iter_size << std::endl;
+        // std::cout << "iter_size: " << dim.iter_size << std::endl;
     } else if (target == Target::Stride) {
         calculateValueChange(dim.iter_stride, dim.stride, behaviour, valueChange);
-        // std::cout << "iter_stride: " << dim.iter_stride << std::endl;
+        std::cout << "iter_stride: " << dim.iter_stride << std::endl;
     } else {
         assert_msg("Unexpected target for a dynamic modifier", false);
     }
