@@ -23,18 +23,19 @@ void streamRegister_t<T>::addModifier(std::shared_ptr<Modifier> mod) {
 template <typename T>
 void streamRegister_t<T>::addDimension(Dimension dim) {
     assert_msg("Cannot append more dimensions as the max value was reached", dimensions.size() < su->maxDimensions);
-    // dimensions.push_back(dim);
-    // vecCfg.push_back(false);
+
     dimensions.push_front(dim);
-    // if dynamic modifier has been added, then it must be applied to the new dimension
-    // find modifier of dimension 0
-    auto currentModifierIters = modifiers.equal_range(-1);
-    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-        if (it->second->isDynamic())
-            it->second->modDimension(dimensions.at(0), elementWidth);
-    }
 
     vecCfg.push_front(false);
+
+    auto currentModifierIters = modifiers.equal_range(-1);
+    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+        if (it->second->isDynamic()){
+            std::cout << "0 Applying modifier to dim 0 of u" << registerN << std::endl;
+            it->second->modDimension(dimensions.at(0), elementWidth);
+        }
+    }
+
 
     std::unordered_multimap<int, std::shared_ptr<Modifier>> updatedModifiers;
 
@@ -249,7 +250,23 @@ void streamRegister_t<T>::updateIteration() {
 
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
     // std::cout << "Advancing dimension no 1" << std::endl;
-    dimensions.at(0).advance();
+    bool firstIter = dimensions.at(0).advance();
+    if (firstIter) {
+        auto currentModifierIters = modifiers.equal_range(0);
+        for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+            const bool dynamicModifierExists = it != modifiers.end() && it->second->isDynamic();
+
+            // currDim.resetIndex();
+            // printRegN("Updating EOD of dimension.");
+            // std::cout << "Advancing dimension no " << i + 2 << std::endl;
+
+            if (dynamicModifierExists) {
+                std::cout << "1 Applying modifier to dim 0 of u" << registerN << std::endl;
+                it->second->modDimension(dimensions.at(0), elementWidth);
+            }
+        }
+    }
+
 
     /* No extra processing is needed if there is only 1 dimension */
     if (dimensions.size() == 1)
@@ -258,6 +275,7 @@ void streamRegister_t<T>::updateIteration() {
     // std::cout << "Updating iteration. Dimensions: " << dimensions.size() << std::endl;
     for (size_t i = 0; i < dimensions.size() - 1; ++i) {
         auto &currDim = dimensions.at(i);
+        auto &nextDim = dimensions.at(i + 1);
         /* The following calculations are only necessary if we ARE in the
         last iteration of a dimension */
 
@@ -268,18 +286,39 @@ void streamRegister_t<T>::updateIteration() {
         // std::cout << "Dimension " << i + 1 << " is fully done" << std::endl;
 
         // std::cout << "Looking for modifiers of dimension " << i << std::endl;
-        auto currentModifierIters = modifiers.equal_range(i);
-        dimensions.at(i + 1).advance();
+
+        // Reset EOD flag of current dimension
         currDim.setEndOfDimension(false);
+        
+        // Iterate upper dimension and apply dynamic modifiers if they exist and it is the first iteration of the dimension
+        firstIter = nextDim.advance();
+        if (firstIter) {
+            auto currentModifierIters = modifiers.equal_range(i+1);
+            for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+                const bool dynamicModifierExists = it != modifiers.end() && it->second->isDynamic();
+
+                // currDim.resetIndex();
+                // printRegN("Updating EOD of dimension.");
+                // std::cout << "Advancing dimension no " << i + 2 << std::endl;
+
+                if (dynamicModifierExists) {
+                    std::cout << "2 Applying modifier to dim " << i+1 << " of u" << registerN << std::endl;
+                    it->second->modDimension(nextDim, elementWidth);
+                }
+            }
+        }
+
+        // Apply static modifiers to current dimension
+        auto currentModifierIters = modifiers.equal_range(i);
         for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-            const bool modifierExists = it != modifiers.end();
+            const bool staticModifierExists = it != modifiers.end() && !it->second->isDynamic();
 
             // currDim.resetIndex();
             // printRegN("Updating EOD of dimension.");
             // std::cout << "Advancing dimension no " << i + 2 << std::endl;
 
-            if (modifierExists) {
-                std::cout << "Applying modifier to dim " << i << " of u" << registerN << std::endl;
+            if (staticModifierExists) {
+                //std::cout << "Applying modifier to dim " << i << " of u" << registerN << std::endl;
                 it->second->modDimension(currDim, elementWidth);
             }
         }

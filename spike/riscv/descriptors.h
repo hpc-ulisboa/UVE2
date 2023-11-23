@@ -27,7 +27,7 @@ struct Dimension {
 
     bool isEmpty() const;
 
-    void advance();
+    bool advance();
 
     bool isLastIteration() const;
 

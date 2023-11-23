@@ -18,8 +18,8 @@ bool Dimension::isEmpty() const {
     return iter_size == 0;
 }
 
-void Dimension::advance() {
-    ++iter_index;
+bool Dimension::advance() {
+    return ++iter_index == 1;
 }
 
 bool Dimension::isLastIteration() const {

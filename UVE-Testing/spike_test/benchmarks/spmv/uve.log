@@ -23,14 +23,15 @@ Input (out):
 0.000000
 0.000000
 0.000000
+0 Applying modifier to dim 0 of u3
 iter_offset: 8
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 0
 Resetting dimension 0 of u3
 MUL   5.91491 * 8.43852 = 49.913
@@ -46,13 +47,13 @@ ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADDE   135.282
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 8
 Resetting dimension 0 of u3
 MUL   4.09907 * 6.90001 = 28.2836
@@ -68,13 +69,13 @@ ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADDE   75.0274
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 8
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
 Resetting dimension 0 of u3
 MUL   8.72289 * 6.90001 = 60.188
@@ -90,11 +91,11 @@ ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADDE   231.138
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
-Applying modifier to dim 0 of u3
+1 Applying modifier to dim 0 of u3
 iter_offset: 16
 
 

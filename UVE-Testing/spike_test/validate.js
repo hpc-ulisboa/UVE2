@@ -8,7 +8,7 @@ const { spawnSync } = require("child_process");
 //const kernels = [ "knn" ];
 //const kernels = [ "spmv" ];
 
-const kernels = [ "pvr" ];
+const kernels = [ "spmv" ];
 
 /* DTYPE: dataset datatype
  * DTYPE 1: byte (hexadecimal int)
