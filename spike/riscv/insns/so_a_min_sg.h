@@ -13,8 +13,8 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     assert_msg("Given vectors have different widths", src1.getelementWidth() == src2.getelementWidth());
     auto vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     /* We can only operate on the first available values of the stream */
-    auto elements1 = src1.getElements(true);
-    auto elements2 = src2.getElements(true);
+    auto elements1 = src1.getElements();
+    auto elements2 = src2.getElements();
     auto destElements = dest.getElements(false);
     auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
 
@@ -34,7 +34,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     }
     //dest.setValidIndex(dest.vLen);
     dest.setMode(dest.getVLen() == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
-    dest.setElements(true, out);
+    dest.setElements(out);
 };
 
 /* If the destination register is not configured, we have to build it before the

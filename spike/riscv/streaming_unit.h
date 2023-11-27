@@ -76,8 +76,8 @@ struct streamRegister_t {
     void configureDim();
     void startConfiguration(Dimension dim);
     void endConfiguration();
-    std::vector<ElementsType> getElements(bool causesUpdate);
-    void setElements(bool causesUpdate, std::vector<ElementsType> e);
+    std::vector<ElementsType> getElements(bool causesUpdate = true);
+    void setElements(std::vector<ElementsType> e, bool causesUpdate = true);
     void setValidIndex(const size_t i);
     void setMode(const RegisterMode m);
     bool hasStreamFinished() const;
@@ -123,6 +123,7 @@ private:
     bool isDimensionFullyDone(const std::deque<Dimension>::const_iterator start, const std::deque<Dimension>::const_iterator end) const;
     bool isStreamDone() const;
     bool tryGenerateOffset(size_t &address);
+    void applyDynamicMods(size_t dimN);
     void updateIteration();
     void updateAsLoad();
     void updateAsStore();

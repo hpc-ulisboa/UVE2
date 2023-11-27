@@ -23,7 +23,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
 
     dest.setValidIndex(validElementsIndex);
-    dest.setElements(true, out);
+    dest.setElements(out);
 };
 
 /* If the destination register is not configured, we have to build it before the

@@ -17,8 +17,8 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
     
     /* We can only operate on the first available values of the stream */
-    auto elements1 = src1.getElements(true);
-    auto elements2 = src2.getElements(true);
+    auto elements1 = src1.getElements();
+    auto elements2 = src2.getElements();
 
     /* Grab used types for storage and operation */
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
@@ -42,7 +42,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
                 auto e1 = readAS<OperationType>(elements1.at(i));
                 auto e2 = readAS<OperationType>(elements2.at(i));
                 out.at(i) = readAS<StorageType>(e1 * e2);
-                std::cout << "MUL   " << e1 << " * " << e2 << " = " << readAS<OperationType>(out.at(i)) << "\n";
+                //std::cout << "MUL   " << e1 << " * " << e2 << " = " << readAS<OperationType>(out.at(i)) << "\n";
             }
         } else if (zeroing)
             out.at(i) = 0; // zeroing out the rest of the elements
@@ -50,7 +50,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     //std::cout << "MUL END\n\n";
     //dest.setValidIndex(dest.vLen);
     dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
-    dest.setElements(true, out);
+    dest.setElements(out);
 };
 
 /* If the destination register is not configured, we have to build it before the

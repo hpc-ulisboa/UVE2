@@ -17,7 +17,7 @@ auto baseBehaviour = [](auto &dest, auto &pred, const auto value) {
         out.at(i) = pi.at((i+1)*sizeof(uint32_t)-1) ? value : destElements.at(i);
 
     dest.setValidIndex(destValidIndex);
-    dest.setElements(true, out);
+    dest.setElements(out);
 };
 
 // If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done

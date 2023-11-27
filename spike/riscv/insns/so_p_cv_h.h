@@ -11,8 +11,8 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
     
     assert_msg("Given vectors have different widths", src1.getelementWidth() == src2.getelementWidth());
     /* We can only operate on the first available values of the stream */
-    auto elements1 = src1.getElements(true);
-    auto elements2 = src2.getElements(true);
+    auto elements1 = src1.getElements();
+    auto elements2 = src2.getElements();
     auto destElements = destP.getPredicate();
     auto validElementsIndex = std::min(elements1.size(), elements2.size());
 

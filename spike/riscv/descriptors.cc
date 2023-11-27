@@ -18,8 +18,8 @@ bool Dimension::isEmpty() const {
     return iter_size == 0;
 }
 
-bool Dimension::advance() {
-    return ++iter_index == 1;
+void Dimension::advance() {
+    ++iter_index;
 }
 
 bool Dimension::isLastIteration() const {
@@ -35,11 +35,17 @@ bool Dimension::isEndOfDimension() const {
     return endOfDimension;
 }
 
+bool Dimension::isModApplied() const {
+    return modApplied;
+}
+
 void Dimension::setEndOfDimension(bool b) {
     // std::cout << "Setting end of dimension to: " << b << std::endl;
     endOfDimension = b;
-    if (!b)
+    if (!b){
+        modApplied = false;
         iter_index = 0;
+    }
 }
 
 size_t Dimension::calcOffset(size_t width) const {
@@ -70,6 +76,8 @@ void StaticModifier::modDimension(Dimension &dim, const size_t elementWidth) {
     } else {
         assert_msg("Unexpected target for a static modifier", false);
     }
+
+    dim.modApplied = true;
 }
 
 void DynamicModifier::calculateValueChange(size_t &target, size_t baseValue, Behaviour behaviour, size_t valueChange) {
@@ -99,21 +107,23 @@ void DynamicModifier::modDimension(Dimension &dim, const size_t elementWidth) {
     auto &src = (su->registers).at(streamSource);
     size_t valueChange;
     std::visit([&](auto &reg) {
-        valueChange = (size_t)(reg.getElements(true).at(0));
+        valueChange = (size_t)(reg.getElements().at(0));
     }, src);
 
     if (target == Target::Offset) {
         calculateValueChange(dim.iter_offset, dim.offset, behaviour, valueChange * elementWidth);
-        std::cout << "iter_offset: " << dim.iter_offset << std::endl;
+        //std::cout << "iter_offset: " << dim.iter_offset << std::endl;
     } else if (target == Target::Size) {
         calculateValueChange(dim.iter_size, dim.size, behaviour, valueChange);
-        // std::cout << "iter_size: " << dim.iter_size << std::endl;
+        //std::cout << "iter_size: " << dim.iter_size << std::endl;
     } else if (target == Target::Stride) {
         calculateValueChange(dim.iter_stride, dim.stride, behaviour, valueChange);
-        std::cout << "iter_stride: " << dim.iter_stride << std::endl;
+        //std::cout << "iter_stride: " << dim.iter_stride << std::endl;
     } else {
         assert_msg("Unexpected target for a dynamic modifier", false);
     }
+
+    dim.modApplied = true;
 }
 
 /*void Modifier::printModifier() const {

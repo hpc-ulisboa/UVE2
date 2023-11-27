@@ -16,6 +16,7 @@ struct Dimension {
         iter_stride = stride;
         iter_index = 0;
         endOfDimension = iter_size == 0;
+        modApplied = false;
         // endOfDimension = false;
         // std::cout << "offset: " << offset << ", size: " << size << ", stride: "
         // << stride << std::endl;
@@ -27,11 +28,11 @@ struct Dimension {
 
     bool isEmpty() const;
 
-    bool advance();
+    void advance();
 
     bool isLastIteration() const;
 
-    // bool triggerIterationUpdate() const;
+    bool isModApplied() const;
 
     bool isEndOfDimension() const;
 
@@ -50,6 +51,7 @@ private:
     size_t iter_stride;
     size_t iter_index;
     bool endOfDimension;
+    bool modApplied;
 
     //friend class Modifier;
 	friend class StaticModifier;

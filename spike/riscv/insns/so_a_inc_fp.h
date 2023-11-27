@@ -8,7 +8,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     bool zeroing = src.getType() == RegisterConfig::Load;
 
-    auto elements = src.getElements(true);
+    auto elements = src.getElements();
     auto destElements = dest.getElements(false);
     auto validElementsIndex = src.getValidIndex();
     auto pi = pred.getPredicate();
@@ -29,7 +29,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     }
     //dest.setValidIndex(dest.vLen);
     dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
-    dest.setElements(true, out);
+    dest.setElements(out);
 };
 
 // If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done

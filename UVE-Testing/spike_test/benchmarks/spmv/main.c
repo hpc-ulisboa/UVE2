@@ -8,60 +8,82 @@
 
 #define ran (DataType)(((double)rand() / (RAND_MAX)) * (MAX - MIN) + MIN)
 
-extern void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t N, int32_t L);
+extern void core(void *nzval, uint32_t *colind, uint32_t *rowptr, void *x, void *y, int32_t N);
 
-void fillVal(DataType *nzval, uint32_t *colind, DataType *x, int32_t N, int32_t L) {
-    int j, cur_indx, i;
+void fillVal(DataType *A, int32_t N) {
+    int j;
     srand48(8650341L);
-    for (i = 0; i < N; i++) {
-        x[i] = ran;
-        cur_indx = 0;
-        for (j = 0; j < L; j++) {
-            cur_indx = (DataType)(((double)rand() / (RAND_MAX)) * ((L - 1) - cur_indx) + cur_indx);
-            if (cur_indx < L) {
-                nzval[i * L + j] = ran;
-                colind[i * L + j] = cur_indx;
-            }
-        }
+    for (j = 0; j < N; j++) {
+        A[j] = ran;
     }
 }
 
-int main() {
-    int N = SIZE, L = SIZE;
+void initMat(int *colind, int *rowDelimiters, int NNZ, int N) {
+    int nnzAssigned = 0;
+    float prob = (float)NNZ / ((float)N * (float)N);
 
-    uint32_t colind[N * L];
-    DataType nzval[N * L];
+    srand48(8675307L);
+
+    int fillRemaining = 0;
+    int i, j;
+
+    for (i = 0; i < N; i++) {
+        rowDelimiters[i] = nnzAssigned;
+        for (j = 0; j < N; j++) {
+            int numEntriesLeft = (N * N) - ((i * N) + j);
+            int needToAssign = NNZ - nnzAssigned;
+            if (numEntriesLeft <= needToAssign) {
+                fillRemaining = 1;
+            }
+            if ((nnzAssigned < NNZ && drand48() <= prob) || fillRemaining == 1) {
+                colind[nnzAssigned] = j;
+                nnzAssigned++;
+            }
+        }
+    }
+    rowDelimiters[N] = NNZ;
+}
+
+int main() {
+    int N = SIZE;
+    int NNZ = SIZE * SIZE;
+
+    DataType nzval[NNZ];
+    uint32_t colind[NNZ];
+    uint32_t rowptr[N + 1];
     DataType x[N];
     DataType y[N];
 
     initZero(y, N);
-    fillVal(nzval, colind, x, N, L);
+    fillVal(nzval, NNZ);
+    fillVal(x, N);
 
-	printf("\nInput (cols):\n");
-    for (int i = 0; i < N; ++i){
-		for (int j = 0; j < L; ++j)
-        	printf("%d ", colind[i*L+j]);
-		printf("\n");
-	}
-	
-	printf("\nInput (nzval):\n");
-    for (int i = 0; i < N; ++i){
-		for (int j = 0; j < L; ++j)
-        	printf(DataFormat("", " "), nzval[i*L+j]);
-		printf("\n");
-	}
+    /*
+        printf("\nInput (colind):\n");
+        for (int i = 0; i < N; ++i){
+            for (int j = 0; j < N; ++j)
+                printf("%d ", colind[i*N+j]);
+            printf("\n");
+        }
 
-	printf("\nInput (vec):\n");
-	for (int i = 0; i < N; ++i)
-		printf(DataFormat("", "\n"), x[i]);
+        printf("\nInput (nzval):\n");
+        for (int i = 0; i < N; ++i){
+            for (int j = 0; j < N; ++j)
+                printf(DataFormat("", " "), nzval[i*N+j]);
+            printf("\n");
+        }
 
-	printf("\nInput (out):\n");
-    for (int i = 0; i < N; ++i)
-        printf(DataFormat("", "\n"), y[i]);
+        printf("\nInput (x):\n");
+        for (int i = 0; i < N; ++i)
+            printf(DataFormat("", "\n"), x[i]);
 
-    core(nzval, colind, x, y, N, L);
+        printf("\nInput (y):\n");
+        for (int i = 0; i < N; ++i)
+            printf(DataFormat("", "\n"), y[i]);
+    */
+    core(nzval, colind, rowptr, x, y, N);
 
-	printf("\n\nResult (out):\n");
+    // printf("\n\nResult (y):\n");
     for (int i = 0; i < N; ++i)
         printf(DataFormat("", "\n"), y[i]);
 

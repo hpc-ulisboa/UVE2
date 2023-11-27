@@ -28,15 +28,6 @@ void streamRegister_t<T>::addDimension(Dimension dim) {
 
     vecCfg.push_front(false);
 
-    auto currentModifierIters = modifiers.equal_range(-1);
-    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-        if (it->second->isDynamic()){
-            std::cout << "0 Applying modifier to dim 0 of u" << registerN << std::endl;
-            it->second->modDimension(dimensions.at(0), elementWidth);
-        }
-    }
-
-
     std::unordered_multimap<int, std::shared_ptr<Modifier>> updatedModifiers;
 
     // Increment all modifiers' indexes
@@ -98,7 +89,7 @@ std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
 }
 
 template <typename T>
-void streamRegister_t<T>::setElements(bool causesUpdate, std::vector<T> e) {
+void streamRegister_t<T>::setElements(std::vector<T> e, bool causesUpdate) {
     assert_msg("Trying to set values to a load stream", type != RegisterConfig::Load);
 
     elements = e;
@@ -128,21 +119,9 @@ bool streamRegister_t<T>::hasStreamFinished() const {
     return status == RegisterStatus::Finished;
 }
 
-/*
-template <typename T>
-void streamRegister_t<T>::clearEndOfDimensionOfDim(size_t i) {
-    assert_msg("Trying to clear eof of invalid dimension", i < dimensions.size());
-    // Cannot clear this flag when the stream has finished, it would prevent us from knowing that
-    // Cannot clear this flag when the stream has finished, it would prevent us from knowing that
-    if (isStreamDone())
-        return;
-    dimensions.at(i).setEndOfDimension(false);
-}
-*/
-
 template <typename T>
 bool streamRegister_t<T>::isEndOfDimensionOfDim(size_t i) const {
-    assert_msg("Trying to check eof of invalid dimension", i < dimensions.size());
+    assert_msg("Trying to check EOD of invalid dimension", i < dimensions.size());
     return dimensions.at(i).isEndOfDimension();
 }
 
@@ -189,15 +168,17 @@ template <typename T>
 size_t streamRegister_t<T>::generateOffset() {
     /* Result will be the final accumulation of all offsets calculated per dimension */
     size_t init = 0;
-    int counter = 0;
+    int dimN = 0;
 
     return std::accumulate(dimensions.begin(), dimensions.end(), init, [&](size_t acc, Dimension &dim) {
-        if (dim.isLastIteration() && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + counter)) {
-            // std::cout << "Last iteration of dimension " << counter << std::endl;
+        if (dim.isLastIteration() && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + dimN)) {
+            // std::cout << "Last iteration of dimension " << dimN << std::endl;
             dim.setEndOfDimension(true);
         }
-        ++counter;
-        // std::cout << "Accumulating dimension " << ++counter << std::endl;
+        if(!dim.isModApplied())
+            applyDynamicMods(dimN);
+        ++dimN;
+        // std::cout << "Accumulating dimension " << ++dimN << std::endl;
         return acc + dim.calcOffset(elementWidth);
     });
 }
@@ -241,6 +222,15 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
 }
 
 template <typename T>
+void streamRegister_t<T>::applyDynamicMods(size_t dimN) {
+    auto currentModifierIters = modifiers.equal_range(dimN);
+    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+        if (it->second->isDynamic())
+            it->second->modDimension(dimensions.at(dimN), elementWidth);
+    }
+}
+
+template <typename T>
 void streamRegister_t<T>::updateIteration() {
     if (isStreamDone()) {
         status = RegisterStatus::Finished;
@@ -249,24 +239,7 @@ void streamRegister_t<T>::updateIteration() {
     }
 
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
-    // std::cout << "Advancing dimension no 1" << std::endl;
-    bool firstIter = dimensions.at(0).advance();
-    if (firstIter) {
-        auto currentModifierIters = modifiers.equal_range(0);
-        for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-            const bool dynamicModifierExists = it != modifiers.end() && it->second->isDynamic();
-
-            // currDim.resetIndex();
-            // printRegN("Updating EOD of dimension.");
-            // std::cout << "Advancing dimension no " << i + 2 << std::endl;
-
-            if (dynamicModifierExists) {
-                std::cout << "1 Applying modifier to dim 0 of u" << registerN << std::endl;
-                it->second->modDimension(dimensions.at(0), elementWidth);
-            }
-        }
-    }
-
+    dimensions.at(0).advance();
 
     /* No extra processing is needed if there is only 1 dimension */
     if (dimensions.size() == 1)
@@ -290,44 +263,21 @@ void streamRegister_t<T>::updateIteration() {
         // Reset EOD flag of current dimension
         currDim.setEndOfDimension(false);
         
-        // Iterate upper dimension and apply dynamic modifiers if they exist and it is the first iteration of the dimension
-        firstIter = nextDim.advance();
-        if (firstIter) {
-            auto currentModifierIters = modifiers.equal_range(i+1);
-            for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-                const bool dynamicModifierExists = it != modifiers.end() && it->second->isDynamic();
-
-                // currDim.resetIndex();
-                // printRegN("Updating EOD of dimension.");
-                // std::cout << "Advancing dimension no " << i + 2 << std::endl;
-
-                if (dynamicModifierExists) {
-                    std::cout << "2 Applying modifier to dim " << i+1 << " of u" << registerN << std::endl;
-                    it->second->modDimension(nextDim, elementWidth);
-                }
-            }
-        }
+        // Iterate upper dimension
+        nextDim.advance();
 
         // Apply static modifiers to current dimension
         auto currentModifierIters = modifiers.equal_range(i);
         for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-            const bool staticModifierExists = it != modifiers.end() && !it->second->isDynamic();
-
-            // currDim.resetIndex();
-            // printRegN("Updating EOD of dimension.");
-            // std::cout << "Advancing dimension no " << i + 2 << std::endl;
-
-            if (staticModifierExists) {
+            if (!it->second->isDynamic()) {
                 //std::cout << "Applying modifier to dim " << i << " of u" << registerN << std::endl;
                 it->second->modDimension(currDim, elementWidth);
             }
         }
 
         // The values at lower dimensions might have been modified. As such, we need to reset them before next iteration
-        for (size_t j = 0; j < i; j++) {
-            std::cout << "Resetting dimension " << j << " of u" << registerN << std::endl;
+        for (size_t j = 0; j < i; j++)
             dimensions.at(j).resetIterValues();
-        }
     }
 }
 
@@ -460,8 +410,7 @@ void streamingUnit_t::updateEODTable(const size_t stream) {
             // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
             ++d;
         }
-    },
-               registers.at(stream));
+    }, registers.at(stream));
 }
 
 template <typename T>

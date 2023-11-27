@@ -7,7 +7,7 @@ auto &predReg = P.SU.predicates[insn.uve_v_pred()];
 auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
     /* We can only operate on the first available values of the stream */
-    auto elements = src.getElements(true);
+    auto elements = src.getElements();
     auto destElements = dest.getElements(false); // doesn't iterate the stream
     auto validElementsIndex = src.getValidIndex();
     std::vector<StorageType> out(dest.getVLen());
@@ -20,7 +20,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     }
     //std::cout << "\n";
     dest.setValidIndex(validElementsIndex);
-    dest.setElements(true, out);
+    dest.setElements(out);
 };
 
 /* If the destination register is not configured, we have to build it before the

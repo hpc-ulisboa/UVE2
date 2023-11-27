@@ -13,7 +13,7 @@ auto baseBehaviour = [](auto &dest, auto value) {
     out.at(0) = value;
 
     dest.setMode(RegisterMode::Scalar);
-    dest.setElements(true, out);
+    dest.setElements(out);
 };
 
 /* If the destination register is not configured, we have to build it before the
