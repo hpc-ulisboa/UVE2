@@ -1,8 +1,12 @@
 bbl loader
-135.282465
-75.027386
-244.557986
-198.988751
+u1   getDynModElement
+u1   value = 1
+u1   getDynModElement
+u1   value = 2
+u1   getDynModElement
+u1   value = 2
+u1   getDynModElement
+u1   value = 2
 MUL   5.91491 * 8.43852 = 49.913
 MUL   3.78429 * 9.21978 = 34.8903
 MUL   2.07382 * 9.21978 = 19.1202
@@ -16,6 +20,14 @@ ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADDE   135.282
+u1   getDynModElement
+u1   value = 0
+u1   getDynModElement
+u1   value = 2
+u1   getDynModElement
+u1   value = 2
+u1   getDynModElement
+u1   value = 2
 MUL   4.09907 * 6.90001 = 28.2836
 MUL   3.1948 * 9.21978 = 29.4554
 MUL   0.850048 * 9.21978 = 7.83725
@@ -29,6 +41,14 @@ ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADDE   75.0274
+u1   getDynModElement
+u1   value = 1
+u1   getDynModElement
+u1   value = 1
+u1   getDynModElement
+u1   value = 2
+u1   getDynModElement
+u1   value = 2
 MUL   8.72289 * 8.43852 = 73.6083
 MUL   6.92409 * 8.43852 = 58.4291
 MUL   3.61915 * 9.21978 = 33.3678
@@ -42,6 +62,19 @@ ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADD   0 + 0 = 0
 ADDE   244.558
+u1   getDynModElement
+u1   value = 2
+u1   getDynModElement
+u1   value = 2
+u1   getDynModElement
+u1   value = 2
+u1   getDynModElement
+u1   value = 2
+DYN MOD   Stream has finished
+135.282465
+75.027386
+244.557986
+198.988751
 MUL   4.49259 * 9.21978 = 41.4207
 MUL   6.06268 * 9.21978 = 55.8966
 MUL   6.64286 * 9.21978 = 61.2457

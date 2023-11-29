@@ -66,6 +66,7 @@ struct streamRegister_t {
     void startConfiguration(Dimension dim);
     void endConfiguration();
     std::vector<ElementsType> getElements(bool causesUpdate = true);
+    T getDynModElement();
     void setElements(std::vector<ElementsType> e, bool causesUpdate = true);
     void setValidIndex(const size_t i);
     void setMode(const RegisterMode m);
@@ -73,7 +74,7 @@ struct streamRegister_t {
     //void clearEndOfDimensionOfDim(size_t i);
     bool isEndOfDimensionOfDim(size_t i) const;
 
-    size_t getelementWidth() const;
+    size_t getElementWidth() const;
     size_t getVLen() const;
     size_t getValidIndex() const;
     size_t getRegisterLength() const;

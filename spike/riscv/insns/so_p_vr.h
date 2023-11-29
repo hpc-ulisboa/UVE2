@@ -4,7 +4,7 @@ auto& src1Reg = P.SU.registers[insn.uve_pred_vs1()];
 auto &predReg = P.SU.predicates[insn.uve_pred()];
 
 auto baseBehaviour = [](auto &destP, auto &src1, auto &pred) {  
-    auto StorageType = src1.getelementWidth();
+    auto StorageType = src1.getElementWidth();
     auto destElements = destP.getPredicate();
     auto validElementsIndex = src1.getValidIndex();
 

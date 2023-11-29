@@ -42,7 +42,7 @@ struct Dimension {
     size_t getSize() const;
 
 private:
-    const long unsigned int offset;
+    const unsigned int offset;
     const unsigned int size;
     const int stride;
     long unsigned int iter_offset;
@@ -134,16 +134,10 @@ struct DynamicModifier : public Modifier {
         return scatter;
     }
 
-    void setApplied(const bool s) override {
-        modApplied = s;
-        if (!s)
-            indirectRegisterValues.pop_front();
-    }
-
 private:
     const size_t streamSource;
     bool scatter;
-    std::deque<uint32_t> indirectRegisterValues;
+    int indirectRegisterValue;
 
     streamingUnit_t *su;
 

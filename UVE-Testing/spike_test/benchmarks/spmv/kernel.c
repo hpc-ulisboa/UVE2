@@ -11,7 +11,7 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
         "ss.sta.ld.w              u2, %[cols], %[sn], %[sn] \t\n"    // D1: linear access size 'unknown'
         "ss.app.indl.siz.set      u2, u3 \t\n"                       // Indirection from stream u1 -> modifout size
         "ss.end                   u2, %[zero], %[zero], %[one] \t\n" // D2: new line stride N
-        "ss.cfg.vec               u2 \t\n"
+        //"ss.cfg.vec               u2 \t\n"
 
         // val stream
         "ss.sta.ld.w              u1, %[val], %[sn], %[sn] \t\n"     // D1: linear access size 'unknown'
@@ -43,11 +43,11 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
             ".jloop%=: \t\n"
                 "so.a.mul.fp u9, u1, u4, p0\n\t"
                 "so.a.add.fp u8, u8, u9, p0\n\t"
-            "so.b.ndc.1 u2, .jloop%= \n\t"
+            "so.b.ndc.1 u1, .jloop%= \n\t"
 
             "so.a.adde.fp u10, u8, p0 \n\t"
             "so.a.add.fp  u6, u5, u10, p0\n\t"
-        "so.b.nc	u2, .iLoop1%= \n\t"::);
+        "so.b.nc	u1, .iLoop1%= \n\t"::);
 }
 #endif // RUN_UVE
 

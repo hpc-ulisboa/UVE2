@@ -34,9 +34,10 @@ void Dimension::setEndOfDimension(bool b) {
 }
 
 size_t Dimension::calcOffset(size_t width) const {
-    // std::cout << "iter_offset: " << iter_offset << ", iter_stride: " <<
-    // iter_stride << ", iter_index: " << iter_index << ", width: " << width <<
-    // std::endl;
+    /*std::cout << "iter_offset: " << iter_offset << ", iter_stride: " <<
+    iter_stride << ", iter_index: " << iter_index << ", width: " << width << std::endl;
+    std::cout << "iter_stride * iter_index * width: " << iter_stride * iter_index * width << std::endl;
+    */
     return iter_offset + iter_stride * iter_index * width;
 }
 
@@ -89,41 +90,37 @@ void DynamicModifier::calculateValueChange(auto &target, auto baseValue, Behavio
 
 bool DynamicModifier::getIndirectRegisterValues() {
     auto &src = (su->registers).at(streamSource);
-    std::vector<uint32_t> values;
-    size_t validElementsIndex;
+    bool end;
     std::visit(overloaded{
-        [&](StreamReg32 &reg) { values = reg.getElements(); validElementsIndex = reg.getValidIndex(); },
-        [&](auto &reg) { assert_msg("Unexpected register type for a dynamic modifier", false); }
+        [&](auto &reg) { indirectRegisterValue = reg.getDynModElement(); end = reg.hasStreamFinished();}
     }, src);
-    indirectRegisterValues = std::deque<uint32_t>(values.begin(), values.begin()+validElementsIndex);
 
     /*print values
     for (auto &v : indirectRegisterValues) {
         printf("value: %d\n", v);
     }*/
 
-    return !indirectRegisterValues.empty();
+    return !end;
 }
 
 void DynamicModifier::modDimension(Dimension &dim, const size_t elementWidth) {
     // size_t valueChange = behaviour == Behaviour::Increment ? displacement : -1*displacement;
-    if (indirectRegisterValues.empty()) {
-        if (!getIndirectRegisterValues()) {
-            dim.setEndOfDimension(true);
-            return;
-        }
+    if (!getIndirectRegisterValues()) {
+        std::cout << "DYN MOD   Stream has finished" << std::endl;
+        dim.setEndOfDimension(true);
+        return;
     }
-
-    int valueChange = indirectRegisterValues.front();
     
     if (target == Target::Offset) {
-        calculateValueChange(dim.iter_offset, dim.offset, behaviour, valueChange * elementWidth);
+        calculateValueChange(dim.iter_offset, dim.offset, behaviour, indirectRegisterValue * elementWidth);
         //std::cout << "iter_offset: " << dim.iter_offset << std::endl;
     } else if (target == Target::Size) {
-        calculateValueChange(dim.iter_size, dim.size, behaviour, valueChange);
+        calculateValueChange(dim.iter_size, dim.size, behaviour, indirectRegisterValue);
+        if (dim.iter_size)
+            dim.setEndOfDimension(false);
         //std::cout << "iter_size: " << dim.iter_size << std::endl;
     } else if (target == Target::Stride) {
-        calculateValueChange(dim.iter_stride, dim.stride, behaviour, valueChange);
+        calculateValueChange(dim.iter_stride, dim.stride, behaviour, indirectRegisterValue);
         //std::cout << "iter_stride: " << dim.iter_stride << std::endl;
     } else {
         assert_msg("Unexpected target for a dynamic modifier", false);

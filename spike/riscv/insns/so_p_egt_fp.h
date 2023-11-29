@@ -7,7 +7,7 @@ auto& predReg = P.SU.predicates[insn.uve_pred()];
 auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto extra) {
     /* Each stream's elements must have the same width for content to be
      * operated on */
-    assert_msg("Given vectors have different widths", src1.getelementWidth() == src2.getelementWidth());
+    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
     /* We can only operate on the first available values of the stream */
     auto elements1 = src1.getElements();
     auto elements2 = src2.getElements();

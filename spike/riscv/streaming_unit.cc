@@ -61,8 +61,6 @@ void streamRegister_t<T>::startConfiguration(Dimension dim) {
     status = RegisterStatus::NotConfigured;
     mode = RegisterMode::Scalar;
     validIndex = 1;
-    mode = RegisterMode::Scalar;
-    validIndex = 1;
     dimensions.clear();
     dimensions.push_back(dim);
     vecCfg.push_back(false);
@@ -81,6 +79,20 @@ std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
     std::vector<T> e(elements.begin(), elements.end());
 
     return e;
+}
+
+template <typename T>
+T streamRegister_t<T>::getDynModElement() {
+    mode = RegisterMode::Scalar;
+    validIndex = 1;
+    std::cout << "u" << registerN << "   getDynModElement" << std::endl;
+    assert_msg("Dynamic modifier source is not correctly configured", this->type == RegisterConfig::Load);
+    
+    updateAsLoad();
+
+    std::cout << "u" << registerN << "   value = " << (int)elements.at(0) << std::endl;
+
+    return elements.at(0);
 }
 
 template <typename T>
@@ -121,7 +133,7 @@ bool streamRegister_t<T>::isEndOfDimensionOfDim(size_t i) const {
 }
 
 template <typename T>
-size_t streamRegister_t<T>::getelementWidth() const {
+size_t streamRegister_t<T>::getElementWidth() const {
     return elementWidth;
 }
 
@@ -170,7 +182,6 @@ size_t streamRegister_t<T>::generateOffset() {
             // std::cout << "Last iteration of dimension " << dimN << std::endl;
             dim.setEndOfDimension(true);
         }
-        applyDynamicMods(dimN);
         ++dimN;
         // std::cout << "Accumulating dimension " << ++dimN << std::endl;
         return acc + dim.calcOffset(elementWidth);
@@ -206,8 +217,9 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
     }
 
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
+        applyDynamicMods(i);
         if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)) {
-            // std::cout << "Stop dimension loading " << i+1 << std::endl;
+            std::cout << "Stop dimension loading " << i+1 << std::endl;
             return false;
         }
     }
@@ -219,9 +231,8 @@ template <typename T>
 void streamRegister_t<T>::applyDynamicMods(size_t dimN) {
     auto currentModifierIters = modifiers.equal_range(dimN);
     for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-        if (it->second->isDynamic() && !it->second->isApplied()) {
+        if (it->second->isDynamic() && !it->second->isApplied())
             it->second->modDimension(dimensions.at(dimN), elementWidth);
-        }
     }
 }
 
