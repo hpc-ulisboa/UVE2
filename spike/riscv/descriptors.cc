@@ -4,10 +4,6 @@
 
 /* Start of Dimension function definitions */
 
-/*void Dimension::resetIndex() {
-    iter_index = 0;
-}*/
-
 void Dimension::resetIterValues() {
     iter_offset = offset;
     iter_size = size;
@@ -23,29 +19,18 @@ void Dimension::advance() {
 }
 
 bool Dimension::isLastIteration() const {
-    // std::cout << "iter_index: " << iter_index << ", iter_size: " << iter_size
-    // << std::endl;
     return iter_index + 1 >= iter_size;
 }
-/*bool Dimension::triggerIterationUpdate() const {
-    return iter_index >= iter_size;
-}*/
 
 bool Dimension::isEndOfDimension() const {
     return endOfDimension;
 }
 
-bool Dimension::isModApplied() const {
-    return modApplied;
-}
-
 void Dimension::setEndOfDimension(bool b) {
     // std::cout << "Setting end of dimension to: " << b << std::endl;
     endOfDimension = b;
-    if (!b){
-        modApplied = false;
+    if (!b)
         iter_index = 0;
-    }
 }
 
 size_t Dimension::calcOffset(size_t width) const {
@@ -77,10 +62,10 @@ void StaticModifier::modDimension(Dimension &dim, const size_t elementWidth) {
         assert_msg("Unexpected target for a static modifier", false);
     }
 
-    dim.modApplied = true;
+    modApplied = true;
 }
 
-void DynamicModifier::calculateValueChange(size_t &target, size_t baseValue, Behaviour behaviour, size_t valueChange) {
+void DynamicModifier::calculateValueChange(auto &target, auto baseValue, Behaviour behaviour, int valueChange) {
     switch (behaviour) {
     case Behaviour::Add:
         target = baseValue + valueChange;
@@ -102,14 +87,35 @@ void DynamicModifier::calculateValueChange(size_t &target, size_t baseValue, Beh
     }
 }
 
+bool DynamicModifier::getIndirectRegisterValues() {
+    auto &src = (su->registers).at(streamSource);
+    std::vector<uint32_t> values;
+    size_t validElementsIndex;
+    std::visit(overloaded{
+        [&](StreamReg32 &reg) { values = reg.getElements(); validElementsIndex = reg.getValidIndex(); },
+        [&](auto &reg) { assert_msg("Unexpected register type for a dynamic modifier", false); }
+    }, src);
+    indirectRegisterValues = std::deque<uint32_t>(values.begin(), values.begin()+validElementsIndex);
+
+    /*print values
+    for (auto &v : indirectRegisterValues) {
+        printf("value: %d\n", v);
+    }*/
+
+    return !indirectRegisterValues.empty();
+}
+
 void DynamicModifier::modDimension(Dimension &dim, const size_t elementWidth) {
     // size_t valueChange = behaviour == Behaviour::Increment ? displacement : -1*displacement;
-    auto &src = (su->registers).at(streamSource);
-    size_t valueChange;
-    std::visit([&](auto &reg) {
-        valueChange = (size_t)(reg.getElements().at(0));
-    }, src);
+    if (indirectRegisterValues.empty()) {
+        if (!getIndirectRegisterValues()) {
+            dim.setEndOfDimension(true);
+            return;
+        }
+    }
 
+    int valueChange = indirectRegisterValues.front();
+    
     if (target == Target::Offset) {
         calculateValueChange(dim.iter_offset, dim.offset, behaviour, valueChange * elementWidth);
         //std::cout << "iter_offset: " << dim.iter_offset << std::endl;
@@ -122,8 +128,8 @@ void DynamicModifier::modDimension(Dimension &dim, const size_t elementWidth) {
     } else {
         assert_msg("Unexpected target for a dynamic modifier", false);
     }
-
-    dim.modApplied = true;
+    
+    modApplied = true;
 }
 
 /*void Modifier::printModifier() const {

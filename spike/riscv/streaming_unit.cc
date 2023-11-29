@@ -71,15 +71,10 @@ void streamRegister_t<T>::startConfiguration(Dimension dim) {
 template <typename T>
 void streamRegister_t<T>::endConfiguration() {
     status = RegisterStatus::Running;
-    /*if (this->type == RegisterConfig::Load) {
-      updateAsLoad();
-    }*/
 }
 
 template <typename T>
 std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
-    // assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
-
     if (causesUpdate && this->type == RegisterConfig::Load)
         updateAsLoad();
 
@@ -175,8 +170,7 @@ size_t streamRegister_t<T>::generateOffset() {
             // std::cout << "Last iteration of dimension " << dimN << std::endl;
             dim.setEndOfDimension(true);
         }
-        if(!dim.isModApplied())
-            applyDynamicMods(dimN);
+        applyDynamicMods(dimN);
         ++dimN;
         // std::cout << "Accumulating dimension " << ++dimN << std::endl;
         return acc + dim.calcOffset(elementWidth);
@@ -225,8 +219,18 @@ template <typename T>
 void streamRegister_t<T>::applyDynamicMods(size_t dimN) {
     auto currentModifierIters = modifiers.equal_range(dimN);
     for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-        if (it->second->isDynamic())
+        if (it->second->isDynamic() && !it->second->isApplied()) {
             it->second->modDimension(dimensions.at(dimN), elementWidth);
+        }
+    }
+}
+
+template <typename T>
+void streamRegister_t<T>::setDynamicModsNotApplied(size_t dimN, bool ifScatter) {
+    auto currentModifierIters = modifiers.equal_range(dimN);
+    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+        if (it->second->isDynamic() && it->second->isScatter() == ifScatter)
+            it->second->setApplied(false);
     }
 }
 
@@ -240,6 +244,8 @@ void streamRegister_t<T>::updateIteration() {
 
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
     dimensions.at(0).advance();
+    // Unflag scatter dynamic modifiers of first dimension
+    setDynamicModsNotApplied(0, true);
 
     /* No extra processing is needed if there is only 1 dimension */
     if (dimensions.size() == 1)
@@ -262,9 +268,13 @@ void streamRegister_t<T>::updateIteration() {
 
         // Reset EOD flag of current dimension
         currDim.setEndOfDimension(false);
+        // Unflag regular dynamic modifiers of current dimension
+        setDynamicModsNotApplied(i, false);
         
         // Iterate upper dimension
         nextDim.advance();
+        // Unflag scatter dynamic modifiers of upper dimension
+        setDynamicModsNotApplied(i+1, true);
 
         // Apply static modifiers to current dimension
         auto currentModifierIters = modifiers.equal_range(i);

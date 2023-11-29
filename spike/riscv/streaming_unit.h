@@ -3,17 +3,6 @@
 
 #include "descriptors.h"
 #include "helpers.h"
-#include <algorithm>
-#include <array>
-#include <cstddef> // size_t
-#include <deque>
-#include <iostream>
-#include <memory>
-#include <numeric>
-#include <type_traits>
-#include <unordered_map>
-#include <variant>
-#include <vector>
 
 /* Necessary for using MMU */
 class processor_t;
@@ -124,6 +113,7 @@ private:
     bool isStreamDone() const;
     bool tryGenerateOffset(size_t &address);
     void applyDynamicMods(size_t dimN);
+    void setDynamicModsNotApplied(size_t dimN, bool ifScatter);
     void updateIteration();
     void updateAsLoad();
     void updateAsStore();

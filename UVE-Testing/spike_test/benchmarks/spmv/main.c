@@ -18,8 +18,8 @@ void fillVal(DataType *A, int32_t N) {
     }
 }
 
-void initMat(int *colind, int *rowDelimiters, int NNZ, int N) {
-    int nnzAssigned = 0;
+void initMat(uint32_t *colind, uint32_t *rowDelimiters, int NNZ, int N) {
+    uint32_t nnzAssigned = 0;
     float prob = (float)NNZ / ((float)N * (float)N);
 
     srand48(8675307L);
@@ -36,12 +36,12 @@ void initMat(int *colind, int *rowDelimiters, int NNZ, int N) {
                 fillRemaining = 1;
             }
             if ((nnzAssigned < NNZ && drand48() <= prob) || fillRemaining == 1) {
-                colind[nnzAssigned] = j;
+                colind[nnzAssigned] = (uint32_t)j;
                 nnzAssigned++;
             }
         }
     }
-    rowDelimiters[N] = NNZ;
+    rowDelimiters[N] = (uint32_t)NNZ;
 }
 
 int main() {
@@ -55,35 +55,40 @@ int main() {
     DataType y[N];
 
     initZero(y, N);
+    initMat(colind, rowptr, NNZ, N);
     fillVal(nzval, NNZ);
     fillVal(x, N);
 
-    /*
-        printf("\nInput (colind):\n");
-        for (int i = 0; i < N; ++i){
-            for (int j = 0; j < N; ++j)
-                printf("%d ", colind[i*N+j]);
-            printf("\n");
-        }
+    
+    printf("\nInput (colind):\n");
+    for (int i = 0; i < N; ++i){
+        for (int j = 0; j < N; ++j)
+            printf("%d ", colind[i*N+j]);
+        printf("\n");
+    }
 
-        printf("\nInput (nzval):\n");
-        for (int i = 0; i < N; ++i){
-            for (int j = 0; j < N; ++j)
-                printf(DataFormat("", " "), nzval[i*N+j]);
-            printf("\n");
-        }
+    printf("\nInput (nzval):\n");
+    for (int i = 0; i < N; ++i){
+        for (int j = 0; j < N; ++j)
+            printf(DataFormat("", " "), nzval[i*N+j]);
+        printf("\n");
+    }
 
-        printf("\nInput (x):\n");
-        for (int i = 0; i < N; ++i)
-            printf(DataFormat("", "\n"), x[i]);
+    printf("\nInput (rowptr):\n");
+    for (int i = 0; i < N+1; ++i)
+        printf("%lu\n", rowptr[i]);
 
-        printf("\nInput (y):\n");
-        for (int i = 0; i < N; ++i)
-            printf(DataFormat("", "\n"), y[i]);
-    */
+    printf("\nInput (x):\n");
+    for (int i = 0; i < N; ++i)
+        printf(DataFormat("", "\n"), x[i]);
+
+    printf("\nInput (y):\n");
+    for (int i = 0; i < N; ++i)
+        printf(DataFormat("", "\n"), y[i]);
+    
     core(nzval, colind, rowptr, x, y, N);
 
-    // printf("\n\nResult (y):\n");
+    printf("\n\nResult (y):\n");
     for (int i = 0; i < N; ++i)
         printf(DataFormat("", "\n"), y[i]);
 

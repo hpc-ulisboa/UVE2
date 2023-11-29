@@ -20,7 +20,7 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
         "ss.cfg.vec               u1 \t\n"
 
         // vec stream
-        "ss.sta.ld.w              u4, %[vec], %[one], %[zero] \t\n"   // Dummout D2
+        "ss.sta.ld.w              u4, %[vec], %[one], %[zero] \t\n"   // Dummy D2
         //"ss.app.ind.sca.ofs.add   u4, u2 \t\n"                      // Indirection from stream u2 -> add to base address
         "ss.app.ind.ofs.add.1     u4, u2 \t\n"                        // to be done with new insn above
         "ss.end                   u4, %[zero], %[zero], %[zero] \t\n" // D1: new line stride N
@@ -61,7 +61,7 @@ void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec,
         cur_nnz = rowDelimiters[i];
 
         for (int j = 0; j < cur_nnz; j++) {
-            t += val[i*N+j] * vec[cols[i*N+j]];
+            t += val[j] * vec[cols[j]];
         }
         out[i] += t;
     }

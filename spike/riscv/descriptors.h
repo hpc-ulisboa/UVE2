@@ -3,12 +3,11 @@
 
 #include "helpers.h"
 //#include "streaming_unit.h"
-#include <cstddef> // size_t
 
 class streamingUnit_t;
 
 struct Dimension {
-    Dimension(uint64_t offset, unsigned int size, int stride)
+    Dimension(long unsigned int offset, unsigned int size, int stride)
         : offset(offset), size(size), stride(stride) {
 
         iter_offset = offset;
@@ -16,7 +15,7 @@ struct Dimension {
         iter_stride = stride;
         iter_index = 0;
         endOfDimension = iter_size == 0;
-        modApplied = false;
+
         // endOfDimension = false;
         // std::cout << "offset: " << offset << ", size: " << size << ", stride: "
         // << stride << std::endl;
@@ -43,15 +42,14 @@ struct Dimension {
     size_t getSize() const;
 
 private:
-    const size_t offset;
-    const size_t size;
-    const size_t stride;
-    size_t iter_offset;
-    size_t iter_size;
-    size_t iter_stride;
-    size_t iter_index;
+    const long unsigned int offset;
+    const unsigned int size;
+    const int stride;
+    long unsigned int iter_offset;
+    unsigned int iter_size;
+    int iter_stride;
+    unsigned int iter_index;
     bool endOfDimension;
-    bool modApplied;
 
     //friend class Modifier;
 	friend class StaticModifier;
@@ -74,7 +72,9 @@ enum class Behaviour {
 
 struct Modifier {
     Modifier(Target target, Behaviour behaviour)
-        : target(target), behaviour(behaviour) {}
+        : target(target), behaviour(behaviour) {
+            modApplied = false;
+        }
 
     virtual void modDimension(Dimension &dim, const size_t elementWidth) = 0;
 
@@ -82,9 +82,23 @@ struct Modifier {
         return false;
     }
 
+    virtual bool isScatter() const {
+        return false;
+    }
+
+    bool isApplied() const {
+        return modApplied;
+    }
+
+    virtual void setApplied(const bool s) {
+        modApplied = s;
+    }
+
 protected:
     const Target target;
     const Behaviour behaviour;
+
+    bool modApplied;
 
     streamingUnit_t *su;
 
@@ -94,7 +108,7 @@ protected:
 };
 
 struct StaticModifier : public Modifier {
-    StaticModifier(Target t, Behaviour b, size_t d = 0, size_t s = 0)
+    StaticModifier(Target t, Behaviour b, int d = 0, unsigned int s = 0)
         : Modifier(t, b), displacement(d), size(s) {
         assert_msg("Static modifier must be of type Increment or Decrement", b == Behaviour::Decrement || b == Behaviour::Increment);
     }
@@ -102,13 +116,13 @@ struct StaticModifier : public Modifier {
 	void modDimension(Dimension &dim, const size_t elementWidth) override;
 
 private:
-    const size_t displacement;
-    const size_t size;
+    const int displacement;
+    const unsigned int size;
 };
 
 struct DynamicModifier : public Modifier {
-    DynamicModifier(Target t, Behaviour b, const size_t src, streamingUnit_t *su)
-        : Modifier(t, b), streamSource(src), su(su) {}
+    DynamicModifier(Target t, Behaviour b, const size_t src, streamingUnit_t *su, bool sc = false /*default must be discussed*/)
+        : Modifier(t, b), streamSource(src), scatter(sc), su(su) {}
 
 	void modDimension(Dimension &dim, const size_t elementWidth) override;
 
@@ -116,12 +130,25 @@ struct DynamicModifier : public Modifier {
         return true;
     }
 
+    bool isScatter() const override{
+        return scatter;
+    }
+
+    void setApplied(const bool s) override {
+        modApplied = s;
+        if (!s)
+            indirectRegisterValues.pop_front();
+    }
+
 private:
     const size_t streamSource;
-
-    void calculateValueChange(size_t &target, size_t baseValue, Behaviour behaviour, size_t valueChange);
+    bool scatter;
+    std::deque<uint32_t> indirectRegisterValues;
 
     streamingUnit_t *su;
+
+    void calculateValueChange(auto &target, auto baseValue, Behaviour behaviour, int valueChange);
+    bool getIndirectRegisterValues();
 };
 
 #endif // DIMENSION_HPP

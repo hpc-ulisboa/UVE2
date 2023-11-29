@@ -21,7 +21,7 @@ const kernels = [ "spmv" ];
  * DSIZE 64: 64x64 matrix (DEFAULT)
 */
 
-const compileFlags = ["-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50"];
+const compileFlags = ["-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=4"];
 const linkFlags = ["-Wall", "-pedantic", "-static"];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";

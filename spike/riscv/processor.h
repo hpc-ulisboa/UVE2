@@ -337,13 +337,4 @@ public:
     triggers::module_t TM;
 };
 
-/* Copied from cppreference as it provides a generic overloaded visitor implementation  */
-template <class... Ts>
-struct overloaded : Ts... {
-    using Ts::operator()...;
-};
-// explicit deduction guide (not needed as of C++20)
-template <class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
-
 #endif
