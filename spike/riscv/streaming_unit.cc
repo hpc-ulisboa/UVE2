@@ -85,12 +85,9 @@ template <typename T>
 T streamRegister_t<T>::getDynModElement() {
     mode = RegisterMode::Scalar;
     validIndex = 1;
-    std::cout << "u" << registerN << "   getDynModElement" << std::endl;
     assert_msg("Dynamic modifier source is not correctly configured", this->type == RegisterConfig::Load);
     
     updateAsLoad();
-
-    std::cout << "u" << registerN << "   value = " << (int)elements.at(0) << std::endl;
 
     return elements.at(0);
 }
@@ -179,7 +176,8 @@ size_t streamRegister_t<T>::generateOffset() {
 
     return std::accumulate(dimensions.begin(), dimensions.end(), init, [&](size_t acc, Dimension &dim) {
         if (dim.isLastIteration() && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + dimN)) {
-            // std::cout << "Last iteration of dimension " << dimN << std::endl;
+            if(registerN == 4)
+                std::cout << "Last iteration of dimension " << dimN << std::endl;
             dim.setEndOfDimension(true);
         }
         ++dimN;
@@ -201,7 +199,7 @@ bool streamRegister_t<T>::isStreamDone() const {
 }
 
 template <typename T>
-bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
+bool streamRegister_t<T>::tryGenerateOffset(size_t &address, bool causesUpdate) {
     /* There are two situations that prevent us from generating offsets/iterating a stream:
     1) We are at the last iteration of the outermost dimension
     2) We just finished the last iteration of a dimension and there is a configure
@@ -211,15 +209,21 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
     /* The outermost dimension is the last one in the container */
 
     if (isStreamDone()) {
+        if(registerN == 4)
+		    std:: cout << "u" << registerN << "    Stream is done" << std::endl;
         status = RegisterStatus::Finished;
         type = RegisterConfig::NoStream;
         return false;
     }
 
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
+		// Unflag scatter dynamic modifiers of first dimension
+        if (causesUpdate)
+            setDynamicModsNotApplied(i, true);
         applyDynamicMods(i);
         if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)) {
-            std::cout << "Stop dimension loading " << i+1 << std::endl;
+            if(registerN == 4)
+                std::cout << "u" << registerN << "    Stop dimension loading " << i+1 << std::endl;
             return false;
         }
     }
@@ -231,8 +235,11 @@ template <typename T>
 void streamRegister_t<T>::applyDynamicMods(size_t dimN) {
     auto currentModifierIters = modifiers.equal_range(dimN);
     for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-        if (it->second->isDynamic() && !it->second->isApplied())
+        if (it->second->isDynamic() && !it->second->isApplied()){
+            if(registerN == 4)
+                std::cout << "u" << registerN << "    Applying modifier to dim " << dimN << std::endl;
             it->second->modDimension(dimensions.at(dimN), elementWidth);
+        }
     }
 }
 
@@ -255,8 +262,7 @@ void streamRegister_t<T>::updateIteration() {
 
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
     dimensions.at(0).advance();
-    // Unflag scatter dynamic modifiers of first dimension
-    setDynamicModsNotApplied(0, true);
+
 
     /* No extra processing is needed if there is only 1 dimension */
     if (dimensions.size() == 1)
@@ -272,8 +278,6 @@ void streamRegister_t<T>::updateIteration() {
         if (!currDim.isEndOfDimension())
             // if (!isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1))
             continue;
-
-        // std::cout << "Dimension " << i + 1 << " is fully done" << std::endl;
 
         // std::cout << "Looking for modifiers of dimension " << i << std::endl;
 
@@ -336,8 +340,9 @@ void streamRegister_t<T>::updateAsLoad() {
 
     size_t max = mode == RegisterMode::Vector ? vLen : 1;
 
-    while (eCount < max && tryGenerateOffset(offset)) {
-        // std::cout << "Can generate offset before (eCount = " << eCount << ")" << std::endl;
+    bool causesUpdate = true;
+
+    while (eCount < max && tryGenerateOffset(offset, causesUpdate)) {
         auto value = [this](auto address) -> ElementsType {
             if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint8_t>(address));
@@ -351,13 +356,23 @@ void streamRegister_t<T>::updateAsLoad() {
         // elements.push_back(value);
         // std::cout << "u"<< registerN << "   Loaded Value: " << readAS<double>(value) << std::endl;
         elements.at(eCount) = value;
+        if (registerN==2)
+            std::cout << "u" << registerN << "    Loaded Value: " << readAS<int>(value) << std::endl;
+        if (registerN==4)
+            std::cout << "u" << registerN << "    Loaded Value: " << readAS<double>(value) << std::endl;
         ++validIndex;
         if (tryGenerateOffset(offset)) {
-            // std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
+            if(registerN == 4)
+                std::cout << "u" << registerN << "    Can generate offset after (eCount = " << eCount << ")" << std::endl;
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;
-        } else
-            break;
+        } else{
+            if(registerN == 4)
+			    std::cout << "u" << registerN << "    Cannot generate offset after (eCount = " << eCount << ")" << std::endl;
+			break;
+		}
+
+        causesUpdate = false;
     }
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     // std::cout << "eCount: " << eCount << std::endl;

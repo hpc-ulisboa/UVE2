@@ -7,7 +7,7 @@
 class streamingUnit_t;
 
 struct Dimension {
-    Dimension(long unsigned int offset, unsigned int size, int stride)
+    Dimension(size_t offset, size_t size, int stride)
         : offset(offset), size(size), stride(stride) {
 
         iter_offset = offset;
@@ -42,13 +42,13 @@ struct Dimension {
     size_t getSize() const;
 
 private:
-    const unsigned int offset;
-    const unsigned int size;
+    const size_t offset;
+    const size_t size;
     const int stride;
-    long unsigned int iter_offset;
-    unsigned int iter_size;
+    size_t iter_offset;
+    size_t iter_size;
     int iter_stride;
-    unsigned int iter_index;
+    size_t iter_index;
     bool endOfDimension;
 
     //friend class Modifier;

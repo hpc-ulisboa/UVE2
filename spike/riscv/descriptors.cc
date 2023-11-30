@@ -1,6 +1,7 @@
 #include "descriptors.h"
 #include "streaming_unit.h"
 #include <iostream>
+#include <limits.h>
 
 /* Start of Dimension function definitions */
 
@@ -110,9 +111,18 @@ void DynamicModifier::modDimension(Dimension &dim, const size_t elementWidth) {
         dim.setEndOfDimension(true);
         return;
     }
-    
+
     if (target == Target::Offset) {
         calculateValueChange(dim.iter_offset, dim.offset, behaviour, indirectRegisterValue * elementWidth);
+        dim.setEndOfDimension(false);
+        if(behaviour != Behaviour::Increment && behaviour != Behaviour::Decrement)
+            dim.iter_size = UINT_MAX;
+        // print dimension
+        std::cout << "Dimension: ";
+        std::cout << "offset: " << dim.iter_offset << ", ";
+        std::cout << "size: " << dim.iter_size << ", ";
+        std::cout << "stride: " << dim.iter_stride << ", ";
+        std::cout << "EOD: " << (int)dim.endOfDimension << std::endl;
         //std::cout << "iter_offset: " << dim.iter_offset << std::endl;
     } else if (target == Target::Size) {
         calculateValueChange(dim.iter_size, dim.size, behaviour, indirectRegisterValue);
@@ -125,7 +135,7 @@ void DynamicModifier::modDimension(Dimension &dim, const size_t elementWidth) {
     } else {
         assert_msg("Unexpected target for a dynamic modifier", false);
     }
-    
+  
     modApplied = true;
 }
 

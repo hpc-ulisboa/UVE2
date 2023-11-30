@@ -75,7 +75,7 @@ int main() {
     }
 
     printf("\nInput (rowptr):\n");
-    for (int i = 0; i < N+1; ++i)
+    for (int i = 1; i < N+1; ++i)
         printf("%lu\n", rowptr[i]);
 
     printf("\nInput (x):\n");
@@ -86,7 +86,7 @@ int main() {
     for (int i = 0; i < N; ++i)
         printf(DataFormat("", "\n"), y[i]);
     
-    core(nzval, colind, rowptr, x, y, N);
+    core(nzval, colind, rowptr+1, x, y, N);
 
     printf("\n\nResult (y):\n");
     for (int i = 0; i < N; ++i)
