@@ -122,7 +122,10 @@ private:
 
 struct DynamicModifier : public Modifier {
     DynamicModifier(Target t, Behaviour b, const size_t src, streamingUnit_t *su, bool sc = false /*default must be discussed*/)
-        : Modifier(t, b), streamSource(src), scatter(sc), su(su) {}
+        : Modifier(t, b), streamSource(src), scatter(sc), su(su) {
+            indirectRegisterValue = 0;
+            end = false;
+        }
 
 	void modDimension(Dimension &dim, const size_t elementWidth) override;
 
@@ -138,11 +141,12 @@ private:
     const size_t streamSource;
     bool scatter;
     int indirectRegisterValue;
+    bool end;
 
     streamingUnit_t *su;
 
     void calculateValueChange(auto &target, auto baseValue, Behaviour behaviour, int valueChange);
-    bool getIndirectRegisterValues();
+    void getIndirectRegisterValues();
 };
 
 #endif // DIMENSION_HPP

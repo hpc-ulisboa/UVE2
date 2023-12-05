@@ -51,6 +51,7 @@ void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t 
         DataType sum = out[i];
         for (j = 0; j < L; j++) {
             Si = nzval[i * L + j] * vec[cols[i * L + j]];
+            //printf("(nzval[%d] = %f  *  vec[%d] = %f) = (Si = %f)\n", i*L+j, nzval[i * L + j], cols[i*L+j], vec[cols[i * L + j]], Si);
             sum += Si;
         }
         out[i] = sum;

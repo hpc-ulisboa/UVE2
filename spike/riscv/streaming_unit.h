@@ -53,8 +53,11 @@ struct streamRegister_t {
     // static constexpr size_t maxDimensions = 8;
     // static constexpr size_t maxModifiers = su->maxDimensions - 1;
 
+    /* FOR DEBUGGING */
+    size_t registerN;
+
     streamRegister_t(streamingUnit_t *su = nullptr, RegisterConfig t = RegisterConfig::NoStream, size_t regN = -1) :
-     su(su), registerN(regN), type(t) {
+     registerN(regN), su(su), type(t) {
         status = RegisterStatus::NotConfigured;
         mode = RegisterMode::Vector;
         validIndex = vLen;
@@ -66,7 +69,7 @@ struct streamRegister_t {
     void startConfiguration(Dimension dim);
     void endConfiguration();
     std::vector<ElementsType> getElements(bool causesUpdate = true);
-    T getDynModElement();
+    bool getDynModElement(int &value);
     void setElements(std::vector<ElementsType> e, bool causesUpdate = true);
     void setValidIndex(const size_t i);
     void setMode(const RegisterMode m);
@@ -89,8 +92,6 @@ struct streamRegister_t {
 
 private:
     streamingUnit_t *su;
-    /* FOR DEBUGGING */
-    size_t registerN;
     std::vector<ElementsType> elements = std::vector<ElementsType>(vLen);
     size_t validIndex;
     /* Same ordeal as above. Although the amount of dimensions is capped, we can avoid
@@ -112,7 +113,7 @@ private:
     size_t generateOffset();
     bool isDimensionFullyDone(const std::deque<Dimension>::const_iterator start, const std::deque<Dimension>::const_iterator end) const;
     bool isStreamDone() const;
-    bool tryGenerateOffset(size_t &address, bool causesUpdate = true);
+    bool tryGenerateOffset(size_t &address);
     void applyDynamicMods(size_t dimN);
     void setDynamicModsNotApplied(size_t dimN, bool ifScatter);
     void updateIteration();

@@ -59,7 +59,7 @@ int main() {
     fillVal(nzval, NNZ);
     fillVal(x, N);
 
-    
+    /*
     printf("\nInput (colind):\n");
     for (int i = 0; i < N; ++i){
         for (int j = 0; j < N; ++j)
@@ -85,10 +85,11 @@ int main() {
     printf("\nInput (y):\n");
     for (int i = 0; i < N; ++i)
         printf(DataFormat("", "\n"), y[i]);
+    */
     
     core(nzval, colind, rowptr+1, x, y, N);
 
-    printf("\n\nResult (y):\n");
+    //printf("\n\nResult (y):\n");
     for (int i = 0; i < N; ++i)
         printf(DataFormat("", "\n"), y[i]);
 

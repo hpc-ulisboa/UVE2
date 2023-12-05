@@ -60,15 +60,15 @@ void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec,
         t = 0.0;
         cur_nnz = rowDelimiters[i];
 
-        printf("i: %d, cur_nnz: %d\n", i, cur_nnz);
+        //printf("i: %d, cur_nnz: %d\n", i, cur_nnz);
 
         for (int j = 0; j < cur_nnz; j++) {
-            printf("val[%d]: %lf, cols[%d]: %d, vec[%d]: %lf\n", j, val[j], j, cols[j], cols[j], vec[cols[j]]);
+            //printf("val[%d]: %lf, cols[%d]: %d, vec[%d]: %lf\n", j, val[j], j, cols[j], cols[j], vec[cols[j]]);
             t += val[j] * vec[cols[j]];
         }
         out[i] += t;
 
-        printf("out[%d]: %lf\n", i, out[i]);
+        //printf("out[%d]: %lf\n", i, out[i]);
     }
 }
 #endif // RUN_SIMPLE

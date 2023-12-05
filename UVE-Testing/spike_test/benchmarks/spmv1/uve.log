@@ -1,160 +1,51 @@
 bbl loader
-u2    Can generate offset
-u2    Can generate offset
-u2    Can generate offset
-u2    Can generate offset
-Stop dimension loading 1
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 1
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-Stop dimension loading 2
-MUL   5.91491 * 8.43852 = 49.913
-MUL   3.78429 * 9.21978 = 34.8903
-MUL   2.07382 * 9.21978 = 19.1202
-MUL   3.40127 * 9.21978 = 31.359
-ADD   0 + 49.913 = 49.913
-ADD   0 + 34.8903 = 34.8903
-ADD   0 + 19.1202 = 19.1202
-ADD   0 + 31.359 = 31.359
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADDE   135.282
-u2    Can generate offset
-u2    Can generate offset
-u2    Can generate offset
-u2    Can generate offset
-Stop dimension loading 1
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 0
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-Stop dimension loading 2
-MUL   4.09907 * 6.90001 = 28.2836
-MUL   3.1948 * 9.21978 = 29.4554
-MUL   0.850048 * 9.21978 = 7.83725
-MUL   1.02509 * 9.21978 = 9.45114
-ADD   0 + 28.2836 = 28.2836
-ADD   0 + 29.4554 = 29.4554
-ADD   0 + 7.83725 = 7.83725
-ADD   0 + 9.45114 = 9.45114
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADDE   75.0274
-u2    Can generate offset
-u2    Can generate offset
-u2    Can generate offset
-u2    Can generate offset
-Stop dimension loading 1
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 1
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 1
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-Stop dimension loading 2
-MUL   8.72289 * 8.43852 = 73.6083
-MUL   6.92409 * 8.43852 = 58.4291
-MUL   3.61915 * 9.21978 = 33.3678
-MUL   8.58511 * 9.21978 = 79.1528
-ADD   0 + 73.6083 = 73.6083
-ADD   0 + 58.4291 = 58.4291
-ADD   0 + 33.3678 = 33.3678
-ADD   0 + 79.1528 = 79.1528
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADDE   244.558
-u2    Can generate offset
-u2    Can generate offset
-u2    Can generate offset
-u2    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-u3    Can generate offset
-u3    Applying modifier to dim 0
-u1   getDynModElement
-u1    Can generate offset
-u1   value = 2
-DYN MOD   Stream has finished
-u3    Can generate offset
-135.282465
-75.027386
-244.557986
-198.988751
-MUL   4.49259 * 9.21978 = 41.4207
-MUL   6.06268 * 9.21978 = 55.8966
-MUL   6.64286 * 9.21978 = 61.2457
-MUL   4.38469 * 9.21978 = 40.4259
-ADD   0 + 41.4207 = 41.4207
-ADD   0 + 55.8966 = 55.8966
-ADD   0 + 61.2457 = 61.2457
-ADD   0 + 40.4259 = 40.4259
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADD   0 + 0 = 0
-ADDE   198.989
+1609.724703
+1619.391365
+1326.531509
+1369.150886
+1436.489384
+1423.947260
+1337.817988
+1446.557825
+1502.354770
+1459.944096
+1452.335581
+1389.417790
+1296.498259
+1235.811211
+1305.349530
+1321.690291
+1369.786204
+1286.030567
+1386.875693
+1230.449489
+1351.311925
+1186.484115
+1479.829140
+1460.353212
+1260.306300
+1439.373112
+1362.902871
+1445.460843
+1315.611143
+1321.562985
+1397.959274
+1339.846489
+1311.183442
+1477.669696
+1370.981121
+1314.172611
+1388.432770
+1486.419399
+1616.204041
+1339.182053
+1314.503211
+1196.547307
+1339.208228
+1325.962122
+1490.217532
+1472.535727
+1451.017267
+1255.596035
+1417.586831
+1497.987555

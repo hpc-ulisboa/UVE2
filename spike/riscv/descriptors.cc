@@ -89,55 +89,55 @@ void DynamicModifier::calculateValueChange(auto &target, auto baseValue, Behavio
     }
 }
 
-bool DynamicModifier::getIndirectRegisterValues() {
+void DynamicModifier::getIndirectRegisterValues() {
     auto &src = (su->registers).at(streamSource);
-    bool end;
     std::visit(overloaded{
-        [&](auto &reg) { indirectRegisterValue = reg.getDynModElement(); end = reg.hasStreamFinished();}
+        [&](auto &reg) { end = !reg.getDynModElement(indirectRegisterValue);}
     }, src);
 
     /*print values
     for (auto &v : indirectRegisterValues) {
         printf("value: %d\n", v);
     }*/
-
-    return !end;
 }
 
 void DynamicModifier::modDimension(Dimension &dim, const size_t elementWidth) {
     // size_t valueChange = behaviour == Behaviour::Increment ? displacement : -1*displacement;
-    if (!getIndirectRegisterValues()) {
-        std::cout << "DYN MOD   Stream has finished" << std::endl;
-        dim.setEndOfDimension(true);
-        return;
-    }
+    if(!end){
+        getIndirectRegisterValues();
 
-    if (target == Target::Offset) {
-        calculateValueChange(dim.iter_offset, dim.offset, behaviour, indirectRegisterValue * elementWidth);
-        dim.setEndOfDimension(false);
-        if(behaviour != Behaviour::Increment && behaviour != Behaviour::Decrement)
-            dim.iter_size = UINT_MAX;
-        // print dimension
-        std::cout << "Dimension: ";
-        std::cout << "offset: " << dim.iter_offset << ", ";
-        std::cout << "size: " << dim.iter_size << ", ";
-        std::cout << "stride: " << dim.iter_stride << ", ";
-        std::cout << "EOD: " << (int)dim.endOfDimension << std::endl;
-        //std::cout << "iter_offset: " << dim.iter_offset << std::endl;
-    } else if (target == Target::Size) {
-        calculateValueChange(dim.iter_size, dim.size, behaviour, indirectRegisterValue);
-        if (dim.iter_size)
+        if (target == Target::Offset) {
+            calculateValueChange(dim.iter_offset, dim.offset, behaviour, indirectRegisterValue * elementWidth);
             dim.setEndOfDimension(false);
-        //std::cout << "iter_size: " << dim.iter_size << std::endl;
-    } else if (target == Target::Stride) {
-        calculateValueChange(dim.iter_stride, dim.stride, behaviour, indirectRegisterValue);
-        //std::cout << "iter_stride: " << dim.iter_stride << std::endl;
+
+            if(scatter && behaviour != Behaviour::Increment && behaviour != Behaviour::Decrement)
+                dim.iter_size = UINT_MAX;
+            /* print dimension
+            std::cout << "Dimension: ";
+            std::cout << "offset: " << dim.iter_offset << ", ";
+            std::cout << "size: " << dim.iter_size << ", ";
+            std::cout << "stride: " << dim.iter_stride << ", ";
+            std::cout << "EOD: " << (int)dim.endOfDimension << std::endl;*/
+            //std::cout << "iter_offset: " << dim.iter_offset << std::endl;
+        } else if (target == Target::Size) {
+            calculateValueChange(dim.iter_size, dim.size, behaviour, indirectRegisterValue);
+            if (dim.iter_size)
+                dim.setEndOfDimension(false);
+            //std::cout << "iter_size: " << dim.iter_size << std::endl;
+        } else if (target == Target::Stride) {
+            calculateValueChange(dim.iter_stride, dim.stride, behaviour, indirectRegisterValue);
+            //std::cout << "iter_stride: " << dim.iter_stride << std::endl;
+        } else {
+            assert_msg("Unexpected target for a dynamic modifier", false);
+        }
+
+        modApplied = true;
+
     } else {
-        assert_msg("Unexpected target for a dynamic modifier", false);
+        dim.setEndOfDimension(true);
+        end = false;
     }
-  
-    modApplied = true;
-}
+  }
 
 /*void Modifier::printModifier() const {
     // print modifier

@@ -2,13 +2,13 @@
 const fs = require('node:fs');
 const { spawnSync } = require("child_process");
 
-//const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance" ];
+const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv1", "spmv" ];
 
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "knn" ];
 //const kernels = [ "spmv" ];
 
-const kernels = [ "spmv" ];
+//const kernels = [ "spmv" ];
 
 /* DTYPE: dataset datatype
  * DTYPE 1: byte (hexadecimal int)
@@ -21,7 +21,7 @@ const kernels = [ "spmv" ];
  * DSIZE 64: 64x64 matrix (DEFAULT)
 */
 
-const compileFlags = ["-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=4"];
+const compileFlags = ["-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50"];
 const linkFlags = ["-Wall", "-pedantic", "-static"];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
