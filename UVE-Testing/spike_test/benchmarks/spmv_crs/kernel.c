@@ -8,22 +8,24 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
         "ss.ld.w                  u7, %[rowDelimiters], %[sn], %[one] \t\n" // D1: linear access
 
         // val stream
-        "ss.sta.ld.d              u1, %[val], %[sn], zero \t\n"     // D1: linear access size 'unknown'
+        //"ss.sta.ld.d              u1, %[val], %[sn], zero \t\n"     // D1: linear access size 'unknown'
+        "ss.sta.ld.d              u1, %[val], %[sn], %[sn] \t\n"     // D1: linear access size 'unknown'
         "ss.app.indl.siz.set      u1, u7 \t\n"                       // Indirection from stream u1 -> modify size
-        "ss.end                   u1, %[zero], %[zero], %[one] \t\n" // D2: new line stride 1
+        "ss.end                   u1, zero, zero, %[one] \t\n" // D2: new line stride 1
         "ss.cfg.vec               u1 \t\n"
 
         // cols stream
-        "ss.sta.ld.w              u2, %[cols], %[sn], %[zero] \t\n"    // D1: linear access size 'unknown'
+        //"ss.sta.ld.w              u2, %[cols], %[sn], zero \t\n"    // D1: linear access size 'unknown'
+        "ss.sta.ld.w              u2, %[cols], %[sn], %[sn] \t\n"    // D1: linear access size 'unknown'
         "ss.app.indl.siz.set      u2, u3 \t\n"                       // Indirection from stream u1 -> modify size
-        "ss.end                   u2, %[zero], %[zero], %[one] \t\n" // D2: new line stride 1
+        "ss.end                   u2, zero, zero, %[one] \t\n" // D2: new line stride 1
         "ss.cfg.vec               u2 \t\n"
 
         // vec stream
-        "ss.sta.ld.d              u4, %[vec], %[sn], %[zero] \t\n"   // Dummy D2
+        "ss.sta.ld.d              u4, %[vec], %[sn], zero \t\n"   // Dummy D2
         //"ss.app.ind.sca.ofs.add   u4, u2 \t\n"                      // Indirection from stream u2 -> add to base address
         "ss.app.ind.ofs.add.1     u4, u2 \t\n"                        // to be done with new insn above
-        "ss.end                   u4, %[zero], %[zero], %[zero] \t\n" // D1: new line stride N
+        "ss.end                   u4, zero, zero, zero \t\n" // D1: new line stride N
         "ss.cfg.vec               u4 \t\n"
 
         // out stream load
@@ -64,7 +66,8 @@ void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec,
 
         for (int j = 0; j < cur_nnz; j++) {
             //printf("val[%d]: %lf, cols[%d]: %d, vec[%d]: %lf\n", j, val[j], j, cols[j], cols[j], vec[cols[j]]);
-            t += val[j] * vec[cols[j]];
+            //t += val[j] * vec[cols[j]];
+            t += val[i * N + j] * vec[cols[i * N + j]];
         }
         out[i] += t;
 

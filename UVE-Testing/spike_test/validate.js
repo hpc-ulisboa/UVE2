@@ -2,13 +2,13 @@
 const fs = require('node:fs');
 const { spawnSync } = require("child_process");
 
-const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv1", "spmv" ];
+//const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv1", "spmv2" ];
 
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "knn" ];
 //const kernels = [ "spmv" ];
 
-//const kernels = [ "spmv" ];
+const kernels = [ "spmv_ellpack" ];
 
 /* DTYPE: dataset datatype
  * DTYPE 1: byte (hexadecimal int)
@@ -88,9 +88,6 @@ for (let kernel of kernels) {
   console.log(`\n### Attempting to compile and run kernel ${kernel}...\n`);
 
   /* Compile Functions source files */
-  compileKernel(compilerPath, [...compileFlags, "-O3", "-Wall", "-I..", "../Functions.c", "-c"]);
-  compileKernel(compilerPath, [...compileFlags, "-O3", "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
-
   compileKernel(compilerPath, [...compileFlags, "-O3", "-Wall", "-I..", "../Functions.c", "-c"]);
   compileKernel(compilerPath, [...compileFlags, "-O3", "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
 

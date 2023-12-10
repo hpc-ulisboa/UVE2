@@ -1,0 +1,144 @@
+bbl loader
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 0
+Under K!
+cur_indx = 0
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 0
+Under K!
+cur_indx = 0
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 0
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 0
+Under K!
+cur_indx = 0
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 0
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+cur_indx = 1
+Under K!
+
+Input (cols):
+1 1 1 
+0 0 1 
+0 0 1 
+1 1 1 
+0 1 1 
+1 1 1 
+1 1 1 
+1 1 1 
+1 1 1 
+0 0 1 
+0 1 1 
+1 1 1 
+
+Input (nzval):
+5.914905 3.784288 2.073821 
+8.438519 4.099069 3.194803 
+9.076290 9.219778 8.722893 
+5.569462 0.319938 0.989845 
+4.321926 9.278377 3.953654 
+9.288636 3.073357 7.830762 
+9.421966 8.570868 8.896462 
+4.577727 8.737056 1.857262 
+2.338280 0.074199 4.212511 
+9.707506 8.570643 7.073183 
+6.439517 6.688900 0.558950 
+1.020816 9.507193 9.477242 
+
+Input (vec):
+6.900010
+6.262619
+9.805682
+3.332597
+8.770675
+4.384690
+3.380304
+5.452756
+0.862650
+9.536583
+2.859752
+7.774526
+
+Input (out):
+0.000000
+0.000000
+0.000000
+0.000000
+0.000000
+0.000000
+0.000000
+0.000000
+0.000000
+0.000000
+0.000000
+0.000000
+
+
+Result (out):
+73.729911
+106.517320
+180.871208
+43.082095
+112.688502
+126.459537
+168.397428
+95.016740
+41.489785
+170.416068
+89.823254
+125.285275
