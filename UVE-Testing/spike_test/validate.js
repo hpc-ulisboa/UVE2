@@ -2,13 +2,13 @@
 const fs = require('node:fs');
 const { spawnSync } = require("child_process");
 
-//const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv1", "spmv2" ];
+const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv_ellpack", "spmv_ellpack_delimiters" ];
 
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "knn" ];
 //const kernels = [ "spmv" ];
 
-const kernels = [ "spmv_ellpack" ];
+//const kernels = [ "" ];
 
 /* DTYPE: dataset datatype
  * DTYPE 1: byte (hexadecimal int)

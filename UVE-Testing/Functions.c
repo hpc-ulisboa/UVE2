@@ -7,6 +7,7 @@ void initArray(DataType *array, int N) {
     array[i] = values[i];
   }
 }
+
 void initArray2D(DataType *array, int N, int M) {
   const DataType values[] = DataSet;
 

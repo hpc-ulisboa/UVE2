@@ -1,8 +1,9 @@
-// Adapted from: MachSuite
-// Compile with:
-/* gcc -DTYPE=5 -O3 ../../../../Functions.c -c
-   gcc -I../../../.. -O3 generateData.c -c
-   gcc -O3 Functions.o generateData.o -o generateData
+/* Adapted from: MachSuite
+   Using Sparse Matrix 494 Bus Interconnect Matrix from SuiteSparse (http://sparse.tamu.edu/HB/494_bus)
+ Compile with:
+gcc -DTYPE=5 -O3 ../../../../Functions.c -c
+gcc -I../../../.. -O3 generateData.c -c
+gcc -O3 Functions.o generateData.o -o generateData
 */
 #include <assert.h>
 #include <fcntl.h>
@@ -111,6 +112,7 @@ int main(int argc, char **argv) {
 
     // Write 'nzval:\n' to file
     state = write(fd, "#define nzvalSpmvEllpack { ", 27);
+    assert(state == 27 && "Couldn't write nzval to input data file");
     for (int i = 0; i < N * L; i++) {
         char buffer[50];
         if (i == N * L - 1)
@@ -123,6 +125,7 @@ int main(int argc, char **argv) {
 
     // Write 'cols:\n' to file
     state = write(fd, "#define colsSpmvEllpack { ", 26);
+    assert(state == 26 && "Couldn't write cols to input data file");
     for (int i = 0; i < N * L; i++) {
         char buffer[50];
         if (i == N * L - 1)
@@ -135,6 +138,7 @@ int main(int argc, char **argv) {
 
     // Write 'vec:\n' to file
     state = write(fd, "#define vecSpmvEllpack { ", 25);
+    assert(state == 25 && "Couldn't write vec to input data file");
     for (int i = 0; i < N; i++) {
         char buffer[50];
         if (i == N - 1)
@@ -143,6 +147,19 @@ int main(int argc, char **argv) {
             sprintf(buffer, "%lf, ", vec[i]);  // Convert the float to a string
         ssize_t status = write(fd, buffer, strlen(buffer));  // Write the string to the file
         assert(status == strlen(buffer) && "Couldn't write vec to input data file");
+    }
+
+    // Write 'rowDelimitersSpmvEllpack:\n' to file
+    state = write(fd, "#define rowDelimitersSpmvEllpack { ", 34);
+    assert(state == 34 && "Couldn't write rowDelimiters to input data file");
+    for (int i = 0; i < N; i++) {
+        char buffer[50];
+        if (i == N - 1)
+            sprintf(buffer, "%d };\n\n", row_fill[i]);  // Convert the int to a string
+        else
+            sprintf(buffer, "%d, ", row_fill[i]);  // Convert the int to a string
+        ssize_t status = write(fd, buffer, strlen(buffer));  // Write the string to the file
+        assert(status == strlen(buffer) && "Couldn't write rowDelimiters to input data file");
     }
 
     close(fd);

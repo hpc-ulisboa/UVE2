@@ -38,6 +38,8 @@
 #elif TYPE == 4
 #define DataType float
 #define DataSet fDataset
+#define sgdX sgdXDataset
+#define sgdY sgdYDataset
 #define DataFormat(start, end) start "%3.6f" end
 
 // Using doubles

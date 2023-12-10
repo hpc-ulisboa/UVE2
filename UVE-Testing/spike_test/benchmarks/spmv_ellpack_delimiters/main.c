@@ -6,11 +6,12 @@
 #define MIN 0.
 #define MAX 10.0
 
-extern void core(DataType *nzval, uint32_t *cols, DataType *vec, DataType *out, int32_t M, int32_t K);
+extern void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint64_t N, uint64_t K);
 
-static void initVals(uint32_t *colind, DataType *nzval, DataType *x, int M, int K) {
+static void initVals(uint32_t *colind, DataType *nzval, uint32_t *rowDelimiters, DataType *x, int M, int K) {
     const uint32_t cols_data[] = colsSpmvEllpack;
     const DataType nzval_data[] = nzvalSpmvEllpack;
+    const uint32_t row_data[] = rowDelimitersSpmvEllpack;
     const DataType x_data[] = vecSpmvEllpack;
     
     for (int i = 0; i < M * K; i++) {
@@ -18,8 +19,10 @@ static void initVals(uint32_t *colind, DataType *nzval, DataType *x, int M, int 
         nzval[i] = nzval_data[i];
     }
 
-    for (int i = 0; i < M; i++)
+    for (int i = 0; i < M; i++) {
         x[i] = x_data[i];
+        rowDelimiters[i] = row_data[i];
+    }
 }
 
 int main() {
@@ -27,10 +30,11 @@ int main() {
 
     uint32_t colind[M * K];
     DataType nzval[M * K];
+    uint32_t rowDelimiters[M];
     DataType x[M];
     DataType y[M];
 
-    initVals(colind, nzval, x, M, K);
+    initVals(colind, nzval, rowDelimiters, x, M, K);
     initZero(y, M);
 
 /*	printf("\nInput (cols):\n");
@@ -55,7 +59,7 @@ int main() {
     for (int i = 0; i < M; ++i)
         printf(DataFormat("", "\n"), y[i]);
 */
-    core(nzval, colind, x, y, M, K);
+    core(nzval, colind, rowDelimiters, x, y, M, K);
 
 	//printf("\n\nResult (out):\n");
     for (int i = 0; i < M; ++i)

@@ -1,7 +1,7 @@
 #include "Functions.h"
 
 #ifdef RUN_UVE
-void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint64_t N) {
+void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint64_t N, uint64_t K) {
     asm volatile(
         // rowDelimiters stream (!!! this one should not be vectorial)
         "ss.ld.w                  u3, %[rowDelimiters], %[sn], %[one] \t\n" // D1: linear access
@@ -9,14 +9,14 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
 
         // val stream
         //"ss.sta.ld.d              u1, %[val], %[sn], zero \t\n"     // D1: linear access size 'unknown'
-        "ss.sta.ld.d              u1, %[val], %[sn], %[sn] \t\n"     // D1: linear access size 'unknown'
+        "ss.sta.ld.d              u1, %[val], %[sn], %[sk] \t\n"     // D1: linear access size 'unknown'
         "ss.app.indl.siz.set      u1, u7 \t\n"                       // Indirection from stream u1 -> modify size
         "ss.end                   u1, zero, zero, %[one] \t\n" // D2: new line stride 1
         "ss.cfg.vec               u1 \t\n"
 
         // cols stream
         //"ss.sta.ld.w              u2, %[cols], %[sn], zero \t\n"    // D1: linear access size 'unknown'
-        "ss.sta.ld.w              u2, %[cols], %[sn], %[sn] \t\n"    // D1: linear access size 'unknown'
+        "ss.sta.ld.w              u2, %[cols], %[sn], %[sk] \t\n"    // D1: linear access size 'unknown'
         "ss.app.indl.siz.set      u2, u3 \t\n"                       // Indirection from stream u1 -> modify size
         "ss.end                   u2, zero, zero, %[one] \t\n" // D2: new line stride 1
         "ss.cfg.vec               u2 \t\n"
@@ -36,7 +36,7 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
 
         :
         : [val] "r"(val), [cols] "r"(cols), [rowDelimiters] "r"(rowDelimiters), [vec] "r"(vec), [out] "r"(out),
-          [sn] "r"(N), [zero] "r"(0), [one] "r"(1));
+          [sn] "r"(N), [sk] "r"(K), [zero] "r"(0), [one] "r"(1));
 
     asm volatile(
         ".iLoop1%=: \t\n"
@@ -54,7 +54,7 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE
-void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec, DataType *out, uint64_t N) {
+void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec, DataType *out, uint64_t N, uint64_t K) {
     DataType t;
     int cur_nnz;
 
@@ -67,7 +67,7 @@ void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec,
         for (int j = 0; j < cur_nnz; j++) {
             //printf("val[%d]: %lf, cols[%d]: %d, vec[%d]: %lf\n", j, val[j], j, cols[j], cols[j], vec[cols[j]]);
             //t += val[j] * vec[cols[j]];
-            t += val[i * N + j] * vec[cols[i * N + j]];
+            t += val[i * K + j] * vec[cols[i * K + j]];
         }
         out[i] += t;
 
