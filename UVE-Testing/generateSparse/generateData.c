@@ -1,8 +1,8 @@
 /* Adapted from: MachSuite
    Using Sparse Matrix 494 Bus Interconnect Matrix from SuiteSparse (http://sparse.tamu.edu/HB/494_bus)
  Compile with:
-gcc -DTYPE=5 -O3 ../../../../Functions.c -c
-gcc -I../../../.. -O3 generateData.c -c
+gcc -DTYPE=5 -O3 ../Functions.c -c
+gcc -I.. -O3 generateData.c -c
 gcc -O3 Functions.o generateData.o -o generateData
 */
 #include <assert.h>
