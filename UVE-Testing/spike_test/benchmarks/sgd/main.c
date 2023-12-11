@@ -16,7 +16,9 @@
 #define NUM_BATCHES PB_N / BATCH_SIZE
 #define EPOCHS 100
 
-extern void core(void **x, void *x_array, void *y, void *y_err, void *sgd_model);
+extern void core_kernel(void **x, void *x_array, void *y, void *y_err, void *sgd_model, DataType *intercept);
+extern void predict(DataType *y_fitted, DataType **x, DataType *x_array, DataType *sgd_model, DataType *intercept);
+extern void r2_score(DataType *y_fitted, DataType *y, DataType *result);
 
 DataType intercept = 0.0;
 
@@ -33,45 +35,16 @@ static void init_array(DataType **x, DataType *y){
     }
 }
 
-void predict(DataType *y_fitted, DataType **x, DataType *sgd_model){
-    DataType r;
-    for (int i = 0; i < PB_N; i++){
-        r = 0.0;
-        for (int j = 0; j < PB_D; j++)
-            r += x[i][j] * sgd_model[j];
-
-        y_fitted[i] = r + intercept;
-    }
-}
-
-DataType r2_score(DataType *y_fitted, DataType *y){
-
-    DataType y_mean = 0.0;
-    for (int i = 0; i < PB_N; i++)
-        y_mean += y[i];
-    y_mean = y_mean / (DataType)PB_N;
-
-    DataType res = 0.0;
-    for (int i = 0; i < PB_N; i++)
-        res += (y[i] - y_fitted[i]) * (y[i] - y_fitted[i]);
-
-    DataType tot = 0.0;
-    for (int i = 0; i < PB_N; i++)
-        tot += (y[i] - y_mean) * (y[i] - y_mean);
-
-    return 1.0 - (res / tot);
-}
-
 int main(int argc, char **argv){
     /* Retrieve problem size. */
-    int i;
+    int i, intercept = 0;
 
     /* Variable declaration/allocation. */
 
     DataType *x_array = (DataType *)malloc(PB_N * PB_D * sizeof(DataType));
     DataType **x = (DataType **)malloc(PB_N * sizeof(DataType *));
     for (i = 0; i < PB_N; i++)
-        x[i] = &(*(x_array + i * PB_D));
+        x[i] = x_array + i * PB_D;
 
     DataType *y = (DataType *)malloc(PB_N * sizeof(DataType));
     DataType *y_fitted = (DataType *)malloc(PB_N * sizeof(DataType));
@@ -84,8 +57,9 @@ int main(int argc, char **argv){
     initConstant(sgd_model, PB_D, 1.0);
 
     /* Run kernel. */
-    core(x, x_array, y, y_err, sgd_model);
-    //predict(y_fitted, x, sgd_model);
+    core_kernel(x, x_array, y, y_err, sgd_model, &intercept);
+    predict(y_fitted, x, x_array, sgd_model, &intercept);
+    //r2_score(y_fitted, y, &result);
 
     for (i = 0; i < PB_D; i++)
         printf( DataFormat("", "\n"), sgd_model[i]);
