@@ -16,9 +16,9 @@
 #define NUM_BATCHES PB_N / BATCH_SIZE
 #define EPOCHS 100
 
-extern void core_kernel(void **x, void *x_array, void *y, void *y_err, void *sgd_model, DataType *intercept);
-extern void predict(DataType *y_fitted, DataType **x, DataType *x_array, DataType *sgd_model, DataType *intercept);
-extern void r2_score(DataType *y_fitted, DataType *y, DataType *result);
+extern DataType core_kernel(void **x, void *x_array, void *y, void *y_err, void *sgd_model);
+extern void predict(DataType *y_fitted, DataType **x, DataType *x_array, DataType *sgd_model, DataType intercept);
+extern DataType r2_score(DataType *y_fitted, DataType *y);
 
 DataType intercept = 0.0;
 
@@ -37,7 +37,8 @@ static void init_array(DataType **x, DataType *y){
 
 int main(int argc, char **argv){
     /* Retrieve problem size. */
-    int i, intercept = 0;
+    int i;
+    DataType intercept, result;
 
     /* Variable declaration/allocation. */
 
@@ -57,14 +58,14 @@ int main(int argc, char **argv){
     initConstant(sgd_model, PB_D, 1.0);
 
     /* Run kernel. */
-    core_kernel(x, x_array, y, y_err, sgd_model, &intercept);
-    predict(y_fitted, x, x_array, sgd_model, &intercept);
-    //r2_score(y_fitted, y, &result);
+    intercept = core_kernel(x, x_array, y, y_err, sgd_model);
+    //predict(y_fitted, x, x_array, sgd_model, intercept);
+    //result = r2_score(y_fitted, y);
 
-    for (i = 0; i < PB_D; i++)
-        printf( DataFormat("", "\n"), sgd_model[i]);
-    //printf("\n%.4lf", intercept);
-    //printf("\n%.4f", r2_score(y_fitted, y));
+    for (i = 0; i < PB_N; i++)
+        printf( DataFormat("", "\n"), y_err[i]);
+    printf( DataFormat("\n", "\n"), intercept);
+    printf( DataFormat("", "\n"), result);
 
     free(x);
     free(y);

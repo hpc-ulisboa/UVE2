@@ -106,6 +106,10 @@ void streamRegister_t<T>::setElements(std::vector<T> e, bool causesUpdate) {
 
     elements = e;
 
+    if (registerN == 10 || registerN == 17)
+        std::cout << "u" << registerN << "    element: " << readAS<double>(elements.at(0)) << std::endl;
+        
+
     if (causesUpdate && this->type == RegisterConfig::Store)
         updateAsStore();
 }
