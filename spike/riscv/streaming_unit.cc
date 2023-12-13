@@ -105,11 +105,7 @@ void streamRegister_t<T>::setElements(std::vector<T> e, bool causesUpdate) {
     assert_msg("Trying to set values to a load stream", type != RegisterConfig::Load);
 
     elements = e;
-
-    if (registerN == 10 || registerN == 17)
-        std::cout << "u" << registerN << "    element: " << readAS<double>(elements.at(0)) << std::endl;
-        
-
+ 
     if (causesUpdate && this->type == RegisterConfig::Store)
         updateAsStore();
 }
@@ -175,7 +171,9 @@ RegisterMode streamRegister_t<T>::getMode() const {
 template <typename T>
 void streamRegister_t<T>::printRegN(char *str) {
     if (registerN >= 0) {
-        fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
+        if (registerN == 16)
+            fprintf(stdout, "%s\n", str);
+            //fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
     } else
         fprintf(stderr, ">>> Register number not set for debugging. %s<<<", str);
 }

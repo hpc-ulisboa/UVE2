@@ -59,11 +59,11 @@ int main(int argc, char **argv){
 
     /* Run kernel. */
     intercept = core_kernel(x, x_array, y, y_err, sgd_model);
-    //predict(y_fitted, x, x_array, sgd_model, intercept);
-    //result = r2_score(y_fitted, y);
+    predict(y_fitted, x, x_array, sgd_model, intercept);
+    result = r2_score(y_fitted, y);
 
-    for (i = 0; i < PB_N; i++)
-        printf( DataFormat("", "\n"), y_err[i]);
+    for (i = 0; i < PB_D; i++)
+        printf( DataFormat("", "\n"), sgd_model[i]);
     printf( DataFormat("\n", "\n"), intercept);
     printf( DataFormat("", "\n"), result);
 

@@ -88,32 +88,32 @@ DataType core_kernel(void **x, void *x_array, void *y, void *y_err, void *sgd_mo
             "so.b.ndc.2 u1, .SLOOP_1_0%= \t\n"
 
             // KERNEL 2
-            "so.v.dp.d u16, zero, p0 \t\n"
+            "so.v.mvsv.d u16, zero \t\n" // intercept_der
 
             ".SLOOP_1_1%=:  \t\n"
-                "so.a.add.fp  u16, u16, u5, p0 \t\n" // intercept_der += y_err(i)
+                "so.a.adde.acc.fp  u16, u5, p0 \t\n" // intercept_der += y_err(i)
             "so.b.ndc.1 u5, .SLOOP_1_1%= \t\n"
 
-            "so.a.adde.fp  u17, u16, p0 \t\n"    // reduce intercept_der
-            "so.a.div.fp  u17, u17, u12, p0 \t\n" // intercept_der /= PB_N
-            "so.a.mul.fp  u17, u17, u11, p0 \t\n" // intercept_der *= lr
-            "so.a.add.fp  u10, u10, u17, p0 \t\n" // intercept += intercept_der
+            //"so.a.adde.fp  u17, u16, p0 \t\n"     // reduce intercept_der
+            "so.a.div.fp  u16, u16, u12, p0 \t\n" // intercept_der /= PB_N
+            "so.a.mul.fp  u16, u16, u11, p0 \t\n" // intercept_der *= lr
+            "so.a.add.fp  u10, u10, u16, p0 \t\n" // intercept += intercept_der
 
-            /* KERNEL 3
+            // KERNEL 3
             ".SLOOP_1_2%=:  \t\n"
 
                 "so.v.dp.d u18, zero, p0 \t\n" // raw_update
 
                 ".SLOOP_1_2_0%=:  \t\n"
                     "so.a.mul.fp  u19, u6, u7, p0 \t\n"   // x(j,i) * y_err(j)
-                    "so.a.add.fp  u18, u18, u19, p0 \t\n" // raw_update += x(j,i) * y_err(j)
+                    "so.a.adde.acc.fp  u18, u19, p0 \t\n" // raw_update += x(j,i) * y_err(j)
                 "so.b.ndc.1 u6, .SLOOP_1_2_0%= \t\n"
 
-                "so.a.adde.fp  u19, u18, p0 \t\n"     // reduce raw_update
-                "so.a.mul.fp  u19, u19, u11, p0 \t\n" // raw_update * lr
-                "so.a.add.fp  u9, u8, u19, p0 \t\n"   // sgd_model(j) += raw_update * lr
+                //"so.a.adde.fp  u19, u18, p0 \t\n"     // reduce raw_update
+                "so.a.mul.fp  u18, u18, u11, p0 \t\n" // raw_update * lr
+                "so.a.add.fp  u9, u8, u18, p0 \t\n"   // sgd_model(j) += raw_update * lr
 
-            "so.b.ndc.2 u6, .SLOOP_1_2%= \t\n"*/
+            "so.b.ndc.2 u6, .SLOOP_1_2%= \t\n"
 
         "so.b.nc u1, .SLOOP_1%= \t\n"
 
@@ -155,11 +155,11 @@ void predict(void *y_fitted, void **x, void *x_array, void *sgd_model, DataType 
 
             ".SLOOP_1_0%=:  \t\n"
                 "so.a.mul.fp  u6, u2, u1, p0 \t\n" // aux = x(i,j) *sgd_model(j)
-                "so.a.add.fp  u5, u5, u6, p0 \t\n" // r += aux
+                "so.a.adde.acc.fp  u5, u6, p0 \t\n" // r += aux
             "so.b.ndc.1 u1, .SLOOP_1_0%= \t\n"
 
-            "so.a.adde.fp  u7, u5, p0 \t\n"    // reduce r
-            "so.a.add.fp  u3, u7, u5, p0 \t\n" // store r + intercept
+            //"so.a.adde.fp  u7, u5, p0 \t\n"    // reduce r
+            "so.a.add.fp  u3, u5, u4, p0 \t\n" // store r + intercept
 
         "so.b.ndc.2 u1, .SLOOP_1%= \t\n"
         :
@@ -167,23 +167,6 @@ void predict(void *y_fitted, void **x, void *x_array, void *sgd_model, DataType 
 }
 
 DataType r2_score(void *y_fitted, void *y) {
-    /*
-        DataType y_mean = 0.0;
-        for (int i = 0; i < PB_N; i++)
-            y_mean += y[i];
-        y_mean = y_mean / (DataType)PB_N;
-
-        DataType res = 0.0;
-        for (int i = 0; i < PB_N; i++)
-            res += (y[i] - y_fitted[i]) * (y[i] - y_fitted[i]);
-
-        DataType tot = 0.0;
-        for (int i = 0; i < PB_N; i++)
-            tot += (y[i] - y_mean) * (y[i] - y_mean);
-
-        *result = 1.0 - (res / tot);
-    */
-
     DataType result;
     
     asm volatile (
@@ -214,25 +197,27 @@ DataType r2_score(void *y_fitted, void *y) {
         ".SLOOP_2%=:  \t\n"
             "so.a.sub.fp  u9, u2, u4, p0 \t\n" // y[i] - y_fitted[i]
             "so.a.mul.fp  u9, u9, u9, p0 \t\n" // (y[i] - y_fitted[i]) * (y[i] - y_fitted[i])
-            "so.a.add.fp  u8, u8, u9, p0 \t\n" // res += (y[i] - y_fitted[i]) * (y[i] - y_fitted[i])
+            //"so.a.add.fp  u8, u8, u9, p0 \t\n" // res += (y[i] - y_fitted[i]) * (y[i] - y_fitted[i])
+            "so.a.adde.acc.fp  u8, u9, p0 \t\n" // res += (y[i] - y_fitted[i]) * (y[i] - y_fitted[i])
         "so.b.nc u2, .SLOOP_2%= \t\n"
 
-        "so.a.adde.fp  u10, u8, p0 \t\n"    // reduce res
+        //"so.a.adde.fp  u10, u8, p0 \t\n"    // reduce res
 
         "so.v.dp.d u11, zero, p0 \t\n" // tot
 
         ".SLOOP_3%=:  \t\n"
             "so.a.sub.fp  u12, u3, u7, p0 \t\n" // y[i] - y_mean
             "so.a.mul.fp  u12, u12, u12, p0 \t\n" // (y[i] - y_mean) * (y[i] - y_mean)
-            "so.a.add.fp  u11, u11, u12, p0 \t\n" // tot += (y[i] - y_mean) * (y[i] - y_mean)
+            //"so.a.add.fp  u11, u11, u12, p0 \t\n" // tot += (y[i] - y_mean) * (y[i] - y_mean)
+            "so.a.adde.acc.fp  u11, u12, p0 \t\n" // tot += (y[i] - y_mean) * (y[i] - y_mean)
         "so.b.nc u3, .SLOOP_3%= \t\n"
 
-        "so.a.adde.fp  u15, u11, p0 \t\n" // reduce tot
+         //"so.a.adde.fp  u15, u11, p0 \t\n" // reduce tot
 
         "so.v.mvsv.d u14, %[one] \t\n" // 1.0
 
-        "so.a.div.fp  u15, u10, u15, p0 \t\n" // res / tot
-        "so.a.sub.fp  u14, u14, u15, p0 \t\n"  // 1.0 - (res / tot)
+        "so.a.div.fp  u11, u8, u11, p0 \t\n" // res / tot
+        "so.a.sub.fp  u14, u14, u11, p0 \t\n"  // 1.0 - (res / tot)
 
         "so.v.mvvs %[result], u14  \t\n" // result = 1.0 - (res / tot)
 
@@ -262,19 +247,20 @@ DataType core_kernel(DataType **x, DataType *x_array, DataType *y, DataType *y_e
         intercept_der = 0.0;
         for (i = 0; i < PB_N /*BATCH_SIZE*/; i++)
             intercept_der += y_err[i];
-        printf("\nintercept_der: %.4lf\n", intercept_der);
+            
+        //printf("\nintercept_der: %.4lf\n", intercept_der);
         intercept_der = intercept_der / (DataType)PB_N /*BATCH_SIZE*/;
         intercept = intercept + (learning_rate * intercept_der);
 
-        printf("intercept: %.4lf\n", intercept);
-/*
+        //printf("intercept: %.4lf\n", intercept);
+
         for (i = 0; i < PB_D; i++) {
             raw_update = 0.0;
-            for (j = 0; j /*< BATCH_SIZE && b + j/ < PB_N; j++)
-                raw_update += x[/*b +/ j][i] * y_err[j];
+            for (j = 0; j /*< BATCH_SIZE && b + j*/ < PB_N; j++)
+                raw_update += x[/*b +*/ j][i] * y_err[j];
             sgd_model[i] = sgd_model[i] + (learning_rate * raw_update);
         }
-*/
+
         // printf("\n%.4lf\n", intercept);
     }
 
