@@ -9,17 +9,22 @@ auto baseBehaviour = [](auto &value, auto &src, auto &pred, auto extra) {
     auto validElementsIndex = src.getValidIndex();
 
     using OperationType = decltype(extra);
+    using StorageType = typename std::remove_reference_t<decltype(src)>::ElementsType;
+
+    OperationType acc = 0;
 
     for (size_t i = 0; i < validElementsIndex; i++) {
         if (pi.at((i+1)*sizeof(OperationType)-1))
-            value += readAS<OperationType>(elements.at(i));
+            acc += readAS<OperationType>(elements.at(i));
     }
+
+    value = readAS<StorageType>(acc);
 };
 
 std::visit(overloaded{
-    [&](StreamReg8 &src) { signed char value = 0; baseBehaviour(destReg, src, predReg, (signed char){}); WRITE_REG(destReg, value); },
-    [&](StreamReg16 &src) { short int value = 0; baseBehaviour(destReg, src, predReg, (short int){}); WRITE_REG(destReg, value); },
-    [&](StreamReg32 &src) { int value = 0; baseBehaviour(destReg, src, predReg, int{}); WRITE_REG(destReg, value); },
-    [&](StreamReg64 &src) { long int value = 0; baseBehaviour(destReg, src, predReg, (long int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg8 &src) { uint8_t value = 0; baseBehaviour(destReg, src, predReg, (signed char){}); WRITE_REG(destReg, value); },
+    [&](StreamReg16 &src) { uint16_t value = 0; baseBehaviour(destReg, src, predReg, (short int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg32 &src) { uint32_t value = 0; baseBehaviour(destReg, src, predReg, int{}); WRITE_REG(destReg, value); },
+    [&](StreamReg64 &src) { uint64_t value = 0; baseBehaviour(destReg, src, predReg, (long int){}); WRITE_REG(destReg, value); },
     [&](auto &src) { assert_msg("Invoking so.a.adds.sg with invalid parameter sizes", false); }
 }, srcReg);

@@ -167,7 +167,7 @@ void predict(void *y_fitted, void **x, void *x_array, void *sgd_model, DataType 
 }
 
 DataType r2_score(void *y_fitted, void *y) {
-    DataType result;
+    DataType result = 0.0;
     
     asm volatile (
         // y(i) stream load
@@ -220,7 +220,9 @@ DataType r2_score(void *y_fitted, void *y) {
         "so.a.sub.fp  u14, u14, u11, p0 \t\n"  // 1.0 - (res / tot)
 
         "so.v.mvvs %[result], u14  \t\n" // result = 1.0 - (res / tot)
+        //"so.a.adds.acc.fp %[result], u14, p0 \t\n" // result = 1.0 - (res / tot) TO TEST ADDS.ACC INSNS
 
+        //: [result] "+f"(result) // TO TEST ADDS.ACC INSNS
         : [result] "=r"(result)
         : [pb_n] "r"((DataType)(PB_N)), [one] "r"((DataType)(1)));
 

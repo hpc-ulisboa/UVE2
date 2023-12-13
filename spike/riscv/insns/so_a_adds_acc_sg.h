@@ -1,5 +1,3 @@
-#define readRegAS(T, reg) static_cast<T>( READ_REG(reg) )
-
 auto destReg = insn.uve_rd();
 auto &srcReg = P.SU.registers[insn.uve_rs1()];
 auto &predReg = P.SU.predicates[insn.uve_pred()];
@@ -11,17 +9,22 @@ auto baseBehaviour = [](auto &value, auto &src, auto &pred, auto extra) {
     auto validElementsIndex = src.getValidIndex();
 
     using OperationType = decltype(extra);
+    using StorageType = typename std::remove_reference_t<decltype(value)>;
+
+    OperationType acc = readAS<OperationType>(value);
 
     for (size_t i = 0; i < validElementsIndex; i++) {
         if (pi.at((i+1)*sizeof(OperationType)-1))
-            value += readAS<OperationType>(elements.at(i));
+            acc += readAS<OperationType>(elements.at(i));
     }
+
+    value = readAS<StorageType>(acc);
 };
 
 std::visit(overloaded{
-    [&](StreamReg8 &src) { signed char value = readRegAS(signed char, destReg); baseBehaviour(destReg, src, predReg, (signed char){}); WRITE_REG(destReg, value); },
-    [&](StreamReg16 &src) { short int value = readRegAS(short int, destReg); baseBehaviour(destReg, src, predReg, (short int){}); WRITE_REG(destReg, value); },
-    [&](StreamReg32 &src) { int value = readRegAS(int, destReg); baseBehaviour(destReg, src, predReg, int{}); WRITE_REG(destReg, value); },
-    [&](StreamReg64 &src) { long int value = readRegAS(long int, destReg); baseBehaviour(destReg, src, predReg, (long int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg8 &src) { uint8_t value = READ_REG(destReg); baseBehaviour(destReg, src, predReg, (signed char){}); WRITE_REG(destReg, value); },
+    [&](StreamReg16 &src) { uint16_t value = READ_REG(destReg); baseBehaviour(destReg, src, predReg, (short int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg32 &src) { uint32_t value = READ_REG(destReg); baseBehaviour(destReg, src, predReg, int{}); WRITE_REG(destReg, value); },
+    [&](StreamReg64 &src) { uint64_t value = READ_REG(destReg); baseBehaviour(destReg, src, predReg, (long int){}); WRITE_REG(destReg, value); },
     [&](auto &src) { assert_msg("Invoking so.a.adds.acc.sg with invalid parameter sizes", false); }
 }, srcReg);

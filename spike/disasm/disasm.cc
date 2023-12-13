@@ -2456,6 +2456,7 @@ void disassembler_t::add_instructions(const isa_parser_t* isa)
   DEFINE_UMOD(ss_app_mod_siz_inc);
   DEFINE_UCONF(ss_end);
   DISASM_INSN("ss.cfg.vec", ss_cfg_vec, 0, {&urd});
+  DISASM_INSN("ss.cfg.ind", ss_cfg_ind, 0, {&urd});
 
   DEFINE_UBTYPE(so_b_c); 
   DEFINE_UBTYPE(so_b_dc_1);
@@ -2482,6 +2483,7 @@ void disassembler_t::add_instructions(const isa_parser_t* isa)
   DEFINE_UVTYPE_MVSV(so_v_mvsv_h);
   DEFINE_UVTYPE_MVSV(so_v_mvsv_w);
   DEFINE_UVTYPE_MVSV(so_v_mvsv_d);
+  DISASM_INSN("so.v.mvvs", so_v_mvvs, 0, {&uxrd, &urs1});
   DEFINE_UVTYPE_DP(so_v_dp_d);
   DEFINE_UVTYPE_DP(so_v_dp_w);
   DEFINE_UVTYPE_DP(so_v_dp_h);
@@ -2531,7 +2533,7 @@ void disassembler_t::add_instructions(const isa_parser_t* isa)
   DEFINE_UA2TYPE(so_a_adds_fp);
   DEFINE_UA2TYPE(so_a_adds_us);
   DEFINE_UA2TYPE(so_a_adds_sg);
-  DEFINE_UA2TYPE(so_a_adds_acc_fp);
+  DISASM_INSN("so.a.adds.acc.fp", so_a_adds_acc_fp, 0, {&frd, &urs1, &upred});
   DEFINE_UA2TYPE(so_a_adds_acc_us);
   DEFINE_UA2TYPE(so_a_adds_acc_sg);
   DEFINE_UATYPE(so_a_nand);
