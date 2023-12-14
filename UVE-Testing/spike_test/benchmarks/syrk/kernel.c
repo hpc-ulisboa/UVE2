@@ -45,13 +45,13 @@ void core(int N, int M, DataType alpha, DataType beta, DataType *C, DataType *A)
 asm volatile (
     ".SLOOP_1: \n\t"
     	".SLOOP_1_0: \n\t"
-    		"so.a.mul.fp  u1, u2, u7, p0 \n\t"
+    		"so.a.mul.fp  u1, u2, u7, p0 \n\t" // C[i][j] *= beta
     	"so.b.ndc.1 u1, .SLOOP_1_0 \n\t"
 
     	".SLOOP_1_1: \n\t"
-    		"so.a.mul.fp  u9, u6, u8, p0 \n\t"
-    		"so.a.mul.fp  u10, u9, u5, p0 \n\t"
-    		"so.a.add.fp  u3, u10, u4, p0 \n\t"
+    		"so.a.mul.fp  u9, u6, u8, p0 \n\t"  // aux = alpha * A[i][k]
+    		"so.a.mul.fp  u10, u9, u5, p0 \n\t" // aux1 = aux * A[j][k]
+    		"so.a.add.fp  u3, u4, u10, p0 \n\t" // C[i][j] += aux1
     	"so.b.ndc.2 u3, .SLOOP_1_1 \n\t"
     "so.b.nc u1, .SLOOP_1 \n\t":::);
  }
@@ -64,13 +64,17 @@ void core(int N, int M, DataType alpha, DataType beta, DataType *C /* N * N */, 
 	int i, j, k;
 
 	for (i = 0; i < N; i++) {
-		for (j = 0; j <= i; j++)
+		for (j = 0; j <= i; j++) {
+			printf("L1 C[%d][%d] = %lf * %lf = %lf\n", i, j, C[i*N+j], beta, C[i*N+j]*beta);
 			C[i*N+j] *= beta;
+		}
+		printf("\n");
 		for (k = 0; k < M; k++) {
 			for (j = 0; j <= i; j++){
-				C[i*N+j] += alpha * A[i*N+k] * A[j*N+k];
-				printf("C[%d][%d] = %f\n", i, j, C[i*N+j]);
+				printf("L2 C[%d][%d] = %lf + %lf = %lf\n", i, j, C[i*N+j], alpha * A[i*M+k] * A[j*M+k], C[i*N+j] + alpha * A[i*M+k] * A[j*M+k]);
+				C[i*N+j] += alpha * A[i*M+k] * A[j*M+k];
 			}
+			printf("\n");
 		}
 	}
 }

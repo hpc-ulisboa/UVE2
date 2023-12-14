@@ -21,7 +21,7 @@ const kernels = [ "syrk" ];
  * DSIZE 64: 64x64 matrix (DEFAULT)
 */
 
-const compileFlags = ["-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=10"];
+const compileFlags = ["-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=8"];
 const linkFlags = ["-Wall", "-pedantic", "-static"];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";

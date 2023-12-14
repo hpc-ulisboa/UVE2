@@ -13,7 +13,7 @@ void initArray2D(DataType *array, int N, int M) {
 
   for (int i = 0; i < N; ++i) {
     for (int j = 0; j < M; ++j) {
-      array[i*N+j] = values[i*M+j];
+      array[i*M+j] = values[i*M+j];
     }
   }
 }
