@@ -105,3 +105,8 @@ core(DataType *a, DataType *b, DataType *c, uint64_t sizeN, int ntimes, DataType
 }
 
 #endif
+
+#ifdef RUN_BLANK
+void core(DataType *a, DataType *b, DataType *c, uint64_t sizeN, int ntimes, DataType scalar){
+}
+#endif // RUN_BLANK

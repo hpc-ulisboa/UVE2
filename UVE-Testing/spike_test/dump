@@ -1,0 +1,48 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+   0:	7139                	addi	sp,sp,-64
+   2:	fc22                	sd	s0,56(sp)
+   4:	0080                	addi	s0,sp,64
+   6:	fca43c23          	sd	a0,-40(s0)
+   a:	fcb43823          	sd	a1,-48(s0)
+   e:	fca43427          	fsd	fa0,-56(s0)
+  12:	fe042623          	sw	zero,-20(s0)
+  16:	a089                	j	58 <.L2>
+
+0000000000000018 <.L3>:
+  18:	fec42783          	lw	a5,-20(s0)
+  1c:	078e                	slli	a5,a5,0x3
+  1e:	fd843703          	ld	a4,-40(s0)
+  22:	97ba                	add	a5,a5,a4
+  24:	2398                	fld	fa4,0(a5)
+  26:	fec42783          	lw	a5,-20(s0)
+  2a:	078e                	slli	a5,a5,0x3
+  2c:	fd043703          	ld	a4,-48(s0)
+  30:	97ba                	add	a5,a5,a4
+  32:	2394                	fld	fa3,0(a5)
+  34:	fc843787          	fld	fa5,-56(s0)
+  38:	12f6f7d3          	fmul.d	fa5,fa3,fa5
+  3c:	fec42783          	lw	a5,-20(s0)
+  40:	078e                	slli	a5,a5,0x3
+  42:	fd843703          	ld	a4,-40(s0)
+  46:	97ba                	add	a5,a5,a4
+  48:	02f777d3          	fadd.d	fa5,fa4,fa5
+  4c:	a39c                	fsd	fa5,0(a5)
+  4e:	fec42783          	lw	a5,-20(s0)
+  52:	2785                	addiw	a5,a5,1
+  54:	fef42623          	sw	a5,-20(s0)
+
+0000000000000058 <.L2>:
+  58:	fec42783          	lw	a5,-20(s0)
+  5c:	0007871b          	sext.w	a4,a5
+  60:	478d                	li	a5,3
+  62:	fae7dbe3          	ble	a4,a5,18 <.L3>
+  66:	0001                	nop
+  68:	7462                	ld	s0,56(sp)
+  6a:	6121                	addi	sp,sp,64
+  6c:	8082                	ret

@@ -1,6 +1,5 @@
 #include "Functions.h"
 
-
 #ifdef RUN_UVE
 void core_uve(DataType *A, DataType *B) {
   asm volatile(
@@ -74,3 +73,8 @@ void core(DataType *A, DataType *B) {
   }
 }
 #endif // RUN_SIMPLE
+
+#ifdef RUN_BLANK
+void core(DataType *A, DataType *B) {
+}
+#endif // RUN_BLANK

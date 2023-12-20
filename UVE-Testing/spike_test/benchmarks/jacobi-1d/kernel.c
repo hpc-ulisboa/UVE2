@@ -41,3 +41,8 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
         A[i] = ct * (B[i - 1] + B[i] + B[i + 1]);
 }
 #endif // RUN_SIMPLE
+
+#ifdef RUN_BLANK
+void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
+}
+#endif // RUN_BLANK

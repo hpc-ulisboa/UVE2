@@ -29,3 +29,8 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 	}
 }
 #endif // RUN_SIMPLE
+
+#ifdef RUN_BLANK
+void core(DataType dest[SIZE], DataType src[SIZE]) {
+}
+#endif // RUN_BLANK

@@ -58,3 +58,8 @@ void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t 
     }
 }
 #endif // RUN_SIMPLE
+
+#ifdef RUN_BLANK
+void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t N, int32_t L) {
+}
+#endif // RUN_BLANK

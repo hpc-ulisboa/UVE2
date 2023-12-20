@@ -81,3 +81,8 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
   }
 }
 #endif // RUN_SIMPLE
+
+#ifdef RUN_BLANK
+void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, uint64_t sizeI, uint64_t sizeJ, uint64_t sizeK){
+}
+#endif // RUN_BLANK

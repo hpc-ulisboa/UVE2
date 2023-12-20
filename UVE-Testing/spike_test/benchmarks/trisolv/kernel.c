@@ -67,3 +67,8 @@ void core(DataType *L, DataType *b, DataType *x) {
     }
 }
 #endif // RUN_SIMPLE
+
+#ifdef RUN_BLANK
+void core(DataType *L, DataType *b, DataType *x){
+}
+#endif // RUN_BLANK

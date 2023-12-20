@@ -6,8 +6,7 @@
 #define EPOCHS 100
 
 #ifdef RUN_UVE
-
-DataType core_kernel(void **x, void *x_array, void *y, void *y_err, void *sgd_model) {
+DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model) {
     DataType intercept;
     asm volatile(
         // KERNEL 1 Streams
@@ -125,7 +124,7 @@ DataType core_kernel(void **x, void *x_array, void *y, void *y_err, void *sgd_mo
     return intercept;
 }
 
-void predict(void *y_fitted, void **x, void *x_array, void *sgd_model, DataType intercept) {
+void predict(void *y_fitted, void *x_array, void *sgd_model, DataType intercept) {
     asm volatile(
 
         // KERNEL 1 Streams
@@ -229,10 +228,16 @@ DataType r2_score(void *y_fitted, void *y) {
     return result;
 }
 
+DataType core(DataType **x, DataType *x_array, DataType *y, DataType *y_err, DataType *sgd_model, DataType *y_fitted) {
+    DataType intercept = core_kernel(x_array, y, y_err, sgd_model);
+    predict(y_fitted, x_array, sgd_model, intercept);
+    return r2_score(y_fitted, y);
+}
+
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE
-DataType core_kernel(DataType **x, DataType *x_array, DataType *y, DataType *y_err, DataType *sgd_model) {
+DataType core_kernel(DataType **x, DataType *y, DataType *y_err, DataType *sgd_model) {
     int e, b, i, j;
     DataType yhat, raw_update, intercept_der, intercept = 0;
     DataType learning_rate = 0.01 * 2.0;
@@ -269,7 +274,7 @@ DataType core_kernel(DataType **x, DataType *x_array, DataType *y, DataType *y_e
     return intercept;
 }
 
-void predict(DataType *y_fitted, DataType **x, DataType *x_array, DataType *sgd_model, DataType intercept) {
+void predict(DataType *y_fitted, DataType **x, DataType *sgd_model, DataType intercept) {
     DataType r;
     for (int i = 0; i < PB_N; i++) {
         r = 0.0;
@@ -298,4 +303,15 @@ DataType r2_score(DataType *y_fitted, DataType *y) {
     return 1.0 - (res / tot);
 }
 
+DataType core(DataType **x, DataType *x_array, DataType *y, DataType *y_err, DataType *sgd_model, DataType *y_fitted) {
+    DataType intercept = core_kernel(x, y, y_err, sgd_model);
+    predict(y_fitted, x, sgd_model, intercept);
+    return r2_score(y_fitted, y);
+}
 #endif // RUN_SIMPLE
+
+#ifdef RUN_BLANK
+DataType core(DataType **x, DataType *x_array, DataType *y, DataType *y_err, DataType *sgd_model, DataType *y_fitted){
+    return 0.0;
+}
+#endif

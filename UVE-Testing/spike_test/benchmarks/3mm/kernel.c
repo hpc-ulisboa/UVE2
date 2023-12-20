@@ -71,10 +71,14 @@ core_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t sizeJ, 
 	}
 }
 
-void
-core(void* A, void* B, void* C, void* D, void* E, void* F, void* G, uint64_t I, uint64_t J, uint64_t K, uint64_t L, uint64_t M){
+void core(void* A, void* B, void* C, void* D, void* E, void* F, void* G, uint64_t I, uint64_t J, uint64_t K, uint64_t L, uint64_t M){
 	core_kernel(A, B, E, I, J, K);
 	core_kernel(C, D, F, J, L, M);
 	core_kernel(E, F, G, I, L, J);
 }
 #endif // RUN_SIMPLE
+
+#ifdef RUN_BLANK
+void core(void* A, void* B, void* C, void* D, void* E, void* F, void* G, uint64_t I, uint64_t J, uint64_t K, uint64_t L, uint64_t M){
+}
+#endif // RUN_BLANK

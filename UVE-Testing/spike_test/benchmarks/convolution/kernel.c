@@ -65,3 +65,8 @@ void core(DataType *src, DataType *dst, DataType *filter){
     }
 }
 #endif // RUN_SIMPLE
+
+#ifdef RUN_BLANK
+void core(DataType *src, DataType *dst, DataType *filter){
+}
+#endif // RUN_BLANK

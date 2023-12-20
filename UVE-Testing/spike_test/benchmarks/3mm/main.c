@@ -23,13 +23,11 @@ int main() {
   initArray2D(C, J, M);
   initArray2D(D, M, L);
   
-printf("START\n");
   core(A, B, C, D, E, F, G, I, J, K, L, M);
-printf("END\n");
 
   for (int i = 0; i < I; i++) {
     for (int j = 0; j < L; j++)
-      printf( DataFormat("", "\n"), G[i*SIZE+j]);
+      printf( DataFormat("", "\n"), G[i*L+j]);
   }
 
   return 0;
