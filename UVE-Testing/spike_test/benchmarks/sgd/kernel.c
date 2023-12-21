@@ -5,6 +5,8 @@
 #define NUM_BATCHES PB_N / BATCH_SIZE
 #define EPOCHS 100
 
+long int start = 0, end = 0;
+
 #ifdef RUN_UVE
 DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model) {
     DataType intercept;
@@ -222,16 +224,23 @@ DataType r2_score(void *y_fitted, void *y) {
         //"so.a.adds.acc.fp %[result], u14, p0 \t\n" // result = 1.0 - (res / tot) TO TEST ADDS.ACC INSNS
 
         //: [result] "+f"(result) // TO TEST ADDS.ACC INSNS
-        : [result] "=r"(result)
+        : [result] "=&r"(result)
         : [pb_n] "r"((DataType)(PB_N)), [one] "r"((DataType)(1)));
 
     return result;
 }
 
 DataType core(DataType **x, DataType *x_array, DataType *y, DataType *y_err, DataType *sgd_model, DataType *y_fitted) {
+    asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
+
     DataType intercept = core_kernel(x_array, y, y_err, sgd_model);
     predict(y_fitted, x_array, sgd_model, intercept);
-    return r2_score(y_fitted, y);
+    DataType r = r2_score(y_fitted, y);
+
+    asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
+    printf("%ld\n%ld\n", start, end);
+
+    return r;
 }
 
 #endif // RUN_UVE
@@ -304,9 +313,15 @@ DataType r2_score(DataType *y_fitted, DataType *y) {
 }
 
 DataType core(DataType **x, DataType *x_array, DataType *y, DataType *y_err, DataType *sgd_model, DataType *y_fitted) {
+    asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
+
     DataType intercept = core_kernel(x, y, y_err, sgd_model);
     predict(y_fitted, x, sgd_model, intercept);
-    return r2_score(y_fitted, y);
+    DataType r = r2_score(y_fitted, y);
+
+    asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));    printf("%ld\n%ld\n", start, end);
+
+    return r;
 }
 #endif // RUN_SIMPLE
 

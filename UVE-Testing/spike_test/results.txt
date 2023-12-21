@@ -1,0 +1,151 @@
+
+### Attempting to compile and run kernel saxpy...
+
+UVE executed 324 less instructions
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 353      | 29  | 324        | 91.78          |
+|----------|-----|------------|----------------|
+Kernel saxpy is similar enough
+
+### Attempting to compile and run kernel memcpy...
+
+UVE executed 234 less instructions
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 253      | 19  | 234        | 92.49          |
+|----------|-----|------------|----------------|
+Kernel memcpy is similar enough
+
+### Attempting to compile and run kernel jacobi-1d...
+
+UVE executed 901 less instructions
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 967      | 66  | 901        | 93.17          |
+|----------|-----|------------|----------------|
+Kernel jacobi-1d is similar enough
+
+### Attempting to compile and run kernel jacobi-2d...
+
+UVE executed 75533 less instructions
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 79027    | 3494 | 75533      | 95.58          |
+|----------|------|------------|----------------|
+Kernel jacobi-2d is similar enough
+
+### Attempting to compile and run kernel 3mm...
+
+UVE executed 2506038 less instructions
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 2712127  | 206089 | 2506038    | 92.40          |
+|----------|--------|------------|----------------|
+Kernel 3mm is similar enough
+
+### Attempting to compile and run kernel trisolv...
+
+Values were -3798025834736546.500000 and -3798025834736547.500000 with difference of 1 at index 47
+UVE executed 8483 less instructions
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 9273     | 790 | 8483       | 91.48          |
+|----------|-----|------------|----------------|
+Kernel trisolv: Did not generate result similar enough
+
+### Attempting to compile and run kernel stream...
+
+UVE executed 1279 less instructions
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 1365     | 86  | 1279       | 93.70          |
+|----------|-----|------------|----------------|
+Kernel stream is similar enough
+
+### Attempting to compile and run kernel mvt...
+
+UVE executed 33092 less instructions
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 35609    | 2517 | 33092      | 92.93          |
+|----------|------|------------|----------------|
+Kernel mvt is similar enough
+
+### Attempting to compile and run kernel gemver...
+
+UVE executed 66306 less instructions
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 71313    | 5007 | 66306      | 92.98          |
+|----------|------|------------|----------------|
+Kernel gemver is similar enough
+
+### Attempting to compile and run kernel gemm...
+
+UVE executed 1079738 less instructions
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 1150513  | 70775 | 1079738    | 93.85          |
+|----------|-------|------------|----------------|
+Kernel gemm is similar enough
+
+### Attempting to compile and run kernel convolution...
+
+UVE executed 48668 less instructions
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 76329    | 27661 | 48668      | 63.76          |
+|----------|-------|------------|----------------|
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel sgd...
+
+UVE executed 4835444 less instructions
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 5513820  | 678376 | 4835444    | 87.70          |
+|----------|--------|------------|----------------|
+Kernel sgd is similar enough
+
+### Attempting to compile and run kernel covariance...
+
+UVE executed 588043 less instructions
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 624052   | 36009 | 588043     | 94.23          |
+|----------|-------|------------|----------------|
+Kernel covariance is similar enough
+
+### Attempting to compile and run kernel spmv_ellpack...
+
+UVE executed 46932 less instructions
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 51390    | 4458 | 46932      | 91.33          |
+|----------|------|------------|----------------|
+Kernel spmv_ellpack is similar enough
+
+### Attempting to compile and run kernel spmv_ellpack_delimiters...
+
+UVE executed 21394 less instructions
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 24881    | 3487 | 21394      | 85.99          |
+|----------|------|------------|----------------|
+Kernel spmv_ellpack_delimiters is similar enough

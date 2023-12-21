@@ -1,5 +1,7 @@
 #include "Functions.h"
 
+long int start = 0, end = 0;
+
 #define PB_H SIZE // 3840
 #define PB_W SIZE // 2160
 #ifdef RUN_UVE
@@ -9,6 +11,8 @@
 
 void core(DataType *src, DataType *dst, DataType *filter){
     asm volatile(
+        "rdinstret %[s] \t\n"
+
         // src(y,x) stream load
         "ss.sta.ld.d           u7, %[src], %[wnm2], %[hn] \t\n"
         "ss.app                u7, %[one], %[hnm2], %[one] \t\n"
@@ -27,13 +31,6 @@ void core(DataType *src, DataType *dst, DataType *filter){
         "ss.sta.st.d           u3, %[dst], %[wnm2], %[hn] \t\n"
         "ss.end                u3, %[one], %[hnm2], %[one] \t\n"
 
-        :
-        : [src] "r"(src + PB_H), [dst] "r"(dst + PB_H), [filter] "r"(filter),
-        [hn] "r"(PB_H), [hnm2] "r"(PB_H - 2), [wnm2] "r"(PB_W - 2), [fsize] "r"(3),
-        [one] "r"(1), [fsizen] "r"(-3), [hnn] "r"(-PB_H), [onen] "r"(-1));
-
-    asm volatile(
-
         ".SLOOP_1%=: \t\n"
 
             "so.v.dp.d u4, zero, p0\t\n"
@@ -45,12 +42,23 @@ void core(DataType *src, DataType *dst, DataType *filter){
 
             "so.a.adde.fp  u3, u4, p0\t\n"
 
-        "so.b.nc u3, .SLOOP_1%= \t\n" :::);
+        "so.b.nc u3, .SLOOP_1%= \t\n"
+
+        "rdinstret %[e] \t\n"
+
+        : [s] "=&r" (start), [e] "=&r" (end)
+        : [src] "r"(src + PB_H), [dst] "r"(dst + PB_H), [filter] "r"(filter),
+        [hn] "r"(PB_H), [hnm2] "r"(PB_H - 2), [wnm2] "r"(PB_W - 2), [fsize] "r"(3),
+        [one] "r"(1), [fsizen] "r"(-3), [hnn] "r"(-PB_H), [onen] "r"(-1));
+
+    printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE
 void core(DataType *src, DataType *dst, DataType *filter){
+    asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
+
     DataType sum;
     int y, x, k, j;
     for (y = 1; y < PB_W - 1; y++){
@@ -63,6 +71,9 @@ void core(DataType *src, DataType *dst, DataType *filter){
             dst[y * PB_W + x] = sum;
         }
     }
+
+    asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
+    printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE
 

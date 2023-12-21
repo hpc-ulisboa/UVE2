@@ -1,9 +1,12 @@
 #include "Functions.h"
 
+long int start = 0, end = 0;
 
 #ifdef RUN_UVE
 void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, uint64_t sizeI, uint64_t sizeJ, uint64_t sizeK){
 	asm volatile(
+		"rdinstret %[s] \t\n"
+
 		// C_ij Store
 		"ss.sta.st.d u1, %[C], %[sizeI], %[sizeJ] \t\n"
 		"ss.end u1, zero, %[sizeJ], %[one]\t\n"
@@ -40,14 +43,7 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 
 		"so.v.dp.d u4, %[beta], p0 \t\n"
 		"so.v.dp.d u10, %[alpha], p0 \t\n"
-		: 
-		: [sizeI] "r" (sizeI), [sizeJ] "r" (sizeJ), [sizeK] "r" (sizeK),
-		[alpha] "r" (alpha), [beta] "r" (beta),
-		[C] "r" (C), [A] "r" (A), [B] "r" (B),
-		[one] "r" (1)
-	);
 
-	asm volatile( 	
 		".SLOOP_1%=: \t\n"
 			".SLOOP_1_0%=: \t\n"
 				"so.a.mul.fp  u1, u3, u4, p0 \t\n" // C_ij = C_ij * beta
@@ -58,9 +54,18 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 				"so.a.add.fp  u5, u7, u12, p0 \t\n" // C_ij = tmp2 + C_ij
 			"so.b.ndc.2 u5, .SLOOP_1_1%= \t\n"
 		"so.b.nc u1, .SLOOP_1%= \t\n"
-		:::
+
+		"rdinstret %[e] \t\n"
+
+		: [s] "=&r" (start), [e] "=&r" (end)
+		: [sizeI] "r" (sizeI), [sizeJ] "r" (sizeJ), [sizeK] "r" (sizeK),
+		[alpha] "r" (alpha), [beta] "r" (beta),
+		[C] "r" (C), [A] "r" (A), [B] "r" (B),
+		[one] "r" (1)
 	);
+	printf("%ld\n%ld\n", start, end);
 }
+
 #endif // RUN_UVE
 
 
@@ -68,6 +73,8 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, uint64_t sizeI, uint64_t sizeJ, uint64_t sizeK){
   
   // C (sizeI x sizeJ) * beta  += alpha * A (sizeI x sizeK) * B (sizeK x sizeJ)
+
+  asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
 
   int i, j, k;
   
@@ -79,6 +86,9 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 	      C[i * sizeI + j] += alpha * A[i * sizeI + k] * B[k*sizeK + j];
     }
   }
+
+  asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
+  printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE
 

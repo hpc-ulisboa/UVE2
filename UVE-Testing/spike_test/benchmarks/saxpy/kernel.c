@@ -1,12 +1,12 @@
 #include "Functions.h"
-#include <stdio.h>
+
+long int start = 0, end = 0;
 
 #ifdef RUN_UVE
 void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
-    long int start = 0, end = 0;
-
     asm volatile(
-        "csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
+        //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
+        "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
         "ss.ld.d u1, %[src1], %[size], %[stride] \t\n"
         "ss.cfg.vec u1 \t\n"
@@ -24,7 +24,7 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
 			"so.a.add.fp u3, u2, u5, p0 \n\t"
         "so.b.nc u1, .uve_loop%= \n\t" 
 
-        "csrrs %[end], instret, x0 \t\n"
+        "rdinstret %[end] \t\n"
 
         : [start] "=&r"(start), [end] "=&r"(end)
         : [src1] "r"(src),
@@ -34,19 +34,17 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
           [stride] "r"(1),
           [value] "r"(value));
 
-    printf("instret start: %ld\nend: %ld\ninsns executed: %ld\n", start, end, end-start);
+    printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE
 void core(DataType dest[SIZE], DataType src[SIZE], DataType A) {
+    asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
     for (int i = 0; i < SIZE; i++) {
         dest[i] += src[i] * A;
     }
+    asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
+    printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE
-
-#ifdef RUN_BLANK
-void core(DataType dest[SIZE], DataType src[SIZE], DataType A) {
-}
-#endif // RUN_BLANK

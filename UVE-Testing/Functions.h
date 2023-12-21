@@ -2,6 +2,7 @@
 #define FUNCTIONS_H
 
 #include <stdint.h>
+#include <stdio.h>
 #include "Dataset.h"
 
 
@@ -59,6 +60,5 @@ void initArray2D(DataType *array, int N, int M);
 
 void initZero(DataType *array, int N);
 void initConstant(DataType *array, int N, DataType m);
-
 
 #endif // FUNCTIONS_H

@@ -1,20 +1,20 @@
 #include "Functions.h"
 
+long int start = 0, end = 0;
+
 #ifdef RUN_UVE
 
 void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, DataType *data /* %3 */, DataType *cov /* %4 */, DataType *mean /* %5 */) {
     // kernel 1
     asm volatile(
+        "rdinstret %[s] \t\n"
+
         "ss.sta.ld.d    u1, %[data], %[M], %[one] \t\n"
         "ss.end         u1, zero, %[N], %[M] \t\n"
         "ss.cfg.vec     u1 \t\n"
 
         "ss.st.d u2, %[mean], %[M], %[one] \t\n"
-        :
-        : [M] "r"(sizeM), [N] "r"(sizeN), [float_n] "r"(float_n), [data] "r"(data), [mean] "r"(mean), [one] "r"(1)
-        :);
-
-    asm volatile(
+        
         "so.v.mvsv.d u3, %[float_n] \t\n"
 
         ".SLOOP_1%=: \t\n"
@@ -26,19 +26,9 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
 
             "so.a.div.fp    u2, u4, u3, p0 \t\n"
         "so.b.nc u1, .SLOOP_1%= \t\n"
-        :
-        : [float_n] "r"(float_n)
-        :);
-
-    /* print mean
-    printf("\nmean:\n");
-    for (int i = 0; i < sizeM; i++) {
-        printf(DataFormat("", " "), mean[i]);
-    }
-    printf("\n");*/
-
-    // kernel 2
-    asm volatile(
+        
+        // kernel 2
+  
         "ss.sta.st.d    u1, %[data], %[N], %[M] \t\n"
         "ss.end         u1, zero, %[M], %[one] \t\n"
         "ss.cfg.vec     u1 \t\n"
@@ -50,26 +40,13 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
         "ss.sta.ld.d    u3, %[data], %[N], %[M] \t\n"
         "ss.end         u3, zero, %[M], %[one] \t\n"
         "ss.cfg.vec     u3 \t\n"
-        :
-        : [M] "r"(sizeM), [N] "r"(sizeN), [float_n] "r"(float_n), [data] "r"(data), [mean] "r"(mean), [one] "r"(1)
-        :);
-
-    asm volatile(
+        
         ".SLOOP_2%=: \t\n"
             "so.a.sub.fp  u1, u3, u2, p0 \t\n"
-        "so.b.nc u1, .SLOOP_2%= \t\n" :::);
+        "so.b.nc u1, .SLOOP_2%= \t\n"
 
-    /* print data
-    printf("\ndata:\n");
-    for (int i = 0; i < sizeN; i++) {
-        for (int j = 0; j < sizeM; j++) {
-            printf(DataFormat("", " "), data[i * sizeM + j]);
-        }
-        printf("\n");
-    }*/
-
-    // kernel 3
-    asm volatile(
+        // kernel 3
+  
         "ss.sta.ld.d        u1, %[data], %[M], %[one] \t\n"
         //"ss.app.mod.ofs.inc u1, %[M], %[one] \t\n"
         "ss.app.mod.siz.dec u1, %[M], %[one] \t\n"
@@ -93,11 +70,7 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
         "ss.app.mod.ofs.inc u4, %[M], %[M] \t\n"
         "ss.app.mod.siz.dec u4, %[M], %[one] \t\n"
         "ss.end             u4, zero, %[M], %[M] \t\n"
-        :
-        : [M] "r"(sizeM), [N] "r"(sizeN), [float_n] "r"(float_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean), [one] "r"(1)
-        :);
-
-    asm volatile(
+        
         "so.v.mvsv.d u5, %[float_nn] \t\n"
 
         ".SLOOP_3%=: \t\n"
@@ -113,9 +86,13 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
             "so.v.mv        u3, u8, p0 \t\n"
             "so.v.mv        u4, u8, p0 \t\n"
         "so.b.nc u1, .SLOOP_3%= \t\n"
-        :
-        : [float_nn] "r"((double)(float_n - 1.0))
-        :);
+
+        "rdinstret %[e] \t\n"
+        : [s] "=&r" (start), [e] "=&r" (end)
+        : [M] "r"(sizeM), [N] "r"(sizeN), [float_n] "r"(float_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
+          [one] "r"(1), [float_nn] "r"((double)(float_n - 1.0)));
+
+    printf("%ld\n%ld\n", start, end);
 }
 
 #endif // RUN_UVE
@@ -123,6 +100,8 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
 #ifdef RUN_SIMPLE
 
 void core(int sizeM, int sizeN, DataType float_n, DataType *data, DataType *cov, DataType *mean) {
+    asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
+
     int i, j, k;
 
     /*print data
@@ -181,6 +160,9 @@ void core(int sizeM, int sizeN, DataType float_n, DataType *data, DataType *cov,
                 printf("\n");
             }*/
         }
+    
+    asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
+    printf("%ld\n%ld\n", start, end);
 }
 
 #endif // RUN_SIMPLE

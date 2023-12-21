@@ -1,8 +1,11 @@
 #include "Functions.h"
 
+long int start = 0, end = 0;
+
 #ifdef RUN_UVE
 void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint64_t N, uint64_t K) {
     asm volatile(
+        "rdinstret %[s] \t\n"
         // rowDelimiters stream (!!! this one should not be vectorial)
         "ss.ld.w                  u3, %[rowDelimiters], %[sn], %[one] \t\n" // D1: linear access
         "ss.ld.w                  u7, %[rowDelimiters], %[sn], %[one] \t\n" // D1: linear access
@@ -34,11 +37,6 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
         // out stream store
         "ss.st.d              u6, %[out], %[sn], %[one] \t\n" // D1: linear access size N
 
-        :
-        : [val] "r"(val), [cols] "r"(cols), [rowDelimiters] "r"(rowDelimiters), [vec] "r"(vec), [out] "r"(out),
-          [sn] "r"(N), [sk] "r"(K), [zero] "r"(0), [one] "r"(1));
-
-    asm volatile(
         ".iLoop1%=: \t\n"
             "so.v.dp.d u8, zero, p0 \t\n"
 
@@ -49,12 +47,22 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
 
             "so.a.adde.fp u10, u8, p0 \n\t"
             "so.a.add.fp  u6, u5, u10, p0\n\t"
-        "so.b.nc	u1, .iLoop1%= \n\t"::);
+        "so.b.nc	u1, .iLoop1%= \n\t"
+
+        "rdinstret %[e] \t\n"
+
+        : [s] "=&r" (start), [e] "=&r" (end)
+        : [val] "r"(val), [cols] "r"(cols), [rowDelimiters] "r"(rowDelimiters), [vec] "r"(vec), [out] "r"(out),
+          [sn] "r"(N), [sk] "r"(K), [zero] "r"(0), [one] "r"(1));
+
+    printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE
 void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec, DataType *out, uint64_t N, uint64_t K) {
+    asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
+
     DataType t;
     int cur_nnz;
 
@@ -73,6 +81,9 @@ void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec,
 
         //printf("out[%d]: %lf\n", i, out[i]);
     }
+
+    asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
+    printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE
 
