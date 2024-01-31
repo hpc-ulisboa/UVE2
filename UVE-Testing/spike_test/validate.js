@@ -2,13 +2,13 @@
 const fs = require('node:fs');
 const { spawnSync } = require("child_process");
 
-const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv_ellpack", "spmv_ellpack_delimiters"];
+//const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv_ellpack", "spmv_ellpack_delimiters"];
 
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "knn" ];
 //const kernels = [ "syrk" ];
 
-//const kernels = ["sgd"];
+const kernels = ["trisolv"];
 
 /* DTYPE: dataset datatype
  * DTYPE 1: byte (hexadecimal int)
@@ -21,8 +21,8 @@ const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", 
  * DSIZE 64: 64x64 matrix (DEFAULT)
 */
 
-const compileFlags = ["-O3", "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50"];
-const linkFlags = ["-O3", "-Wall", "-pedantic", "-static"];
+const compileFlags = ["-O2", "-Wall", "-pedantic", "-DTYPE=5", "-DSIZE=50"];
+const linkFlags = ["-O2", "-Wall", "-pedantic", "-static"];
 const compilerPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
 const spikePath = "/home/afernandes/uve-dev/UVE-Testing/spike";
@@ -156,12 +156,14 @@ for (let kernel of kernels) {
 	compileKernel(compilerPath, [...compileFlags, "-I..", "../Functions.c", "-c"]);
 	compileKernel(compilerPath, [...compileFlags, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
 
+	
+	compileKernel(compilerPath, [...compileFlags, "-DRUN_UVE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
+	compileKernel(compilerPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `benchmarks/${kernel}/${bin_uve}`]);
+
 	/* Compile and link each kernel file */
 	compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 	compileKernel(compilerPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `benchmarks/${kernel}/${bin_simple}`]);
 
-	compileKernel(compilerPath, [...compileFlags, "-DRUN_UVE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
-	compileKernel(compilerPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `benchmarks/${kernel}/${bin_uve}`]);
 
 	/* Run each kernel file */
 	const execSimple = executableRun(spikePath, [pkPath, `benchmarks/${kernel}/${bin_simple}`, kernel]);
@@ -176,11 +178,11 @@ for (let kernel of kernels) {
 		//break;
 	}
 
-	// Delete executables for next kernel
+	/* Delete executables for next kernel
 	const del = spawnSync("rm", ["-f", bin_simple, bin_uve, 'main.o', 'kernel.o', 'Functions.o']);
 	if (del.error) {
 		console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 		break;
-	}
+	}*/
 
 }
