@@ -61,15 +61,16 @@ function adjustTableWidth(data) {
     }
 
     // Print the table header
-    printHyphenRow();
+    //printHyphenRow();
     printRow(data[0]);
+    printHyphenRow();
 
     // Print each data row with adjusted width
     data.slice(1).forEach((row, index) => {
-        printHyphenRow();
+        //printHyphenRow();
         printRow(row);
     });
-	printHyphenRow();
+	//printHyphenRow();
 
 }
 
