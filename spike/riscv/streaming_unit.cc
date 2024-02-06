@@ -179,7 +179,7 @@ void streamRegister_t<T>::printRegN(char *str) {
 }
 
 template <typename T>
-size_t streamRegister_t<T>::generateOffset() {
+size_t streamRegister_t<T>::generateAddress() {
     /* Result will be the final accumulation of all offsets calculated per dimension */
     size_t init = 0;
     int dimN = 0;
@@ -190,7 +190,7 @@ size_t streamRegister_t<T>::generateOffset() {
         }
         ++dimN;
         // std::cout << "Accumulating dimension " << ++dimN << std::endl;
-        return acc + dim.calcOffset(elementWidth);
+        return acc + dim.calcAddress(elementWidth);
     });
 }
 
@@ -207,7 +207,7 @@ bool streamRegister_t<T>::isStreamDone() const {
 }
 
 template <typename T>
-bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
+bool streamRegister_t<T>::tryGenerateAddress(size_t &address) {
     /* There are two situations that prevent us from generating offsets/iterating a stream:
     1) We are at the last iteration of the outermost dimension
     2) We just finished the last iteration of a dimension and there is a configure
@@ -232,7 +232,7 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
             return false;
         }
     }
-    address = generateOffset();
+    address = generateAddress();
     return true;
 }
 
@@ -345,9 +345,7 @@ void streamRegister_t<T>::updateAsLoad() {
 
     size_t max = mode == RegisterMode::Vector ? vLen : 1;
 
-    bool causesUpdate = true;
-
-    while (eCount < max && tryGenerateOffset(offset)) {
+    while (eCount < max && tryGenerateAddress(offset)) {
         auto value = [this](auto address) -> ElementsType {
             if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint8_t>(address));
@@ -358,6 +356,7 @@ void streamRegister_t<T>::updateAsLoad() {
             else
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint64_t>(address));
         }(offset);
+
         // elements.push_back(value);
         // std::cout << "u"<< registerN << "   Loaded Value: " << readAS<double>(value) << std::endl;
         elements.at(eCount) = value;
@@ -366,14 +365,12 @@ void streamRegister_t<T>::updateAsLoad() {
         ++validElements;
         for (size_t i = 0; i < dimensions.size() - 1; i++)
             setDynamicModsNotApplied(i, true);
-        if (tryGenerateOffset(offset)) {
+        if (tryGenerateAddress(offset)) {
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;
         } else{
 			break;
 		}
-
-        causesUpdate = false;
     }
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     // std::cout << "eCount: " << eCount << std::endl;
@@ -409,7 +406,7 @@ void streamRegister_t<T>::updateAsStore() {
     std::cout << std::endl;
     */
 
-    while (eCount < validElements && tryGenerateOffset(offset)) {
+    while (eCount < validElements && tryGenerateAddress(offset)) {
         // auto value = elements.front();
         // elements.erase(elements.begin());
         // elements.pop_front(); //-- std::array
@@ -424,7 +421,7 @@ void streamRegister_t<T>::updateAsStore() {
         else
             gMMU(su->p).template store<std::uint64_t>(offset, readAS<ElementsType>(value));
 
-        if (tryGenerateOffset(offset)) {
+        if (tryGenerateAddress(offset)) {
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;
         } else
@@ -446,7 +443,7 @@ void streamingUnit_t::updateEODTable(const size_t stream) {
     std::visit([&](const auto reg) {
         int d = 0;
         for (const auto dim : reg.dimensions) {
-            EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
+            EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension();
             // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
             ++d;
         }

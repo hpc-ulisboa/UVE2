@@ -34,12 +34,12 @@ void dimension_t::setEndOfDimension(bool b) {
         iter_index = 0;
 }
 
-size_t dimension_t::calcOffset(size_t width) const {
+size_t dimension_t::calcAddress(size_t width) const {
     /*std::cout << "iter_offset: " << iter_offset << ", iter_stride: " <<
     iter_stride << ", iter_index: " << iter_index << ", width: " << width << std::endl;
     std::cout << "iter_stride * iter_index * width: " << iter_stride * iter_index * width << std::endl;
     */
-    return iter_offset + iter_stride * iter_index;// * width;
+    return iter_offset + iter_stride * iter_index * width;
 }
 
 size_t dimension_t::getSize() const {

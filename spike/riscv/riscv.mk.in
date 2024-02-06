@@ -1483,10 +1483,10 @@ riscv_insn_list = \
 	$(riscv_insn_svinval) \
 	$(riscv_insn_ext_cmo) \
 	$(riscv_insn_ext_uve) \
-    # $(riscv_insn_ext_k) \
-	# $(if $(HAVE_INT128),$(riscv_insn_ext_v),) \
-	# $(riscv_insn_ext_p) \
-	# $(riscv_insn_ext_q) \
+    $(riscv_insn_ext_k) \
+	$(if $(HAVE_INT128),$(riscv_insn_ext_v),) \
+	$(riscv_insn_ext_p) \
+	$(riscv_insn_ext_q) \
 
 riscv_gen_srcs = $(addsuffix .cc,$(riscv_insn_list))
 

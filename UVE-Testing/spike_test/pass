@@ -1,0 +1,30 @@
+
+### Attempting to compile and run kernel saxpy...
+
+/home/afernandes/uve-dev/UVE-Testing/spike_test/validate.js:82
+		throw new Error(`Issue in Kernel ${command}: Execution failed\nStderr: ${executable.stderr}\nStdout: ${executable.stdout}`);
+		^
+
+Error: Issue in Kernel /home/afernandes/uve-dev/UVE-Testing/spike: Execution failed
+Stderr: 
+Stdout: z  0000000000000000 ra 0000000000010356 sp 0000003ffffff700 gp 0000000000205b38
+tp 0000000000000000 t0 4057051eb851eb85 t1 000000000000000f t2 40360f5c28f5c28f
+s0 0000003ffffff710 s1 0000000000000040 a0 0000003ffffff710 a1 0000003ffffff910
+a2 0000000000000000 a3 0000000000053d3a a4 0000003ffffff910 a5 0000000000000000
+a6 4031fd70a3d70a3d a7 40432e147ae147ae s2 0000000000000000 s3 0000000000000000
+s4 0000000000000000 s5 0000000000000000 s6 0000000000000000 s7 0000000000000000
+s8 0000000000000000 s9 0000000000000000 sA 0000000000000000 sB 0000000000000000
+t3 4057d7ae147ae148 t4 c0457eb851eb851f t5 c041b33333333333 t6 c03fb851eb851eb8
+pc 0000000000010270 va/inst 00000000c2202773 sr 8000000200006020
+An illegal instruction was executed!
+
+    at executableRun (/home/afernandes/uve-dev/UVE-Testing/spike_test/validate.js:82:9)
+    at Object.<anonymous> (/home/afernandes/uve-dev/UVE-Testing/spike_test/validate.js:180:18)
+    at Module._compile (node:internal/modules/cjs/loader:1099:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)
+    at Module.load (node:internal/modules/cjs/loader:975:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:822:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:77:12)
+    at node:internal/main/run_main_module:17:47
+
+Node.js v17.9.1

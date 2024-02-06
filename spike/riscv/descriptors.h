@@ -30,7 +30,7 @@ struct dimension_t {
     bool isModApplied() const;
     bool isEndOfDimension() const;
     void setEndOfDimension(bool b);
-    size_t calcOffset(size_t width) const;
+    size_t calcAddress(size_t width) const;
     size_t getSize() const;
 
 private:

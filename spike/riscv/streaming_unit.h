@@ -110,10 +110,10 @@ private:
     is controlled using the instruction ss_cfg_vec */
     std::deque<bool> vecCfg;
 
-    size_t generateOffset();
+    size_t generateAddress();
     bool isDimensionFullyDone(const std::deque<dimension_t>::const_iterator start, const std::deque<dimension_t>::const_iterator end) const;
     bool isStreamDone() const;
-    bool tryGenerateOffset(size_t &address);
+    bool tryGenerateAddress(size_t &address);
     void applyDynamicMods(size_t dimN);
     void setDynamicModsNotApplied(size_t dimN, bool ifScatter);
     void updateIteration();

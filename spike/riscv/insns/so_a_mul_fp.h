@@ -4,8 +4,6 @@ auto &src1Reg = P.SU.registers[insn.uve_rs1()];
 auto &src2Reg = P.SU.registers[insn.uve_rs2()];
 auto &predReg = P.SU.predicates[insn.uve_pred()];
 
-// fprintf(stderr, "UVE    Register u%ld\n", streamReg);
-
 /* The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would
     use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to
     later on infer its type and know the storage we need to use */
