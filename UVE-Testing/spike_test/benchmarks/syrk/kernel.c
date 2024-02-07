@@ -80,8 +80,3 @@ void core(int N, int M, DataType alpha, DataType beta, DataType *C /* N * N */, 
 }
 
 #endif // RUN_SIMPLE
-
-#ifdef RUN_BLANK
-void core (int N, int M, DataType alpha, DataType beta, DataType *C /* N * N */, DataType *A /* N * M */) {
-}
-#endif // RUN_BLANK

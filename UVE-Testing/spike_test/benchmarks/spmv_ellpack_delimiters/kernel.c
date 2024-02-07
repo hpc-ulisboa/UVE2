@@ -87,6 +87,9 @@ void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec,
 }
 #endif // RUN_SIMPLE
 
+
+
+
 #ifdef RUN_BLANK
 void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec, DataType *out, uint64_t N, uint64_t K){
 }

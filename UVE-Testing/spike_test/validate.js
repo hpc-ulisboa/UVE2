@@ -2,13 +2,13 @@
 const fs = require('node:fs');
 const { spawnSync } = require("child_process");
 
-const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv_ellpack", "spmv_ellpack_delimiters"];
+//const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv_ellpack", "spmv_ellpack_delimiters"];
 
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "knn" ];
 //const kernels = [ "syrk" ];
 
-//const kernels = ["3mm"];
+const kernels = ["saxpy" , "memcpy"];
 
 /* DTYPE: dataset datatype
  * DTYPE 1: byte (hexadecimal int)
@@ -20,18 +20,24 @@ const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", 
  * DSIZE: size of the dataset (usually a matrix SIZE*SIZE)
  * DSIZE 64: 64x64 matrix (DEFAULT)
 */
-const type = 5;
-const size = 50;
-const compileFlags = ["-O2", "-Wall", "-pedantic", `-DTYPE=${type}`, `-DSIZE=${size}`];
+
+// read type and size from command line
+const type_names = ["b", "h", "i", "f", "d"];
+
+const typeN = process.argv[2] || 5;
+const type = type_names[typeN-1];
+const size = process.argv[3] || 50;
+
+const compileFlags = ["-O2", "-Wall", "-pedantic", `-DTYPE=${typeN}`, `-DSIZE=${size}`];
 const linkFlags = ["-O2", "-Wall", "-pedantic", "-static"];
-const clangFlags = ["-O2", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-L/home/afernandes/install/uve_tc/lib", "--target=riscv64", "-march=rv64gcv", "-pedantic", "-Rpass-analysis=loop-vectorize", `-DTYPE=${type}`, `-DSIZE=${size}`];
+const clangFlags = ["-O2", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize", `-DTYPE=${typeN}`, `-DSIZE=${size}`];
 const gccPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const clangPath = "/home/afernandes/LLVM-Compiler/llvm-project/build/bin/clang";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
 const spikePath = "/home/afernandes/uve-dev/UVE-Testing/spike";
-const bin_simple = "./run_simple";
-const bin_uve = "./run_uve";
-const bin_rvv = "./run_rvv";
+const bin_simple = `./run_simple_${type}_${size}`;
+const bin_uve = `./run_uve_${type}_${size}`;
+const bin_rvv = `./run_rvv_${type}_${size}`;
 
 function adjustTableWidth(data) {
     // Function to calculate the maximum width of each column
@@ -61,16 +67,15 @@ function adjustTableWidth(data) {
     }
 
     // Print the table header
-    //printHyphenRow();
-    printRow(data[0]);
     printHyphenRow();
+    printRow(data[0]);
 
     // Print each data row with adjusted width
     data.slice(1).forEach((row, index) => {
-        //printHyphenRow();
+        printHyphenRow();
         printRow(row);
     });
-	//printHyphenRow();
+	printHyphenRow();
 
 }
 
@@ -85,9 +90,12 @@ function executableRun(command, args) {
 	return executable;
 }
 
-function compileKernel(command, args) {
+function compileKernel(command, args, flag = false) {
 	//console.log(`${command} ${args.join(" ")}`);
 	const executable = spawnSync(command, args);
+	if (flag)
+		console.log(executable.stderr.toString());
+
 	if (executable.error) {
 		throw new Error(`An error occured while trying to compile ${command} ${args.join(" ")}: ${executable.error.message}`);
 	}
@@ -99,15 +107,15 @@ function compileKernel(command, args) {
 function aproximateEqual(stdout1, stdout2, stdout3, kernel) {
 	let flag = true;
 	/* Write log files */
-	fs.writeFile(`benchmarks/${kernel}/simple.log`, stdout1, (err) => {
+	fs.writeFile(`benchmarks/${kernel}/simple__${type}_${size}.log`, stdout1, (err) => {
 		if (err) throw err;
 	});
 
-	fs.writeFile(`benchmarks/${kernel}/uve.log`, stdout2, (err) => {
+	fs.writeFile(`benchmarks/${kernel}/uve_${type}_${size}.log`, stdout2, (err) => {
 		if (err) throw err;
 	});
 
-	fs.writeFile(`benchmarks/${kernel}/rvv.log`, stdout3, (err) => {
+	fs.writeFile(`benchmarks/${kernel}/rvv_${type}_${size}.log`, stdout3, (err) => {
 		if (err) throw err;
 	});
 
@@ -184,6 +192,8 @@ function aproximateEqual(stdout1, stdout2, stdout3, kernel) {
 	// Call the function to adjust table width and print the table
 	adjustTableWidth(data);
 
+	console.log(`\n`);
+
 	return flag;
 }
 
@@ -205,13 +215,19 @@ for (let kernel of kernels) {
 	/* Compile for RVV with clang */
 	compileKernel(clangPath, [...clangFlags, "-I..", "../Functions.c", "-c"]);
 	compileKernel(clangPath, [...clangFlags, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
-	compileKernel(clangPath, [...clangFlags, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
+	compileKernel(clangPath, [...clangFlags, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"], true);
 	compileKernel(clangPath, [...clangFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `benchmarks/${kernel}/${bin_rvv}`]);
 
 	/* Run each kernel file */
 	const execSimple = executableRun(spikePath, [pkPath, `benchmarks/${kernel}/${bin_simple}`, kernel]);
 	const execUVE = executableRun(spikePath, [pkPath, `benchmarks/${kernel}/${bin_uve}`, kernel]);
 	const execRVV = executableRun(spikePath, ["--isa=rv64gcv",  "--varch=vlen:512,elen:64", pkPath, `benchmarks/${kernel}/${bin_rvv}`, kernel]);
+
+	const objDump = spawnSync("/home/afernandes/LLVM-Compiler/llvm-project/build/bin/llvm-objdump", ["--mattr=rv64gcv",  "-d", "kernel.o"]);
+	const stdoutO = objDump.stdout.toString();
+	fs.writeFile(`benchmarks/${kernel}/rvv.dump`, stdoutO, (err) => {
+		if (err) throw err;
+	});
 
 	/* Test if generated values are similar */
 

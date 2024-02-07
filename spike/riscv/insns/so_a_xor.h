@@ -29,8 +29,8 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     for (size_t i = 0; i < vLen; i++) {
         if (i < validElementsIndex){
             if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
-                auto e1 = readAS<OperationType>(elements1.at(i));
-                auto e2 = readAS<OperationType>(elements2.at(i));
+                OperationType e1 = readAS<OperationType>(elements1.at(i));
+                OperationType e2 = readAS<OperationType>(elements2.at(i));
                 out.at(i) = readAS<StorageType>(e1 ^ e2);
                 //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
             }

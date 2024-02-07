@@ -167,6 +167,7 @@ void core(int sizeM, int sizeN, DataType float_n, DataType *data, DataType *cov,
 
 #endif // RUN_SIMPLE
 
+
 #ifdef RUN_BLANK
 void core(int sizeM, int sizeN, DataType float_n, DataType *data, DataType *cov, DataType *mean) {
 }

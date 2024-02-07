@@ -25,8 +25,8 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
         uint8_t value = 0;
         for (size_t i = 0; i < validElementsIndex; i++) {
             if(pi.at((i+1)*sizeof(OperationType)-1)){
-                auto e1 = readAS<OperationType>(elements1.at(i));
-                auto e2 = readAS<OperationType>(elements2.at(i));
+                OperationType e1 = readAS<OperationType>(elements1.at(i));
+                OperationType e2 = readAS<OperationType>(elements2.at(i));
                 value = e1 >= e2;
             } else
                 value = readAS<OperationType>(destElements.at(i));

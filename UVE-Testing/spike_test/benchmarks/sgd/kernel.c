@@ -325,6 +325,7 @@ DataType core(DataType **x, DataType *x_array, DataType *y, DataType *y_err, Dat
 }
 #endif // RUN_SIMPLE
 
+
 #ifdef RUN_BLANK
 DataType core(DataType **x, DataType *x_array, DataType *y, DataType *y_err, DataType *sgd_model, DataType *y_fitted){
     return 0.0;

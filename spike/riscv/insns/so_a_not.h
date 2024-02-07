@@ -24,7 +24,7 @@ bool zeroing = src.getType() == RegisterConfig::Load;
     for (size_t i = 0; i < vLen; i++) {
         if (i < validElementsIndex){
             if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
-                auto e = readAS<OperationType>(elements.at(i));
+                OperationType e = readAS<OperationType>(elements.at(i));
                 out.at(i) = readAS<StorageType>(!e);
                 //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
             }

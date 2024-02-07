@@ -64,6 +64,7 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
 }
 #endif // RUN_SIMPLE
 
+
 #ifdef RUN_BLANK
 void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
 }

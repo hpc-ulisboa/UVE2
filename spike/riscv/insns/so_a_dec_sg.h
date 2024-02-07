@@ -21,7 +21,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     for (size_t i = 0; i < vLen; i++) {
         if (i < validElementsIndex){
             if (pi.at((i+1)*sizeof(OperationType)-1)){
-                auto e = readAS<OperationType>(elements.at(i)) - 1.0;
+                OperationType e = readAS<OperationType>(elements.at(i)) - 1.0;
                 out.at(i) = readAS<StorageType>(e);
             }
         } else 

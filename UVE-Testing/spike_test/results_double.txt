@@ -1,0 +1,27 @@
+
+### Attempting to compile and run kernel saxpy...
+
+benchmarks/saxpy/kernel.c:44:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < SIZE; i++) {
+    ^
+benchmarks/saxpy/kernel.c:44:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 193 less instructions
+RVV executed 113 less instructions
+UVE executed 80 less instructions than RVV
+|----------|-----|------------|----------------|
+| Original | RVV | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 213      | 100 | 113        | 53.05          |
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 213      | 20  | 193        | 90.61          |
+|----------|-----|------------|----------------|
+| RVV      | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 100      | 20  | 80         | 80.00          |
+|----------|-----|------------|----------------|
+
+
+Kernel saxpy is similar enough

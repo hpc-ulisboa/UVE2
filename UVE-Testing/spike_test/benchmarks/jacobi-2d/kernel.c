@@ -120,6 +120,7 @@ void core(DataType *A, DataType *B) {
 }
 #endif // RUN_SIMPLE
 
+
 #ifdef RUN_BLANK
 void core(DataType *A, DataType *B) {
 }

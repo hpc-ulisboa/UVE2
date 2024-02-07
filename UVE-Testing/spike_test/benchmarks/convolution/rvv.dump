@@ -1,0 +1,205 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: 5d 71        	addi	sp, sp, -80
+       4: a2 e4        	sd	s0, 72(sp)
+       6: a6 e0        	sd	s1, 64(sp)
+       8: 4a fc        	sd	s2, 56(sp)
+       a: 4e f8        	sd	s3, 48(sp)
+       c: 52 f4        	sd	s4, 40(sp)
+       e: 56 f0        	sd	s5, 32(sp)
+      10: 5a ec        	sd	s6, 24(sp)
+      12: 5e e8        	sd	s7, 16(sp)
+      14: 62 e4        	sd	s8, 8(sp)
+      16: f3 26 20 c0  	rdinstret	a3
+      1a: 37 07 00 00  	lui	a4, 0
+      1e: f3 2a 20 c2  	csrr	s5, vlenb
+      22: 13 d8 3a 00  	srli	a6, s5, 3
+      26: 89 47        	li	a5, 2
+      28: 23 30 d7 00  	sd	a3, 0(a4)
+      2c: 63 e0 07 01  	bltu	a5, a6, 0x2c <core+0x2a>
+      30: 09 48        	li	a6, 2
+
+0000000000000032 <.LBB0_2>:
+      32: 81 42        	li	t0, 0
+      34: 01 43        	li	t1, 0
+      36: 93 08 86 04  	addi	a7, a2, 72
+      3a: 13 8b 85 19  	addi	s6, a1, 408
+      3e: 93 03 20 03  	li	t2, 50
+      42: 13 0e 50 06  	li	t3, 101
+      46: 85 4e        	li	t4, 1
+      48: 93 09 30 03  	li	s3, 51
+      4c: 13 0f 00 03  	li	t5, 48
+      50: 53 00 00 f2  	fmv.d.x	ft0, zero
+      54: 93 0f 10 03  	li	t6, 49
+      58: 13 09 00 19  	li	s2, 400
+      5c: d7 76 80 0d  	vsetvli	a3, zero, e64, m1, ta, ma
+      60: 57 34 00 5e  	vmv.v.i	v8, 0
+      64: 05 4a        	li	s4, 1
+      66: 01 a0        	j	0x66 <.LBB0_2+0x34>
+
+0000000000000068 <.LBB0_3>:
+      68: 05 0a        	addi	s4, s4, 1
+      6a: 05 03        	addi	t1, t1, 1
+      6c: 93 82 02 19  	addi	t0, t0, 400
+      70: 93 83 23 03  	addi	t2, t2, 50
+      74: 13 0e 2e 03  	addi	t3, t3, 50
+      78: 93 8e 2e 03  	addi	t4, t4, 50
+      7c: 93 89 29 03  	addi	s3, s3, 50
+      80: 63 00 fa 01  	beq	s4, t6, 0x80 <.LBB0_3+0x18>
+
+0000000000000084 <.LBB0_4>:
+      84: 05 4c        	li	s8, 1
+      86: 63 60 0f 01  	bltu	t5, a6, 0x86 <.LBB0_4+0x2>
+      8a: b3 06 23 03  	mul	a3, t1, s2
+      8e: 33 07 d5 00  	add	a4, a0, a3
+      92: 93 0b 07 4b  	addi	s7, a4, 1200
+      96: ae 96        	add	a3, a3, a1
+      98: 13 84 86 31  	addi	s0, a3, 792
+      9c: 93 86 86 19  	addi	a3, a3, 408
+      a0: b3 b4 16 01  	sltu	s1, a3, a7
+      a4: b3 37 86 00  	sltu	a5, a2, s0
+      a8: e5 8f        	and	a5, a5, s1
+      aa: b3 b6 76 01  	sltu	a3, a3, s7
+      ae: 33 37 87 00  	sltu	a4, a4, s0
+      b2: f9 8e        	and	a3, a3, a4
+      b4: dd 8e        	or	a3, a3, a5
+      b6: 05 4c        	li	s8, 1
+      b8: 81 e2        	bnez	a3, 0xb8 <.LBB0_4+0x34>
+      ba: 93 d6 3a 00  	srli	a3, s5, 3
+      be: 1b 87 f6 ff  	addiw	a4, a3, -1
+      c2: 87 74 06 0a  	vlse64.v	v9, (a2), zero
+      c6: 93 07 86 01  	addi	a5, a2, 24
+      ca: 07 f5 07 0a  	vlse64.v	v10, (a5), zero
+      ce: 93 07 06 03  	addi	a5, a2, 48
+      d2: 87 f5 07 0a  	vlse64.v	v11, (a5), zero
+      d6: 93 07 86 00  	addi	a5, a2, 8
+      da: 07 f6 07 0a  	vlse64.v	v12, (a5), zero
+      de: 93 07 06 02  	addi	a5, a2, 32
+      e2: 87 f6 07 0a  	vlse64.v	v13, (a5), zero
+      e6: 93 07 86 03  	addi	a5, a2, 56
+      ea: 07 f7 07 0a  	vlse64.v	v14, (a5), zero
+      ee: 93 07 06 01  	addi	a5, a2, 16
+      f2: 87 f7 07 0a  	vlse64.v	v15, (a5), zero
+      f6: 93 07 86 02  	addi	a5, a2, 40
+      fa: 07 f8 07 0a  	vlse64.v	v16, (a5), zero
+      fe: 93 07 06 04  	addi	a5, a2, 64
+     102: 87 f8 07 0a  	vlse64.v	v17, (a5), zero
+     106: 93 7b 07 03  	andi	s7, a4, 48
+     10a: 13 c4 0b 03  	xori	s0, s7, 48
+     10e: 13 cc 1b 03  	xori	s8, s7, 49
+     112: 96 87        	mv	a5, t0
+
+0000000000000114 <.LBB0_7>:
+     114: b3 04 f5 00  	add	s1, a0, a5
+     118: 13 87 04 33  	addi	a4, s1, 816
+     11c: 07 79 87 02  	vl1re64.v	v18, (a4)
+     120: 57 99 84 a2  	vfmadd.vv	v18, v9, v8
+     124: 13 87 04 1a  	addi	a4, s1, 416
+     128: 87 79 87 02  	vl1re64.v	v19, (a4)
+     12c: 13 87 04 01  	addi	a4, s1, 16
+     130: 07 7a 87 02  	vl1re64.v	v20, (a4)
+     134: 13 87 84 32  	addi	a4, s1, 808
+     138: 87 7a 87 02  	vl1re64.v	v21, (a4)
+     13c: 13 87 84 19  	addi	a4, s1, 408
+     140: 07 7b 87 02  	vl1re64.v	v22, (a4)
+     144: d7 19 25 a3  	vfmadd.vv	v19, v10, v18
+     148: 57 9a 35 a3  	vfmadd.vv	v20, v11, v19
+     14c: d7 1a 46 a3  	vfmadd.vv	v21, v12, v20
+     150: 57 9b 56 a3  	vfmadd.vv	v22, v13, v21
+     154: 13 87 84 00  	addi	a4, s1, 8
+     158: 07 79 87 02  	vl1re64.v	v18, (a4)
+     15c: 13 87 04 32  	addi	a4, s1, 800
+     160: 87 79 87 02  	vl1re64.v	v19, (a4)
+     164: 13 87 04 19  	addi	a4, s1, 400
+     168: 07 7a 87 02  	vl1re64.v	v20, (a4)
+     16c: 87 fa 84 02  	vl1re64.v	v21, (s1)
+     170: 57 19 67 a3  	vfmadd.vv	v18, v14, v22
+     174: d7 99 27 a3  	vfmadd.vv	v19, v15, v18
+     178: 57 1a 38 a3  	vfmadd.vv	v20, v16, v19
+     17c: d7 9a 48 a3  	vfmadd.vv	v21, v17, v20
+     180: 33 07 fb 00  	add	a4, s6, a5
+     184: a7 0a 87 02  	vs1r.v	v21, (a4)
+     188: 15 8c        	sub	s0, s0, a3
+     18a: d6 97        	add	a5, a5, s5
+     18c: 01 e0        	bnez	s0, 0x18c <.LBB0_7+0x78>
+     18e: 63 80 0b 00  	beqz	s7, 0x18e <.LBB0_7+0x7a>
+
+0000000000000192 <.LBB0_9>:
+     192: 93 06 fc fc  	addi	a3, s8, -49
+     196: 33 07 7c 00  	add	a4, s8, t2
+     19a: 0e 07        	slli	a4, a4, 3
+     19c: b3 84 e5 00  	add	s1, a1, a4
+     1a0: 33 07 cc 01  	add	a4, s8, t3
+     1a4: 0e 07        	slli	a4, a4, 3
+     1a6: 33 04 e5 00  	add	s0, a0, a4
+     1aa: 33 07 dc 01  	add	a4, s8, t4
+     1ae: 0e 07        	slli	a4, a4, 3
+     1b0: b3 07 e5 00  	add	a5, a0, a4
+     1b4: 4e 9c        	add	s8, s8, s3
+     1b6: 13 17 3c 00  	slli	a4, s8, 3
+     1ba: 2a 97        	add	a4, a4, a0
+
+00000000000001bc <.LBB0_10>:
+     1bc: 87 30 06 00  	fld	ft1, 0(a2)
+     1c0: 07 31 04 00  	fld	ft2, 0(s0)
+     1c4: c3 f0 20 02  	fmadd.d	ft1, ft1, ft2, ft0
+     1c8: 07 31 86 01  	fld	ft2, 24(a2)
+     1cc: 87 31 07 00  	fld	ft3, 0(a4)
+     1d0: 07 32 06 03  	fld	ft4, 48(a2)
+     1d4: 87 b2 07 00  	fld	ft5, 0(a5)
+     1d8: 07 33 86 00  	fld	ft6, 8(a2)
+     1dc: 87 33 84 ff  	fld	ft7, -8(s0)
+     1e0: 08 32        	fld	fa0, 32(a2)
+     1e2: 87 35 84 e6  	fld	fa1, -408(s0)
+     1e6: c3 70 31 0a  	fmadd.d	ft1, ft2, ft3, ft1
+     1ea: c3 70 52 0a  	fmadd.d	ft1, ft4, ft5, ft1
+     1ee: c3 70 73 0a  	fmadd.d	ft1, ft6, ft7, ft1
+     1f2: c3 70 b5 0a  	fmadd.d	ft1, fa0, fa1, ft1
+     1f6: 07 31 86 03  	fld	ft2, 56(a2)
+     1fa: 87 31 84 cd  	fld	ft3, -808(s0)
+     1fe: 07 32 06 01  	fld	ft4, 16(a2)
+     202: 87 32 04 ff  	fld	ft5, -16(s0)
+     206: 07 33 86 02  	fld	ft6, 40(a2)
+     20a: 87 33 04 e6  	fld	ft7, -416(s0)
+     20e: 28 22        	fld	fa0, 64(a2)
+     210: 87 35 04 cd  	fld	fa1, -816(s0)
+     214: c3 70 31 0a  	fmadd.d	ft1, ft2, ft3, ft1
+     218: c3 70 52 0a  	fmadd.d	ft1, ft4, ft5, ft1
+     21c: c3 70 73 0a  	fmadd.d	ft1, ft6, ft7, ft1
+     220: c3 70 b5 0a  	fmadd.d	ft1, fa0, fa1, ft1
+     224: 27 b0 14 00  	fsd	ft1, 0(s1)
+     228: 85 06        	addi	a3, a3, 1
+     22a: a1 04        	addi	s1, s1, 8
+     22c: 21 04        	addi	s0, s0, 8
+     22e: a1 07        	addi	a5, a5, 8
+     230: 21 07        	addi	a4, a4, 8
+     232: 81 e2        	bnez	a3, 0x232 <.LBB0_10+0x76>
+     234: 01 a0        	j	0x234 <.LBB0_10+0x78>
+
+0000000000000236 <.LBB0_11>:
+     236: 73 26 20 c0  	rdinstret	a2
+     23a: 37 05 00 00  	lui	a0, 0
+     23e: 83 35 05 00  	ld	a1, 0(a0)
+     242: b7 06 00 00  	lui	a3, 0
+     246: 37 05 00 00  	lui	a0, 0
+     24a: 13 05 05 00  	mv	a0, a0
+     24e: 23 b0 c6 00  	sd	a2, 0(a3)
+     252: 26 64        	ld	s0, 72(sp)
+     254: 86 64        	ld	s1, 64(sp)
+     256: 62 79        	ld	s2, 56(sp)
+     258: c2 79        	ld	s3, 48(sp)
+     25a: 22 7a        	ld	s4, 40(sp)
+     25c: 82 7a        	ld	s5, 32(sp)
+     25e: 62 6b        	ld	s6, 24(sp)
+     260: c2 6b        	ld	s7, 16(sp)
+     262: 22 6c        	ld	s8, 8(sp)
+     264: 61 61        	addi	sp, sp, 80
+     266: 17 03 00 00  	auipc	t1, 0
+     26a: 67 00 03 00  	jr	t1

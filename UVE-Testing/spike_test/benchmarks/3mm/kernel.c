@@ -78,7 +78,9 @@ void core(void* A, void* B, void* C, void* D, void* E, void* F, void* G, uint64_
 }
 #endif // RUN_SIMPLE
 
+
 #ifdef RUN_BLANK
 void core(void* A, void* B, void* C, void* D, void* E, void* F, void* G, uint64_t I, uint64_t J, uint64_t K, uint64_t L, uint64_t M){
 }
 #endif // RUN_BLANK
+
