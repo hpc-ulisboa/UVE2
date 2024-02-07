@@ -8,7 +8,7 @@ const { spawnSync } = require("child_process");
 //const kernels = [ "knn" ];
 //const kernels = [ "syrk" ];
 
-const kernels = ["saxpy" , "memcpy"];
+const kernels = ["convolution"];
 
 /* DTYPE: dataset datatype
  * DTYPE 1: byte (hexadecimal int)
@@ -22,15 +22,28 @@ const kernels = ["saxpy" , "memcpy"];
 */
 
 // read type and size from command line
-const type_names = ["b", "h", "i", "f", "d"];
-
-const typeN = process.argv[2] || 5;
-const type = type_names[typeN-1];
+const typeMap = {
+    'b': 'byte',
+    'h': 'half-word',
+    'i': 'integer',
+    'f': 'float',
+    'd': 'double'
+};
+// read character from command line
+const type = process.argv[2] || 'd';
+console.log(`Type: ${type}`);
+// check if typeN is "b" or "h" or "i" or "f" or "d"
+if (!(type == 'b' || type == 'h' || type == 'i' || type == 'f' || type == 'd')) {
+	console.error("Invalid type. Please use b, h, i, f or d");
+	process.exit(1);
+}
 const size = process.argv[3] || 50;
 
-const compileFlags = ["-O2", "-Wall", "-pedantic", `-DTYPE=${typeN}`, `-DSIZE=${size}`];
+console.log(`Running with type \x1b[36m${typeMap[type]}\x1b[0m and size \x1b[36m${size}\x1b[0m\n`);
+
+const compileFlags = ["-O2", "-Wall", "-pedantic", `-D${type.toUpperCase()}_TYPE`, `-DSIZE=${size}`];
 const linkFlags = ["-O2", "-Wall", "-pedantic", "-static"];
-const clangFlags = ["-O2", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize", `-DTYPE=${typeN}`, `-DSIZE=${size}`];
+const clangFlags = ["-O2", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize", `-D${type.toUpperCase()}_TYPE`, `-DSIZE=${size}`];
 const gccPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const clangPath = "/home/afernandes/LLVM-Compiler/llvm-project/build/bin/clang";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
@@ -156,29 +169,29 @@ function aproximateEqual(stdout1, stdout2, stdout3, kernel) {
 	const insns1 = end1-start1;
 	const insns2 = end2-start2;
 	const insns3 = end3-start3;
-	const diffInsnsUVE = insns1-insns2;
-	const diffInsnsRVV = insns1-insns3;
-	const diffInsnsUVE_RVV = insns3 - insns2;
+	const diffInsnsUVE = insns2-insns1;
+	const diffInsnsRVV = insns3-insns1;
+	const diffInsnsUVE_RVV = insns2 - insns3;
 
 	// difference in percentage
 	const diffInsnsPuve = (diffInsnsUVE/insns1)*100;
 	const diffInsnsPrvv = (diffInsnsRVV/insns1)*100;
 	const diffInsnsPuve_rvv = (diffInsnsUVE_RVV/insns3)*100;
 
-	if (diffInsnsUVE > 0)
-		console.log(`UVE executed ${diffInsnsUVE} less instructions`);
-	else if (diffInsnsUVE < 0)
-		console.log(`UVE executed ${-diffInsnsUVE} more instructions`);
+	if (diffInsnsUVE < 0)
+		console.log(`UVE executed ${-diffInsnsUVE} less instructions`);
+	else if (diffInsnsUVE > 0)
+		console.log(`UVE executed ${diffInsnsUVE} more instructions`);
 
-	if (diffInsnsRVV > 0)
-		console.log(`RVV executed ${diffInsnsRVV} less instructions`);
-	else if (diffInsnsRVV < 0)
-		console.log(`RVV executed ${-diffInsnsRVV} more instructions`);
+	if (diffInsnsRVV < 0)
+		console.log(`RVV executed ${-diffInsnsRVV} less instructions`);
+	else if (diffInsnsRVV > 0)
+		console.log(`RVV executed ${diffInsnsRVV} more instructions`);
 
-	if (diffInsnsUVE_RVV > 0)
-		console.log(`UVE executed ${diffInsnsUVE_RVV} less instructions than RVV`);
-	else if (diffInsnsUVE_RVV < 0)
-		console.log(`UVE executed ${-diffInsnsUVE_RVV} more instructions than RVV`);
+	if (diffInsnsUVE_RVV < 0)
+		console.log(`UVE executed ${-diffInsnsUVE_RVV} less instructions than RVV`);
+	else if (diffInsnsUVE_RVV > 0)
+		console.log(`UVE executed ${diffInsnsUVE_RVV} more instructions than RVV`);
 
 	const data = [
 		['Original', 'RVV', 'Difference', 'Difference (%)'],

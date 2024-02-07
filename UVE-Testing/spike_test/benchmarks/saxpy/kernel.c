@@ -3,7 +3,7 @@
 long int start = 0, end = 0;
 
 #ifdef RUN_UVE
-#if TYPE == 5
+#ifdef D_TYPE
 void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
     asm volatile(
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
@@ -37,8 +37,8 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
 
     printf("%ld\n%ld\n", start, end);
 }
-#endif // TYPE == 5
-#if TYPE == 4
+#endif // D_TYPE
+#ifdef F_TYPE
 void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
     asm volatile(
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
@@ -72,8 +72,8 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
 
     printf("%ld\n%ld\n", start, end);
 }
-#endif // TYPE == 4
-#if TYPE == 3
+#endif // F_TYPE
+#ifdef I_TYPE
 void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
     asm volatile(
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
@@ -107,8 +107,8 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
 
     printf("%ld\n%ld\n", start, end);
 }
-#endif // TYPE == 3
-#if TYPE == 2
+#endif // I_TYPE
+#ifdef H_TYPE
 void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
     asm volatile(
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
@@ -142,8 +142,8 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
 
     printf("%ld\n%ld\n", start, end);
 }
-#endif // TYPE == 2
-#if TYPE == 1
+#endif // H_TYPE
+#ifdef B_TYPE
 void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
     asm volatile(
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
@@ -177,7 +177,7 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
 
     printf("%ld\n%ld\n", start, end);
 }
-#endif // TYPE == 1
+#endif // B_TYPE
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE

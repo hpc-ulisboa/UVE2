@@ -3,7 +3,7 @@
 long int start = 0, end = 0;
 
 #ifdef RUN_UVE
-#if TYPE == 5
+#ifdef D_TYPE
 void core(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
 		"rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
@@ -28,8 +28,8 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 
 	printf("%ld\n%ld\n", start, end);
 }
-#endif // TYPE == 5
-#if TYPE == 4 || TYPE == 3
+#endif // D_TYPE
+#if defined(F_TYPE) || defined(I_TYPE) 
 void core(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
 		"rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
@@ -54,8 +54,8 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 
 	printf("%ld\n%ld\n", start, end);
 }
-#endif // TYPE == 4 || TYPE == 3
-#if TYPE == 2
+#endif // F_TYPE || I_TYPE
+#ifdef H_TYPE
 void core(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
 		"rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
@@ -80,8 +80,8 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 
 	printf("%ld\n%ld\n", start, end);
 }
-#endif // TYPE == 2
-#if TYPE == 1
+#endif // H_TYPE
+#ifdef B_TYPE
 void core(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
 		"rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
@@ -106,7 +106,7 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 
 	printf("%ld\n%ld\n", start, end);
 }
-#endif // TYPE == 1
+#endif // B_TYPE
 #endif // RUN_UVE
 
 
@@ -123,8 +123,3 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 }
 #endif // RUN_SIMPLE
 
-
-#ifdef RUN_BLANK
-void core(DataType dest[SIZE], DataType src[SIZE]) {
-}
-#endif // RUN_BLANK
