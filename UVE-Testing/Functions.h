@@ -14,7 +14,7 @@
 /* Becase we might wanna test different properties, we can define here a diferent build type */
 // Using bytes
 #ifdef B_TYPE
-#define DataType char
+#define DataType signed char
 #define DataSet iDataset
 #define DataFormat(start, end) start "%x" end
 #endif // BYTE_TYPE

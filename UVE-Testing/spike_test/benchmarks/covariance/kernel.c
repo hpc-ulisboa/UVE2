@@ -182,7 +182,7 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
         "rdinstret %[e] \t\n"
         : [s] "=&r" (start), [e] "=&r" (end)
         : [M] "r"(sizeM), [N] "r"(sizeN), [float_n] "r"(float_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
-          [one] "r"(1), [float_nn] "r"((double)(float_n - 1.0)));
+          [one] "r"(1), [float_nn] "r"((float)(float_n - 1.0)));
 
     printf("%ld\n%ld\n", start, end);
 }
@@ -274,7 +274,7 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
         "rdinstret %[e] \t\n"
         : [s] "=&r" (start), [e] "=&r" (end)
         : [M] "r"(sizeM), [N] "r"(sizeN), [float_n] "r"(float_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
-          [one] "r"(1), [float_nn] "r"((double)(float_n - 1.0)));
+          [one] "r"(1), [float_nn] "r"((int)(float_n - 1.0)));
 
     printf("%ld\n%ld\n", start, end);
 }
@@ -366,10 +366,103 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, Dat
         "rdinstret %[e] \t\n"
         : [s] "=&r" (start), [e] "=&r" (end)
         : [M] "r"(sizeM), [N] "r"(sizeN), [float_n] "r"(float_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
-          [one] "r"(1), [float_nn] "r"((double)(float_n - 1.0)));
+          [one] "r"(1), [float_nn] "r"((short int)(float_n - 1.0)));
 
     printf("%ld\n%ld\n", start, end);
 }
+#endif // H_TYPE
+#ifdef B_TYPE
+void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType float_n /* %2 */, DataType *data /* %3 */, DataType *cov /* %4 */, DataType *mean /* %5 */) {
+    // kernel 1
+    asm volatile(
+        "rdinstret %[s] \t\n"
+
+        "ss.sta.ld.b    u1, %[data], %[M], %[one] \t\n"
+        "ss.end         u1, zero, %[N], %[M] \t\n"
+        "ss.cfg.vec     u1 \t\n"
+
+        "ss.st.b u2, %[mean], %[M], %[one] \t\n"
+        
+        "so.v.mvsv.b u3, %[float_n] \t\n"
+
+        ".SLOOP_1%=: \t\n"
+            "so.v.mvsv.b    u4, zero \t\n"
+
+            ".SLOOP_1_0%=: \t\n"
+                "so.a.adde.acc.sg   u4, u1, p0 \t\n"
+            "so.b.ndc.1 u1, .SLOOP_1_0%= \t\n"
+
+            "so.a.div.sg    u2, u4, u3, p0 \t\n"
+        "so.b.nc u1, .SLOOP_1%= \t\n"
+        
+        // kernel 2
+  
+        "ss.sta.st.b    u1, %[data], %[N], %[M] \t\n"
+        "ss.end         u1, zero, %[M], %[one] \t\n"
+        "ss.cfg.vec     u1 \t\n"
+
+        "ss.sta.ld.b    u2, %[mean], %[N], zero \t\n"
+        "ss.end         u2, zero, %[M], %[one] \t\n"
+        "ss.cfg.vec     u2 \t\n"
+
+        "ss.sta.ld.b    u3, %[data], %[N], %[M] \t\n"
+        "ss.end         u3, zero, %[M], %[one] \t\n"
+        "ss.cfg.vec     u3 \t\n"
+        
+        ".SLOOP_2%=: \t\n"
+            "so.a.sub.sg  u1, u3, u2, p0 \t\n"
+        "so.b.nc u1, .SLOOP_2%= \t\n"
+
+        // kernel 3
+  
+        "ss.sta.ld.b        u1, %[data], %[M], %[one] \t\n"
+        //"ss.app.mod.ofs.inc u1, %[M], %[one] \t\n"
+        "ss.app.mod.siz.dec u1, %[M], %[one] \t\n"
+        "ss.app             u1, zero, %[M], %[one] \t\n"
+        "ss.end             u1, zero, %[N], %[M] \t\n"
+        "ss.cfg.vec         u1 \t\n"
+
+        "ss.sta.ld.b        u2, %[data], %[M], %[one] \t\n"
+        //"ss.app.mod.ofs.inc u2, %[M], %[one] \t\n"
+        "ss.app.mod.siz.dec u2, %[M], %[one] \t\n"
+        "ss.app             u2, zero, %[M], zero \t\n"
+        "ss.end             u2, zero, %[N], %[M] \t\n"
+        "ss.cfg.vec         u2 \t\n"
+
+        "ss.sta.st.b        u3, %[cov], %[M], %[M] \t\n"
+        "ss.app.mod.ofs.inc u3, %[M], %[one] \t\n"
+        "ss.app.mod.siz.dec u3, %[M], %[one] \t\n"
+        "ss.end             u3, zero, %[M], %[one] \t\n"
+
+        "ss.sta.st.b        u4, %[cov], %[M], %[one] \t\n"
+        "ss.app.mod.ofs.inc u4, %[M], %[M] \t\n"
+        "ss.app.mod.siz.dec u4, %[M], %[one] \t\n"
+        "ss.end             u4, zero, %[M], %[M] \t\n"
+        
+        "so.v.mvsv.b u5, %[float_nn] \t\n"
+
+        ".SLOOP_3%=: \t\n"
+            "so.v.dp.b      u6, zero, p0 \t\n"
+
+            ".SLOOP_3_0_0%=: \t\n"
+                "so.a.mul.sg  u7, u2, u1, p0 \t\n"
+                "so.a.add.sg  u6, u6, u7, p0 \t\n"
+            "so.b.ndc.1 u2, .SLOOP_3_0_0%= \t\n"
+
+            "so.a.adde.sg   u7, u6, p0 \t\n"
+            "so.a.div.sg    u8, u7, u5, p0 \t\n"
+            "so.v.mv        u3, u8, p0 \t\n"
+            "so.v.mv        u4, u8, p0 \t\n"
+        "so.b.nc u1, .SLOOP_3%= \t\n"
+
+        "rdinstret %[e] \t\n"
+        : [s] "=&r" (start), [e] "=&r" (end)
+        : [M] "r"(sizeM), [N] "r"(sizeN), [float_n] "r"(float_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
+          [one] "r"(1), [float_nn] "r"((char)(float_n - 1.0)));
+
+    printf("%ld\n%ld\n", start, end);
+}
+#endif // B_TYPE
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE

@@ -8,7 +8,7 @@ const { spawnSync } = require("child_process");
 //const kernels = [ "knn" ];
 //const kernels = [ "syrk" ];
 
-const kernels = ["convolution"];
+const kernels = ["jacobi-1d"];
 
 /* DTYPE: dataset datatype
  * DTYPE 1: byte (hexadecimal int)
@@ -48,9 +48,9 @@ const gccPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const clangPath = "/home/afernandes/LLVM-Compiler/llvm-project/build/bin/clang";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
 const spikePath = "/home/afernandes/uve-dev/UVE-Testing/spike";
-const bin_simple = `./run_simple_${type}_${size}`;
-const bin_uve = `./run_uve_${type}_${size}`;
-const bin_rvv = `./run_rvv_${type}_${size}`;
+const bin_simple = `runs_${type}_${size}/run_simple`;
+const bin_uve = `runs_${type}_${size}/run_uve`;
+const bin_rvv = `runs_${type}_${size}/run_rvv`;
 
 function adjustTableWidth(data) {
     // Function to calculate the maximum width of each column
@@ -120,15 +120,15 @@ function compileKernel(command, args, flag = false) {
 function aproximateEqual(stdout1, stdout2, stdout3, kernel) {
 	let flag = true;
 	/* Write log files */
-	fs.writeFile(`benchmarks/${kernel}/simple__${type}_${size}.log`, stdout1, (err) => {
+	fs.writeFile(`benchmarks/${kernel}/runs_${type}_${size}/simple.log`, stdout1, (err) => {
 		if (err) throw err;
 	});
 
-	fs.writeFile(`benchmarks/${kernel}/uve_${type}_${size}.log`, stdout2, (err) => {
+	fs.writeFile(`benchmarks/${kernel}/runs_${type}_${size}/uve.log`, stdout2, (err) => {
 		if (err) throw err;
 	});
 
-	fs.writeFile(`benchmarks/${kernel}/rvv_${type}_${size}.log`, stdout3, (err) => {
+	fs.writeFile(`benchmarks/${kernel}/runs_${type}_${size}/rvv.log`, stdout3, (err) => {
 		if (err) throw err;
 	});
 
@@ -157,11 +157,11 @@ function aproximateEqual(stdout1, stdout2, stdout3, kernel) {
 		const diff = Math.abs(value1 - value2);
 		const diff2 = Math.abs(value1 - value3);
 		if (diff > 0.1) {
-			console.error(`UVE: Values were ${str1[i]} and ${str2[i]} with difference of ${diff} at index ${i-3}`);
+			console.error(`UVE: Values were ${str1[i]} and ${str2[i]} with difference of ${diff} at index ${i-2}`);
 			flag = false;
 		}
 		if (diff2 > 0.1) {
-			console.error(`RVV: Values were ${str1[i]} and ${str3[i]} with difference of ${diff2} at index ${i-3}`);
+			console.error(`RVV: Values were ${str1[i]} and ${str3[i]} with difference of ${diff2} at index ${i-2}`);
 			flag = false;
 		}
 	}
@@ -213,6 +213,11 @@ function aproximateEqual(stdout1, stdout2, stdout3, kernel) {
 for (let kernel of kernels) {
 	console.log(`\n### Attempting to compile and run kernel ${kernel}...\n`);
 
+	// if the directory does not exist, create it
+	if (!fs.existsSync(`benchmarks/${kernel}/runs_${type}_${size}`)) {
+		fs.mkdirSync(`benchmarks/${kernel}/runs_${type}_${size}`);
+	}
+
 	/* Compile Functions source files */
 	compileKernel(gccPath, [...compileFlags, "-I..", "../Functions.c", "-c"]);
 	compileKernel(gccPath, [...compileFlags, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
@@ -251,11 +256,11 @@ for (let kernel of kernels) {
 		//break;
 	}
 
-	/* Delete executables for next kernel
+	// Delete executables for next kernel
 	const del = spawnSync("rm", ["-f", bin_simple, bin_uve, 'main.o', 'kernel.o', 'Functions.o']);
 	if (del.error) {
 		console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 		break;
-	}*/
+	}
 
 }
