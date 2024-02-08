@@ -12,8 +12,8 @@ function deleteLogsAndExecutables(dirPath) {
                 // Recurse into subdirectories
                 deleteLogsAndExecutables(fullPath);
             } else if (file.isFile()) {
-                // Delete .log files and executables
-                if (path.extname(file.name) === '.log' || path.extname(file.name) === '.dump' || !path.extname(file.name)) {
+                // Delete .txt files and executables
+                if (path.extname(file.name) === '.txt' || path.extname(file.name) === '.dump' || !path.extname(file.name)) {
                     fs.unlink(fullPath, err => {
                         if (err) throw err;
                         console.log(`Deleted ${fullPath}`);

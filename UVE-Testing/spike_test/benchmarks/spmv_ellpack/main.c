@@ -6,6 +6,10 @@
 #define MIN 0.
 #define MAX 10.0
 
+#ifndef D_TYPE
+#error *Benchmark only available for double precision*
+#endif
+
 extern void core(DataType *nzval, uint32_t *cols, DataType *vec, DataType *out, int32_t M, int32_t K);
 
 static void initVals(uint32_t *colind, DataType *nzval, DataType *x, int M, int K) {

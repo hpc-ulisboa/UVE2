@@ -1,6 +1,6 @@
 Benchmarks sgd, spmv_ellpack and spmv_ellpack_delimiters use double type with fixed sizes
 Benchmarks jacobi-1d and jacobi-2d use float or double type. Double will be used.
-Running with type double and size 50
+Running with typebyte[0m and size50[0m
 
 
 ### Attempting to compile and run kernel saxpy...
@@ -8,23 +8,23 @@ Running with type double and size 50
 benchmarks/saxpy/kernel.c:186:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
     for (int i = 0; i < SIZE; i++) {
     ^
-benchmarks/saxpy/kernel.c:186:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/saxpy/kernel.c:186:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 324 less instructions
-RVV executed 262 less instructions
-UVE executed 62 less instructions than RVV
+UVE executed 393 less instructions
+RVV executed 57 more instructions
+UVE executed 450 less instructions than RVV
 |----------|-----|------------|----------------|
 | Original | RVV | Difference | Difference (%) |
 |----------|-----|------------|----------------|
-| 353      | 91  | -262       | -74.22         |
+| 404      | 461 | 57         | 14.11          |
 |----------|-----|------------|----------------|
 | Original | UVE | Difference | Difference (%) |
 |----------|-----|------------|----------------|
-| 353      | 29  | -324       | -91.78         |
+| 404      | 11  | -393       | -97.28         |
 |----------|-----|------------|----------------|
 | RVV      | UVE | Difference | Difference (%) |
 |----------|-----|------------|----------------|
-| 91       | 29  | -62        | -68.13         |
+| 461      | 11  | -450       | -97.61         |
 |----------|-----|------------|----------------|
 
 
@@ -35,23 +35,23 @@ Kernel saxpy is similar enough
 benchmarks/memcpy/kernel.c:117:2: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
         for (int i = 0; i < SIZE; ++i) {
         ^
-benchmarks/memcpy/kernel.c:117:2: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/memcpy/kernel.c:117:2: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 234 less instructions
-RVV executed 182 less instructions
-UVE executed 52 less instructions than RVV
+UVE executed 246 less instructions
+RVV executed 58 more instructions
+UVE executed 304 less instructions than RVV
 |----------|-----|------------|----------------|
 | Original | RVV | Difference | Difference (%) |
 |----------|-----|------------|----------------|
-| 253      | 71  | -182       | -71.94         |
+| 253      | 311 | 58         | 22.92          |
 |----------|-----|------------|----------------|
 | Original | UVE | Difference | Difference (%) |
 |----------|-----|------------|----------------|
-| 253      | 19  | -234       | -92.49         |
+| 253      | 7   | -246       | -97.23         |
 |----------|-----|------------|----------------|
 | RVV      | UVE | Difference | Difference (%) |
 |----------|-----|------------|----------------|
-| 71       | 19  | -52        | -73.24         |
+| 311      | 7   | -304       | -97.75         |
 |----------|-----|------------|----------------|
 
 
@@ -59,6 +59,25 @@ Kernel memcpy is similar enough
 
 ### Attempting to compile and run kernel jacobi-1d...
 
+In file included from benchmarks/jacobi-1d/kernel.c:1:
+../Functions.h:47:9: warning: 'DataType' macro redefined [-Wmacro-redefined]
+#define DataType double
+        ^
+../Functions.h:17:9: note: previous definition is here
+#define DataType signed char
+        ^
+../Functions.h:48:9: warning: 'DataSet' macro redefined [-Wmacro-redefined]
+#define DataSet fDataset
+        ^
+../Functions.h:18:9: note: previous definition is here
+#define DataSet iDataset
+        ^
+../Functions.h:51:9: warning: 'DataFormat' macro redefined [-Wmacro-redefined]
+#define DataFormat(start, end) start "%3.6lf" end
+        ^
+../Functions.h:19:9: note: previous definition is here
+#define DataFormat(start, end) start "%hhd" end
+        ^
 benchmarks/jacobi-1d/kernel.c:109:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
     for (int i = 1; i < SIZE - 1; ++i)
     ^
@@ -67,6 +86,7 @@ benchmarks/jacobi-1d/kernel.c:112:5: remark: the cost-model indicates that inter
     for (int i = 1; i < SIZE - 1; ++i)
     ^
 benchmarks/jacobi-1d/kernel.c:112:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+3 warnings generated.
 
 UVE executed 901 less instructions
 RVV executed 766 less instructions
@@ -90,6 +110,25 @@ Kernel jacobi-1d is similar enough
 
 ### Attempting to compile and run kernel jacobi-2d...
 
+In file included from benchmarks/jacobi-2d/kernel.c:1:
+../Functions.h:47:9: warning: 'DataType' macro redefined [-Wmacro-redefined]
+#define DataType double
+        ^
+../Functions.h:17:9: note: previous definition is here
+#define DataType signed char
+        ^
+../Functions.h:48:9: warning: 'DataSet' macro redefined [-Wmacro-redefined]
+#define DataSet fDataset
+        ^
+../Functions.h:18:9: note: previous definition is here
+#define DataSet iDataset
+        ^
+../Functions.h:51:9: warning: 'DataFormat' macro redefined [-Wmacro-redefined]
+#define DataFormat(start, end) start "%3.6lf" end
+        ^
+../Functions.h:19:9: note: previous definition is here
+#define DataFormat(start, end) start "%hhd" end
+        ^
 benchmarks/jacobi-2d/kernel.c:211:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
     for (int j = 1; j < SIZE - 1; j++) {
     ^
@@ -98,6 +137,7 @@ benchmarks/jacobi-2d/kernel.c:216:5: remark: the cost-model indicates that inter
     for (int j = 1; j < SIZE - 1; j++) {
     ^
 benchmarks/jacobi-2d/kernel.c:216:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+3 warnings generated.
 
 UVE executed 75533 less instructions
 RVV executed 64590 less instructions
@@ -121,32 +161,28 @@ Kernel jacobi-2d is similar enough
 
 ### Attempting to compile and run kernel 3mm...
 
-benchmarks/3mm/kernel.c:201:10: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
                 for (k = 0; k < sizeK; k++)
                 ^
-benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/3mm/kernel.c:201:10: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
-benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/3mm/kernel.c:201:10: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
-benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/3mm/kernel.c:201:10: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
-benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
 
-UVE executed 2506216 less instructions
-RVV executed 519002 more instructions
-UVE executed 3025218 less instructions than RVV
+UVE executed 3766207 less instructions
+RVV executed 309044 less instructions
+UVE executed 3457163 less instructions than RVV
 |----------|---------|------------|----------------|
 | Original | RVV     | Difference | Difference (%) |
 |----------|---------|------------|----------------|
-| 2712305  | 3231307 | 519002     | 19.14          |
+| 3813103  | 3504059 | -309044    | -8.10          |
 |----------|---------|------------|----------------|
 | Original | UVE     | Difference | Difference (%) |
 |----------|---------|------------|----------------|
-| 2712305  | 206089  | -2506216   | -92.40         |
+| 3813103  | 46896   | -3766207   | -98.77         |
 |----------|---------|------------|----------------|
 | RVV      | UVE     | Difference | Difference (%) |
 |----------|---------|------------|----------------|
-| 3231307  | 206089  | -3025218   | -93.62         |
+| 3504059  | 46896   | -3457163   | -98.66         |
 |----------|---------|------------|----------------|
 
 
@@ -162,92 +198,86 @@ benchmarks/trisolv/kernel.c:283:9: remark: loop not vectorized [-Rpass-missed=lo
         for (int j = 0; j < i; ++j) {
         ^
 
-UVE: Values were -3798025834736546.500000 and -3798025834736547.500000 with difference of 1 at index 47
-UVE executed 8484 less instructions
-RVV executed 1431 more instructions
-UVE executed 9915 less instructions than RVV
+UVE executed 12584 less instructions
+RVV executed 1016 less instructions
+UVE executed 11568 less instructions than RVV
 |----------|-------|------------|----------------|
 | Original | RVV   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 9274     | 10705 | 1431       | 15.43          |
+| 12996    | 11980 | -1016      | -7.82          |
 |----------|-------|------------|----------------|
 | Original | UVE   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 9274     | 790   | -8484      | -91.48         |
+| 12996    | 412   | -12584     | -96.83         |
 |----------|-------|------------|----------------|
 | RVV      | UVE   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 10705    | 790   | -9915      | -92.62         |
+| 11980    | 412   | -11568     | -96.56         |
 |----------|-------|------------|----------------|
 
 
-Kernel trisolv: Did not generate result similar enough
+Kernel trisolv is similar enough
 
 ### Attempting to compile and run kernel stream...
 
-benchmarks/stream/kernel.c:383:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/stream/kernel.c:383:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
     for (j=0; j<sizeN; j++)
     ^
-benchmarks/stream/kernel.c:383:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/stream/kernel.c:386:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/stream/kernel.c:386:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
     for (j=0; j<sizeN; j++)
     ^
-benchmarks/stream/kernel.c:386:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/stream/kernel.c:389:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/stream/kernel.c:389:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
     for (j=0; j<sizeN; j++)
     ^
-benchmarks/stream/kernel.c:389:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/stream/kernel.c:392:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/stream/kernel.c:392:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
     for (j=0; j<sizeN; j++)
     ^
-benchmarks/stream/kernel.c:392:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 1279 less instructions
-RVV executed 1020 less instructions
-UVE executed 259 less instructions than RVV
-|----------|-----|------------|----------------|
-| Original | RVV | Difference | Difference (%) |
-|----------|-----|------------|----------------|
-| 1365     | 345 | -1020      | -74.73         |
-|----------|-----|------------|----------------|
-| Original | UVE | Difference | Difference (%) |
-|----------|-----|------------|----------------|
-| 1365     | 86  | -1279      | -93.70         |
-|----------|-----|------------|----------------|
-| RVV      | UVE | Difference | Difference (%) |
-|----------|-----|------------|----------------|
-| 345      | 86  | -259       | -75.07         |
-|----------|-----|------------|----------------|
+UVE executed 1383 less instructions
+RVV executed 215 more instructions
+UVE executed 1598 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 1415     | 1630 | 215        | 15.19          |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 1415     | 32   | -1383      | -97.74         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 1630     | 32   | -1598      | -98.04         |
+|----------|------|------------|----------------|
 
 
 Kernel stream is similar enough
 
 ### Attempting to compile and run kernel mvt...
 
-benchmarks/mvt/kernel.c:373:7: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/mvt/kernel.c:373:7: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
       for (int j = 0; j < sizeN; j++)
       ^
-benchmarks/mvt/kernel.c:373:7: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 benchmarks/mvt/kernel.c:377:7: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
       for (int j = 0; j < sizeN; j++)
       ^
-benchmarks/mvt/kernel.c:377:7: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/mvt/kernel.c:377:7: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 33092 less instructions
-RVV executed 24820 less instructions
-UVE executed 8272 less instructions than RVV
+UVE executed 49941 less instructions
+RVV executed 4478 less instructions
+UVE executed 45463 less instructions than RVV
 |----------|-------|------------|----------------|
 | Original | RVV   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 35609    | 10789 | -24820     | -69.70         |
+| 50658    | 46180 | -4478      | -8.84          |
 |----------|-------|------------|----------------|
 | Original | UVE   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 35609    | 2517  | -33092     | -92.93         |
+| 50658    | 717   | -49941     | -98.58         |
 |----------|-------|------------|----------------|
 | RVV      | UVE   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 10789    | 2517  | -8272      | -76.67         |
+| 46180    | 717   | -45463     | -98.45         |
 |----------|-------|------------|----------------|
 
 
@@ -255,38 +285,35 @@ Kernel mvt is similar enough
 
 ### Attempting to compile and run kernel gemver...
 
-benchmarks/gemver/kernel.c:627:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/gemver/kernel.c:627:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
         for (j = 0; j < sizeN; j++)
         ^
-benchmarks/gemver/kernel.c:627:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 benchmarks/gemver/kernel.c:631:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
         for (j = 0; j < sizeN; j++)
         ^
-benchmarks/gemver/kernel.c:631:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/gemver/kernel.c:634:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/gemver/kernel.c:631:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/gemver/kernel.c:634:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
     for (i = 0; i < sizeN; i++)
     ^
-benchmarks/gemver/kernel.c:634:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/gemver/kernel.c:638:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/gemver/kernel.c:638:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
         for (j = 0; j < sizeN; j++)
         ^
-benchmarks/gemver/kernel.c:638:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 66306 less instructions
-RVV executed 52524 less instructions
-UVE executed 13782 less instructions than RVV
+UVE executed 90321 less instructions
+RVV executed 1715 less instructions
+UVE executed 88606 less instructions than RVV
 |----------|-------|------------|----------------|
 | Original | RVV   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 71313    | 18789 | -52524     | -73.65         |
+| 91416    | 89701 | -1715      | -1.88          |
 |----------|-------|------------|----------------|
 | Original | UVE   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 71313    | 5007  | -66306     | -92.98         |
+| 91416    | 1095  | -90321     | -98.80         |
 |----------|-------|------------|----------------|
 | RVV      | UVE   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 18789    | 5007  | -13782     | -73.35         |
+| 89701    | 1095  | -88606     | -98.78         |
 |----------|-------|------------|----------------|
 
 
@@ -294,31 +321,29 @@ Kernel gemver is similar enough
 
 ### Attempting to compile and run kernel gemm...
 
-benchmarks/gemm/kernel.c:342:8: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/gemm/kernel.c:342:8: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
        for (j = 0; j < sizeJ; j++)
        ^
-benchmarks/gemm/kernel.c:342:8: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/gemm/kernel.c:339:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/gemm/kernel.c:339:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
     for (j = 0; j < sizeJ; j++)
     ^
-benchmarks/gemm/kernel.c:339:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 1082238 less instructions
-RVV executed 859152 less instructions
-UVE executed 223086 less instructions than RVV
-|----------|--------|------------|----------------|
-| Original | RVV    | Difference | Difference (%) |
-|----------|--------|------------|----------------|
-| 1153013  | 293861 | -859152    | -74.51         |
-|----------|--------|------------|----------------|
-| Original | UVE    | Difference | Difference (%) |
-|----------|--------|------------|----------------|
-| 1153013  | 70775  | -1082238   | -93.86         |
-|----------|--------|------------|----------------|
-| RVV      | UVE    | Difference | Difference (%) |
-|----------|--------|------------|----------------|
-| 293861   | 70775  | -223086    | -75.92         |
-|----------|--------|------------|----------------|
+UVE executed 1267836 less instructions
+RVV executed 142897 more instructions
+UVE executed 1410733 less instructions than RVV
+|----------|---------|------------|----------------|
+| Original | RVV     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1278011  | 1420908 | 142897     | 11.18          |
+|----------|---------|------------|----------------|
+| Original | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1278011  | 10175   | -1267836   | -99.20         |
+|----------|---------|------------|----------------|
+| RVV      | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1420908  | 10175   | -1410733   | -99.28         |
+|----------|---------|------------|----------------|
 
 
 Kernel gemm is similar enough
@@ -328,23 +353,23 @@ Kernel gemm is similar enough
 benchmarks/convolution/kernel.c:250:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
         for (x = 1; x < PB_H - 1; x++){
         ^
-benchmarks/convolution/kernel.c:250:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/convolution/kernel.c:250:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 143182 less instructions
-RVV executed 159592 less instructions
-UVE executed 16410 more instructions than RVV
+UVE executed 205392 less instructions
+RVV executed 140253 less instructions
+UVE executed 65139 less instructions than RVV
 |----------|-------|------------|----------------|
 | Original | RVV   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 170843   | 11251 | -159592    | -93.41         |
+| 233053   | 92800 | -140253    | -60.18         |
 |----------|-------|------------|----------------|
 | Original | UVE   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 170843   | 27661 | -143182    | -83.81         |
+| 233053   | 27661 | -205392    | -88.13         |
 |----------|-------|------------|----------------|
 | RVV      | UVE   | Difference | Difference (%) |
 |----------|-------|------------|----------------|
-| 11251    | 27661 | 16410      | 145.85         |
+| 92800    | 27661 | -65139     | -70.19         |
 |----------|-------|------------|----------------|
 
 
@@ -355,38 +380,101 @@ Kernel convolution is similar enough
 benchmarks/covariance/kernel.c:488:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
         for (i = 0; i < sizeN; i++)
         ^
-benchmarks/covariance/kernel.c:488:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/covariance/kernel.c:502:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/covariance/kernel.c:488:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/covariance/kernel.c:502:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
         for (j = 0; j < sizeM; j++)
         ^
-benchmarks/covariance/kernel.c:502:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
-benchmarks/covariance/kernel.c:518:13: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/covariance/kernel.c:518:13: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
             for (k = 0; k < sizeN; k++)
             ^
-benchmarks/covariance/kernel.c:518:13: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 587421 less instructions
-RVV executed 443353 less instructions
-UVE executed 144068 less instructions than RVV
+RVV: Values were 1 and 0 with difference of 1 at index 21
+RVV: Values were -1 and 0 with difference of 1 at index 37
+RVV: Values were -2 and -1 with difference of 1 at index 170
+RVV: Values were 1 and 0 with difference of 1 at index 292
+RVV: Values were 1 and 0 with difference of 1 at index 425
+RVV: Values were -2 and -1 with difference of 1 at index 448
+RVV: Values were -1 and 0 with difference of 1 at index 474
+RVV: Values were 2 and 1 with difference of 1 at index 520
+RVV: Values were -2 and -1 with difference of 1 at index 547
+RVV: Values were -1 and 0 with difference of 1 at index 624
+RVV: Values were -2 and -1 with difference of 1 at index 686
+RVV: Values were 1 and 0 with difference of 1 at index 779
+RVV: Values were 2 and 1 with difference of 1 at index 838
+RVV: Values were 1 and 0 with difference of 1 at index 926
+RVV: Values were 1 and 0 with difference of 1 at index 948
+RVV: Values were -2 and -1 with difference of 1 at index 1003
+RVV: Values were 2 and 1 with difference of 1 at index 1010
+RVV: Values were 1 and 0 with difference of 1 at index 1050
+RVV: Values were -1 and 0 with difference of 1 at index 1077
+RVV: Values were -2 and -1 with difference of 1 at index 1184
+RVV: Values were 2 and 1 with difference of 1 at index 1190
+RVV: Values were -1 and 0 with difference of 1 at index 1199
+RVV: Values were -1 and 0 with difference of 1 at index 1209
+RVV: Values were -1 and 0 with difference of 1 at index 1212
+RVV: Values were 1 and 0 with difference of 1 at index 1258
+RVV: Values were 1 and 0 with difference of 1 at index 1318
+RVV: Values were -1 and 0 with difference of 1 at index 1371
+RVV: Values were 1 and 0 with difference of 1 at index 1465
+RVV: Values were -1 and 0 with difference of 1 at index 1645
+RVV: Values were -2 and -1 with difference of 1 at index 1723
+RVV: Values were -2 and -1 with difference of 1 at index 1813
+RVV: Values were -1 and 0 with difference of 1 at index 1850
+RVV: Values were 2 and 1 with difference of 1 at index 1916
+RVV: Values were -2 and -1 with difference of 1 at index 1995
+RVV: Values were 2 and 1 with difference of 1 at index 2023
+RVV: Values were 1 and 0 with difference of 1 at index 2105
+RVV: Values were -1 and 0 with difference of 1 at index 2143
+RVV: Values were 2 and 1 with difference of 1 at index 2147
+RVV: Values were -1 and 0 with difference of 1 at index 2192
+RVV: Values were -1 and 0 with difference of 1 at index 2282
+RVV: Values were -2 and -1 with difference of 1 at index 2289
+RVV: Values were -2 and -1 with difference of 1 at index 2360
+RVV: Values were 2 and 1 with difference of 1 at index 2392
+RVV: Values were -2 and -1 with difference of 1 at index 2408
+RVV: Values were 1 and 0 with difference of 1 at index 2418
+RVV: Values were -1 and 0 with difference of 1 at index 2473
+UVE executed 811294 less instructions
+RVV executed 169534 less instructions
+UVE executed 641760 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 623430   | 180077 | -443353    | -71.12         |
+| 823153   | 653619 | -169534    | -20.60         |
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 623430   | 36009  | -587421    | -94.22         |
+| 823153   | 11859  | -811294    | -98.56         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 180077   | 36009  | -144068    | -80.00         |
+| 653619   | 11859  | -641760    | -98.19         |
 |----------|--------|------------|----------------|
 
 
-Kernel covariance is similar enough
+Kernel covariance: Did not generate result similar enough
 
 ### Attempting to compile and run kernel sgd...
 
+In file included from benchmarks/sgd/kernel.c:1:
+../Functions.h:47:9: warning: 'DataType' macro redefined [-Wmacro-redefined]
+#define DataType double
+        ^
+../Functions.h:17:9: note: previous definition is here
+#define DataType signed char
+        ^
+../Functions.h:48:9: warning: 'DataSet' macro redefined [-Wmacro-redefined]
+#define DataSet fDataset
+        ^
+../Functions.h:18:9: note: previous definition is here
+#define DataSet iDataset
+        ^
+../Functions.h:51:9: warning: 'DataFormat' macro redefined [-Wmacro-redefined]
+#define DataFormat(start, end) start "%3.6lf" end
+        ^
+../Functions.h:19:9: note: previous definition is here
+#define DataFormat(start, end) start "%hhd" end
+        ^
 benchmarks/sgd/kernel.c:276:13: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
             for (j = 0; j /*< BATCH_SIZE && b + j*/ < PB_N; j++)
             ^
@@ -431,6 +519,7 @@ benchmarks/sgd/kernel.c:310:5: remark: the cost-model indicates that interleavin
     for (int i = 0; i < PB_N; i++)
     ^
 benchmarks/sgd/kernel.c:310:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+3 warnings generated.
 
 UVE executed 6352731 less instructions
 RVV executed 5574941 less instructions
@@ -454,10 +543,30 @@ Kernel sgd is similar enough
 
 ### Attempting to compile and run kernel spmv_ellpack...
 
+In file included from benchmarks/spmv_ellpack/kernel.c:1:
+../Functions.h:47:9: warning: 'DataType' macro redefined [-Wmacro-redefined]
+#define DataType double
+        ^
+../Functions.h:17:9: note: previous definition is here
+#define DataType signed char
+        ^
+../Functions.h:48:9: warning: 'DataSet' macro redefined [-Wmacro-redefined]
+#define DataSet fDataset
+        ^
+../Functions.h:18:9: note: previous definition is here
+#define DataSet iDataset
+        ^
+../Functions.h:51:9: warning: 'DataFormat' macro redefined [-Wmacro-redefined]
+#define DataFormat(start, end) start "%3.6lf" end
+        ^
+../Functions.h:19:9: note: previous definition is here
+#define DataFormat(start, end) start "%hhd" end
+        ^
 benchmarks/spmv_ellpack/kernel.c:62:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
         for (j = 0; j < L; j++) {
         ^
 benchmarks/spmv_ellpack/kernel.c:62:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+3 warnings generated.
 
 UVE executed 46932 less instructions
 RVV executed 22223 less instructions
@@ -481,10 +590,30 @@ Kernel spmv_ellpack is similar enough
 
 ### Attempting to compile and run kernel spmv_ellpack_delimiters...
 
+In file included from benchmarks/spmv_ellpack_delimiters/kernel.c:1:
+../Functions.h:47:9: warning: 'DataType' macro redefined [-Wmacro-redefined]
+#define DataType double
+        ^
+../Functions.h:17:9: note: previous definition is here
+#define DataType signed char
+        ^
+../Functions.h:48:9: warning: 'DataSet' macro redefined [-Wmacro-redefined]
+#define DataSet fDataset
+        ^
+../Functions.h:18:9: note: previous definition is here
+#define DataSet iDataset
+        ^
+../Functions.h:51:9: warning: 'DataFormat' macro redefined [-Wmacro-redefined]
+#define DataFormat(start, end) start "%3.6lf" end
+        ^
+../Functions.h:19:9: note: previous definition is here
+#define DataFormat(start, end) start "%hhd" end
+        ^
 benchmarks/spmv_ellpack_delimiters/kernel.c:75:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
         for (int j = 0; j < cur_nnz; j++) {
         ^
 benchmarks/spmv_ellpack_delimiters/kernel.c:75:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+3 warnings generated.
 
 UVE executed 21394 less instructions
 RVV executed 3888 more instructions

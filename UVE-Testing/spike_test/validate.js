@@ -2,24 +2,13 @@
 const fs = require('node:fs');
 const { spawnSync } = require("child_process");
 
-//const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "sgd", "covariance", "spmv_ellpack", "spmv_ellpack_delimiters"];
+const kernels = ["saxpy", "memcpy", "jacobi-1d", "jacobi-2d", "3mm", "trisolv", "stream", "mvt", "gemver", "gemm", "convolution", "covariance", "sgd", "spmv_ellpack", "spmv_ellpack_delimiters"];
 
 //const kernels = [ "floyd-warshall" ];
 //const kernels = [ "knn" ];
 //const kernels = [ "syrk" ];
 
-const kernels = ["jacobi-1d"];
-
-/* DTYPE: dataset datatype
- * DTYPE 1: byte (hexadecimal int)
- * DTYPE 2: half-word (short int)
- * DTYPE 3: word (int)
- * DTYPE 4: word (float)
- * DTYPE 5: double (DEFAULT)
- * 
- * DSIZE: size of the dataset (usually a matrix SIZE*SIZE)
- * DSIZE 64: 64x64 matrix (DEFAULT)
-*/
+//const kernels = ["3mm"];
 
 // read type and size from command line
 const typeMap = {
@@ -31,26 +20,35 @@ const typeMap = {
 };
 // read character from command line
 const type = process.argv[2] || 'd';
-console.log(`Type: ${type}`);
+
 // check if typeN is "b" or "h" or "i" or "f" or "d"
 if (!(type == 'b' || type == 'h' || type == 'i' || type == 'f' || type == 'd')) {
 	console.error("Invalid type. Please use b, h, i, f or d");
 	process.exit(1);
 }
+// check if sgd, spmv_ellpack or spmv_ellpack_delimiters are wanted
+// \x1b[36m cyan \x1b[0m
+if (kernels.includes("sgd") || kernels.includes("spmv_ellpack") || kernels.includes("spmv_ellpack_delimiters")) {
+	console.log("Benchmarks sgd, spmv_ellpack and spmv_ellpack_delimiters use double type with fixed sizes");
+}
+// check if jacobi-1d, jacobi-2d are wanted
+if (kernels.includes("jacobi-1d") || kernels.includes("jacobi-2d")) {
+	console.log("Benchmarks jacobi-1d and jacobi-2d use float or double type. Double will be used.");
+}
 const size = process.argv[3] || 50;
 
-console.log(`Running with type \x1b[36m${typeMap[type]}\x1b[0m and size \x1b[36m${size}\x1b[0m\n`);
+console.log(`Running with type ${typeMap[type]} and size ${size}\n`);
 
-const compileFlags = ["-O2", "-Wall", "-pedantic", `-D${type.toUpperCase()}_TYPE`, `-DSIZE=${size}`];
+const compileFlags = ["-O2", "-Wall", "-pedantic", `-DSIZE=${size}`];
 const linkFlags = ["-O2", "-Wall", "-pedantic", "-static"];
 const clangFlags = ["-O2", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize", `-D${type.toUpperCase()}_TYPE`, `-DSIZE=${size}`];
 const gccPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const clangPath = "/home/afernandes/LLVM-Compiler/llvm-project/build/bin/clang";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
 const spikePath = "/home/afernandes/uve-dev/UVE-Testing/spike";
-const bin_simple = `runs_${type}_${size}/run_simple`;
-const bin_uve = `runs_${type}_${size}/run_uve`;
-const bin_rvv = `runs_${type}_${size}/run_rvv`;
+const bin_simple = `.run_simple`;
+const bin_uve = `.run_uve`;
+const bin_rvv = `.run_rvv`;
 
 function adjustTableWidth(data) {
     // Function to calculate the maximum width of each column
@@ -117,18 +115,18 @@ function compileKernel(command, args, flag = false) {
 	}
 }
 
-function aproximateEqual(stdout1, stdout2, stdout3, kernel) {
+function aproximateEqual(stdout1, stdout2, stdout3, dir) {
 	let flag = true;
 	/* Write log files */
-	fs.writeFile(`benchmarks/${kernel}/runs_${type}_${size}/simple.log`, stdout1, (err) => {
+	fs.writeFile(`${dir}/simple.txt`, stdout1, (err) => {
 		if (err) throw err;
 	});
 
-	fs.writeFile(`benchmarks/${kernel}/runs_${type}_${size}/uve.log`, stdout2, (err) => {
+	fs.writeFile(`${dir}/uve.txt`, stdout2, (err) => {
 		if (err) throw err;
 	});
 
-	fs.writeFile(`benchmarks/${kernel}/runs_${type}_${size}/rvv.log`, stdout3, (err) => {
+	fs.writeFile(`${dir}/rvv.txt`, stdout3, (err) => {
 		if (err) throw err;
 	});
 
@@ -211,45 +209,60 @@ function aproximateEqual(stdout1, stdout2, stdout3, kernel) {
 }
 
 for (let kernel of kernels) {
-	console.log(`\n### Attempting to compile and run kernel ${kernel}...\n`);
+	// check if sgd, spmv_ellpack or spmv_ellpack_delimiters are wanted
+	let dir; let t;
+	if (kernel === "sgd" || kernel === "spmv_ellpack" || kernel === "spmv_ellpack_delimiters") {
+		dir = `benchmarks/${kernel}`;
+		t = "D";
+	} else {
+		if (kernel === "jacobi-1d" || kernel === "jacobi-2d" && type !== "f" && type !== "d") {
+			t = "d";
+		} else {
+			t = type;
+		}
+		dir = `benchmarks/${kernel}/runs_${t}_${size}`;
+		// if the directory does not exist, create it
+		if (!fs.existsSync(`benchmarks/${kernel}/runs_${t}_${size}`)) {
+			fs.mkdirSync(`benchmarks/${kernel}/runs_${t}_${size}`);
+		}
 
-	// if the directory does not exist, create it
-	if (!fs.existsSync(`benchmarks/${kernel}/runs_${type}_${size}`)) {
-		fs.mkdirSync(`benchmarks/${kernel}/runs_${type}_${size}`);
+		t = t.toUpperCase()
 	}
 
+	console.log(`\n### Attempting to compile and run kernel ${kernel}...\n`);
+
 	/* Compile Functions source files */
-	compileKernel(gccPath, [...compileFlags, "-I..", "../Functions.c", "-c"]);
-	compileKernel(gccPath, [...compileFlags, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
+	compileKernel(gccPath, [...compileFlags, `-D${t}_TYPE`, "-I..", "../Functions.c", "-c"]);
+	compileKernel(gccPath, [...compileFlags, `-D${t}_TYPE`, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
 
 	
-	compileKernel(gccPath, [...compileFlags, "-DRUN_UVE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
-	compileKernel(gccPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `benchmarks/${kernel}/${bin_uve}`]);
+	compileKernel(gccPath, [...compileFlags, `-D${t}_TYPE`, "-DRUN_UVE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
+	compileKernel(gccPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`]);
 
 	/* Compile and link each kernel file */
-	compileKernel(gccPath, [...compileFlags, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
-	compileKernel(gccPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `benchmarks/${kernel}/${bin_simple}`]);
+	compileKernel(gccPath, [...compileFlags, `-D${t}_TYPE`, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
+	compileKernel(gccPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}`]);
 
 	/* Compile for RVV with clang */
-	compileKernel(clangPath, [...clangFlags, "-I..", "../Functions.c", "-c"]);
-	compileKernel(clangPath, [...clangFlags, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
-	compileKernel(clangPath, [...clangFlags, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"], true);
-	compileKernel(clangPath, [...clangFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `benchmarks/${kernel}/${bin_rvv}`]);
+	compileKernel(clangPath, [...clangFlags, `-D${t}_TYPE`, "-I..", "../Functions.c", "-c"]);
+	compileKernel(clangPath, [...clangFlags, `-D${t}_TYPE`, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
+	compileKernel(clangPath, [...clangFlags, `-D${t}_TYPE`, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"], true);
+	compileKernel(clangPath, [...clangFlags, `-D${t}_TYPE`, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_rvv}`]);
 
 	/* Run each kernel file */
-	const execSimple = executableRun(spikePath, [pkPath, `benchmarks/${kernel}/${bin_simple}`, kernel]);
-	const execUVE = executableRun(spikePath, [pkPath, `benchmarks/${kernel}/${bin_uve}`, kernel]);
-	const execRVV = executableRun(spikePath, ["--isa=rv64gcv",  "--varch=vlen:512,elen:64", pkPath, `benchmarks/${kernel}/${bin_rvv}`, kernel]);
+	const execSimple = executableRun(spikePath, [pkPath, `${dir}/${bin_simple}`, kernel]);
+	const execUVE = executableRun(spikePath, [pkPath, `${dir}/${bin_uve}`, kernel]);
+	const execRVV = executableRun(spikePath, ["--isa=rv64gcv",  "--varch=vlen:512,elen:64", pkPath, `${dir}/${bin_rvv}`, kernel]);
 
 	const objDump = spawnSync("/home/afernandes/LLVM-Compiler/llvm-project/build/bin/llvm-objdump", ["--mattr=rv64gcv",  "-d", "kernel.o"]);
 	const stdoutO = objDump.stdout.toString();
-	fs.writeFile(`benchmarks/${kernel}/rvv.dump`, stdoutO, (err) => {
+	fs.writeFile(`${dir}/rvv.dump`, stdoutO, (err) => {
 		if (err) throw err;
 	});
 
 	/* Test if generated values are similar */
 
-	if (aproximateEqual(execSimple.stdout.toString(),  execUVE.stdout.toString(), execRVV.stdout.toString(), kernel)) {
+	if (aproximateEqual(execSimple.stdout.toString(),  execUVE.stdout.toString(), execRVV.stdout.toString(), dir)) {
 		console.log(`Kernel ${kernel} is similar enough`);
 	} else {
 		console.error(`Kernel ${kernel}: Did not generate result similar enough`);
@@ -257,7 +270,7 @@ for (let kernel of kernels) {
 	}
 
 	// Delete executables for next kernel
-	const del = spawnSync("rm", ["-f", bin_simple, bin_uve, 'main.o', 'kernel.o', 'Functions.o']);
+	const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o', 'Functions.o']);
 	if (del.error) {
 		console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 		break;

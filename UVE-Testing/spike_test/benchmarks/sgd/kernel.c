@@ -8,6 +8,7 @@
 long int start = 0, end = 0;
 
 #ifdef RUN_UVE
+
 DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model) {
     DataType intercept;
     asm volatile(

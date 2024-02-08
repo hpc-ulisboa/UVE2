@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef D_TYPE
+#error *Benchmark only available for double precision*
+#endif
+
 // Define the input range to operate over
 #define MIN 0.
 #define MAX 10.0
