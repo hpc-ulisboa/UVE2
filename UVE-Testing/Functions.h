@@ -16,7 +16,7 @@
 #ifdef B_TYPE
 #define DataType signed char
 #define DataSet iDataset
-#define DataFormat(start, end) start "%x" end
+#define DataFormat(start, end) start "%hhd" end
 #endif // BYTE_TYPE
 
 // Using shorts (half-words)

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Functions.h"
 
-extern void core(int sizeM, int sizeN, DataType float_n, DataType *data, DataType *cov, DataType *mean);
+extern void core(int sizeM, int sizeN, DataType datat_n, DataType *data, DataType *cov, DataType *mean);
 
 
 int main() {
@@ -16,7 +16,7 @@ int main() {
   initArray2D(cov, sizeM, sizeM);
   initZero(mean, sizeM);
 
-  double n = sizeN;
+  DataType n = sizeN;
 
   core(sizeM, sizeN, n, data, cov, mean);
 

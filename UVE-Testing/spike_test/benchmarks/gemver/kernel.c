@@ -61,11 +61,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_2_0%=: \n\t"
 				"so.a.mul.fp  u16, u5, u6, p0 \n\t"
 				"so.a.mul.fp  u29, u16, u7, p0 \n\t"
-				"so.a.add.fp  u11, u11, u29, p0 \n\t"
+				"so.a.adde.acc.fp  u11, u29, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
 
-			"so.a.adde.fp  u30, u11, p0 \n\t"
-			"so.a.add.fp  u1, u9, u30, p0 \n\t"
+			//"so.a.adde.fp  u30, u11, p0 \n\t"
+			//"so.a.add.fp  u1, u9, u30, p0 \n\t"
+			"so.a.add.fp  u1, u9, u11, p0 \n\t"
 		"so.b.nc u1, .SLOOP_2%= \n\t"
 		
 
@@ -105,11 +106,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_4_0%=: \n\t"
 				"so.a.mul.fp  u14, u5, u12, p0 \n\t"
 				"so.a.mul.fp  u15, u14, u7, p0 \n\t"
-				"so.a.add.fp  u13, u13, u15, p0 \n\t"
+				"so.a.adde.acc.fp  u13, u15, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
 
-			"so.a.adde.fp  u15, u13, p0 \n\t"
-			"so.a.add.fp  u1, u9, u15, p0 \n\t"
+			//"so.a.adde.fp  u15, u13, p0 \n\t"
+			//"so.a.add.fp  u1, u9, u15, p0 \n\t"
+			"so.a.add.fp  u1, u9, u13, p0 \n\t"
 		"so.b.nc u1, .SLOOP_4%= \n\t"
 
 		"rdinstret %[e] \n\t"
@@ -183,11 +185,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_2_0%=: \n\t"
 				"so.a.mul.fp  u16, u5, u6, p0 \n\t"
 				"so.a.mul.fp  u29, u16, u7, p0 \n\t"
-				"so.a.add.fp  u11, u11, u29, p0 \n\t"
+				"so.a.adde.acc.fp  u11, u29, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
 
-			"so.a.adde.fp  u30, u11, p0 \n\t"
-			"so.a.add.fp  u1, u9, u30, p0 \n\t"
+			//"so.a.adde.fp  u30, u11, p0 \n\t"
+			//"so.a.add.fp  u1, u9, u30, p0 \n\t"
+			"so.a.add.fp  u1, u9, u11, p0 \n\t"
 		"so.b.nc u1, .SLOOP_2%= \n\t"
 		
 
@@ -227,11 +230,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_4_0%=: \n\t"
 				"so.a.mul.fp  u14, u5, u12, p0 \n\t"
 				"so.a.mul.fp  u15, u14, u7, p0 \n\t"
-				"so.a.add.fp  u13, u13, u15, p0 \n\t"
+				"so.a.adde.acc.fp  u13, u15, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
 
-			"so.a.adde.fp  u15, u13, p0 \n\t"
-			"so.a.add.fp  u1, u9, u15, p0 \n\t"
+			//"so.a.adde.fp  u15, u13, p0 \n\t"
+			//"so.a.add.fp  u1, u9, u15, p0 \n\t"
+			"so.a.add.fp  u1, u9, u13, p0 \n\t"
 		"so.b.nc u1, .SLOOP_4%= \n\t"
 
 		"rdinstret %[e] \n\t"
@@ -305,11 +309,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_2_0%=: \n\t"
 				"so.a.mul.sg  u16, u5, u6, p0 \n\t"
 				"so.a.mul.sg  u29, u16, u7, p0 \n\t"
-				"so.a.add.sg  u11, u11, u29, p0 \n\t"
+				"so.a.adde.acc.sg  u11, u29, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
 
-			"so.a.adde.sg  u30, u11, p0 \n\t"
-			"so.a.add.sg  u1, u9, u30, p0 \n\t"
+			//"so.a.adde.sg  u30, u11, p0 \n\t"
+			//"so.a.add.sg  u1, u9, u30, p0 \n\t"
+			"so.a.add.sg  u1, u9, u11, p0 \n\t"
 		"so.b.nc u1, .SLOOP_2%= \n\t"
 		
 
@@ -349,11 +354,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_4_0%=: \n\t"
 				"so.a.mul.sg  u14, u5, u12, p0 \n\t"
 				"so.a.mul.sg  u15, u14, u7, p0 \n\t"
-				"so.a.add.sg  u13, u13, u15, p0 \n\t"
+				"so.a.adde.acc.sg  u13, u15, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
 
-			"so.a.adde.sg  u15, u13, p0 \n\t"
-			"so.a.add.sg  u1, u9, u15, p0 \n\t"
+			//"so.a.adde.sg  u15, u13, p0 \n\t"
+			//"so.a.add.sg  u1, u9, u15, p0 \n\t"
+			"so.a.add.sg  u1, u9, u13, p0 \n\t"
 		"so.b.nc u1, .SLOOP_4%= \n\t"
 
 		"rdinstret %[e] \n\t"
@@ -427,11 +433,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_2_0%=: \n\t"
 				"so.a.mul.sg  u16, u5, u6, p0 \n\t"
 				"so.a.mul.sg  u29, u16, u7, p0 \n\t"
-				"so.a.add.sg  u11, u11, u29, p0 \n\t"
+				"so.a.adde.acc.sg  u11, u29, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
 
-			"so.a.adde.sg  u30, u11, p0 \n\t"
-			"so.a.add.sg  u1, u9, u30, p0 \n\t"
+			//"so.a.adde.sg  u30, u11, p0 \n\t"
+			//"so.a.add.sg  u1, u9, u30, p0 \n\t"
+			"so.a.add.sg  u1, u9, u11, p0 \n\t"
 		"so.b.nc u1, .SLOOP_2%= \n\t"
 		
 
@@ -471,11 +478,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_4_0%=: \n\t"
 				"so.a.mul.sg  u14, u5, u12, p0 \n\t"
 				"so.a.mul.sg  u15, u14, u7, p0 \n\t"
-				"so.a.add.sg  u13, u13, u15, p0 \n\t"
+				"so.a.adde.acc.sg  u13, u15, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
 
-			"so.a.adde.sg  u15, u13, p0 \n\t"
-			"so.a.add.sg  u1, u9, u15, p0 \n\t"
+			//"so.a.adde.sg  u15, u13, p0 \n\t"
+			//"so.a.add.sg  u1, u9, u15, p0 \n\t"
+			"so.a.add.sg  u1, u9, u13, p0 \n\t"
 		"so.b.nc u1, .SLOOP_4%= \n\t"
 
 		"rdinstret %[e] \n\t"
@@ -549,11 +557,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_2_0%=: \n\t"
 				"so.a.mul.sg  u16, u5, u6, p0 \n\t"
 				"so.a.mul.sg  u29, u16, u7, p0 \n\t"
-				"so.a.add.sg  u11, u11, u29, p0 \n\t"
+				"so.a.adde.acc.sg  u11, u29, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
 
-			"so.a.adde.sg  u30, u11, p0 \n\t"
-			"so.a.add.sg  u1, u9, u30, p0 \n\t"
+			//"so.a.adde.sg  u30, u11, p0 \n\t"
+			//"so.a.add.sg  u1, u9, u30, p0 \n\t"
+			"so.a.add.sg  u1, u9, u11, p0 \n\t"
 		"so.b.nc u1, .SLOOP_2%= \n\t"
 		
 
@@ -593,11 +602,12 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 			".SLOOP_4_0%=: \n\t"
 				"so.a.mul.sg  u14, u5, u12, p0 \n\t"
 				"so.a.mul.sg  u15, u14, u7, p0 \n\t"
-				"so.a.add.sg  u13, u13, u15, p0 \n\t"
+				"so.a.adde.acc.sg  u13, u15, p0 \n\t"
 			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
 
-			"so.a.adde.sg  u15, u13, p0 \n\t"
-			"so.a.add.sg  u1, u9, u15, p0 \n\t"
+			//"so.a.adde.sg  u15, u13, p0 \n\t"
+			//"so.a.add.sg  u1, u9, u15, p0 \n\t"
+			"so.a.add.sg  u1, u9, u13, p0 \n\t"
 		"so.b.nc u1, .SLOOP_4%= \n\t"
 
 		"rdinstret %[e] \n\t"

@@ -1,54 +1,1669 @@
 
-### Attempting to compile and run kernel saxpy...
+### Attempting to compile and run kernel 3mm (size: 2500, type: byte) ...
 
-benchmarks/saxpy/kernel.c:186:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
-    for (int i = 0; i < SIZE; i++) {
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+                for (k = 0; k < sizeK; k++)
+                ^
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+
+UVE executed 3766207 less instructions
+RVV executed 309044 less instructions
+UVE executed 3457163 less instructions than RVV
+|----------|---------|------------|----------------|
+| Original | RVV     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3813103  | 3504059 | -309044    | -8.10          |
+|----------|---------|------------|----------------|
+| Original | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3813103  | 46896   | -3766207   | -98.77         |
+|----------|---------|------------|----------------|
+| RVV      | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3504059  | 46896   | -3457163   | -98.66         |
+|----------|---------|------------|----------------|
+
+
+Kernel 3mm is similar enough
+
+### Attempting to compile and run kernel 3mm (size: 2500, type: half-word) ...
+
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+                for (k = 0; k < sizeK; k++)
+                ^
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+
+UVE executed 3743746 less instructions
+RVV executed 270933 less instructions
+UVE executed 3472813 less instructions than RVV
+|----------|---------|------------|----------------|
+| Original | RVV     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3815003  | 3544070 | -270933    | -7.10          |
+|----------|---------|------------|----------------|
+| Original | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3815003  | 71257   | -3743746   | -98.13         |
+|----------|---------|------------|----------------|
+| RVV      | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3544070  | 71257   | -3472813   | -97.99         |
+|----------|---------|------------|----------------|
+
+
+Kernel 3mm is similar enough
+
+### Attempting to compile and run kernel 3mm (size: 2500, type: integer) ...
+
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+                for (k = 0; k < sizeK; k++)
+                ^
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+
+UVE executed 2948746 less instructions
+RVV executed 509114 more instructions
+UVE executed 3457860 less instructions than RVV
+|----------|---------|------------|----------------|
+| Original | RVV     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3072447  | 3581561 | 509114     | 16.57          |
+|----------|---------|------------|----------------|
+| Original | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3072447  | 123701  | -2948746   | -95.97         |
+|----------|---------|------------|----------------|
+| RVV      | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3581561  | 123701  | -3457860   | -96.55         |
+|----------|---------|------------|----------------|
+
+
+Kernel 3mm is similar enough
+
+### Attempting to compile and run kernel 3mm (size: 2500, type: float) ...
+
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+                for (k = 0; k < sizeK; k++)
+                ^
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+
+UVE executed 2573716 less instructions
+RVV executed 511807 more instructions
+UVE executed 3085523 less instructions than RVV
+|----------|---------|------------|----------------|
+| Original | RVV     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 2697417  | 3209224 | 511807     | 18.97          |
+|----------|---------|------------|----------------|
+| Original | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 2697417  | 123701  | -2573716   | -95.41         |
+|----------|---------|------------|----------------|
+| RVV      | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3209224  | 123701  | -3085523   | -96.15         |
+|----------|---------|------------|----------------|
+
+
+Kernel 3mm is similar enough
+
+### Attempting to compile and run kernel 3mm (size: 2500, type: double) ...
+
+benchmarks/3mm/kernel.c:201:10: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+                for (k = 0; k < sizeK; k++)
+                ^
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+benchmarks/3mm/kernel.c:201:10: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 2506216 less instructions
+RVV executed 519002 more instructions
+UVE executed 3025218 less instructions than RVV
+|----------|---------|------------|----------------|
+| Original | RVV     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 2712305  | 3231307 | 519002     | 19.14          |
+|----------|---------|------------|----------------|
+| Original | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 2712305  | 206089  | -2506216   | -92.40         |
+|----------|---------|------------|----------------|
+| RVV      | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 3231307  | 206089  | -3025218   | -93.62         |
+|----------|---------|------------|----------------|
+
+
+Kernel 3mm is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: byte) ...
+
+benchmarks/convolution/kernel.c:250:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_H - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:250:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 205392 less instructions
+RVV executed 140253 less instructions
+UVE executed 65139 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 233053   | 92800 | -140253    | -60.18         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 233053   | 27661 | -205392    | -88.13         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 92800    | 27661 | -65139     | -70.19         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: half-word) ...
+
+benchmarks/convolution/kernel.c:250:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_H - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:250:9: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 205390 less instructions
+RVV executed 196121 less instructions
+UVE executed 9269 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 233051   | 36930 | -196121    | -84.15         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 233051   | 27661 | -205390    | -88.13         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 36930    | 27661 | -9269      | -25.10         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: integer) ...
+
+benchmarks/convolution/kernel.c:250:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_H - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:250:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 163918 less instructions
+RVV executed 184505 less instructions
+UVE executed 20587 more instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 191579   | 7074  | -184505    | -96.31         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 191579   | 27661 | -163918    | -85.56         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 7074     | 27661 | 20587      | 291.02         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: float) ...
+
+benchmarks/convolution/kernel.c:250:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_H - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:250:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 143182 less instructions
+RVV executed 164200 less instructions
+UVE executed 21018 more instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 170843   | 6643  | -164200    | -96.11         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 170843   | 27661 | -143182    | -83.81         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 6643     | 27661 | 21018      | 316.39         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: double) ...
+
+benchmarks/convolution/kernel.c:250:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_H - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:250:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 143182 less instructions
+RVV executed 159592 less instructions
+UVE executed 16410 more instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 170843   | 11251 | -159592    | -93.41         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 170843   | 27661 | -143182    | -83.81         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 11251    | 27661 | 16410      | 145.85         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel covariance (size: 2500, type: byte) ...
+
+benchmarks/covariance/kernel.c:488:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (i = 0; i < sizeN; i++)
+        ^
+benchmarks/covariance/kernel.c:488:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/covariance/kernel.c:502:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeM; j++)
+        ^
+benchmarks/covariance/kernel.c:518:13: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+            for (k = 0; k < sizeN; k++)
+            ^
+
+UVE executed 811444 less instructions
+RVV executed 172185 less instructions
+UVE executed 639259 less instructions than RVV
+|----------|--------|------------|----------------|
+| Original | RVV    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 823303   | 651118 | -172185    | -20.91         |
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 823303   | 11859  | -811444    | -98.56         |
+|----------|--------|------------|----------------|
+| RVV      | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 651118   | 11859  | -639259    | -98.18         |
+|----------|--------|------------|----------------|
+
+
+Kernel covariance is similar enough
+
+### Attempting to compile and run kernel covariance (size: 2500, type: half-word) ...
+
+benchmarks/covariance/kernel.c:488:9: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (i = 0; i < sizeN; i++)
+        ^
+benchmarks/covariance/kernel.c:502:9: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeM; j++)
+        ^
+benchmarks/covariance/kernel.c:518:13: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+            for (k = 0; k < sizeN; k++)
+            ^
+benchmarks/covariance/kernel.c:518:13: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 806647 less instructions
+RVV executed 473032 less instructions
+UVE executed 333615 less instructions than RVV
+|----------|--------|------------|----------------|
+| Original | RVV    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 822531   | 349499 | -473032    | -57.51         |
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 822531   | 15884  | -806647    | -98.07         |
+|----------|--------|------------|----------------|
+| RVV      | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 349499   | 15884  | -333615    | -95.46         |
+|----------|--------|------------|----------------|
+
+
+Kernel covariance is similar enough
+
+### Attempting to compile and run kernel covariance (size: 2500, type: integer) ...
+
+benchmarks/covariance/kernel.c:488:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (i = 0; i < sizeN; i++)
+        ^
+benchmarks/covariance/kernel.c:502:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeM; j++)
+        ^
+benchmarks/covariance/kernel.c:518:13: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+            for (k = 0; k < sizeN; k++)
+            ^
+
+UVE executed 663396 less instructions
+RVV executed 344838 less instructions
+UVE executed 318558 less instructions than RVV
+|----------|--------|------------|----------------|
+| Original | RVV    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 687330   | 342492 | -344838    | -50.17         |
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 687330   | 23934  | -663396    | -96.52         |
+|----------|--------|------------|----------------|
+| RVV      | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 342492   | 23934  | -318558    | -93.01         |
+|----------|--------|------------|----------------|
+
+
+Kernel covariance is similar enough
+
+### Attempting to compile and run kernel covariance (size: 2500, type: float) ...
+
+benchmarks/covariance/kernel.c:488:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (i = 0; i < sizeN; i++)
+        ^
+benchmarks/covariance/kernel.c:502:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeM; j++)
+        ^
+benchmarks/covariance/kernel.c:518:13: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+            for (k = 0; k < sizeN; k++)
+            ^
+
+UVE executed 599496 less instructions
+RVV executed 304024 less instructions
+UVE executed 295472 less instructions than RVV
+|----------|--------|------------|----------------|
+| Original | RVV    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 623430   | 319406 | -304024    | -48.77         |
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 623430   | 23934  | -599496    | -96.16         |
+|----------|--------|------------|----------------|
+| RVV      | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 319406   | 23934  | -295472    | -92.51         |
+|----------|--------|------------|----------------|
+
+
+Kernel covariance is similar enough
+
+### Attempting to compile and run kernel covariance (size: 2500, type: double) ...
+
+benchmarks/covariance/kernel.c:488:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (i = 0; i < sizeN; i++)
+        ^
+benchmarks/covariance/kernel.c:488:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/covariance/kernel.c:502:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (j = 0; j < sizeM; j++)
+        ^
+benchmarks/covariance/kernel.c:502:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/covariance/kernel.c:518:13: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+            for (k = 0; k < sizeN; k++)
+            ^
+benchmarks/covariance/kernel.c:518:13: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 587421 less instructions
+RVV executed 443353 less instructions
+UVE executed 144068 less instructions than RVV
+|----------|--------|------------|----------------|
+| Original | RVV    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 623430   | 180077 | -443353    | -71.12         |
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 623430   | 36009  | -587421    | -94.22         |
+|----------|--------|------------|----------------|
+| RVV      | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 180077   | 36009  | -144068    | -80.00         |
+|----------|--------|------------|----------------|
+
+
+Kernel covariance is similar enough
+
+### Attempting to compile and run kernel gemm (size: 2500, type: byte) ...
+
+benchmarks/gemm/kernel.c:342:8: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+       for (j = 0; j < sizeJ; j++)
+       ^
+benchmarks/gemm/kernel.c:339:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j = 0; j < sizeJ; j++)
     ^
-benchmarks/saxpy/kernel.c:186:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 419 less instructions
-RVV executed 362 less instructions
-UVE executed 57 less instructions than RVV
+UVE executed 1267836 less instructions
+RVV executed 142897 more instructions
+UVE executed 1410733 less instructions than RVV
+|----------|---------|------------|----------------|
+| Original | RVV     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1278011  | 1420908 | 142897     | 11.18          |
+|----------|---------|------------|----------------|
+| Original | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1278011  | 10175   | -1267836   | -99.20         |
+|----------|---------|------------|----------------|
+| RVV      | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1420908  | 10175   | -1410733   | -99.28         |
+|----------|---------|------------|----------------|
+
+
+Kernel gemm is similar enough
+
+### Attempting to compile and run kernel gemm (size: 2500, type: half-word) ...
+
+benchmarks/gemm/kernel.c:342:8: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+       for (j = 0; j < sizeJ; j++)
+       ^
+benchmarks/gemm/kernel.c:339:5: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j = 0; j < sizeJ; j++)
+    ^
+
+UVE executed 1257743 less instructions
+RVV executed 158647 more instructions
+UVE executed 1416390 less instructions than RVV
+|----------|---------|------------|----------------|
+| Original | RVV     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1278018  | 1436665 | 158647     | 12.41          |
+|----------|---------|------------|----------------|
+| Original | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1278018  | 20275   | -1257743   | -98.41         |
+|----------|---------|------------|----------------|
+| RVV      | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1436665  | 20275   | -1416390   | -98.59         |
+|----------|---------|------------|----------------|
+
+
+Kernel gemm is similar enough
+
+### Attempting to compile and run kernel gemm (size: 2500, type: integer) ...
+
+benchmarks/gemm/kernel.c:342:8: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+       for (j = 0; j < sizeJ; j++)
+       ^
+benchmarks/gemm/kernel.c:339:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j = 0; j < sizeJ; j++)
+    ^
+
+UVE executed 1237539 less instructions
+RVV executed 575099 less instructions
+UVE executed 662440 less instructions than RVV
+|----------|--------|------------|----------------|
+| Original | RVV    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 1278014  | 702915 | -575099    | -45.00         |
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 1278014  | 40475  | -1237539   | -96.83         |
+|----------|--------|------------|----------------|
+| RVV      | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 702915   | 40475  | -662440    | -94.24         |
+|----------|--------|------------|----------------|
+
+
+Kernel gemm is similar enough
+
+### Attempting to compile and run kernel gemm (size: 2500, type: float) ...
+
+benchmarks/gemm/kernel.c:342:8: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+       for (j = 0; j < sizeJ; j++)
+       ^
+benchmarks/gemm/kernel.c:339:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j = 0; j < sizeJ; j++)
+    ^
+
+UVE executed 1112538 less instructions
+RVV executed 530447 less instructions
+UVE executed 582091 less instructions than RVV
+|----------|--------|------------|----------------|
+| Original | RVV    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 1153013  | 622566 | -530447    | -46.01         |
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 1153013  | 40475  | -1112538   | -96.49         |
+|----------|--------|------------|----------------|
+| RVV      | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 622566   | 40475  | -582091    | -93.50         |
+|----------|--------|------------|----------------|
+
+
+Kernel gemm is similar enough
+
+### Attempting to compile and run kernel gemm (size: 2500, type: double) ...
+
+benchmarks/gemm/kernel.c:342:8: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+       for (j = 0; j < sizeJ; j++)
+       ^
+benchmarks/gemm/kernel.c:342:8: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/gemm/kernel.c:339:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (j = 0; j < sizeJ; j++)
+    ^
+benchmarks/gemm/kernel.c:339:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 1082238 less instructions
+RVV executed 859152 less instructions
+UVE executed 223086 less instructions than RVV
+|----------|--------|------------|----------------|
+| Original | RVV    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 1153013  | 293861 | -859152    | -74.51         |
+|----------|--------|------------|----------------|
+| Original | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 1153013  | 70775  | -1082238   | -93.86         |
+|----------|--------|------------|----------------|
+| RVV      | UVE    | Difference | Difference (%) |
+|----------|--------|------------|----------------|
+| 293861   | 70775  | -223086    | -75.92         |
+|----------|--------|------------|----------------|
+
+
+Kernel gemm is similar enough
+
+### Attempting to compile and run kernel gemver (size: 2500, type: byte) ...
+
+benchmarks/gemver/kernel.c:637:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:641:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:641:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/gemver/kernel.c:644:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (i = 0; i < sizeN; i++)
+    ^
+benchmarks/gemver/kernel.c:648:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+
+UVE executed 90421 less instructions
+RVV executed 1715 less instructions
+UVE executed 88706 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 91416    | 89701 | -1715      | -1.88          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 91416    | 995   | -90421     | -98.91         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 89701    | 995   | -88706     | -98.89         |
+|----------|-------|------------|----------------|
+
+
+Kernel gemver is similar enough
+
+### Attempting to compile and run kernel gemver (size: 2500, type: half-word) ...
+
+benchmarks/gemver/kernel.c:637:9: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:641:9: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:644:5: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (i = 0; i < sizeN; i++)
+    ^
+benchmarks/gemver/kernel.c:648:9: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+
+UVE executed 89671 less instructions
+RVV executed 1009 less instructions
+UVE executed 88662 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 91318    | 90309 | -1009      | -1.10          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 91318    | 1647  | -89671     | -98.20         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 90309    | 1647  | -88662     | -98.18         |
+|----------|-------|------------|----------------|
+
+
+Kernel gemver is similar enough
+
+### Attempting to compile and run kernel gemver (size: 2500, type: integer) ...
+
+benchmarks/gemver/kernel.c:637:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:641:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:644:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (i = 0; i < sizeN; i++)
+    ^
+benchmarks/gemver/kernel.c:648:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+
+UVE executed 78364 less instructions
+RVV executed 39222 less instructions
+UVE executed 39142 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 81315    | 42093 | -39222     | -48.23         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 81315    | 2951  | -78364     | -96.37         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 42093    | 2951  | -39142     | -92.99         |
+|----------|-------|------------|----------------|
+
+
+Kernel gemver is similar enough
+
+### Attempting to compile and run kernel gemver (size: 2500, type: float) ...
+
+benchmarks/gemver/kernel.c:637:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:641:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:644:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (i = 0; i < sizeN; i++)
+    ^
+benchmarks/gemver/kernel.c:648:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+
+UVE executed 68362 less instructions
+RVV executed 33223 less instructions
+UVE executed 35139 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 71313    | 38090 | -33223     | -46.59         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 71313    | 2951  | -68362     | -95.86         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 38090    | 2951  | -35139     | -92.25         |
+|----------|-------|------------|----------------|
+
+
+Kernel gemver is similar enough
+
+### Attempting to compile and run kernel gemver (size: 2500, type: double) ...
+
+benchmarks/gemver/kernel.c:637:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:637:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/gemver/kernel.c:641:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:641:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/gemver/kernel.c:644:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (i = 0; i < sizeN; i++)
+    ^
+benchmarks/gemver/kernel.c:644:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/gemver/kernel.c:648:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (j = 0; j < sizeN; j++)
+        ^
+benchmarks/gemver/kernel.c:648:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 66406 less instructions
+RVV executed 52524 less instructions
+UVE executed 13882 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 71313    | 18789 | -52524     | -73.65         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 71313    | 4907  | -66406     | -93.12         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 18789    | 4907  | -13882     | -73.88         |
+|----------|-------|------------|----------------|
+
+
+Kernel gemver is similar enough
+
+### Attempting to compile and run kernel memcpy (size: 2500, type: byte) ...
+
+benchmarks/memcpy/kernel.c:117:2: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (int i = 0; i < SIZE; ++i) {
+        ^
+
+UVE executed 12420 less instructions
+RVV executed 11885 less instructions
+UVE executed 535 less instructions than RVV
 |----------|-----|------------|----------------|
 | Original | RVV | Difference | Difference (%) |
 |----------|-----|------------|----------------|
-| 451      | 89  | 362        | 80.27          |
+| 12505    | 620 | -11885     | -95.04         |
 |----------|-----|------------|----------------|
 | Original | UVE | Difference | Difference (%) |
 |----------|-----|------------|----------------|
-| 451      | 32  | 419        | 92.90          |
+| 12505    | 85  | -12420     | -99.32         |
 |----------|-----|------------|----------------|
 | RVV      | UVE | Difference | Difference (%) |
 |----------|-----|------------|----------------|
-| 89       | 32  | 57         | 64.04          |
+| 620      | 85  | -535       | -86.29         |
 |----------|-----|------------|----------------|
 
 
-Kernel saxpy is similar enough
+Kernel memcpy is similar enough
 
-### Attempting to compile and run kernel memcpy...
+### Attempting to compile and run kernel memcpy (size: 2500, type: half-word) ...
+
+benchmarks/memcpy/kernel.c:117:2: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (int i = 0; i < SIZE; ++i) {
+        ^
+
+UVE executed 12342 less instructions
+RVV executed 12065 less instructions
+UVE executed 277 less instructions than RVV
+|----------|-----|------------|----------------|
+| Original | RVV | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 12505    | 440 | -12065     | -96.48         |
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 12505    | 163 | -12342     | -98.70         |
+|----------|-----|------------|----------------|
+| RVV      | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 440      | 163 | -277       | -62.95         |
+|----------|-----|------------|----------------|
+
+
+Kernel memcpy is similar enough
+
+### Attempting to compile and run kernel memcpy (size: 2500, type: integer) ...
+
+benchmarks/memcpy/kernel.c:117:2: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (int i = 0; i < SIZE; ++i) {
+        ^
+
+UVE executed 12186 less instructions
+RVV executed 11674 less instructions
+UVE executed 512 less instructions than RVV
+|----------|-----|------------|----------------|
+| Original | RVV | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 12505    | 831 | -11674     | -93.35         |
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 12505    | 319 | -12186     | -97.45         |
+|----------|-----|------------|----------------|
+| RVV      | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 831      | 319 | -512       | -61.61         |
+|----------|-----|------------|----------------|
+
+
+Kernel memcpy is similar enough
+
+### Attempting to compile and run kernel memcpy (size: 2500, type: float) ...
+
+benchmarks/memcpy/kernel.c:117:2: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+        for (int i = 0; i < SIZE; ++i) {
+        ^
+
+UVE executed 12186 less instructions
+RVV executed 11674 less instructions
+UVE executed 512 less instructions than RVV
+|----------|-----|------------|----------------|
+| Original | RVV | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 12505    | 831 | -11674     | -93.35         |
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 12505    | 319 | -12186     | -97.45         |
+|----------|-----|------------|----------------|
+| RVV      | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 831      | 319 | -512       | -61.61         |
+|----------|-----|------------|----------------|
+
+
+Kernel memcpy is similar enough
+
+### Attempting to compile and run kernel memcpy (size: 2500, type: double) ...
 
 benchmarks/memcpy/kernel.c:117:2: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
         for (int i = 0; i < SIZE; ++i) {
         ^
 benchmarks/memcpy/kernel.c:117:2: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 302 less instructions
-RVV executed 255 less instructions
-UVE executed 47 less instructions than RVV
-|----------|-----|------------|----------------|
-| Original | RVV | Difference | Difference (%) |
-|----------|-----|------------|----------------|
-| 323      | 68  | 255        | 78.95          |
-|----------|-----|------------|----------------|
-| Original | UVE | Difference | Difference (%) |
-|----------|-----|------------|----------------|
-| 323      | 21  | 302        | 93.50          |
-|----------|-----|------------|----------------|
-| RVV      | UVE | Difference | Difference (%) |
-|----------|-----|------------|----------------|
-| 68       | 21  | 47         | 69.12          |
-|----------|-----|------------|----------------|
+UVE executed 11874 less instructions
+RVV executed 10589 less instructions
+UVE executed 1285 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 12505    | 1916 | -10589     | -84.68         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 12505    | 631  | -11874     | -94.95         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 1916     | 631  | -1285      | -67.07         |
+|----------|------|------------|----------------|
 
 
 Kernel memcpy is similar enough
+
+### Attempting to compile and run kernel mvt (size: 2500, type: byte) ...
+
+benchmarks/mvt/kernel.c:373:7: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+benchmarks/mvt/kernel.c:377:7: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+benchmarks/mvt/kernel.c:377:7: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 49941 less instructions
+RVV executed 4478 less instructions
+UVE executed 45463 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 50658    | 46180 | -4478      | -8.84          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 50658    | 717   | -49941     | -98.58         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 46180    | 717   | -45463     | -98.45         |
+|----------|-------|------------|----------------|
+
+
+Kernel mvt is similar enough
+
+### Attempting to compile and run kernel mvt (size: 2500, type: half-word) ...
+
+benchmarks/mvt/kernel.c:373:7: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+benchmarks/mvt/kernel.c:377:7: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+
+UVE executed 49592 less instructions
+RVV executed 4030 less instructions
+UVE executed 45562 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 50609    | 46579 | -4030      | -7.96          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 50609    | 1017  | -49592     | -97.99         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 46579    | 1017  | -45562     | -97.82         |
+|----------|-------|------------|----------------|
+
+
+Kernel mvt is similar enough
+
+### Attempting to compile and run kernel mvt (size: 2500, type: integer) ...
+
+benchmarks/mvt/kernel.c:373:7: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+benchmarks/mvt/kernel.c:377:7: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+
+UVE executed 38992 less instructions
+RVV executed 18069 less instructions
+UVE executed 20923 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 40609    | 22540 | -18069     | -44.50         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 40609    | 1617  | -38992     | -96.02         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 22540    | 1617  | -20923     | -92.83         |
+|----------|-------|------------|----------------|
+
+
+Kernel mvt is similar enough
+
+### Attempting to compile and run kernel mvt (size: 2500, type: float) ...
+
+benchmarks/mvt/kernel.c:373:7: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+benchmarks/mvt/kernel.c:377:7: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+
+UVE executed 33992 less instructions
+RVV executed 14967 less instructions
+UVE executed 19025 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 35609    | 20642 | -14967     | -42.03         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 35609    | 1617  | -33992     | -95.46         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 20642    | 1617  | -19025     | -92.17         |
+|----------|-------|------------|----------------|
+
+
+Kernel mvt is similar enough
+
+### Attempting to compile and run kernel mvt (size: 2500, type: double) ...
+
+benchmarks/mvt/kernel.c:373:7: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+benchmarks/mvt/kernel.c:373:7: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/mvt/kernel.c:377:7: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+      for (int j = 0; j < sizeN; j++)
+      ^
+benchmarks/mvt/kernel.c:377:7: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 33092 less instructions
+RVV executed 24820 less instructions
+UVE executed 8272 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 35609    | 10789 | -24820     | -69.70         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 35609    | 2517  | -33092     | -92.93         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 10789    | 2517  | -8272      | -76.67         |
+|----------|-------|------------|----------------|
+
+
+Kernel mvt is similar enough
+
+### Attempting to compile and run kernel saxpy (size: 2500, type: byte) ...
+
+benchmarks/saxpy/kernel.c:186:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (int i = 0; i < SIZE; i++) {
+    ^
+
+UVE executed 19878 less instructions
+RVV executed 19101 less instructions
+UVE executed 777 less instructions than RVV
+|----------|-----|------------|----------------|
+| Original | RVV | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 20006    | 905 | -19101     | -95.48         |
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 20006    | 128 | -19878     | -99.36         |
+|----------|-----|------------|----------------|
+| RVV      | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 905      | 128 | -777       | -85.86         |
+|----------|-----|------------|----------------|
+
+
+Kernel saxpy is similar enough
+
+### Attempting to compile and run kernel saxpy (size: 2500, type: half-word) ...
+
+benchmarks/saxpy/kernel.c:186:5: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (int i = 0; i < SIZE; i++) {
+    ^
+
+UVE executed 19762 less instructions
+RVV executed 19396 less instructions
+UVE executed 366 less instructions than RVV
+|----------|-----|------------|----------------|
+| Original | RVV | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 20007    | 611 | -19396     | -96.95         |
+|----------|-----|------------|----------------|
+| Original | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 20007    | 245 | -19762     | -98.78         |
+|----------|-----|------------|----------------|
+| RVV      | UVE | Difference | Difference (%) |
+|----------|-----|------------|----------------|
+| 611      | 245 | -366       | -59.90         |
+|----------|-----|------------|----------------|
+
+
+Kernel saxpy is similar enough
+
+### Attempting to compile and run kernel saxpy (size: 2500, type: integer) ...
+
+benchmarks/saxpy/kernel.c:186:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (int i = 0; i < SIZE; i++) {
+    ^
+
+UVE executed 19526 less instructions
+RVV executed 18843 less instructions
+UVE executed 683 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 20005    | 1162 | -18843     | -94.19         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 20005    | 479  | -19526     | -97.61         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 1162     | 479  | -683       | -58.78         |
+|----------|------|------------|----------------|
+
+
+Kernel saxpy is similar enough
+
+### Attempting to compile and run kernel saxpy (size: 2500, type: float) ...
+
+benchmarks/saxpy/kernel.c:186:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (int i = 0; i < SIZE; i++) {
+    ^
+
+UVE executed 17026 less instructions
+RVV executed 16347 less instructions
+UVE executed 679 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 17505    | 1158 | -16347     | -93.38         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 17505    | 479  | -17026     | -97.26         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 1158     | 479  | -679       | -58.64         |
+|----------|------|------------|----------------|
+
+
+Kernel saxpy is similar enough
+
+### Attempting to compile and run kernel saxpy (size: 2500, type: double) ...
+
+benchmarks/saxpy/kernel.c:186:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < SIZE; i++) {
+    ^
+benchmarks/saxpy/kernel.c:186:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 16558 less instructions
+RVV executed 14950 less instructions
+UVE executed 1608 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 17505    | 2555 | -14950     | -85.40         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 17505    | 947  | -16558     | -94.59         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 2555     | 947  | -1608      | -62.94         |
+|----------|------|------------|----------------|
+
+
+Kernel saxpy is similar enough
+
+### Attempting to compile and run kernel sgd (size: 0, type: double) ...
+
+benchmarks/sgd/kernel.c:276:13: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+            for (j = 0; j /*< BATCH_SIZE && b + j*/ < PB_N; j++)
+            ^
+benchmarks/sgd/kernel.c:276:13: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/sgd/kernel.c:265:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (i = 0; i < PB_N /*BATCH_SIZE*/; i++)
+        ^
+benchmarks/sgd/kernel.c:265:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/sgd/kernel.c:257:9: remark: loop not vectorized: cannot identify array bounds [-Rpass-analysis=loop-vectorize]
+        for (i = 0; i /*< BATCH_SIZE && b+i*/ < PB_N; i++) {
+        ^
+benchmarks/sgd/kernel.c:257:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+benchmarks/sgd/kernel.c:289:5: remark: loop not vectorized: cannot identify array bounds [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < PB_N; i++) {
+    ^
+benchmarks/sgd/kernel.c:289:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+benchmarks/sgd/kernel.c:301:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < PB_N; i++)
+    ^
+benchmarks/sgd/kernel.c:301:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/sgd/kernel.c:306:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < PB_N; i++)
+    ^
+benchmarks/sgd/kernel.c:306:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/sgd/kernel.c:310:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < PB_N; i++)
+    ^
+benchmarks/sgd/kernel.c:310:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/sgd/kernel.c:289:5: remark: loop not vectorized: cannot identify array bounds [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < PB_N; i++) {
+    ^
+benchmarks/sgd/kernel.c:289:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+benchmarks/sgd/kernel.c:301:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < PB_N; i++)
+    ^
+benchmarks/sgd/kernel.c:301:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/sgd/kernel.c:306:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < PB_N; i++)
+    ^
+benchmarks/sgd/kernel.c:306:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/sgd/kernel.c:310:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (int i = 0; i < PB_N; i++)
+    ^
+benchmarks/sgd/kernel.c:310:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 6352731 less instructions
+RVV executed 5574941 less instructions
+UVE executed 777790 less instructions than RVV
+|----------|---------|------------|----------------|
+| Original | RVV     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 7031115  | 1456174 | -5574941   | -79.29         |
+|----------|---------|------------|----------------|
+| Original | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 7031115  | 678384  | -6352731   | -90.35         |
+|----------|---------|------------|----------------|
+| RVV      | UVE     | Difference | Difference (%) |
+|----------|---------|------------|----------------|
+| 1456174  | 678384  | -777790    | -53.41         |
+|----------|---------|------------|----------------|
+
+
+Kernel sgd is similar enough
+
+### Attempting to compile and run kernel spmv_ellpack (size: 0, type: double) ...
+
+benchmarks/spmv_ellpack/kernel.c:62:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (j = 0; j < L; j++) {
+        ^
+benchmarks/spmv_ellpack/kernel.c:62:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 46932 less instructions
+RVV executed 22223 less instructions
+UVE executed 24709 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 51390    | 29167 | -22223     | -43.24         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 51390    | 4458  | -46932     | -91.33         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 29167    | 4458  | -24709     | -84.72         |
+|----------|-------|------------|----------------|
+
+
+Kernel spmv_ellpack is similar enough
+
+### Attempting to compile and run kernel spmv_ellpack_delimiters (size: 0, type: double) ...
+
+benchmarks/spmv_ellpack_delimiters/kernel.c:75:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (int j = 0; j < cur_nnz; j++) {
+        ^
+benchmarks/spmv_ellpack_delimiters/kernel.c:75:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 21394 less instructions
+RVV executed 3888 more instructions
+UVE executed 25282 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 24881    | 28769 | 3888       | 15.63          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 24881    | 3487  | -21394     | -85.99         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 28769    | 3487  | -25282     | -87.88         |
+|----------|-------|------------|----------------|
+
+
+Kernel spmv_ellpack_delimiters is similar enough
+
+### Attempting to compile and run kernel stream (size: 2500, type: byte) ...
+
+benchmarks/stream/kernel.c:383:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:386:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:389:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:392:5: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+
+UVE executed 69632 less instructions
+RVV executed 66738 less instructions
+UVE executed 2894 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 70015    | 3277 | -66738     | -95.32         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 70015    | 383  | -69632     | -99.45         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 3277     | 383  | -2894      | -88.31         |
+|----------|------|------------|----------------|
+
+
+Kernel stream is similar enough
+
+### Attempting to compile and run kernel stream (size: 2500, type: half-word) ...
+
+benchmarks/stream/kernel.c:383:5: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:386:5: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:389:5: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:392:5: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+
+UVE executed 69283 less instructions
+RVV executed 67690 less instructions
+UVE executed 1593 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 70017    | 2327 | -67690     | -96.68         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 70017    | 734  | -69283     | -98.95         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 2327     | 734  | -1593      | -68.46         |
+|----------|------|------------|----------------|
+
+
+Kernel stream is similar enough
+
+### Attempting to compile and run kernel stream (size: 2500, type: integer) ...
+
+benchmarks/stream/kernel.c:383:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:386:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:389:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:392:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+
+UVE executed 68579 less instructions
+RVV executed 65577 less instructions
+UVE executed 3002 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 70015    | 4438 | -65577     | -93.66         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 70015    | 1436 | -68579     | -97.95         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 4438     | 1436 | -3002      | -67.64         |
+|----------|------|------------|----------------|
+
+
+Kernel stream is similar enough
+
+### Attempting to compile and run kernel stream (size: 2500, type: float) ...
+
+benchmarks/stream/kernel.c:383:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:386:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:389:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:392:5: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 2) [-Rpass=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+
+UVE executed 66079 less instructions
+RVV executed 63081 less instructions
+UVE executed 2998 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 67515    | 4434 | -63081     | -93.43         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 67515    | 1436 | -66079     | -97.87         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 4434     | 1436 | -2998      | -67.61         |
+|----------|------|------------|----------------|
+
+
+Kernel stream is similar enough
+
+### Attempting to compile and run kernel stream (size: 2500, type: double) ...
+
+benchmarks/stream/kernel.c:383:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:383:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/stream/kernel.c:386:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:386:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/stream/kernel.c:389:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:389:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/stream/kernel.c:392:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+    for (j=0; j<sizeN; j++)
+    ^
+benchmarks/stream/kernel.c:392:5: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 64675 less instructions
+RVV executed 57622 less instructions
+UVE executed 7053 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 67515    | 9893 | -57622     | -85.35         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 67515    | 2840 | -64675     | -95.79         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 9893     | 2840 | -7053      | -71.29         |
+|----------|------|------------|----------------|
+
+
+Kernel stream is similar enough
+
+### Attempting to compile and run kernel trisolv (size: 2500, type: byte) ...
+
+benchmarks/trisolv/kernel.c:286:18: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at benchmarks/trisolv/kernel.c:286:39 [-Rpass-analysis=loop-vectorize]
+            x[i] -= L[i * SIZE + j] * x[j];
+                 ^
+benchmarks/trisolv/kernel.c:283:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        for (int j = 0; j < i; ++j) {
+        ^
+
+UVE executed 12584 less instructions
+RVV executed 1016 less instructions
+UVE executed 11568 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 12996    | 11980 | -1016      | -7.82          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 12996    | 412   | -12584     | -96.83         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 11980    | 412   | -11568     | -96.56         |
+|----------|-------|------------|----------------|
+
+
+Kernel trisolv is similar enough
+
+### Attempting to compile and run kernel trisolv (size: 2500, type: half-word) ...
+
+benchmarks/trisolv/kernel.c:286:18: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at benchmarks/trisolv/kernel.c:286:39 [-Rpass-analysis=loop-vectorize]
+            x[i] -= L[i * SIZE + j] * x[j];
+                 ^
+benchmarks/trisolv/kernel.c:283:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        for (int j = 0; j < i; ++j) {
+        ^
+
+UVE executed 12486 less instructions
+RVV executed 919 less instructions
+UVE executed 11567 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 12949    | 12030 | -919       | -7.10          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 12949    | 463   | -12486     | -96.42         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 12030    | 463   | -11567     | -96.15         |
+|----------|-------|------------|----------------|
+
+
+Kernel trisolv is similar enough
+
+### Attempting to compile and run kernel trisolv (size: 2500, type: integer) ...
+
+benchmarks/trisolv/kernel.c:286:18: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at benchmarks/trisolv/kernel.c:286:39 [-Rpass-analysis=loop-vectorize]
+            x[i] -= L[i * SIZE + j] * x[j];
+                 ^
+benchmarks/trisolv/kernel.c:283:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        for (int j = 0; j < i; ++j) {
+        ^
+
+UVE executed 9934 less instructions
+RVV executed 1431 more instructions
+UVE executed 11365 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 10499    | 11930 | 1431       | 13.63          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 10499    | 565   | -9934      | -94.62         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 11930    | 565   | -11365     | -95.26         |
+|----------|-------|------------|----------------|
+
+
+Kernel trisolv is similar enough
+
+### Attempting to compile and run kernel trisolv (size: 2500, type: float) ...
+
+benchmarks/trisolv/kernel.c:286:18: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at benchmarks/trisolv/kernel.c:286:39 [-Rpass-analysis=loop-vectorize]
+            x[i] -= L[i * SIZE + j] * x[j];
+                 ^
+benchmarks/trisolv/kernel.c:283:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        for (int j = 0; j < i; ++j) {
+        ^
+
+UVE: Values were 872898.812500 and 872898.562500 with difference of 0.25 at index 16
+UVE: Values were -16372533.000000 and -16372531.000000 with difference of 2 at index 18
+UVE: Values were -20628568.000000 and -20628566.000000 with difference of 2 at index 19
+UVE: Values were -60339964.000000 and -60339968.000000 with difference of 4 at index 20
+UVE: Values were 113169176.000000 and 113169184.000000 with difference of 8 at index 21
+UVE: Values were -315977856.000000 and -315977824.000000 with difference of 32 at index 22
+UVE: Values were 147261728.000000 and 147261712.000000 with difference of 16 at index 23
+UVE: Values were 651010560.000000 and 651010432.000000 with difference of 128 at index 25
+UVE: Values were -1185378560.000000 and -1185377920.000000 with difference of 640 at index 26
+UVE: Values were -12704761856.000000 and -12704755712.000000 with difference of 6144 at index 27
+UVE: Values were 7187345408.000000 and 7187340800.000000 with difference of 4608 at index 28
+UVE: Values were 39105835008.000000 and 39105814528.000000 with difference of 20480 at index 29
+UVE: Values were 66696314880.000000 and 66696286208.000000 with difference of 28672 at index 30
+UVE: Values were 48554946560.000000 and 48554930176.000000 with difference of 16384 at index 31
+UVE: Values were -607494537216.000000 and -607494275072.000000 with difference of 262144 at index 32
+UVE: Values were 610435072000.000000 and 610434744320.000000 with difference of 327680 at index 33
+UVE: Values were -1177840254976.000000 and -1177839861760.000000 with difference of 393216 at index 34
+UVE: Values were -1110662184960.000000 and -1110662053888.000000 with difference of 131072 at index 35
+UVE: Values were -2864352329728.000000 and -2864351805440.000000 with difference of 524288 at index 36
+UVE: Values were 6941679026176.000000 and 6941676929024.000000 with difference of 2097152 at index 37
+UVE: Values were 7714436022272.000000 and 7714433925120.000000 with difference of 2097152 at index 38
+UVE: Values were -937770024960.000000 and -937770352640.000000 with difference of 327680 at index 39
+UVE: Values were 2280469561344.000000 and 2280468512768.000000 with difference of 1048576 at index 40
+UVE: Values were 324196564992.000000 and 324198203392.000000 with difference of 1638400 at index 41
+UVE: Values were -15020143411200.000000 and -15020142362624.000000 with difference of 1048576 at index 42
+UVE: Values were 181748151353344.000000 and 181748101021696.000000 with difference of 50331648 at index 43
+UVE: Values were -191808457932800.000000 and -191808407601152.000000 with difference of 50331648 at index 44
+UVE: Values were 82725641912320.000000 and 82725616746496.000000 with difference of 25165824 at index 45
+UVE: Values were -2094262694969344.000000 and -2094262158098432.000000 with difference of 536870912 at index 46
+UVE: Values were -3798025621209088.000000 and -3798024815902720.000000 with difference of 805306368 at index 47
+UVE: Values were 28793297543626752.000000 and 28793295396143104.000000 with difference of 2147483648 at index 48
+UVE: Values were 54335648441565184.000000 and 54335639851630592.000000 with difference of 8589934592 at index 49
+UVE executed 8709 less instructions
+RVV executed 1431 more instructions
+UVE executed 10140 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 9274     | 10705 | 1431       | 15.43          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 9274     | 565   | -8709      | -93.91         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 10705    | 565   | -10140     | -94.72         |
+|----------|-------|------------|----------------|
+
+
+Kernel trisolv: Did not generate result similar enough
+
+### Attempting to compile and run kernel trisolv (size: 2500, type: double) ...
+
+benchmarks/trisolv/kernel.c:286:18: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at benchmarks/trisolv/kernel.c:286:39 [-Rpass-analysis=loop-vectorize]
+            x[i] -= L[i * SIZE + j] * x[j];
+                 ^
+benchmarks/trisolv/kernel.c:283:9: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+        for (int j = 0; j < i; ++j) {
+        ^
+
+UVE: Values were -3798025834736546.500000 and -3798025834736547.500000 with difference of 1 at index 47
+UVE executed 8484 less instructions
+RVV executed 1431 more instructions
+UVE executed 9915 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 9274     | 10705 | 1431       | 15.43          |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 9274     | 790   | -8484      | -91.48         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 10705    | 790   | -9915      | -92.62         |
+|----------|-------|------------|----------------|
+
+
+Kernel trisolv: Did not generate result similar enough

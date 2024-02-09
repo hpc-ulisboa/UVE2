@@ -1,0 +1,92 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: f3 26 20 c0  	rdinstret	a3
+       6: 37 07 00 00  	lui	a4, 0
+       a: 73 23 20 c2  	csrr	t1, vlenb
+       e: 13 56 13 00  	srli	a2, t1, 1
+      12: a1 47        	li	a5, 8
+      14: 23 30 d7 00  	sd	a3, 0(a4)
+      18: 63 e0 c7 00  	bltu	a5, a2, 0x18 <core+0x16>
+      1c: 21 46        	li	a2, 8
+
+000000000000001e <.LBB0_2>:
+      1e: 85 66        	lui	a3, 1
+      20: 9b 86 46 9c  	addiw	a3, a3, -1596
+      24: 63 e0 c6 00  	bltu	a3, a2, 0x24 <.LBB0_2+0x6>
+      28: 09 66        	lui	a2, 2
+      2a: 1b 06 06 71  	addiw	a2, a2, 1808
+      2e: b3 06 c5 00  	add	a3, a0, a2
+      32: 2e 96        	add	a2, a2, a1
+      34: 33 36 c5 00  	sltu	a2, a0, a2
+      38: b3 b6 d5 00  	sltu	a3, a1, a3
+      3c: 75 8e        	and	a2, a2, a3
+      3e: 01 c2        	beqz	a2, 0x3e <.LBB0_2+0x20>
+
+0000000000000040 <.LBB0_4>:
+      40: 81 48        	li	a7, 0
+
+0000000000000042 <.LBB0_5>:
+      42: 13 96 28 00  	slli	a2, a7, 2
+      46: 32 95        	add	a0, a0, a2
+      48: b2 95        	add	a1, a1, a2
+      4a: 13 86 08 80  	addi	a2, a7, -2048
+      4e: 13 06 c6 e3  	addi	a2, a2, -452
+
+0000000000000052 <.LBB0_6>:
+      52: 07 a0 05 00  	flw	ft0, 0(a1)
+      56: 87 20 05 00  	flw	ft1, 0(a0)
+      5a: 43 70 a0 08  	fmadd.s	ft0, ft0, fa0, ft1
+      5e: 27 20 05 00  	fsw	ft0, 0(a0)
+      62: 11 05        	addi	a0, a0, 4
+      64: 05 06        	addi	a2, a2, 1
+      66: 91 05        	addi	a1, a1, 4
+      68: 01 e2        	bnez	a2, 0x68 <.LBB0_6+0x16>
+
+000000000000006a <.LBB0_7>:
+      6a: 73 26 20 c0  	rdinstret	a2
+      6e: 37 05 00 00  	lui	a0, 0
+      72: 83 35 05 00  	ld	a1, 0(a0)
+      76: b7 06 00 00  	lui	a3, 0
+      7a: 37 05 00 00  	lui	a0, 0
+      7e: 13 05 05 00  	mv	a0, a0
+      82: 23 b0 c6 00  	sd	a2, 0(a3)
+      86: 17 03 00 00  	auipc	t1, 0
+      8a: 67 00 03 00  	jr	t1
+
+000000000000008e <.LBB0_8>:
+      8e: 93 52 13 00  	srli	t0, t1, 1
+      92: 13 86 f2 ff  	addi	a2, t0, -1
+      96: 85 66        	lui	a3, 1
+      98: 9b 86 46 9c  	addiw	a3, a3, -1596
+      9c: 33 78 d6 00  	and	a6, a2, a3
+      a0: b3 48 d8 00  	xor	a7, a6, a3
+      a4: 93 13 13 00  	slli	t2, t1, 1
+      a8: 57 76 00 0d  	vsetvli	a2, zero, e32, m1, ta, ma
+      ac: c6 86        	mv	a3, a7
+      ae: 2a 86        	mv	a2, a0
+      b0: ae 87        	mv	a5, a1
+
+00000000000000b2 <.LBB0_9>:
+      b2: 07 e4 87 02  	vl1re32.v	v8, (a5)
+      b6: 33 87 67 00  	add	a4, a5, t1
+      ba: 87 64 87 02  	vl1re32.v	v9, (a4)
+      be: 07 65 86 02  	vl1re32.v	v10, (a2)
+      c2: 33 07 66 00  	add	a4, a2, t1
+      c6: 87 65 87 02  	vl1re32.v	v11, (a4)
+      ca: 57 55 85 b2  	vfmacc.vf	v10, fa0, v8
+      ce: d7 55 95 b2  	vfmacc.vf	v11, fa0, v9
+      d2: 27 05 86 02  	vs1r.v	v10, (a2)
+      d6: a7 05 87 02  	vs1r.v	v11, (a4)
+      da: 9e 97        	add	a5, a5, t2
+      dc: b3 86 56 40  	sub	a3, a3, t0
+      e0: 1e 96        	add	a2, a2, t2
+      e2: 81 e2        	bnez	a3, 0xe2 <.LBB0_9+0x30>
+      e4: 63 10 08 00  	bnez	a6, 0xe4 <.LBB0_9+0x32>
+      e8: 01 a0        	j	0xe8 <.LBB0_9+0x36>
