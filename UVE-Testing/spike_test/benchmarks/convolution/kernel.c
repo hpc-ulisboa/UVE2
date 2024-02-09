@@ -2,14 +2,12 @@
 
 long int start = 0, end = 0;
 
-#define PB_H SIZE // 3840
-#define PB_W SIZE // 2160
 #ifdef RUN_UVE
 // #define v_len 8 //inner loop is has lenght, might not be worth it
 // vectorization in k and j is possible?
 // losing performance if cfg.vec is not filling the vectors?
 #ifdef D_TYPE
-void core(DataType *src, DataType *dst, DataType *filter){
+void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
     asm volatile(
         "rdinstret %[s] \t\n"
 
@@ -55,7 +53,7 @@ void core(DataType *src, DataType *dst, DataType *filter){
 }
 #endif // D_TYPE
 #ifdef F_TYPE
-void core(DataType *src, DataType *dst, DataType *filter){
+void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
     asm volatile(
         "rdinstret %[s] \t\n"
 
@@ -101,7 +99,7 @@ void core(DataType *src, DataType *dst, DataType *filter){
 }
 #endif // F_TYPE
 #ifdef I_TYPE
-void core(DataType *src, DataType *dst, DataType *filter){
+void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
     asm volatile(
         "rdinstret %[s] \t\n"
 
@@ -147,7 +145,7 @@ void core(DataType *src, DataType *dst, DataType *filter){
 }
 #endif // I_TYPE
 #ifdef H_TYPE
-void core(DataType *src, DataType *dst, DataType *filter){
+void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
     asm volatile(
         "rdinstret %[s] \t\n"
 
@@ -193,7 +191,7 @@ void core(DataType *src, DataType *dst, DataType *filter){
 }
 #endif // H_TYPE
 #ifdef B_TYPE
-void core(DataType *src, DataType *dst, DataType *filter){
+void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
     asm volatile(
         "rdinstret %[s] \t\n"
 
@@ -241,7 +239,7 @@ void core(DataType *src, DataType *dst, DataType *filter){
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE
-void core(DataType *src, DataType *dst, DataType *filter){
+void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
     asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
 
     DataType sum;
@@ -261,9 +259,3 @@ void core(DataType *src, DataType *dst, DataType *filter){
     printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE
-
-
-#ifdef RUN_BLANK
-void core(DataType *src, DataType *dst, DataType *filter){
-}
-#endif // RUN_BLANK

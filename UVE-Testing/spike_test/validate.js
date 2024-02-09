@@ -41,9 +41,9 @@ const typeMap = {
     'D': 'double'
 };
 
-const compileFlags = ["-O2", "-Wall", "-pedantic"];
+const compileFlags = ["-O2", "-Wall", "-pedantic", "-fno-unroll-loops"];
 const linkFlags = ["-O2", "-Wall", "-pedantic", "-static"];
-const clangFlags = ["-O2", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"];
+const clangFlags = ["-O2", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math", "-fno-unroll-loops","--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"];
 const gccPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const clangPath = "/home/afernandes/LLVM-Compiler/llvm-project/build/bin/clang";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
@@ -251,9 +251,21 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(gccPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-DRUN_UVE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 		compileKernel(gccPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`]);
 
+		let objDump = spawnSync("/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-objdump", ["-d", "kernel.o"]);
+		let stdoutO = objDump.stdout.toString();
+		fs.writeFile(`${dir}/uve.dump`, stdoutO, (err) => {
+			if (err) throw err;
+		});
+
 		/* Compile and link each kernel file */
 		compileKernel(gccPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 		compileKernel(gccPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}`]);
+
+		objDump = spawnSync("/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-objdump", ["-d", "kernel.o"]);
+		stdoutO = objDump.stdout.toString();
+		fs.writeFile(`${dir}/simple.dump`, stdoutO, (err) => {
+			if (err) throw err;
+		});
 
 		/* Compile for RVV with clang */
 		compileKernel(clangPath, [...clangFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
@@ -266,8 +278,8 @@ for (let kernel in kernelSizeMap) {
 		const execUVE = executableRun(spikePath, [pkPath, `${dir}/${bin_uve}`, kernel]);
 		const execRVV = executableRun(spikePath, ["--isa=rv64gcv",  "--varch=vlen:512,elen:64", pkPath, `${dir}/${bin_rvv}`, kernel]);
 
-		const objDump = spawnSync("/home/afernandes/LLVM-Compiler/llvm-project/build/bin/llvm-objdump", ["--mattr=rv64gcv",  "-d", "kernel.o"]);
-		const stdoutO = objDump.stdout.toString();
+		objDump = spawnSync("/home/afernandes/LLVM-Compiler/llvm-project/build/bin/llvm-objdump", ["--mattr=rv64gcv",  "-d", "kernel.o"]);
+		stdoutO = objDump.stdout.toString();
 		fs.writeFile(`${dir}/rvv.dump`, stdoutO, (err) => {
 			if (err) throw err;
 		});

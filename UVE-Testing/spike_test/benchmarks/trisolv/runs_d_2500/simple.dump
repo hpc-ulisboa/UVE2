@@ -1,0 +1,57 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+   0:	c02027f3          	rdinstret	a5
+   4:	219c                	fld	fa5,0(a1)
+   6:	00000e37          	lui	t3,0x0
+   a:	00fe3023          	sd	a5,0(t3) # 0 <core>
+   e:	a21c                	fsd	fa5,0(a2)
+  10:	2118                	fld	fa4,0(a0)
+  12:	00860693          	addi	a3,a2,8
+  16:	4801                	li	a6,0
+  18:	1ae7f7d3          	fdiv.d	fa5,fa5,fa4
+  1c:	03200313          	li	t1,50
+  20:	2805                	addiw	a6,a6,1
+  22:	19050893          	addi	a7,a0,400
+  26:	fef6bc27          	fsd	fa5,-8(a3)
+  2a:	02680f63          	beq	a6,t1,68 <.L7>
+
+000000000000002e <.L4>:
+  2e:	40c687b3          	sub	a5,a3,a2
+  32:	97ae                	add	a5,a5,a1
+  34:	239c                	fld	fa5,0(a5)
+  36:	8746                	mv	a4,a7
+  38:	87b2                	mv	a5,a2
+  3a:	a29c                	fsd	fa5,0(a3)
+
+000000000000003c <.L3>:
+  3c:	2314                	fld	fa3,0(a4)
+  3e:	2398                	fld	fa4,0(a5)
+  40:	07a1                	addi	a5,a5,8
+  42:	0721                	addi	a4,a4,8
+  44:	7ae6f7cb          	fnmsub.d	fa5,fa3,fa4,fa5
+  48:	a29c                	fsd	fa5,0(a3)
+  4a:	fed799e3          	bne	a5,a3,3c <.L3>
+  4e:	19850513          	addi	a0,a0,408
+  52:	2118                	fld	fa4,0(a0)
+  54:	06a1                	addi	a3,a3,8
+  56:	2805                	addiw	a6,a6,1
+  58:	1ae7f7d3          	fdiv.d	fa5,fa5,fa4
+  5c:	19088893          	addi	a7,a7,400
+  60:	fef6bc27          	fsd	fa5,-8(a3)
+  64:	fc6815e3          	bne	a6,t1,2e <.L4>
+
+0000000000000068 <.L7>:
+  68:	c02027f3          	rdinstret	a5
+  6c:	000e3583          	ld	a1,0(t3)
+  70:	00000537          	lui	a0,0x0
+  74:	00000737          	lui	a4,0x0
+  78:	863e                	mv	a2,a5
+  7a:	00050513          	mv	a0,a0
+  7e:	00f73023          	sd	a5,0(a4) # 0 <core>
+  82:	00000317          	auipc	t1,0x0
+  86:	00030067          	jr	t1 # 82 <.L7+0x1a>

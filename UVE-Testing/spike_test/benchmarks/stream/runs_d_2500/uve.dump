@@ -1,0 +1,60 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+   0:	4705                	li	a4,1
+   2:	e20508d3          	fmv.x.d	a7,fa0
+   6:	c0202873          	rdinstret	a6
+   a:	76d5708b          	ss.ld.d	u1,a0,a3,a4
+   e:	0000108b          	ss.cfg.vec	u1
+  12:	76d63f0b          	ss.st.d	u30,a2,a3,a4
+  16:	00001f0b          	ss.cfg.vec	u30
+
+000000000000001a <.loop112>:
+  1a:	a8008f2b          	so.v.mv	u30,u1,p0
+  1e:	fff0eeab          	so.b.nc	u1,1a <.loop112>
+  22:	76d6708b          	ss.ld.d	u1,a2,a3,a4
+  26:	0000108b          	ss.cfg.vec	u1
+  2a:	76d5bf0b          	ss.st.d	u30,a1,a3,a4
+  2e:	00001f0b          	ss.cfg.vec	u30
+  32:	ac08b52b          	so.v.dp.d	u10,a7,p0
+
+0000000000000036 <.loop212>:
+  36:	10a09f2b          	so.a.mul.fp	u30,u1,u10,p0
+  3a:	fff0eeab          	so.b.nc	u1,36 <.loop212>
+  3e:	76d5708b          	ss.ld.d	u1,a0,a3,a4
+  42:	0000108b          	ss.cfg.vec	u1
+  46:	76d5f10b          	ss.ld.d	u2,a1,a3,a4
+  4a:	0000110b          	ss.cfg.vec	u2
+  4e:	76d63f0b          	ss.st.d	u30,a2,a3,a4
+  52:	00001f0b          	ss.cfg.vec	u30
+
+0000000000000056 <.loop312>:
+  56:	00209f2b          	so.a.add.fp	u30,u1,u2,p0
+  5a:	fff0eeab          	so.b.nc	u1,56 <.loop312>
+  5e:	76d5f08b          	ss.ld.d	u1,a1,a3,a4
+  62:	0000108b          	ss.cfg.vec	u1
+  66:	76d6710b          	ss.ld.d	u2,a2,a3,a4
+  6a:	0000110b          	ss.cfg.vec	u2
+  6e:	76d53f0b          	ss.st.d	u30,a0,a3,a4
+  72:	00001f0b          	ss.cfg.vec	u30
+  76:	ac08b52b          	so.v.dp.d	u10,a7,p0
+
+000000000000007a <.loop412>:
+  7a:	10a11a2b          	so.a.mul.fp	u20,u2,u10,p0
+  7e:	01409f2b          	so.a.add.fp	u30,u1,u20,p0
+  82:	fff0ecab          	so.b.nc	u1,7a <.loop412>
+  86:	c02027f3          	rdinstret	a5
+  8a:	00000737          	lui	a4,0x0
+  8e:	00000537          	lui	a0,0x0
+  92:	01073023          	sd	a6,0(a4) # 0 <core>
+  96:	863e                	mv	a2,a5
+  98:	00000737          	lui	a4,0x0
+  9c:	85c2                	mv	a1,a6
+  9e:	00050513          	mv	a0,a0
+  a2:	00f73023          	sd	a5,0(a4) # 0 <core>
+  a6:	00000317          	auipc	t1,0x0
+  aa:	00030067          	jr	t1 # a6 <.loop412+0x2c>

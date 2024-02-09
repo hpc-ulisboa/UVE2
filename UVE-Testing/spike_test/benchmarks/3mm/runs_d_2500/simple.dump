@@ -1,0 +1,121 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core_kernel>:
+   0:	cab9                	beqz	a3,56 <.L1>
+   2:	00371893          	slli	a7,a4,0x3
+   6:	00379293          	slli	t0,a5,0x3
+   a:	8e2a                	mv	t3,a0
+   c:	8f32                	mv	t5,a2
+   e:	00550833          	add	a6,a0,t0
+  12:	0006839b          	sext.w	t2,a3
+  16:	01158eb3          	add	t4,a1,a7
+  1a:	4f81                	li	t6,0
+
+000000000000001c <.L3>:
+  1c:	832e                	mv	t1,a1
+  1e:	857a                	mv	a0,t5
+  20:	c70d                	beqz	a4,4a <.L6>
+
+0000000000000022 <.L5>:
+  22:	00053023          	sd	zero,0(a0)
+  26:	861a                	mv	a2,t1
+  28:	86f2                	mv	a3,t3
+  2a:	f20007d3          	fmv.d.x	fa5,zero
+  2e:	cb91                	beqz	a5,42 <.L7>
+
+0000000000000030 <.L4>:
+  30:	2294                	fld	fa3,0(a3)
+  32:	2218                	fld	fa4,0(a2)
+  34:	06a1                	addi	a3,a3,8
+  36:	9646                	add	a2,a2,a7
+  38:	7ae6f7c3          	fmadd.d	fa5,fa3,fa4,fa5
+  3c:	a11c                	fsd	fa5,0(a0)
+  3e:	ff0699e3          	bne	a3,a6,30 <.L4>
+
+0000000000000042 <.L7>:
+  42:	0321                	addi	t1,t1,8
+  44:	0521                	addi	a0,a0,8
+  46:	fdd31ee3          	bne	t1,t4,22 <.L5>
+
+000000000000004a <.L6>:
+  4a:	2f85                	addiw	t6,t6,1
+  4c:	9f46                	add	t5,t5,a7
+  4e:	9e16                	add	t3,t3,t0
+  50:	9816                	add	a6,a6,t0
+  52:	fc7f95e3          	bne	t6,t2,1c <.L3>
+
+0000000000000056 <.L1>:
+  56:	8082                	ret
+
+0000000000000058 <core>:
+  58:	711d                	addi	sp,sp,-96
+  5a:	e8a2                	sd	s0,80(sp)
+  5c:	e0ca                	sd	s2,64(sp)
+  5e:	fc4e                	sd	s3,56(sp)
+  60:	f852                	sd	s4,48(sp)
+  62:	f456                	sd	s5,40(sp)
+  64:	f05a                	sd	s6,32(sp)
+  66:	ec5e                	sd	s7,24(sp)
+  68:	e862                	sd	s8,16(sp)
+  6a:	e466                	sd	s9,8(sp)
+  6c:	ec86                	sd	ra,88(sp)
+  6e:	e4a6                	sd	s1,72(sp)
+  70:	8bb2                	mv	s7,a2
+  72:	8c36                	mv	s8,a3
+  74:	893a                	mv	s2,a4
+  76:	89be                	mv	s3,a5
+  78:	8b42                	mv	s6,a6
+  7a:	8a46                	mv	s4,a7
+  7c:	7406                	ld	s0,96(sp)
+  7e:	7ac6                	ld	s5,112(sp)
+  80:	7ce6                	ld	s9,120(sp)
+  82:	c0202873          	rdinstret	a6
+  86:	77a6                	ld	a5,104(sp)
+  88:	86c6                	mv	a3,a7
+  8a:	8722                	mv	a4,s0
+  8c:	864a                	mv	a2,s2
+  8e:	000004b7          	lui	s1,0x0
+  92:	0104b023          	sd	a6,0(s1) # 0 <core_kernel>
+  96:	00000097          	auipc	ra,0x0
+  9a:	000080e7          	jalr	ra # 96 <core+0x3e>
+  9e:	87e6                	mv	a5,s9
+  a0:	8756                	mv	a4,s5
+  a2:	86a2                	mv	a3,s0
+  a4:	864e                	mv	a2,s3
+  a6:	85e2                	mv	a1,s8
+  a8:	855e                	mv	a0,s7
+  aa:	00000097          	auipc	ra,0x0
+  ae:	000080e7          	jalr	ra # aa <core+0x52>
+  b2:	87a2                	mv	a5,s0
+  b4:	8756                	mv	a4,s5
+  b6:	86d2                	mv	a3,s4
+  b8:	865a                	mv	a2,s6
+  ba:	85ce                	mv	a1,s3
+  bc:	854a                	mv	a0,s2
+  be:	00000097          	auipc	ra,0x0
+  c2:	000080e7          	jalr	ra # be <core+0x66>
+  c6:	c02027f3          	rdinstret	a5
+  ca:	6446                	ld	s0,80(sp)
+  cc:	0004b583          	ld	a1,0(s1)
+  d0:	60e6                	ld	ra,88(sp)
+  d2:	64a6                	ld	s1,72(sp)
+  d4:	6906                	ld	s2,64(sp)
+  d6:	79e2                	ld	s3,56(sp)
+  d8:	7a42                	ld	s4,48(sp)
+  da:	7aa2                	ld	s5,40(sp)
+  dc:	7b02                	ld	s6,32(sp)
+  de:	6be2                	ld	s7,24(sp)
+  e0:	6c42                	ld	s8,16(sp)
+  e2:	6ca2                	ld	s9,8(sp)
+  e4:	00000737          	lui	a4,0x0
+  e8:	00000537          	lui	a0,0x0
+  ec:	00f73023          	sd	a5,0(a4) # 0 <core_kernel>
+  f0:	863e                	mv	a2,a5
+  f2:	00050513          	mv	a0,a0
+  f6:	6125                	addi	sp,sp,96
+  f8:	00000317          	auipc	t1,0x0
+  fc:	00030067          	jr	t1 # f8 <core+0xa0>

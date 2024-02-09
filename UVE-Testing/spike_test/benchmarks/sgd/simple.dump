@@ -1,0 +1,197 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core_kernel>:
+   0:	000007b7          	lui	a5,0x0
+   4:	0007b587          	fld	fa1,0(a5) # 0 <core_kernel>
+   8:	000007b7          	lui	a5,0x0
+   c:	6e85                	lui	t4,0x1
+   e:	f2000553          	fmv.d.x	fa0,zero
+  12:	0007b007          	fld	ft0,0(a5) # 0 <core_kernel>
+  16:	22b58653          	fmv.d	fa2,fa1
+  1a:	dd0e8e93          	addi	t4,t4,-560 # dd0 <core+0xc72>
+  1e:	06400f93          	li	t6,100
+  22:	01d50333          	add	t1,a0,t4
+  26:	05000f13          	li	t5,80
+
+000000000000002a <.L2>:
+  2a:	4881                	li	a7,0
+
+000000000000002c <.L10>:
+  2c:	011507b3          	add	a5,a0,a7
+  30:	639c                	ld	a5,0(a5)
+  32:	f20007d3          	fmv.d.x	fa5,zero
+  36:	8e36                	mv	t3,a3
+  38:	8736                	mv	a4,a3
+  3a:	05078813          	addi	a6,a5,80
+
+000000000000003e <.L3>:
+  3e:	2394                	fld	fa3,0(a5)
+  40:	2318                	fld	fa4,0(a4)
+  42:	07a1                	addi	a5,a5,8
+  44:	0721                	addi	a4,a4,8
+  46:	7ae6f7c3          	fmadd.d	fa5,fa3,fa4,fa5
+  4a:	fef81ae3          	bne	a6,a5,3e <.L3>
+  4e:	02a7f7d3          	fadd.d	fa5,fa5,fa0
+  52:	011587b3          	add	a5,a1,a7
+  56:	2398                	fld	fa4,0(a5)
+  58:	011607b3          	add	a5,a2,a7
+  5c:	08a1                	addi	a7,a7,8
+  5e:	0af777d3          	fsub.d	fa5,fa4,fa5
+  62:	a39c                	fsd	fa5,0(a5)
+  64:	fdd894e3          	bne	a7,t4,2c <.L10>
+  68:	f20007d3          	fmv.d.x	fa5,zero
+  6c:	01d60733          	add	a4,a2,t4
+  70:	87b2                	mv	a5,a2
+
+0000000000000072 <.L5>:
+  72:	2398                	fld	fa4,0(a5)
+  74:	07a1                	addi	a5,a5,8
+  76:	02e7f7d3          	fadd.d	fa5,fa5,fa4
+  7a:	fef71ce3          	bne	a4,a5,72 <.L5>
+  7e:	1a07f7d3          	fdiv.d	fa5,fa5,ft0
+  82:	4881                	li	a7,0
+  84:	52b7f543          	fmadd.d	fa0,fa5,fa1,fa0
+
+0000000000000088 <.L6>:
+  88:	f20007d3          	fmv.d.x	fa5,zero
+  8c:	87aa                	mv	a5,a0
+  8e:	8832                	mv	a6,a2
+
+0000000000000090 <.L7>:
+  90:	6398                	ld	a4,0(a5)
+  92:	00083707          	fld	fa4,0(a6)
+  96:	07a1                	addi	a5,a5,8
+  98:	9746                	add	a4,a4,a7
+  9a:	2314                	fld	fa3,0(a4)
+  9c:	0821                	addi	a6,a6,8
+  9e:	7ae6f7c3          	fmadd.d	fa5,fa3,fa4,fa5
+  a2:	fef317e3          	bne	t1,a5,90 <.L7>
+  a6:	000e3707          	fld	fa4,0(t3)
+  aa:	0e21                	addi	t3,t3,8
+  ac:	08a1                	addi	a7,a7,8
+  ae:	72c7f7c3          	fmadd.d	fa5,fa5,fa2,fa4
+  b2:	fefe3c27          	fsd	fa5,-8(t3)
+  b6:	fde899e3          	bne	a7,t5,88 <.L6>
+  ba:	3ffd                	addiw	t6,t6,-1
+  bc:	f60f97e3          	bnez	t6,2a <.L2>
+  c0:	8082                	ret
+
+00000000000000c2 <predict>:
+  c2:	6805                	lui	a6,0x1
+  c4:	dd080813          	addi	a6,a6,-560 # dd0 <core+0xc72>
+  c8:	982e                	add	a6,a6,a1
+
+00000000000000ca <.L16>:
+  ca:	619c                	ld	a5,0(a1)
+  cc:	f20007d3          	fmv.d.x	fa5,zero
+  d0:	8732                	mv	a4,a2
+  d2:	05078693          	addi	a3,a5,80
+
+00000000000000d6 <.L17>:
+  d6:	2394                	fld	fa3,0(a5)
+  d8:	2318                	fld	fa4,0(a4)
+  da:	07a1                	addi	a5,a5,8
+  dc:	0721                	addi	a4,a4,8
+  de:	7ae6f7c3          	fmadd.d	fa5,fa3,fa4,fa5
+  e2:	fef69ae3          	bne	a3,a5,d6 <.L17>
+  e6:	02a7f7d3          	fadd.d	fa5,fa5,fa0
+  ea:	0521                	addi	a0,a0,8
+  ec:	05a1                	addi	a1,a1,8
+  ee:	fef53c27          	fsd	fa5,-8(a0)
+  f2:	fcb81ce3          	bne	a6,a1,ca <.L16>
+  f6:	8082                	ret
+
+00000000000000f8 <r2_score>:
+  f8:	6705                	lui	a4,0x1
+  fa:	f20007d3          	fmv.d.x	fa5,zero
+  fe:	dd070713          	addi	a4,a4,-560 # dd0 <core+0xc72>
+ 102:	972e                	add	a4,a4,a1
+ 104:	87ae                	mv	a5,a1
+
+0000000000000106 <.L21>:
+ 106:	2398                	fld	fa4,0(a5)
+ 108:	07a1                	addi	a5,a5,8
+ 10a:	02e7f7d3          	fadd.d	fa5,fa5,fa4
+ 10e:	fef71ce3          	bne	a4,a5,106 <.L21>
+ 112:	000007b7          	lui	a5,0x0
+ 116:	0007b707          	fld	fa4,0(a5) # 0 <core_kernel>
+ 11a:	f20006d3          	fmv.d.x	fa3,zero
+ 11e:	87ae                	mv	a5,a1
+ 120:	1ae7f753          	fdiv.d	fa4,fa5,fa4
+
+0000000000000124 <.L22>:
+ 124:	239c                	fld	fa5,0(a5)
+ 126:	2110                	fld	fa2,0(a0)
+ 128:	07a1                	addi	a5,a5,8
+ 12a:	0521                	addi	a0,a0,8
+ 12c:	0ac7f7d3          	fsub.d	fa5,fa5,fa2
+ 130:	6af7f6c3          	fmadd.d	fa3,fa5,fa5,fa3
+ 134:	fef718e3          	bne	a4,a5,124 <.L22>
+ 138:	f2000653          	fmv.d.x	fa2,zero
+
+000000000000013c <.L23>:
+ 13c:	219c                	fld	fa5,0(a1)
+ 13e:	05a1                	addi	a1,a1,8
+ 140:	0ae7f7d3          	fsub.d	fa5,fa5,fa4
+ 144:	62f7f643          	fmadd.d	fa2,fa5,fa5,fa2
+ 148:	feb71ae3          	bne	a4,a1,13c <.L23>
+ 14c:	1ac6f6d3          	fdiv.d	fa3,fa3,fa2
+ 150:	000007b7          	lui	a5,0x0
+ 154:	0007b507          	fld	fa0,0(a5) # 0 <core_kernel>
+ 158:	0ad57553          	fsub.d	fa0,fa0,fa3
+ 15c:	8082                	ret
+
+000000000000015e <core>:
+ 15e:	7139                	addi	sp,sp,-64
+ 160:	f426                	sd	s1,40(sp)
+ 162:	f04a                	sd	s2,32(sp)
+ 164:	ec4e                	sd	s3,24(sp)
+ 166:	e852                	sd	s4,16(sp)
+ 168:	fc06                	sd	ra,56(sp)
+ 16a:	f822                	sd	s0,48(sp)
+ 16c:	a422                	fsd	fs0,8(sp)
+ 16e:	8932                	mv	s2,a2
+ 170:	8a2a                	mv	s4,a0
+ 172:	8636                	mv	a2,a3
+ 174:	89ba                	mv	s3,a4
+ 176:	84be                	mv	s1,a5
+ 178:	c02027f3          	rdinstret	a5
+ 17c:	00000437          	lui	s0,0x0
+ 180:	86ba                	mv	a3,a4
+ 182:	85ca                	mv	a1,s2
+ 184:	00f43023          	sd	a5,0(s0) # 0 <core_kernel>
+ 188:	00000097          	auipc	ra,0x0
+ 18c:	000080e7          	jalr	ra # 188 <core+0x2a>
+ 190:	864e                	mv	a2,s3
+ 192:	85d2                	mv	a1,s4
+ 194:	8526                	mv	a0,s1
+ 196:	00000097          	auipc	ra,0x0
+ 19a:	000080e7          	jalr	ra # 196 <core+0x38>
+ 19e:	85ca                	mv	a1,s2
+ 1a0:	8526                	mv	a0,s1
+ 1a2:	00000097          	auipc	ra,0x0
+ 1a6:	000080e7          	jalr	ra # 1a2 <core+0x44>
+ 1aa:	22a50453          	fmv.d	fs0,fa0
+ 1ae:	c02027f3          	rdinstret	a5
+ 1b2:	00043583          	ld	a1,0(s0)
+ 1b6:	00000537          	lui	a0,0x0
+ 1ba:	00000737          	lui	a4,0x0
+ 1be:	863e                	mv	a2,a5
+ 1c0:	00050513          	mv	a0,a0
+ 1c4:	00f73023          	sd	a5,0(a4) # 0 <core_kernel>
+ 1c8:	00000097          	auipc	ra,0x0
+ 1cc:	000080e7          	jalr	ra # 1c8 <core+0x6a>
+ 1d0:	70e2                	ld	ra,56(sp)
+ 1d2:	7442                	ld	s0,48(sp)
+ 1d4:	22840553          	fmv.d	fa0,fs0
+ 1d8:	74a2                	ld	s1,40(sp)
+ 1da:	7902                	ld	s2,32(sp)
+ 1dc:	69e2                	ld	s3,24(sp)
+ 1de:	6a42                	ld	s4,16(sp)
+ 1e0:	2422                	fld	fs0,8(sp)
+ 1e2:	6121                	addi	sp,sp,64
+ 1e4:	8082                	ret

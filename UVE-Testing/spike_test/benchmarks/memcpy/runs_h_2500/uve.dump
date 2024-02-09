@@ -1,0 +1,30 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+   0:	6785                	lui	a5,0x1
+   2:	9c47879b          	addiw	a5,a5,-1596
+   6:	4605                	li	a2,1
+   8:	c02026f3          	rdinstret	a3
+   c:	66f5108b          	ss.st.h	u1,a0,a5,a2
+  10:	0000108b          	ss.cfg.vec	u1
+  14:	66f5d10b          	ss.ld.h	u2,a1,a5,a2
+  18:	0000110b          	ss.cfg.vec	u2
+
+000000000000001c <.uve_loop10>:
+  1c:	a80100ab          	so.v.mv	u1,u2,p0
+  20:	fff16eab          	so.b.nc	u2,1c <.uve_loop10>
+  24:	c0202773          	rdinstret	a4
+  28:	000007b7          	lui	a5,0x0
+  2c:	00000537          	lui	a0,0x0
+  30:	00d7b023          	sd	a3,0(a5) # 0 <core>
+  34:	863a                	mv	a2,a4
+  36:	000007b7          	lui	a5,0x0
+  3a:	85b6                	mv	a1,a3
+  3c:	00050513          	mv	a0,a0
+  40:	00e7b023          	sd	a4,0(a5) # 0 <core>
+  44:	00000317          	auipc	t1,0x0
+  48:	00030067          	jr	t1 # 44 <.uve_loop10+0x28>

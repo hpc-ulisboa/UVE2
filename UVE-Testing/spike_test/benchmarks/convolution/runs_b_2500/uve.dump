@@ -1,0 +1,50 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+   0:	9536                	add	a0,a0,a3
+   2:	95b6                	add	a1,a1,a3
+   4:	ffe6889b          	addiw	a7,a3,-2
+   8:	3779                	addiw	a4,a4,-2
+   a:	40d00f3b          	negw	t5,a3
+   e:	430d                	li	t1,3
+  10:	4e05                	li	t3,1
+  12:	5ef5                	li	t4,-3
+  14:	5ffd                	li	t6,-1
+  16:	c0202873          	rdinstret	a6
+  1a:	6ce5438b          	ss.sta.ld.b	u7,a0,a4,a3
+  1e:	e11e038b          	ss.app	u7,t3,a7,t3
+  22:	f86e038b          	ss.app	u7,t3,t1,t6
+  26:	f266838b          	ss.end	u7,a3,t1,t5
+  2a:	0000138b          	ss.cfg.vec	u7
+  2e:	04e6430b          	ss.sta.ld.b	u6,a2,a4,zero
+  32:	0110030b          	ss.app	u6,zero,a7,zero
+  36:	e060030b          	ss.app	u6,zero,t1,t3
+  3a:	3260030b          	ss.end	u6,zero,t1,t1
+  3e:	0000130b          	ss.cfg.vec	u6
+  42:	6ce5818b          	ss.sta.st.b	u3,a1,a4,a3
+  46:	e31e018b          	ss.end	u3,t3,a7,t3
+
+000000000000004a <.SLOOP_118>:
+  4a:	ac00022b          	so.v.dp.b	u4,zero,p0
+
+000000000000004e <.SLOOP_1_0_018>:
+  4e:	107322ab          	so.a.mul.sg	u5,u6,u7,p0
+  52:	0052222b          	so.a.add.sg	u4,u4,u5,p0
+  56:	ffe32cab          	so.b.ndc.2	u6,4e <.SLOOP_1_0_018>
+  5a:	200221ab          	so.a.adde.sg	u3,u4,p0
+  5e:	fff1e6ab          	so.b.nc	u3,4a <.SLOOP_118>
+  62:	c02027f3          	rdinstret	a5
+  66:	00000737          	lui	a4,0x0
+  6a:	00000537          	lui	a0,0x0
+  6e:	01073023          	sd	a6,0(a4) # 0 <core>
+  72:	863e                	mv	a2,a5
+  74:	00000737          	lui	a4,0x0
+  78:	85c2                	mv	a1,a6
+  7a:	00050513          	mv	a0,a0
+  7e:	00f73023          	sd	a5,0(a4) # 0 <core>
+  82:	00000317          	auipc	t1,0x0
+  86:	00030067          	jr	t1 # 82 <.SLOOP_1_0_018+0x34>
