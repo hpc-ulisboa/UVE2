@@ -1,0 +1,92 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+   0:	000006b7          	lui	a3,0x0
+   4:	0006b787          	fld	fa5,0(a3) # 0 <core>
+   8:	1141                	addi	sp,sp,-16
+   a:	e422                	sd	s0,8(sp)
+   c:	19850793          	addi	a5,a0,408
+  10:	19858713          	addi	a4,a1,408
+  14:	19050613          	addi	a2,a0,400
+  18:	1a050893          	addi	a7,a0,416
+  1c:	32850313          	addi	t1,a0,808
+  20:	19058e13          	addi	t3,a1,400
+  24:	1a058e93          	addi	t4,a1,416
+  28:	32858f13          	addi	t5,a1,808
+  2c:	0521                	addi	a0,a0,8
+  2e:	05a1                	addi	a1,a1,8
+  30:	03000f93          	li	t6,48
+  34:	03200293          	li	t0,50
+  38:	4385                	li	t2,1
+  3a:	e2078453          	fmv.x.d	s0,fa5
+  3e:	c0202873          	rdinstret	a6
+  42:	2df7f08b          	ss.sta.ld.d	u1,a5,t6,t0
+  46:	0000108b          	ss.cfg.vec	u1
+  4a:	3bf0008b          	ss.end	u1,zero,t6,t2
+  4e:	2df6710b          	ss.sta.ld.d	u2,a2,t6,t0
+  52:	0000110b          	ss.cfg.vec	u2
+  56:	3bf0010b          	ss.end	u2,zero,t6,t2
+  5a:	2df8f18b          	ss.sta.ld.d	u3,a7,t6,t0
+  5e:	0000118b          	ss.cfg.vec	u3
+  62:	3bf0018b          	ss.end	u3,zero,t6,t2
+  66:	2df3720b          	ss.sta.ld.d	u4,t1,t6,t0
+  6a:	0000120b          	ss.cfg.vec	u4
+  6e:	3bf0020b          	ss.end	u4,zero,t6,t2
+  72:	2df5728b          	ss.sta.ld.d	u5,a0,t6,t0
+  76:	0000128b          	ss.cfg.vec	u5
+  7a:	3bf0028b          	ss.end	u5,zero,t6,t2
+  7e:	2df7330b          	ss.sta.st.d	u6,a4,t6,t0
+  82:	0000130b          	ss.cfg.vec	u6
+  86:	3bf0030b          	ss.end	u6,zero,t6,t2
+  8a:	ac0433ab          	so.v.dp.d	u7,s0,p0
+
+000000000000008e <.loop_123>:
+  8e:	0020942b          	so.a.add.fp	u8,u1,u2,p0
+  92:	004194ab          	so.a.add.fp	u9,u3,u4,p0
+  96:	0054152b          	so.a.add.fp	u10,u8,u5,p0
+  9a:	009515ab          	so.a.add.fp	u11,u10,u9,p0
+  9e:	1075932b          	so.a.mul.fp	u6,u11,u7,p0
+  a2:	fff0e6ab          	so.b.nc	u1,8e <.loop_123>
+  a6:	2df7708b          	ss.sta.ld.d	u1,a4,t6,t0
+  aa:	0000108b          	ss.cfg.vec	u1
+  ae:	3bf0008b          	ss.end	u1,zero,t6,t2
+  b2:	2dfe710b          	ss.sta.ld.d	u2,t3,t6,t0
+  b6:	0000110b          	ss.cfg.vec	u2
+  ba:	3bf0010b          	ss.end	u2,zero,t6,t2
+  be:	2dfef18b          	ss.sta.ld.d	u3,t4,t6,t0
+  c2:	0000118b          	ss.cfg.vec	u3
+  c6:	3bf0018b          	ss.end	u3,zero,t6,t2
+  ca:	2dff720b          	ss.sta.ld.d	u4,t5,t6,t0
+  ce:	0000120b          	ss.cfg.vec	u4
+  d2:	3bf0020b          	ss.end	u4,zero,t6,t2
+  d6:	2df5f28b          	ss.sta.ld.d	u5,a1,t6,t0
+  da:	0000128b          	ss.cfg.vec	u5
+  de:	3bf0028b          	ss.end	u5,zero,t6,t2
+  e2:	2df7b30b          	ss.sta.st.d	u6,a5,t6,t0
+  e6:	0000130b          	ss.cfg.vec	u6
+  ea:	3bf0030b          	ss.end	u6,zero,t6,t2
+
+00000000000000ee <.loop_223>:
+  ee:	0020942b          	so.a.add.fp	u8,u1,u2,p0
+  f2:	004194ab          	so.a.add.fp	u9,u3,u4,p0
+  f6:	0054152b          	so.a.add.fp	u10,u8,u5,p0
+  fa:	009515ab          	so.a.add.fp	u11,u10,u9,p0
+  fe:	1075932b          	so.a.mul.fp	u6,u11,u7,p0
+ 102:	fff0e6ab          	so.b.nc	u1,ee <.loop_223>
+ 106:	c02026f3          	rdinstret	a3
+ 10a:	000007b7          	lui	a5,0x0
+ 10e:	6422                	ld	s0,8(sp)
+ 110:	0107b023          	sd	a6,0(a5) # 0 <core>
+ 114:	000007b7          	lui	a5,0x0
+ 118:	00000537          	lui	a0,0x0
+ 11c:	00d7b023          	sd	a3,0(a5) # 0 <core>
+ 120:	8636                	mv	a2,a3
+ 122:	85c2                	mv	a1,a6
+ 124:	00050513          	mv	a0,a0
+ 128:	0141                	addi	sp,sp,16
+ 12a:	00000317          	auipc	t1,0x0
+ 12e:	00030067          	jr	t1 # 12a <.loop_223+0x3c>

@@ -383,8 +383,3 @@ void core(DataType* A, DataType* x_1, DataType* x_2, DataType* y_1, DataType* y_
 
 #endif // RUN_SIMPLE
 
-
-#ifdef RUN_BLANK
-void core(DataType* A, DataType* x_1, DataType* x_2, DataType* y_1, DataType* y_2, uint64_t sizeN) {
-}
-#endif // RUN_BLANK

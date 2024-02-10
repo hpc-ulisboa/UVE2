@@ -1,0 +1,31 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: 73 26 20 c0  	rdinstret	a2
+       6: b7 06 00 00  	lui	a3, 0
+       a: 23 b0 c6 00  	sd	a2, 0(a3)
+       e: 05 66        	lui	a2, 1
+      10: 1b 06 46 9c  	addiw	a2, a2, -1596
+
+0000000000000014 <.LBB0_1>:
+      14: 07 b0 05 00  	fld	ft0, 0(a1)
+      18: 27 30 05 00  	fsd	ft0, 0(a0)
+      1c: 21 05        	addi	a0, a0, 8
+      1e: 7d 16        	addi	a2, a2, -1
+      20: a1 05        	addi	a1, a1, 8
+      22: 01 e2        	bnez	a2, 0x22 <.LBB0_1+0xe>
+      24: 73 26 20 c0  	rdinstret	a2
+      28: 37 05 00 00  	lui	a0, 0
+      2c: 83 35 05 00  	ld	a1, 0(a0)
+      30: b7 06 00 00  	lui	a3, 0
+      34: 37 05 00 00  	lui	a0, 0
+      38: 13 05 05 00  	mv	a0, a0
+      3c: 23 b0 c6 00  	sd	a2, 0(a3)
+      40: 17 03 00 00  	auipc	t1, 0
+      44: 67 00 03 00  	jr	t1

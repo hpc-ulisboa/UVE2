@@ -1,7 +1,7 @@
 #include "Functions.h"
 #include <stdio.h>
 
-extern void core(void *A, void *B, void *C, void *D, void *E, void *F, void *G, uint64_t I, uint64_t J, uint64_t K, uint64_t L, uint64_t M);
+extern void core(DataType *A, DataType *B, DataType *C, DataType *D, DataType *E, DataType *F, DataType *G, uint64_t I, uint64_t J, uint64_t K, uint64_t L, uint64_t M);
 
 int main() {
     size_t I = SIZE;

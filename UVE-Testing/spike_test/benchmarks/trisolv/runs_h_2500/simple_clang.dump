@@ -1,0 +1,63 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: 01 43        	li	t1, 0
+       4: f3 26 20 c0  	rdinstret	a3
+       8: 37 07 00 00  	lui	a4, 0
+       c: 23 30 d7 00  	sd	a3, 0(a4)
+      10: 13 08 60 06  	li	a6, 102
+      14: 93 08 20 03  	li	a7, 50
+      18: aa 82        	mv	t0, a0
+      1a: 01 a0        	j	0x1a <core+0x18>
+
+000000000000001c <.LBB0_1>:
+      1c: b3 06 03 03  	mul	a3, t1, a6
+      20: aa 96        	add	a3, a3, a0
+      22: 83 96 06 00  	lh	a3, 0(a3)
+      26: 42 1e        	slli	t3, t3, 48
+      28: 13 57 0e 43  	srai	a4, t3, 48
+      2c: bb 46 d7 02  	divw	a3, a4, a3
+      30: 23 90 d3 00  	sh	a3, 0(t2)
+      34: 05 03        	addi	t1, t1, 1
+      36: 93 82 42 06  	addi	t0, t0, 100
+      3a: 63 00 13 01  	beq	t1, a7, 0x3a <.LBB0_1+0x1e>
+
+000000000000003e <.LBB0_2>:
+      3e: 93 13 13 00  	slli	t2, t1, 1
+      42: b3 86 75 00  	add	a3, a1, t2
+      46: 03 de 06 00  	lhu	t3, 0(a3)
+      4a: b2 93        	add	t2, t2, a2
+      4c: 23 90 c3 01  	sh	t3, 0(t2)
+      50: 1a 8f        	mv	t5, t1
+      52: b2 87        	mv	a5, a2
+      54: 16 87        	mv	a4, t0
+      56: 63 00 03 00  	beqz	t1, 0x56 <.LBB0_2+0x18>
+
+000000000000005a <.LBB0_3>:
+      5a: 83 1e 07 00  	lh	t4, 0(a4)
+      5e: 83 96 07 00  	lh	a3, 0(a5)
+      62: b3 86 d6 03  	mul	a3, a3, t4
+      66: 33 0e de 40  	sub	t3, t3, a3
+      6a: 23 90 c3 01  	sh	t3, 0(t2)
+      6e: 09 07        	addi	a4, a4, 2
+      70: 7d 1f        	addi	t5, t5, -1
+      72: 89 07        	addi	a5, a5, 2
+      74: 63 10 0f 00  	bnez	t5, 0x74 <.LBB0_3+0x1a>
+      78: 01 a0        	j	0x78 <.LBB0_3+0x1e>
+
+000000000000007a <.LBB0_4>:
+      7a: 73 26 20 c0  	rdinstret	a2
+      7e: 37 05 00 00  	lui	a0, 0
+      82: 83 35 05 00  	ld	a1, 0(a0)
+      86: b7 06 00 00  	lui	a3, 0
+      8a: 37 05 00 00  	lui	a0, 0
+      8e: 13 05 05 00  	mv	a0, a0
+      92: 23 b0 c6 00  	sd	a2, 0(a3)
+      96: 17 03 00 00  	auipc	t1, 0
+      9a: 67 00 03 00  	jr	t1

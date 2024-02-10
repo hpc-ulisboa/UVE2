@@ -1,0 +1,62 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: 01 43        	li	t1, 0
+       4: f3 26 20 c0  	rdinstret	a3
+       8: 37 07 00 00  	lui	a4, 0
+       c: 23 30 d7 00  	sd	a3, 0(a4)
+      10: 13 08 30 03  	li	a6, 51
+      14: 93 08 20 03  	li	a7, 50
+      18: aa 82        	mv	t0, a0
+      1a: 01 a0        	j	0x1a <core+0x18>
+
+000000000000001c <.LBB0_1>:
+      1c: b3 06 03 03  	mul	a3, t1, a6
+      20: aa 96        	add	a3, a3, a0
+      22: 83 86 06 00  	lb	a3, 0(a3)
+      26: 62 1e        	slli	t3, t3, 56
+      28: 13 57 8e 43  	srai	a4, t3, 56
+      2c: bb 46 d7 02  	divw	a3, a4, a3
+      30: 23 80 d3 00  	sb	a3, 0(t2)
+      34: 05 03        	addi	t1, t1, 1
+      36: 93 82 22 03  	addi	t0, t0, 50
+      3a: 63 00 13 01  	beq	t1, a7, 0x3a <.LBB0_1+0x1e>
+
+000000000000003e <.LBB0_2>:
+      3e: b3 86 65 00  	add	a3, a1, t1
+      42: 03 ce 06 00  	lbu	t3, 0(a3)
+      46: b3 03 66 00  	add	t2, a2, t1
+      4a: 23 80 c3 01  	sb	t3, 0(t2)
+      4e: 1a 8f        	mv	t5, t1
+      50: b2 86        	mv	a3, a2
+      52: 16 87        	mv	a4, t0
+      54: 63 00 03 00  	beqz	t1, 0x54 <.LBB0_2+0x16>
+
+0000000000000058 <.LBB0_3>:
+      58: 83 0e 07 00  	lb	t4, 0(a4)
+      5c: 83 87 06 00  	lb	a5, 0(a3)
+      60: b3 87 d7 03  	mul	a5, a5, t4
+      64: 33 0e fe 40  	sub	t3, t3, a5
+      68: 23 80 c3 01  	sb	t3, 0(t2)
+      6c: 05 07        	addi	a4, a4, 1
+      6e: 7d 1f        	addi	t5, t5, -1
+      70: 85 06        	addi	a3, a3, 1
+      72: 63 10 0f 00  	bnez	t5, 0x72 <.LBB0_3+0x1a>
+      76: 01 a0        	j	0x76 <.LBB0_3+0x1e>
+
+0000000000000078 <.LBB0_4>:
+      78: 73 26 20 c0  	rdinstret	a2
+      7c: 37 05 00 00  	lui	a0, 0
+      80: 83 35 05 00  	ld	a1, 0(a0)
+      84: b7 06 00 00  	lui	a3, 0
+      88: 37 05 00 00  	lui	a0, 0
+      8c: 13 05 05 00  	mv	a0, a0
+      90: 23 b0 c6 00  	sd	a2, 0(a3)
+      94: 17 03 00 00  	auipc	t1, 0
+      98: 67 00 03 00  	jr	t1
