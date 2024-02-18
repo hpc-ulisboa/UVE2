@@ -10,7 +10,7 @@ Disassembly of section .text:
        2: 73 27 20 c0  	rdinstret	a4
        6: 37 08 00 00  	lui	a6, 0
        a: 73 23 20 c2  	csrr	t1, vlenb
-       e: 93 56 23 00  	srli	a3, t1, 2
+       e: 93 56 13 00  	srli	a3, t1, 1
       12: a1 47        	li	a5, 8
       14: 23 30 e8 00  	sd	a4, 0(a6)
       18: 63 e0 d7 00  	bltu	a5, a3, 0x18 <core+0x16>
@@ -62,25 +62,32 @@ Disassembly of section .text:
       86: 67 00 03 00  	jr	t1
 
 000000000000008a <.LBB0_8>:
-      8a: 93 52 23 00  	srli	t0, t1, 2
+      8a: 93 52 13 00  	srli	t0, t1, 1
       8e: 93 86 f2 ff  	addi	a3, t0, -1
       92: 05 67        	lui	a4, 1
       94: 1b 07 47 9c  	addiw	a4, a4, -1596
       98: 33 f8 e6 00  	and	a6, a3, a4
       9c: b3 48 e8 00  	xor	a7, a6, a4
-      a0: d7 76 00 0d  	vsetvli	a3, zero, e32, m1, ta, ma
-      a4: 46 87        	mv	a4, a7
-      a6: aa 86        	mv	a3, a0
-      a8: ae 87        	mv	a5, a1
+      a0: 93 13 13 00  	slli	t2, t1, 1
+      a4: d7 76 00 0d  	vsetvli	a3, zero, e32, m1, ta, ma
+      a8: 46 8e        	mv	t3, a7
+      aa: aa 86        	mv	a3, a0
+      ac: 2e 87        	mv	a4, a1
 
-00000000000000aa <.LBB0_9>:
-      aa: 07 e4 87 02  	vl1re32.v	v8, (a5)
-      ae: 87 e4 86 02  	vl1re32.v	v9, (a3)
-      b2: d7 64 86 b6  	vmacc.vx	v9, a2, v8
-      b6: a7 84 86 02  	vs1r.v	v9, (a3)
-      ba: 9a 97        	add	a5, a5, t1
-      bc: 33 07 57 40  	sub	a4, a4, t0
-      c0: 9a 96        	add	a3, a3, t1
-      c2: 01 e3        	bnez	a4, 0xc2 <.LBB0_9+0x18>
-      c4: 63 10 08 00  	bnez	a6, 0xc4 <.LBB0_9+0x1a>
-      c8: 01 a0        	j	0xc8 <.LBB0_9+0x1e>
+00000000000000ae <.LBB0_9>:
+      ae: 07 64 87 02  	vl1re32.v	v8, (a4)
+      b2: b3 07 67 00  	add	a5, a4, t1
+      b6: 87 e4 87 02  	vl1re32.v	v9, (a5)
+      ba: 07 e5 86 02  	vl1re32.v	v10, (a3)
+      be: b3 87 66 00  	add	a5, a3, t1
+      c2: 87 e5 87 02  	vl1re32.v	v11, (a5)
+      c6: 57 65 86 b6  	vmacc.vx	v10, a2, v8
+      ca: d7 65 96 b6  	vmacc.vx	v11, a2, v9
+      ce: 27 85 86 02  	vs1r.v	v10, (a3)
+      d2: a7 85 87 02  	vs1r.v	v11, (a5)
+      d6: 1e 97        	add	a4, a4, t2
+      d8: 33 0e 5e 40  	sub	t3, t3, t0
+      dc: 9e 96        	add	a3, a3, t2
+      de: 63 10 0e 00  	bnez	t3, 0xde <.LBB0_9+0x30>
+      e2: 63 10 08 00  	bnez	a6, 0xe2 <.LBB0_9+0x34>
+      e6: 01 a0        	j	0xe6 <.LBB0_9+0x38>

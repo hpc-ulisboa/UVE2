@@ -1,5 +1,8 @@
 #include "Functions.h"
 
+#define FILTER 3
+#define RADIUS FILTER/2
+
 long int start = 0, end = 0;
 
 #ifdef RUN_UVE
@@ -13,8 +16,8 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
 
         // src(y,x) stream load
         "ss.sta.ld.d           u7, %[src], %[wnm2], %[hn] \t\n"
-        "ss.app                u7, %[one], %[hnm2], %[one] \t\n"
-        "ss.app                u7, %[one], %[fsize], %[onen] \t\n"
+        "ss.app                u7, %[rad], %[hnm2], %[one] \t\n"
+        "ss.app                u7, %[rad], %[fsize], %[onen] \t\n"
         "ss.end                u7, %[hn], %[fsize], %[hnn] \t\n"
         "ss.cfg.vec            u7 \t\n"
 
@@ -27,7 +30,7 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
 
         // dst(y,x) stream scalar store
         "ss.sta.st.d           u3, %[dst], %[wnm2], %[hn] \t\n"
-        "ss.end                u3, %[one], %[hnm2], %[one] \t\n"
+        "ss.end                u3, %[rad], %[hnm2], %[one] \t\n"
 
         ".SLOOP_1%=: \t\n"
 
@@ -45,9 +48,9 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
         "rdinstret %[e] \t\n"
 
         : [s] "=&r" (start), [e] "=&r" (end)
-        : [src] "r"(src + PB_H), [dst] "r"(dst + PB_H), [filter] "r"(filter),
-        [hn] "r"(PB_H), [hnm2] "r"(PB_H - 2), [wnm2] "r"(PB_W - 2), [fsize] "r"(3),
-        [one] "r"(1), [fsizen] "r"(-3), [hnn] "r"(-PB_H), [onen] "r"(-1));
+        : [src] "r"(src + PB_H*RADIUS), [dst] "r"(dst + PB_H*RADIUS), [filter] "r"(filter),
+        [hn] "r"(PB_H), [hnm2] "r"(PB_H - RADIUS*2), [wnm2] "r"(PB_W - RADIUS*2), [fsize] "r"(FILTER),
+        [one] "r"(1), [fsizen] "r"(-FILTER), [hnn] "r"(-PB_H), [onen] "r"(-1), [rad] "r"(RADIUS));
 
     printf("%ld\n%ld\n", start, end);
 }
@@ -244,12 +247,13 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_H, int PB_W){
 
     DataType sum;
     int y, x, k, j;
-    for (y = 1; y < PB_W - 1; y++){
-        for (x = 1; x < PB_H - 1; x++){
+    for (y = RADIUS; y < PB_W - RADIUS; y++){
+        for (x = RADIUS; x < PB_H - RADIUS; x++){
             sum = 0.0;
-            for (k = -1; k <= 1; k++){
-                for (j = -1; j <= 1; j++)
-                    sum = sum + filter[(j + 1) * 3 + k + 1] * src[(y - j) * PB_W + (x - k)];
+            for (k = -RADIUS; k <= RADIUS; k++){
+                for (j = -RADIUS; j <= RADIUS; j++){
+                    sum = sum + filter[(j + RADIUS) * FILTER + k + RADIUS] * src[(y - j) * PB_W + (x - k)];
+                }
             }
             dst[y * PB_W + x] = sum;
         }

@@ -55,25 +55,18 @@ void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t 
     asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
 
     int i, j;
-    DataType Si;
+    DataType t;
 
     for (i = 0; i < N; i++) {
-        DataType sum = out[i];
+        t = 0.0;
         for (j = 0; j < L; j++) {
-            Si = nzval[i * L + j] * vec[cols[i * L + j]];
+            t += nzval[i * L + j] * vec[cols[i * L + j]];
             //printf("(nzval[%d] = %f  *  vec[%d] = %f) = (Si = %f)\n", i*L+j, nzval[i * L + j], cols[i*L+j], vec[cols[i * L + j]], Si);
-            sum += Si;
         }
-        out[i] = sum;
+        out[i] += t;
     }
 
     asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
     printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE
-
-
-#ifdef RUN_BLANK
-void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t N, int32_t L) {
-}
-#endif // RUN_BLANK

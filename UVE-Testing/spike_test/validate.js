@@ -3,10 +3,10 @@ const fs = require('node:fs');
 const { spawnSync } = require("child_process");
 
 // read size from command line
-const size = process.argv[3] || 50;
+const size = process.argv[2] || 50;
 
 // read csv filename from command line
-const csvFilename = process.argv[4] || "results.csv";
+const csvFilename = process.argv[3] || "results.csv";
 
 // write csv header
 fs.writeFile(csvFilename, "kernel,size,datatype,original_clang,rvv,original_gcc,uve\n", (err) => {
@@ -15,8 +15,8 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original_clang,rvv,original_gcc,
 
 // kernel size map
 const kernelSizeMap = {
-	"3mm": size,
-	"convolution": size,
+	//"3mm": size,
+	"convolution": size/*,
 	"covariance": size,
 	"gemm": size,
 	"gemver": size,
@@ -29,7 +29,7 @@ const kernelSizeMap = {
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size
+	"trisolv": size*/
 };
 
 // read type and size from command line
@@ -41,10 +41,10 @@ const typeMap = {
     'D': 'double'
 };
 
-const compileFlags = ["-O2", "-Wall", "-pedantic", "-fno-unroll-loops"];
-const linkFlags = ["-O2", "-Wall", "-pedantic", "-static"];
-const clangFlagsV = ["-O2", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math", "-fno-unroll-loops","--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"];
-const clangFlags = ["-O2", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math", "-fno-unroll-loops",  "-fno-vectorize", "--target=riscv64", "-march=rv64gc"];
+const compileFlags = ["-O3", "-fno-unroll-loops", "-Wall", "-pedantic"];
+const linkFlags = ["-O3", "-Wall", "-pedantic", "-static"];
+const clangFlagsV = ["-O3", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
+const clangFlags = ["-O3", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math",  "-fno-vectorize", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gc"];
 const gccPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const clangPath = "/home/afernandes/LLVM-Compiler/llvm-project/build/bin/clang";
 const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";

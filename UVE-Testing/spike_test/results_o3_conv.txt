@@ -1,0 +1,378 @@
+
+### Attempting to compile and run kernel convolution (size: 2500, type: byte) ...
+
+
+benchmarks/convolution/kernel.c:251:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = RADIUS; x < PB_H - RADIUS; x++){
+        ^
+benchmarks/convolution/kernel.c:251:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 67402 less instructions
+RVV executed 139744 less instructions
+UVE executed 70213 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 237618   | 97874 | -139744    | -58.81         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 95063    | 27661 | -67402     | -70.90         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 97874    | 27661 | -70213     | -71.74         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: half-word) ...
+
+
+benchmarks/convolution/kernel.c:251:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = RADIUS; x < PB_H - RADIUS; x++){
+        ^
+benchmarks/convolution/kernel.c:251:9: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 67401 less instructions
+RVV executed 201419 less instructions
+UVE executed 10843 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 239923   | 38504 | -201419    | -83.95         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 95062    | 27661 | -67401     | -70.90         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 38504    | 27661 | -10843     | -28.16         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: integer) ...
+
+
+benchmarks/convolution/kernel.c:251:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = RADIUS; x < PB_H - RADIUS; x++){
+        ^
+benchmarks/convolution/kernel.c:251:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 67254 less instructions
+RVV executed 231322 less instructions
+UVE executed 19060 more instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 239923   | 8601  | -231322    | -96.42         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 94915    | 27661 | -67254     | -70.86         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 8601     | 27661 | 19060      | 221.60         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: float) ...
+
+
+benchmarks/convolution/kernel.c:251:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = RADIUS; x < PB_H - RADIUS; x++){
+        ^
+benchmarks/convolution/kernel.c:251:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 48823 less instructions
+RVV executed 210976 less instructions
+UVE executed 19449 more instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 219188   | 8212  | -210976    | -96.25         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 76484    | 27661 | -48823     | -63.83         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 8212     | 27661 | 19449      | 236.84         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: double) ...
+
+
+benchmarks/convolution/kernel.c:251:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = RADIUS; x < PB_H - RADIUS; x++){
+        ^
+benchmarks/convolution/kernel.c:251:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE: Values were -15.620000 and 0.000000 with difference of 15.62 at index 51
+UVE: Values were 15.990000 and 0.000000 with difference of 15.99 at index 52
+UVE: Values were 128.460000 and 0.000000 with difference of 128.46 at index 53
+UVE: Values were 88.940000 and 0.000000 with difference of 88.94 at index 54
+UVE: Values were 61.740000 and 0.000000 with difference of 61.74 at index 55
+UVE: Values were -290.580000 and 0.000000 with difference of 290.58 at index 56
+UVE: Values were 12.150000 and 0.000000 with difference of 12.15 at index 57
+UVE: Values were 234.540000 and 0.000000 with difference of 234.54 at index 58
+UVE: Values were -252.400000 and 0.000000 with difference of 252.4 at index 59
+UVE: Values were -43.890000 and 0.000000 with difference of 43.89 at index 60
+UVE: Values were 321.910000 and 0.000000 with difference of 321.91 at index 61
+UVE: Values were -420.090000 and 0.000000 with difference of 420.09 at index 62
+UVE: Values were -104.040000 and 0.000000 with difference of 104.04 at index 63
+UVE: Values were 240.660000 and 0.000000 with difference of 240.66 at index 64
+UVE: Values were 22.730000 and 0.000000 with difference of 22.73 at index 65
+UVE: Values were 181.790000 and 0.000000 with difference of 181.79 at index 66
+UVE: Values were -214.460000 and 0.000000 with difference of 214.46 at index 67
+UVE: Values were -177.020000 and 0.000000 with difference of 177.02 at index 68
+UVE: Values were -42.380000 and 0.000000 with difference of 42.38 at index 69
+UVE: Values were -42.610000 and 0.000000 with difference of 42.61 at index 70
+UVE: Values were 106.050000 and 0.000000 with difference of 106.05 at index 71
+UVE: Values were 21.530000 and 0.000000 with difference of 21.53 at index 72
+UVE: Values were 204.880000 and 0.000000 with difference of 204.88 at index 73
+UVE: Values were 153.650000 and 0.000000 with difference of 153.65 at index 74
+UVE: Values were 18.160000 and 0.000000 with difference of 18.16 at index 75
+UVE: Values were 0.000000 and 302.850000 with difference of 302.85 at index 99
+UVE: Values were 0.000000 and 56.870000 with difference of 56.87 at index 100
+UVE: Values were 247.300000 and 0.000000 with difference of 247.3 at index 124
+UVE: Values were -71.390000 and 0.000000 with difference of 71.39 at index 125
+UVE: Values were 0.000000 and 215.200000 with difference of 215.2 at index 149
+UVE: Values were 0.000000 and -232.950000 with difference of 232.95 at index 150
+UVE: Values were 137.930000 and 0.000000 with difference of 137.93 at index 174
+UVE: Values were -138.880000 and 0.000000 with difference of 138.88 at index 175
+UVE: Values were 0.000000 and 5.240000 with difference of 5.24 at index 199
+UVE: Values were 0.000000 and -315.590000 with difference of 315.59 at index 200
+UVE: Values were 37.630000 and 0.000000 with difference of 37.63 at index 224
+UVE: Values were -50.730000 and 0.000000 with difference of 50.73 at index 225
+UVE: Values were 0.000000 and -31.600000 with difference of 31.6 at index 249
+UVE: Values were 0.000000 and -342.320000 with difference of 342.32 at index 250
+UVE: Values were -116.740000 and 0.000000 with difference of 116.74 at index 274
+UVE: Values were -93.940000 and 0.000000 with difference of 93.94 at index 275
+UVE: Values were 0.000000 and -0.550000 with difference of 0.55 at index 299
+UVE: Values were 0.000000 and -139.980000 with difference of 139.98 at index 300
+UVE: Values were -41.340000 and 0.000000 with difference of 41.34 at index 324
+UVE: Values were -73.850000 and 0.000000 with difference of 73.85 at index 325
+UVE: Values were 0.000000 and -8.910000 with difference of 8.91 at index 349
+UVE: Values were 0.000000 and -51.420000 with difference of 51.42 at index 350
+UVE: Values were 150.570000 and 0.000000 with difference of 150.57 at index 374
+UVE: Values were 67.400000 and 0.000000 with difference of 67.4 at index 375
+UVE: Values were 0.000000 and 59.070000 with difference of 59.07 at index 399
+UVE: Values were 0.000000 and -267.220000 with difference of 267.22 at index 400
+UVE: Values were 61.500000 and 0.000000 with difference of 61.5 at index 424
+UVE: Values were -213.320000 and 0.000000 with difference of 213.32 at index 425
+UVE: Values were 0.000000 and 374.090000 with difference of 374.09 at index 449
+UVE: Values were 0.000000 and -292.830000 with difference of 292.83 at index 450
+UVE: Values were -193.730000 and 0.000000 with difference of 193.73 at index 474
+UVE: Values were -417.470000 and 0.000000 with difference of 417.47 at index 475
+UVE: Values were 0.000000 and 429.610000 with difference of 429.61 at index 499
+UVE: Values were 0.000000 and -15.830000 with difference of 15.83 at index 500
+UVE: Values were -119.660000 and 0.000000 with difference of 119.66 at index 524
+UVE: Values were -63.040000 and 0.000000 with difference of 63.04 at index 525
+UVE: Values were 0.000000 and 2.220000 with difference of 2.22 at index 549
+UVE: Values were 0.000000 and 222.650000 with difference of 222.65 at index 550
+UVE: Values were 255.710000 and 0.000000 with difference of 255.71 at index 574
+UVE: Values were 223.310000 and 0.000000 with difference of 223.31 at index 575
+UVE: Values were 0.000000 and -234.850000 with difference of 234.85 at index 599
+UVE: Values were 0.000000 and 107.610000 with difference of 107.61 at index 600
+UVE: Values were 312.450000 and 0.000000 with difference of 312.45 at index 624
+UVE: Values were 212.820000 and 0.000000 with difference of 212.82 at index 625
+UVE: Values were 0.000000 and -122.250000 with difference of 122.25 at index 649
+UVE: Values were 0.000000 and 24.030000 with difference of 24.03 at index 650
+UVE: Values were 170.050000 and 0.000000 with difference of 170.05 at index 674
+UVE: Values were 76.700000 and 0.000000 with difference of 76.7 at index 675
+UVE: Values were 0.000000 and -105.590000 with difference of 105.59 at index 699
+UVE: Values were 0.000000 and 28.750000 with difference of 28.75 at index 700
+UVE: Values were -9.280000 and 0.000000 with difference of 9.28 at index 724
+UVE: Values were -111.620000 and 0.000000 with difference of 111.62 at index 725
+UVE: Values were 0.000000 and 31.100000 with difference of 31.1 at index 749
+UVE: Values were 0.000000 and -60.780000 with difference of 60.78 at index 750
+UVE: Values were -188.350000 and 0.000000 with difference of 188.35 at index 774
+UVE: Values were -139.290000 and 0.000000 with difference of 139.29 at index 775
+UVE: Values were 0.000000 and 315.720000 with difference of 315.72 at index 799
+UVE: Values were 0.000000 and -74.140000 with difference of 74.14 at index 800
+UVE: Values were -64.650000 and 0.000000 with difference of 64.65 at index 824
+UVE: Values were -182.990000 and 0.000000 with difference of 182.99 at index 825
+UVE: Values were 0.000000 and 136.660000 with difference of 136.66 at index 849
+UVE: Values were 0.000000 and 168.870000 with difference of 168.87 at index 850
+UVE: Values were 123.980000 and 0.000000 with difference of 123.98 at index 874
+UVE: Values were -378.120000 and 0.000000 with difference of 378.12 at index 875
+UVE: Values were 0.000000 and -138.220000 with difference of 138.22 at index 899
+UVE: Values were 0.000000 and 392.910000 with difference of 392.91 at index 900
+UVE: Values were 49.890000 and 0.000000 with difference of 49.89 at index 924
+UVE: Values were -450.270000 and 0.000000 with difference of 450.27 at index 925
+UVE: Values were 0.000000 and -250.880000 with difference of 250.88 at index 949
+UVE: Values were 0.000000 and 250.380000 with difference of 250.38 at index 950
+UVE: Values were 20.500000 and 0.000000 with difference of 20.5 at index 974
+UVE: Values were -353.940000 and 0.000000 with difference of 353.94 at index 975
+UVE: Values were 0.000000 and -235.510000 with difference of 235.51 at index 999
+UVE: Values were 0.000000 and 121.050000 with difference of 121.05 at index 1000
+UVE: Values were 220.180000 and 0.000000 with difference of 220.18 at index 1024
+UVE: Values were -59.430000 and 0.000000 with difference of 59.43 at index 1025
+UVE: Values were 0.000000 and 27.300000 with difference of 27.3 at index 1049
+UVE: Values were 0.000000 and 141.560000 with difference of 141.56 at index 1050
+UVE: Values were 160.340000 and 0.000000 with difference of 160.34 at index 1074
+UVE: Values were 209.710000 and 0.000000 with difference of 209.71 at index 1075
+UVE: Values were 0.000000 and 93.490000 with difference of 93.49 at index 1099
+UVE: Values were 0.000000 and 53.400000 with difference of 53.4 at index 1100
+UVE: Values were -10.030000 and 0.000000 with difference of 10.03 at index 1124
+UVE: Values were 166.470000 and 0.000000 with difference of 166.47 at index 1125
+UVE: Values were 0.000000 and -114.810000 with difference of 114.81 at index 1149
+UVE: Values were 0.000000 and 100.350000 with difference of 100.35 at index 1150
+UVE: Values were -2.960000 and 0.000000 with difference of 2.96 at index 1174
+UVE: Values were 99.150000 and 0.000000 with difference of 99.15 at index 1175
+UVE: Values were 0.000000 and -156.750000 with difference of 156.75 at index 1199
+UVE: Values were 0.000000 and 369.190000 with difference of 369.19 at index 1200
+UVE: Values were 38.210000 and 0.000000 with difference of 38.21 at index 1224
+UVE: Values were 185.650000 and 0.000000 with difference of 185.65 at index 1225
+UVE: Values were 0.000000 and 110.110000 with difference of 110.11 at index 1249
+UVE: Values were 0.000000 and 469.610000 with difference of 469.61 at index 1250
+UVE: Values were 150.580000 and 0.000000 with difference of 150.58 at index 1274
+UVE: Values were 171.250000 and 0.000000 with difference of 171.25 at index 1275
+UVE: Values were 0.000000 and 250.620000 with difference of 250.62 at index 1299
+UVE: Values were 0.000000 and 268.280000 with difference of 268.28 at index 1300
+UVE: Values were 57.200000 and 0.000000 with difference of 57.2 at index 1324
+UVE: Values were -19.620000 and 0.000000 with difference of 19.62 at index 1325
+UVE: Values were 0.000000 and 168.380000 with difference of 168.38 at index 1349
+UVE: Values were 0.000000 and -6.840000 with difference of 6.84 at index 1350
+UVE: Values were -8.890000 and 0.000000 with difference of 8.89 at index 1374
+UVE: Values were -140.220000 and 0.000000 with difference of 140.22 at index 1375
+UVE: Values were 0.000000 and 102.750000 with difference of 102.75 at index 1399
+UVE: Values were 0.000000 and -23.850000 with difference of 23.85 at index 1400
+UVE: Values were 329.840000 and 0.000000 with difference of 329.84 at index 1424
+UVE: Values were -95.750000 and 0.000000 with difference of 95.75 at index 1425
+UVE: Values were 0.000000 and -73.510000 with difference of 73.51 at index 1449
+UVE: Values were 0.000000 and 72.940000 with difference of 72.94 at index 1450
+UVE: Values were 439.730000 and 0.000000 with difference of 439.73 at index 1474
+UVE: Values were 9.140000 and 0.000000 with difference of 9.14 at index 1475
+UVE: Values were 0.000000 and -270.450000 with difference of 270.45 at index 1499
+UVE: Values were 0.000000 and 135.070000 with difference of 135.07 at index 1500
+UVE: Values were 299.080000 and 0.000000 with difference of 299.08 at index 1524
+UVE: Values were 126.990000 and 0.000000 with difference of 126.99 at index 1525
+UVE: Values were 0.000000 and -79.220000 with difference of 79.22 at index 1549
+UVE: Values were 0.000000 and 253.790000 with difference of 253.79 at index 1550
+UVE: Values were 165.660000 and 0.000000 with difference of 165.66 at index 1574
+UVE: Values were 51.570000 and 0.000000 with difference of 51.57 at index 1575
+UVE: Values were 0.000000 and 161.430000 with difference of 161.43 at index 1599
+UVE: Values were 0.000000 and 94.190000 with difference of 94.19 at index 1600
+UVE: Values were -34.540000 and 0.000000 with difference of 34.54 at index 1624
+UVE: Values were -120.100000 and 0.000000 with difference of 120.1 at index 1625
+UVE: Values were 0.000000 and 110.300000 with difference of 110.3 at index 1649
+UVE: Values were 0.000000 and -105.380000 with difference of 105.38 at index 1650
+UVE: Values were -88.130000 and 0.000000 with difference of 88.13 at index 1674
+UVE: Values were -151.600000 and 0.000000 with difference of 151.6 at index 1675
+UVE: Values were 0.000000 and 82.490000 with difference of 82.49 at index 1699
+UVE: Values were 0.000000 and 11.990000 with difference of 11.99 at index 1700
+UVE: Values were -36.040000 and 0.000000 with difference of 36.04 at index 1724
+UVE: Values were -131.420000 and 0.000000 with difference of 131.42 at index 1725
+UVE: Values were 0.000000 and 133.120000 with difference of 133.12 at index 1749
+UVE: Values were 0.000000 and -84.870000 with difference of 84.87 at index 1750
+UVE: Values were 101.140000 and 0.000000 with difference of 101.14 at index 1774
+UVE: Values were -128.450000 and 0.000000 with difference of 128.45 at index 1775
+UVE: Values were 0.000000 and 167.420000 with difference of 167.42 at index 1799
+UVE: Values were 0.000000 and -228.980000 with difference of 228.98 at index 1800
+UVE: Values were 190.560000 and 0.000000 with difference of 190.56 at index 1824
+UVE: Values were -205.780000 and 0.000000 with difference of 205.78 at index 1825
+UVE: Values were 0.000000 and 200.910000 with difference of 200.91 at index 1849
+UVE: Values were 0.000000 and -200.480000 with difference of 200.48 at index 1850
+UVE: Values were 181.240000 and 0.000000 with difference of 181.24 at index 1874
+UVE: Values were -375.960000 and 0.000000 with difference of 375.96 at index 1875
+UVE: Values were 0.000000 and 117.560000 with difference of 117.56 at index 1899
+UVE: Values were 0.000000 and -204.320000 with difference of 204.32 at index 1900
+UVE: Values were 77.700000 and 0.000000 with difference of 77.7 at index 1924
+UVE: Values were -379.680000 and 0.000000 with difference of 379.68 at index 1925
+UVE: Values were 0.000000 and -74.410000 with difference of 74.41 at index 1949
+UVE: Values were 0.000000 and -14.200000 with difference of 14.2 at index 1950
+UVE: Values were -70.140000 and 0.000000 with difference of 70.14 at index 1974
+UVE: Values were -137.050000 and 0.000000 with difference of 137.05 at index 1975
+UVE: Values were 0.000000 and 121.320000 with difference of 121.32 at index 1999
+UVE: Values were 0.000000 and 67.960000 with difference of 67.96 at index 2000
+UVE: Values were -10.010000 and 0.000000 with difference of 10.01 at index 2024
+UVE: Values were 71.590000 and 0.000000 with difference of 71.59 at index 2025
+UVE: Values were 0.000000 and 274.130000 with difference of 274.13 at index 2049
+UVE: Values were 0.000000 and -152.450000 with difference of 152.45 at index 2050
+UVE: Values were 95.250000 and 0.000000 with difference of 95.25 at index 2074
+UVE: Values were 64.510000 and 0.000000 with difference of 64.51 at index 2075
+UVE: Values were 0.000000 and 83.860000 with difference of 83.86 at index 2099
+UVE: Values were 0.000000 and -260.190000 with difference of 260.19 at index 2100
+UVE: Values were -15.000000 and 0.000000 with difference of 15 at index 2124
+UVE: Values were -181.900000 and 0.000000 with difference of 181.9 at index 2125
+UVE: Values were 0.000000 and -94.080000 with difference of 94.08 at index 2149
+UVE: Values were 0.000000 and -251.330000 with difference of 251.33 at index 2150
+UVE: Values were -246.900000 and 0.000000 with difference of 246.9 at index 2174
+UVE: Values were -386.790000 and 0.000000 with difference of 386.79 at index 2175
+UVE: Values were 0.000000 and -264.560000 with difference of 264.56 at index 2199
+UVE: Values were 0.000000 and -281.260000 with difference of 281.26 at index 2200
+UVE: Values were -236.950000 and 0.000000 with difference of 236.95 at index 2224
+UVE: Values were -259.100000 and 0.000000 with difference of 259.1 at index 2225
+UVE: Values were 0.000000 and -61.560000 with difference of 61.56 at index 2249
+UVE: Values were 0.000000 and -253.890000 with difference of 253.89 at index 2250
+UVE: Values were 50.630000 and 0.000000 with difference of 50.63 at index 2274
+UVE: Values were 9.270000 and 0.000000 with difference of 9.27 at index 2275
+UVE: Values were 0.000000 and 186.350000 with difference of 186.35 at index 2299
+UVE: Values were 0.000000 and -108.250000 with difference of 108.25 at index 2300
+UVE: Values were 207.990000 and 0.000000 with difference of 207.99 at index 2324
+UVE: Values were -33.430000 and 0.000000 with difference of 33.43 at index 2325
+UVE: Values were 0.000000 and 140.580000 with difference of 140.58 at index 2349
+UVE: Values were 0.000000 and 112.330000 with difference of 112.33 at index 2350
+UVE: Values were 204.000000 and 0.000000 with difference of 204 at index 2374
+UVE: Values were -228.140000 and 0.000000 with difference of 228.14 at index 2375
+UVE: Values were 0.000000 and 162.310000 with difference of 162.31 at index 2399
+UVE: Values were 0.000000 and 82.410000 with difference of 82.41 at index 2400
+UVE: Values were 402.070000 and 0.000000 with difference of 402.07 at index 2424
+UVE: Values were -177.520000 and 0.000000 with difference of 177.52 at index 2425
+UVE: Values were 0.000000 and 81.650000 with difference of 81.65 at index 2449
+UVE: Values were 0.000000 and -26.400000 with difference of 26.4 at index 2450
+UVE: Values were 0.000000 and -214.320000 with difference of 214.32 at index 2451
+UVE: Values were 0.000000 and 28.740000 with difference of 28.74 at index 2452
+UVE: Values were 0.000000 and -111.740000 with difference of 111.74 at index 2453
+UVE: Values were 0.000000 and -136.200000 with difference of 136.2 at index 2454
+UVE: Values were 0.000000 and 238.340000 with difference of 238.34 at index 2455
+UVE: Values were 0.000000 and -59.010000 with difference of 59.01 at index 2456
+UVE: Values were 0.000000 and -221.230000 with difference of 221.23 at index 2457
+UVE: Values were 0.000000 and 148.830000 with difference of 148.83 at index 2458
+UVE: Values were 0.000000 and 161.130000 with difference of 161.13 at index 2459
+UVE: Values were 0.000000 and 228.120000 with difference of 228.12 at index 2460
+UVE: Values were 0.000000 and -177.010000 with difference of 177.01 at index 2461
+UVE: Values were 0.000000 and -204.860000 with difference of 204.86 at index 2462
+UVE: Values were 0.000000 and 28.260000 with difference of 28.26 at index 2463
+UVE: Values were 0.000000 and -229.470000 with difference of 229.47 at index 2464
+UVE: Values were 0.000000 and 120.450000 with difference of 120.45 at index 2465
+UVE: Values were 0.000000 and 193.430000 with difference of 193.43 at index 2466
+UVE: Values were 0.000000 and -106.130000 with difference of 106.13 at index 2467
+UVE: Values were 0.000000 and 232.150000 with difference of 232.15 at index 2468
+UVE: Values were 0.000000 and 150.960000 with difference of 150.96 at index 2469
+UVE: Values were 0.000000 and -17.160000 with difference of 17.16 at index 2470
+UVE: Values were 0.000000 and -356.930000 with difference of 356.93 at index 2471
+UVE: Values were 0.000000 and -305.170000 with difference of 305.17 at index 2472
+UVE: Values were 0.000000 and 115.780000 with difference of 115.78 at index 2473
+UVE executed 48823 less instructions
+RVV executed 206368 less instructions
+UVE executed 14841 more instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 219188   | 12820 | -206368    | -94.15         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 76484    | 27661 | -48823     | -63.83         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 12820    | 27661 | 14841      | 115.76         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution: Did not generate result similar enough

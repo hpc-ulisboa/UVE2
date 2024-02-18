@@ -31,11 +31,8 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
         "ss.end                   u4, zero, zero, zero \t\n" // D1: new line stride N
         "ss.cfg.vec               u4 \t\n"
 
-        // out stream load
-        "ss.ld.d              u5, %[out], %[sn], %[one] \t\n" // D1: linear access size N
-
         // out stream store
-        "ss.st.d              u6, %[out], %[sn], %[one] \t\n" // D1: linear access size N
+        "ss.st.d              u5, %[out], %[sn], %[one] \t\n" // D1: linear access size N
 
         ".iLoop1%=: \t\n"
             "so.v.dp.d u8, zero, p0 \t\n"
@@ -45,8 +42,7 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
                 "so.a.add.fp u8, u8, u9, p0\n\t"
             "so.b.ndc.1 u1, .jloop%= \n\t"
 
-            "so.a.adde.fp u10, u8, p0 \n\t"
-            "so.a.add.fp  u6, u5, u10, p0\n\t"
+            "so.a.adde.fp u5, u8, p0 \n\t"
         "so.b.nc	u1, .iLoop1%= \n\t"
 
         "rdinstret %[e] \t\n"
@@ -87,10 +83,3 @@ void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec,
 }
 #endif // RUN_SIMPLE
 
-
-
-
-#ifdef RUN_BLANK
-void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec, DataType *out, uint64_t N, uint64_t K){
-}
-#endif // RUN_BLANK

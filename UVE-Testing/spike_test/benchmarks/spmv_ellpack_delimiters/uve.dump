@@ -22,27 +22,25 @@ Disassembly of section .text:
   34:	0021620b          	ss.app.ind.ofs.add.1	u4,u2
   38:	0200020b          	ss.end	u4,zero,zero,zero
   3c:	0000120b          	ss.cfg.vec	u4
-  40:	36f7728b          	ss.ld.d	u5,a4,a5,t1
-  44:	36f7330b          	ss.st.d	u6,a4,a5,t1
+  40:	36f7328b          	ss.st.d	u5,a4,a5,t1
 
-0000000000000048 <.iLoop114>:
-  48:	ac00342b          	so.v.dp.d	u8,zero,p0
+0000000000000044 <.iLoop114>:
+  44:	ac00342b          	so.v.dp.d	u8,zero,p0
 
-000000000000004c <.jloop14>:
-  4c:	104094ab          	so.a.mul.fp	u9,u1,u4,p0
-  50:	0094142b          	so.a.add.fp	u8,u8,u9,p0
-  54:	ffe08cab          	so.b.ndc.1	u1,4c <.jloop14>
-  58:	2004152b          	so.a.adde.fp	u10,u8,p0
-  5c:	00a2932b          	so.a.add.fp	u6,u5,u10,p0
-  60:	fff0e4ab          	so.b.nc	u1,48 <.iLoop114>
-  64:	c0202ef3          	rdinstret	t4
-  68:	00000537          	lui	a0,0x0
-  6c:	000006b7          	lui	a3,0x0
-  70:	00000737          	lui	a4,0x0
-  74:	8676                	mv	a2,t4
-  76:	85f2                	mv	a1,t3
-  78:	00050513          	mv	a0,a0
-  7c:	01c6b023          	sd	t3,0(a3) # 0 <core>
-  80:	01d73023          	sd	t4,0(a4) # 0 <core>
-  84:	00000317          	auipc	t1,0x0
-  88:	00030067          	jr	t1 # 84 <.jloop14+0x38>
+0000000000000048 <.jloop14>:
+  48:	104094ab          	so.a.mul.fp	u9,u1,u4,p0
+  4c:	0094142b          	so.a.add.fp	u8,u8,u9,p0
+  50:	ffe08cab          	so.b.ndc.1	u1,48 <.jloop14>
+  54:	200412ab          	so.a.adde.fp	u5,u8,p0
+  58:	fff0e6ab          	so.b.nc	u1,44 <.iLoop114>
+  5c:	c0202ef3          	rdinstret	t4
+  60:	00000537          	lui	a0,0x0
+  64:	000006b7          	lui	a3,0x0
+  68:	00000737          	lui	a4,0x0
+  6c:	8676                	mv	a2,t4
+  6e:	85f2                	mv	a1,t3
+  70:	00050513          	mv	a0,a0
+  74:	01c6b023          	sd	t3,0(a3) # 0 <core>
+  78:	01d73023          	sd	t4,0(a4) # 0 <core>
+  7c:	00000317          	auipc	t1,0x0
+  80:	00030067          	jr	t1 # 7c <.jloop14+0x34>

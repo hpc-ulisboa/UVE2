@@ -7,7 +7,7 @@ int main(){
 	int N = SIZE; int N2 = N*N;
 	DataType src[N2];
 	DataType dst[N2];
-	DataType filter[3*3] = {1, 0, -1, 2, 0, -2, 1, 0, -1};
+	DataType filter[3*3] = {1, 0, -1, 2, 0, -2, 1, 0, -1};//, 1, 0, -1, 2, 0, -2, 1, 0, -1, 1, 0, -1, 2, 0, -2, 1, 0, -1};
 
 	initArray(src, N2);
 	initZero(dst, N2);

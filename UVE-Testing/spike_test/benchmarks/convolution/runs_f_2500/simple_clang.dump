@@ -7,92 +7,85 @@ Disassembly of section .text:
        0: 01 00        	nop
 
 0000000000000002 <core>:
-       2: 39 71        	addi	sp, sp, -64
-       4: 22 fc        	sd	s0, 56(sp)
-       6: 26 f8        	sd	s1, 48(sp)
-       8: 4a f4        	sd	s2, 40(sp)
-       a: 4e f0        	sd	s3, 32(sp)
-       c: 52 ec        	sd	s4, 24(sp)
-       e: 56 e8        	sd	s5, 16(sp)
-      10: 5a e4        	sd	s6, 8(sp)
-      12: f3 27 20 c0  	rdinstret	a5
-      16: 37 08 00 00  	lui	a6, 0
-      1a: 8d 48        	li	a7, 3
-      1c: 23 30 f8 00  	sd	a5, 0(a6)
-      20: 63 40 17 01  	blt	a4, a7, 0x20 <core+0x1e>
-      24: 9b 07 f7 ff  	addiw	a5, a4, -1
-      28: 9b 84 f6 ff  	addiw	s1, a3, -1
+       2: 79 71        	addi	sp, sp, -48
+       4: 22 f4        	sd	s0, 40(sp)
+       6: 26 f0        	sd	s1, 32(sp)
+       8: 4a ec        	sd	s2, 24(sp)
+       a: 4e e8        	sd	s3, 16(sp)
+       c: 52 e4        	sd	s4, 8(sp)
+       e: f3 27 20 c0  	rdinstret	a5
+      12: 93 24 37 00  	slti	s1, a4, 3
+      16: 13 a4 36 00  	slti	s0, a3, 3
+      1a: 45 8c        	or	s0, s0, s1
+      1c: 37 08 00 00  	lui	a6, 0
+      20: 23 30 f8 00  	sd	a5, 0(a6)
+      24: 01 e0        	bnez	s0, 0x24 <core+0x22>
+      26: 9b 07 f7 ff  	addiw	a5, a4, -1
+      2a: fd 36        	addiw	a3, a3, -1
       2c: 82 17        	slli	a5, a5, 32
-      2e: 93 d2 07 02  	srli	t0, a5, 32
-      32: 82 14        	slli	s1, s1, 32
-      34: 93 de 04 02  	srli	t4, s1, 32
-      38: 93 17 37 00  	slli	a5, a4, 3
-      3c: 3e 95        	add	a0, a0, a5
-      3e: 93 03 85 00  	addi	t2, a0, 8
-      42: 13 13 27 00  	slli	t1, a4, 2
-      46: 33 05 60 40  	neg	a0, t1
-      4a: 05 4e        	li	t3, 1
+      2e: 93 d8 07 02  	srli	a7, a5, 32
+      32: 82 16        	slli	a3, a3, 32
+      34: 13 de 06 02  	srli	t3, a3, 32
+      38: 93 16 37 00  	slli	a3, a4, 3
+      3c: 36 95        	add	a0, a0, a3
+      3e: 13 03 85 00  	addi	t1, a0, 8
+      42: 93 12 27 00  	slli	t0, a4, 2
+      46: b3 06 50 40  	neg	a3, t0
+      4a: 85 43        	li	t2, 1
       4c: 53 00 00 f0  	fmv.w.x	ft0, zero
-      50: 89 49        	li	s3, 2
-      52: 01 a0        	j	0x52 <core+0x50>
+      50: 09 49        	li	s2, 2
 
-0000000000000054 <.LBB0_2>:
-      54: 05 0e        	addi	t3, t3, 1
-      56: 9a 93        	add	t2, t2, t1
-      58: 63 00 5e 00  	beq	t3, t0, 0x58 <.LBB0_2+0x4>
+0000000000000052 <.LBB0_2>:
+      52: b3 8e e3 02  	mul	t4, t2, a4
+      56: 1a 8f        	mv	t5, t1
+      58: 85 4f        	li	t6, 1
 
-000000000000005c <.LBB0_3>:
-      5c: 63 c0 16 01  	blt	a3, a7, 0x5c <.LBB0_3>
-      60: 33 0f ee 02  	mul	t5, t3, a4
-      64: 85 4f        	li	t6, 1
-      66: 1e 89        	mv	s2, t2
+000000000000005a <.LBB0_3>:
+      5a: fd 59        	li	s3, -1
+      5c: 32 8a        	mv	s4, a2
+      5e: fa 87        	mv	a5, t5
+      60: d3 00 00 20  	fmv.s	ft1, ft0
 
-0000000000000068 <.LBB0_5>:
-      68: 7d 5a        	li	s4, -1
-      6a: b2 8a        	mv	s5, a2
-      6c: 4a 8b        	mv	s6, s2
-      6e: d3 00 00 20  	fmv.s	ft1, ft0
+0000000000000064 <.LBB0_4>:
+      64: 85 09        	addi	s3, s3, 1
+      66: 0d 45        	li	a0, 3
+      68: 52 84        	mv	s0, s4
+      6a: be 84        	mv	s1, a5
 
-0000000000000072 <.LBB0_6>:
-      72: 05 0a        	addi	s4, s4, 1
-      74: 8d 44        	li	s1, 3
-      76: 56 84        	mv	s0, s5
-      78: da 87        	mv	a5, s6
+000000000000006c <.LBB0_5>:
+      6c: 07 21 04 00  	flw	ft2, 0(s0)
+      70: 87 a1 04 00  	flw	ft3, 0(s1)
+      74: c3 f0 21 08  	fmadd.s	ft1, ft3, ft2, ft1
+      78: b6 94        	add	s1, s1, a3
+      7a: 7d 15        	addi	a0, a0, -1
+      7c: 31 04        	addi	s0, s0, 12
+      7e: 01 e1        	bnez	a0, 0x7e <.LBB0_5+0x12>
+      80: f1 17        	addi	a5, a5, -4
+      82: 11 0a        	addi	s4, s4, 4
+      84: 63 90 29 01  	bne	s3, s2, 0x84 <.LBB0_5+0x18>
+      88: 33 85 df 01  	add	a0, t6, t4
+      8c: 0a 05        	slli	a0, a0, 2
+      8e: 2e 95        	add	a0, a0, a1
+      90: 27 20 15 00  	fsw	ft1, 0(a0)
+      94: 85 0f        	addi	t6, t6, 1
+      96: 11 0f        	addi	t5, t5, 4
+      98: 63 90 cf 01  	bne	t6, t3, 0x98 <.LBB0_5+0x2c>
+      9c: 85 03        	addi	t2, t2, 1
+      9e: 16 93        	add	t1, t1, t0
+      a0: 63 90 13 01  	bne	t2, a7, 0xa0 <.LBB0_5+0x34>
 
-000000000000007a <.LBB0_7>:
-      7a: 07 21 04 00  	flw	ft2, 0(s0)
-      7e: 87 a1 07 00  	flw	ft3, 0(a5)
-      82: c3 f0 21 08  	fmadd.s	ft1, ft3, ft2, ft1
-      86: aa 97        	add	a5, a5, a0
-      88: fd 14        	addi	s1, s1, -1
-      8a: 31 04        	addi	s0, s0, 12
-      8c: 81 e0        	bnez	s1, 0x8c <.LBB0_7+0x12>
-      8e: 71 1b        	addi	s6, s6, -4
-      90: 91 0a        	addi	s5, s5, 4
-      92: 63 10 3a 01  	bne	s4, s3, 0x92 <.LBB0_7+0x18>
-      96: b3 87 ef 01  	add	a5, t6, t5
-      9a: 8a 07        	slli	a5, a5, 2
-      9c: ae 97        	add	a5, a5, a1
-      9e: 27 a0 17 00  	fsw	ft1, 0(a5)
-      a2: 85 0f        	addi	t6, t6, 1
-      a4: 11 09        	addi	s2, s2, 4
-      a6: 63 90 df 01  	bne	t6, t4, 0xa6 <.LBB0_7+0x2c>
-      aa: 01 a0        	j	0xaa <.LBB0_7+0x30>
-
-00000000000000ac <.LBB0_10>:
-      ac: 73 26 20 c0  	rdinstret	a2
-      b0: 83 35 08 00  	ld	a1, 0(a6)
-      b4: b7 06 00 00  	lui	a3, 0
-      b8: 37 05 00 00  	lui	a0, 0
-      bc: 13 05 05 00  	mv	a0, a0
-      c0: 23 b0 c6 00  	sd	a2, 0(a3)
-      c4: 62 74        	ld	s0, 56(sp)
-      c6: c2 74        	ld	s1, 48(sp)
-      c8: 22 79        	ld	s2, 40(sp)
-      ca: 82 79        	ld	s3, 32(sp)
-      cc: 62 6a        	ld	s4, 24(sp)
-      ce: c2 6a        	ld	s5, 16(sp)
-      d0: 22 6b        	ld	s6, 8(sp)
-      d2: 21 61        	addi	sp, sp, 64
-      d4: 17 03 00 00  	auipc	t1, 0
-      d8: 67 00 03 00  	jr	t1
+00000000000000a4 <.LBB0_9>:
+      a4: 73 26 20 c0  	rdinstret	a2
+      a8: 83 35 08 00  	ld	a1, 0(a6)
+      ac: b7 06 00 00  	lui	a3, 0
+      b0: 37 05 00 00  	lui	a0, 0
+      b4: 13 05 05 00  	mv	a0, a0
+      b8: 23 b0 c6 00  	sd	a2, 0(a3)
+      bc: 22 74        	ld	s0, 40(sp)
+      be: 82 74        	ld	s1, 32(sp)
+      c0: 62 69        	ld	s2, 24(sp)
+      c2: c2 69        	ld	s3, 16(sp)
+      c4: 22 6a        	ld	s4, 8(sp)
+      c6: 45 61        	addi	sp, sp, 48
+      c8: 17 03 00 00  	auipc	t1, 0
+      cc: 67 00 03 00  	jr	t1
