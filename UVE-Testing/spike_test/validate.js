@@ -15,8 +15,8 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original_clang,rvv,original_gcc,
 
 // kernel size map
 const kernelSizeMap = {
-	//"3mm": size,
-	"convolution": size/*,
+	"3mm": size,
+	"convolution": size,
 	"covariance": size,
 	"gemm": size,
 	"gemver": size,
@@ -29,21 +29,21 @@ const kernelSizeMap = {
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size*/
+	"trisolv": size
 };
 
 // read type and size from command line
 const typeMap = {
-    /*'B': 'byte',
+    'B': 'byte',
     'H': 'half-word',
     'I': 'integer',
-    'F': 'float',*/
+    'F': 'float',
     'D': 'double'
 };
 
 const compileFlags = ["-O3", "-fno-unroll-loops", "-Wall", "-pedantic"];
 const linkFlags = ["-O3", "-Wall", "-pedantic", "-static"];
-const clangFlagsV = ["-O3", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
+const clangFlagsV = ["-O3", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
 const clangFlags = ["-O3", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math",  "-fno-vectorize", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gc"];
 const gccPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const clangPath = "/home/afernandes/LLVM-Compiler/llvm-project/build/bin/clang";

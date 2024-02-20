@@ -14,13 +14,13 @@ Disassembly of section .text:
       12: 37 08 00 00  	lui	a6, 0
       16: 23 30 18 01  	sd	a7, 0(a6)
       1a: 81 e3        	bnez	a5, 0x1a <core+0x18>
-      1c: 9b 07 f7 ff  	addiw	a5, a4, -1
-      20: fd 36        	addiw	a3, a3, -1
-      22: 82 17        	slli	a5, a5, 32
-      24: 93 d8 07 02  	srli	a7, a5, 32
-      28: 82 16        	slli	a3, a3, 32
-      2a: 13 d3 06 02  	srli	t1, a3, 32
-      2e: d7 76 a0 0d  	vsetvli	a3, zero, e64, m4, ta, ma
+      1c: 7d 37        	addiw	a4, a4, -1
+      1e: 9b 87 f6 ff  	addiw	a5, a3, -1
+      22: 02 17        	slli	a4, a4, 32
+      24: 93 58 07 02  	srli	a7, a4, 32
+      28: 82 17        	slli	a5, a5, 32
+      2a: 13 d3 07 02  	srli	t1, a5, 32
+      2e: 57 77 a0 0d  	vsetvli	a4, zero, e64, m4, ta, ma
       32: 57 a6 08 52  	vid.v	v12
       36: 57 b4 cf 02  	vadd.vi	v8, v12, -1
       3a: 57 30 c1 72  	vmsleu.vi	v0, v12, 2
@@ -31,17 +31,17 @@ Disassembly of section .text:
       4a: 57 38 00 5e  	vmv.v.i	v16, 0
 
 000000000000004e <.LBB0_2>:
-      4e: b3 83 e2 02  	mul	t2, t0, a4
+      4e: b3 83 d2 02  	mul	t2, t0, a3
       52: 57 70 a0 0d  	vsetvli	zero, zero, e64, m4, ta, ma
       56: 57 ca 82 0e  	vrsub.vx	v20, v8, t0
-      5a: 57 6a 47 97  	vmul.vx	v20, v20, a4
+      5a: 57 ea 46 97  	vmul.vx	v20, v20, a3
       5e: 09 4e        	li	t3, 2
       60: 85 4e        	li	t4, 1
 
 0000000000000062 <.LBB0_3>:
       62: 81 47        	li	a5, 0
       64: 81 4f        	li	t6, 0
-      66: f2 86        	mv	a3, t3
+      66: 72 87        	mv	a4, t3
 
 0000000000000068 <.LBB0_4>:
       68: 57 70 80 08  	vsetvli	zero, zero, e16, m1, tu, ma
@@ -53,7 +53,7 @@ Disassembly of section .text:
       80: 57 70 80 0c  	vsetvli	zero, zero, e16, m1, ta, ma
       84: 07 79 86 05  	vluxei64.v	v18, (a2), v24, v0.t
       88: 57 70 a0 0d  	vsetvli	zero, zero, e64, m4, ta, ma
-      8c: 57 cc 46 03  	vadd.vx	v24, v20, a3
+      8c: 57 4c 47 03  	vadd.vx	v24, v20, a4
       90: 57 0c 8c 03  	vadd.vv	v24, v24, v24
       94: 57 70 80 0c  	vsetvli	zero, zero, e16, m1, ta, ma
       98: 87 79 85 05  	vluxei64.v	v19, (a0), v24, v0.t
@@ -63,12 +63,12 @@ Disassembly of section .text:
       a8: d7 28 19 03  	vredsum.vs	v17, v17, v18
       ac: d7 2f 10 43  	vmv.x.s	t6, v17
       b0: 85 07        	addi	a5, a5, 1
-      b2: fd 16        	addi	a3, a3, -1
+      b2: 7d 17        	addi	a4, a4, -1
       b4: 63 90 e7 01  	bne	a5, t5, 0xb4 <.LBB0_4+0x4c>
-      b8: b3 86 7e 00  	add	a3, t4, t2
-      bc: 86 06        	slli	a3, a3, 1
-      be: ae 96        	add	a3, a3, a1
-      c0: 23 90 f6 01  	sh	t6, 0(a3)
+      b8: 33 87 7e 00  	add	a4, t4, t2
+      bc: 06 07        	slli	a4, a4, 1
+      be: 2e 97        	add	a4, a4, a1
+      c0: 23 10 f7 01  	sh	t6, 0(a4)
       c4: 85 0e        	addi	t4, t4, 1
       c6: 05 0e        	addi	t3, t3, 1
       c8: 63 90 6e 00  	bne	t4, t1, 0xc8 <.LBB0_4+0x60>

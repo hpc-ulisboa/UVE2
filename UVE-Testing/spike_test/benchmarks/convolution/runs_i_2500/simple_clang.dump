@@ -23,22 +23,22 @@ Disassembly of section .text:
       22: 37 08 00 00  	lui	a6, 0
       26: 23 30 f8 00  	sd	a5, 0(a6)
       2a: 01 e0        	bnez	s0, 0x2a <core+0x28>
-      2c: 9b 07 f7 ff  	addiw	a5, a4, -1
-      30: fd 36        	addiw	a3, a3, -1
-      32: 82 17        	slli	a5, a5, 32
-      34: 93 d8 07 02  	srli	a7, a5, 32
-      38: 82 16        	slli	a3, a3, 32
-      3a: 13 de 06 02  	srli	t3, a3, 32
-      3e: 93 16 37 00  	slli	a3, a4, 3
-      42: 36 95        	add	a0, a0, a3
+      2c: 7d 37        	addiw	a4, a4, -1
+      2e: 9b 87 f6 ff  	addiw	a5, a3, -1
+      32: 02 17        	slli	a4, a4, 32
+      34: 93 58 07 02  	srli	a7, a4, 32
+      38: 82 17        	slli	a5, a5, 32
+      3a: 13 de 07 02  	srli	t3, a5, 32
+      3e: 13 97 36 00  	slli	a4, a3, 3
+      42: 3a 95        	add	a0, a0, a4
       44: 13 03 85 00  	addi	t1, a0, 8
-      48: 93 12 27 00  	slli	t0, a4, 2
+      48: 93 92 26 00  	slli	t0, a3, 2
       4c: 33 0b 50 40  	neg	s6, t0
       50: 85 43        	li	t2, 1
       52: 09 49        	li	s2, 2
 
 0000000000000054 <.LBB0_2>:
-      54: b3 8e e3 02  	mul	t4, t2, a4
+      54: b3 8e d3 02  	mul	t4, t2, a3
       58: 1a 8f        	mv	t5, t1
       5a: 85 4f        	li	t6, 1
 
@@ -56,9 +56,9 @@ Disassembly of section .text:
 
 000000000000006c <.LBB0_5>:
       6c: 83 ab 04 00  	lw	s7, 0(s1)
-      70: 14 41        	lw	a3, 0(a0)
-      72: bb 86 76 03  	mulw	a3, a3, s7
-      76: b6 97        	add	a5, a5, a3
+      70: 18 41        	lw	a4, 0(a0)
+      72: 3b 07 77 03  	mulw	a4, a4, s7
+      76: ba 97        	add	a5, a5, a4
       78: 5a 95        	add	a0, a0, s6
       7a: 7d 14        	addi	s0, s0, -1
       7c: b1 04        	addi	s1, s1, 12

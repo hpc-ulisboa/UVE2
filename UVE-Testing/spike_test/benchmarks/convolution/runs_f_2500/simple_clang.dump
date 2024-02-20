@@ -20,23 +20,23 @@ Disassembly of section .text:
       1c: 37 08 00 00  	lui	a6, 0
       20: 23 30 f8 00  	sd	a5, 0(a6)
       24: 01 e0        	bnez	s0, 0x24 <core+0x22>
-      26: 9b 07 f7 ff  	addiw	a5, a4, -1
-      2a: fd 36        	addiw	a3, a3, -1
-      2c: 82 17        	slli	a5, a5, 32
-      2e: 93 d8 07 02  	srli	a7, a5, 32
-      32: 82 16        	slli	a3, a3, 32
-      34: 13 de 06 02  	srli	t3, a3, 32
-      38: 93 16 37 00  	slli	a3, a4, 3
-      3c: 36 95        	add	a0, a0, a3
+      26: 7d 37        	addiw	a4, a4, -1
+      28: 9b 87 f6 ff  	addiw	a5, a3, -1
+      2c: 02 17        	slli	a4, a4, 32
+      2e: 93 58 07 02  	srli	a7, a4, 32
+      32: 82 17        	slli	a5, a5, 32
+      34: 13 de 07 02  	srli	t3, a5, 32
+      38: 13 97 36 00  	slli	a4, a3, 3
+      3c: 3a 95        	add	a0, a0, a4
       3e: 13 03 85 00  	addi	t1, a0, 8
-      42: 93 12 27 00  	slli	t0, a4, 2
-      46: b3 06 50 40  	neg	a3, t0
+      42: 93 92 26 00  	slli	t0, a3, 2
+      46: 33 07 50 40  	neg	a4, t0
       4a: 85 43        	li	t2, 1
       4c: 53 00 00 f0  	fmv.w.x	ft0, zero
       50: 09 49        	li	s2, 2
 
 0000000000000052 <.LBB0_2>:
-      52: b3 8e e3 02  	mul	t4, t2, a4
+      52: b3 8e d3 02  	mul	t4, t2, a3
       56: 1a 8f        	mv	t5, t1
       58: 85 4f        	li	t6, 1
 
@@ -56,7 +56,7 @@ Disassembly of section .text:
       6c: 07 21 04 00  	flw	ft2, 0(s0)
       70: 87 a1 04 00  	flw	ft3, 0(s1)
       74: c3 f0 21 08  	fmadd.s	ft1, ft3, ft2, ft1
-      78: b6 94        	add	s1, s1, a3
+      78: ba 94        	add	s1, s1, a4
       7a: 7d 15        	addi	a0, a0, -1
       7c: 31 04        	addi	s0, s0, 12
       7e: 01 e1        	bnez	a0, 0x7e <.LBB0_5+0x12>

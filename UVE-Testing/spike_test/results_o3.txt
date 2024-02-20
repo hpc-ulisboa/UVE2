@@ -172,14 +172,14 @@ Kernel 3mm is similar enough
 ### Attempting to compile and run kernel convolution (size: 2500, type: byte) ...
 
 
-benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
                 for (j = -1; j <= 1; j++)
                 ^
-benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 81226 less instructions
+UVE executed 94159 less instructions
 RVV executed 105787 less instructions
-UVE executed 117994 less instructions than RVV
+UVE executed 130927 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -187,11 +187,11 @@ UVE executed 117994 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 95063    | 13837  | -81226     | -85.44         |
+| 95063    | 904    | -94159     | -99.05         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 131831   | 13837  | -117994    | -89.50         |
+| 131831   | 904    | -130927    | -99.31         |
 |----------|--------|------------|----------------|
 
 
@@ -200,14 +200,14 @@ Kernel convolution is similar enough
 ### Attempting to compile and run kernel convolution (size: 2500, type: half-word) ...
 
 
-benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
                 for (j = -1; j <= 1; j++)
                 ^
-benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 81225 less instructions
+UVE executed 93293 less instructions
 RVV executed 71326 less instructions
-UVE executed 154760 less instructions than RVV
+UVE executed 166829 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -215,11 +215,11 @@ UVE executed 154760 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 95062    | 13837  | -81225     | -85.44         |
+| 95061    | 1768   | -93293     | -98.14         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 168597   | 13837  | -154760    | -91.79         |
+| 168597   | 1768   | -166829    | -98.95         |
 |----------|--------|------------|----------------|
 
 
@@ -228,14 +228,14 @@ Kernel convolution is similar enough
 ### Attempting to compile and run kernel convolution (size: 2500, type: integer) ...
 
 
-benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
                 for (j = -1; j <= 1; j++)
                 ^
-benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 81078 less instructions
+UVE executed 92283 less instructions
 RVV executed 2215 more instructions
-UVE executed 228301 less instructions than RVV
+UVE executed 239506 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -243,11 +243,11 @@ UVE executed 228301 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 94915    | 13837  | -81078     | -85.42         |
+| 94915    | 2632   | -92283     | -97.23         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 242138   | 13837  | -228301    | -94.29         |
+| 242138   | 2632   | -239506    | -98.91         |
 |----------|--------|------------|----------------|
 
 
@@ -256,14 +256,14 @@ Kernel convolution is similar enough
 ### Attempting to compile and run kernel convolution (size: 2500, type: float) ...
 
 
-benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
                 for (j = -1; j <= 1; j++)
                 ^
-benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 62647 less instructions
+UVE executed 73851 less instructions
 RVV executed 16040 more instructions
-UVE executed 221391 less instructions than RVV
+UVE executed 232596 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -271,11 +271,11 @@ UVE executed 221391 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 76484    | 13837  | -62647     | -81.91         |
+| 76483    | 2632   | -73851     | -96.56         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 235228   | 13837  | -221391    | -94.12         |
+| 235228   | 2632   | -232596    | -98.88         |
 |----------|--------|------------|----------------|
 
 
@@ -284,14 +284,14 @@ Kernel convolution is similar enough
 ### Attempting to compile and run kernel convolution (size: 2500, type: double) ...
 
 
-benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: the cost-model indicates that interleaving is not beneficial and is explicitly disabled or interleave count is set to 1 [-Rpass-analysis=loop-vectorize]
                 for (j = -1; j <= 1; j++)
                 ^
-benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+benchmarks/convolution/kernel.c:588:17: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 55735 less instructions
+UVE executed 71259 less instructions
 RVV executed 4696 less instructions
-UVE executed 193743 less instructions than RVV
+UVE executed 209268 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -299,11 +299,11 @@ UVE executed 193743 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 76484    | 20749  | -55735     | -72.87         |
+| 76483    | 5224   | -71259     | -93.17         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 214492   | 20749  | -193743    | -90.33         |
+| 214492   | 5224   | -209268    | -97.56         |
 |----------|--------|------------|----------------|
 
 
