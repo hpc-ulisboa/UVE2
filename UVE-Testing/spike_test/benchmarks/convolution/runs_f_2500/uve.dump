@@ -19,13 +19,13 @@ Disassembly of section .text:
   1e:	6ce5638b          	ss.sta.ld.w	u7,a0,a4,a3
   22:	e11e038b          	ss.app	u7,t3,a7,t3
   26:	f86e038b          	ss.app	u7,t3,t1,t6
-  2a:	f266838b          	ss.end	u7,a3,t1,t5
-  2e:	0000138b          	ss.cfg.vec	u7
+  2a:	0000138b          	ss.cfg.vec	u7
+  2e:	f266838b          	ss.end	u7,a3,t1,t5
   32:	04e6630b          	ss.sta.ld.w	u6,a2,a4,zero
   36:	0110030b          	ss.app	u6,zero,a7,zero
   3a:	e060030b          	ss.app	u6,zero,t1,t3
-  3e:	3260030b          	ss.end	u6,zero,t1,t1
-  42:	0000130b          	ss.cfg.vec	u6
+  3e:	0000130b          	ss.cfg.vec	u6
+  42:	3260030b          	ss.end	u6,zero,t1,t1
   46:	6ce5a18b          	ss.sta.st.w	u3,a1,a4,a3
   4a:	e31e018b          	ss.end	u3,t3,a7,t3
 

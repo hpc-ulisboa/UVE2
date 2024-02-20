@@ -146,70 +146,97 @@ Disassembly of section .text:
  1ba:	8082                	ret
 
 00000000000001bc <core>:
- 1bc:	7139                	addi	sp,sp,-64
- 1be:	f426                	sd	s1,40(sp)
- 1c0:	f04a                	sd	s2,32(sp)
- 1c2:	ec4e                	sd	s3,24(sp)
- 1c4:	e852                	sd	s4,16(sp)
- 1c6:	fc06                	sd	ra,56(sp)
- 1c8:	f822                	sd	s0,48(sp)
- 1ca:	a422                	fsd	fs0,8(sp)
- 1cc:	8932                	mv	s2,a2
- 1ce:	8a2e                	mv	s4,a1
- 1d0:	8636                	mv	a2,a3
- 1d2:	89ba                	mv	s3,a4
- 1d4:	84be                	mv	s1,a5
- 1d6:	c02027f3          	rdinstret	a5
- 1da:	00000437          	lui	s0,0x0
- 1de:	86ba                	mv	a3,a4
- 1e0:	85ca                	mv	a1,s2
- 1e2:	8552                	mv	a0,s4
- 1e4:	00f43023          	sd	a5,0(s0) # 0 <core_kernel>
- 1e8:	00000097          	auipc	ra,0x0
- 1ec:	000080e7          	jalr	ra # 1e8 <core+0x2c>
- 1f0:	1ba00793          	li	a5,442
+ 1bc:	7179                	addi	sp,sp,-48
+ 1be:	ec26                	sd	s1,24(sp)
+ 1c0:	e84a                	sd	s2,16(sp)
+ 1c2:	e44e                	sd	s3,8(sp)
+ 1c4:	e052                	sd	s4,0(sp)
+ 1c6:	f406                	sd	ra,40(sp)
+ 1c8:	f022                	sd	s0,32(sp)
+ 1ca:	84b2                	mv	s1,a2
+ 1cc:	8a2e                	mv	s4,a1
+ 1ce:	8636                	mv	a2,a3
+ 1d0:	89ba                	mv	s3,a4
+ 1d2:	893e                	mv	s2,a5
+ 1d4:	c02027f3          	rdinstret	a5
+ 1d8:	00000437          	lui	s0,0x0
+ 1dc:	86ba                	mv	a3,a4
+ 1de:	85a6                	mv	a1,s1
+ 1e0:	8552                	mv	a0,s4
+ 1e2:	00f43023          	sd	a5,0(s0) # 0 <core_kernel>
+ 1e6:	00000097          	auipc	ra,0x0
+ 1ea:	000080e7          	jalr	ra # 1e6 <core+0x2a>
+ 1ee:	1ba00793          	li	a5,442
+ 1f2:	4685                	li	a3,1
  1f4:	4729                	li	a4,10
- 1f6:	4685                	li	a3,1
- 1f8:	04f9f08b          	ss.sta.ld.d	u1,s3,a5,zero
- 1fc:	6ae0008b          	ss.end	u1,zero,a4,a3
- 200:	0000108b          	ss.cfg.vec	u1
- 204:	74fa710b          	ss.sta.ld.d	u2,s4,a5,a4
- 208:	6ae0010b          	ss.end	u2,zero,a4,a3
- 20c:	0000110b          	ss.cfg.vec	u2
- 210:	6ef4b18b          	ss.st.d	u3,s1,a5,a3
- 214:	e20507d3          	fmv.x.d	a5,fa0
- 218:	a987b22b          	so.v.mvsv.d	u4,a5
+ 1f6:	04f9f08b          	ss.sta.ld.d	u1,s3,a5,zero
+ 1fa:	6ae0008b          	ss.end	u1,zero,a4,a3
+ 1fe:	0000108b          	ss.cfg.vec	u1
+ 202:	74fa710b          	ss.sta.ld.d	u2,s4,a5,a4
+ 206:	6ae0010b          	ss.end	u2,zero,a4,a3
+ 20a:	0000110b          	ss.cfg.vec	u2
+ 20e:	6ef9318b          	ss.st.d	u3,s2,a5,a3
+ 212:	e2050753          	fmv.x.d	a4,fa0
+ 216:	a987322b          	so.v.mvsv.d	u4,a4
 
-000000000000021c <.SLOOP_196>:
- 21c:	ac0032ab          	so.v.dp.d	u5,zero,p0
+000000000000021a <.SLOOP_195>:
+ 21a:	ac0032ab          	so.v.dp.d	u5,zero,p0
 
-0000000000000220 <.SLOOP_1_096>:
- 220:	1011132b          	so.a.mul.fp	u6,u2,u1,p0
- 224:	201312ab          	so.a.adde.acc.fp	u5,u6,p0
- 228:	ffe08cab          	so.b.ndc.1	u1,220 <.SLOOP_1_096>
- 22c:	004291ab          	so.a.add.fp	u3,u5,u4,p0
- 230:	ffe0a6ab          	so.b.ndc.2	u1,21c <.SLOOP_196>
- 234:	85ca                	mv	a1,s2
- 236:	8526                	mv	a0,s1
- 238:	00000097          	auipc	ra,0x0
- 23c:	000080e7          	jalr	ra # 238 <.SLOOP_1_096+0x18>
- 240:	22a50453          	fmv.d	fs0,fa0
- 244:	c02027f3          	rdinstret	a5
- 248:	00043583          	ld	a1,0(s0)
- 24c:	00000537          	lui	a0,0x0
- 250:	00000737          	lui	a4,0x0
- 254:	863e                	mv	a2,a5
- 256:	00050513          	mv	a0,a0
- 25a:	00f73023          	sd	a5,0(a4) # 0 <core_kernel>
- 25e:	00000097          	auipc	ra,0x0
- 262:	000080e7          	jalr	ra # 25e <.SLOOP_1_096+0x3e>
- 266:	70e2                	ld	ra,56(sp)
- 268:	7442                	ld	s0,48(sp)
- 26a:	22840553          	fmv.d	fa0,fs0
- 26e:	74a2                	ld	s1,40(sp)
- 270:	7902                	ld	s2,32(sp)
- 272:	69e2                	ld	s3,24(sp)
- 274:	6a42                	ld	s4,16(sp)
- 276:	2422                	fld	fs0,8(sp)
- 278:	6121                	addi	sp,sp,64
- 27a:	8082                	ret
+000000000000021e <.SLOOP_1_095>:
+ 21e:	1011132b          	so.a.mul.fp	u6,u2,u1,p0
+ 222:	201312ab          	so.a.adde.acc.fp	u5,u6,p0
+ 226:	ffe08cab          	so.b.ndc.1	u1,21e <.SLOOP_1_095>
+ 22a:	004291ab          	so.a.add.fp	u3,u5,u4,p0
+ 22e:	ffe0a6ab          	so.b.ndc.2	u1,21a <.SLOOP_195>
+ 232:	6ef4f08b          	ss.ld.d	u1,s1,a5,a3
+ 236:	6ef4f10b          	ss.ld.d	u2,s1,a5,a3
+ 23a:	6ef4f18b          	ss.ld.d	u3,s1,a5,a3
+ 23e:	6ef9720b          	ss.ld.d	u4,s2,a5,a3
+ 242:	000007b7          	lui	a5,0x0
+ 246:	00000737          	lui	a4,0x0
+ 24a:	0007b783          	ld	a5,0(a5) # 0 <core_kernel>
+ 24e:	00073703          	ld	a4,0(a4) # 0 <core_kernel>
+ 252:	a987b2ab          	so.v.mvsv.d	u5,a5
+ 256:	ac00332b          	so.v.dp.d	u6,zero,p0
+
+000000000000025a <.SLOOP_1101>:
+ 25a:	0013132b          	so.a.add.fp	u6,u6,u1,p0
+ 25e:	fff0eeab          	so.b.nc	u1,25a <.SLOOP_1101>
+ 262:	200313ab          	so.a.adde.fp	u7,u6,p0
+ 266:	1053d3ab          	so.a.div.fp	u7,u7,u5,p0
+ 26a:	ac00342b          	so.v.dp.d	u8,zero,p0
+
+000000000000026e <.SLOOP_2101>:
+ 26e:	004154ab          	so.a.sub.fp	u9,u2,u4,p0
+ 272:	109494ab          	so.a.mul.fp	u9,u9,u9,p0
+ 276:	2014942b          	so.a.adde.acc.fp	u8,u9,p0
+ 27a:	fff16aab          	so.b.nc	u2,26e <.SLOOP_2101>
+ 27e:	ac0035ab          	so.v.dp.d	u11,zero,p0
+
+0000000000000282 <.SLOOP_3101>:
+ 282:	0071d62b          	so.a.sub.fp	u12,u3,u7,p0
+ 286:	10c6162b          	so.a.mul.fp	u12,u12,u12,p0
+ 28a:	201615ab          	so.a.adde.acc.fp	u11,u12,p0
+ 28e:	fff1eaab          	so.b.nc	u3,282 <.SLOOP_3101>
+ 292:	a987372b          	so.v.mvsv.d	u14,a4
+ 296:	10b455ab          	so.a.div.fp	u11,u8,u11,p0
+ 29a:	00b7572b          	so.a.sub.fp	u14,u14,u11,p0
+ 29e:	a90704ab          	so.v.mvvs	s1,u14
+ 2a2:	c02027f3          	rdinstret	a5
+ 2a6:	00043583          	ld	a1,0(s0)
+ 2aa:	00000537          	lui	a0,0x0
+ 2ae:	00000737          	lui	a4,0x0
+ 2b2:	863e                	mv	a2,a5
+ 2b4:	00050513          	mv	a0,a0
+ 2b8:	00f73023          	sd	a5,0(a4) # 0 <core_kernel>
+ 2bc:	00000097          	auipc	ra,0x0
+ 2c0:	000080e7          	jalr	ra # 2bc <.SLOOP_3101+0x3a>
+ 2c4:	70a2                	ld	ra,40(sp)
+ 2c6:	7402                	ld	s0,32(sp)
+ 2c8:	f2048553          	fmv.d.x	fa0,s1
+ 2cc:	6942                	ld	s2,16(sp)
+ 2ce:	64e2                	ld	s1,24(sp)
+ 2d0:	69a2                	ld	s3,8(sp)
+ 2d2:	6a02                	ld	s4,0(sp)
+ 2d4:	6145                	addi	sp,sp,48
+ 2d6:	8082                	ret

@@ -6,192 +6,305 @@ Disassembly of section .text:
 
 0000000000000000 <core_kernel>:
    0:	000007b7          	lui	a5,0x0
-   4:	0007b587          	fld	fa1,0(a5) # 0 <core_kernel>
-   8:	000007b7          	lui	a5,0x0
-   c:	6e85                	lui	t4,0x1
-   e:	f2000553          	fmv.d.x	fa0,zero
-  12:	0007b007          	fld	ft0,0(a5) # 0 <core_kernel>
-  16:	22b58653          	fmv.d	fa2,fa1
-  1a:	dd0e8e93          	addi	t4,t4,-560 # dd0 <core+0xc72>
-  1e:	06400f93          	li	t6,100
-  22:	01d50333          	add	t1,a0,t4
-  26:	05000f13          	li	t5,80
+   4:	0007be87          	fld	ft9,0(a5) # 0 <core_kernel>
+   8:	f2000553          	fmv.d.x	fa0,zero
+   c:	000007b7          	lui	a5,0x0
+  10:	6e05                	lui	t3,0x1
+  12:	22a50f53          	fmv.d	ft10,fa0
+  16:	0007b207          	fld	ft4,0(a5) # 0 <core_kernel>
+  1a:	23de8fd3          	fmv.d	ft11,ft9
+  1e:	dd0e0e13          	addi	t3,t3,-560 # dd0 <.L27+0xacc>
+  22:	06400f13          	li	t5,100
+  26:	01c50333          	add	t1,a0,t3
+  2a:	05000e93          	li	t4,80
 
-000000000000002a <.L2>:
-  2a:	4881                	li	a7,0
+000000000000002e <.L2>:
+  2e:	4701                	li	a4,0
 
-000000000000002c <.L10>:
-  2c:	011507b3          	add	a5,a0,a7
-  30:	639c                	ld	a5,0(a5)
-  32:	f20007d3          	fmv.d.x	fa5,zero
-  36:	8e36                	mv	t3,a3
-  38:	8736                	mv	a4,a3
-  3a:	05078813          	addi	a6,a5,80
+0000000000000030 <.L3>:
+  30:	00e507b3          	add	a5,a0,a4
+  34:	639c                	ld	a5,0(a5)
+  36:	0006b187          	fld	ft3,0(a3)
+  3a:	2690                	fld	fa2,8(a3)
+  3c:	2394                	fld	fa3,0(a5)
+  3e:	279c                	fld	fa5,8(a5)
+  40:	2b98                	fld	fa4,16(a5)
+  42:	f236f1c3          	fmadd.d	ft3,fa3,ft3,ft10
+  46:	0106b287          	fld	ft5,16(a3)
+  4a:	0187b107          	fld	ft2,24(a5)
+  4e:	0186be07          	fld	ft8,24(a3)
+  52:	0207b087          	fld	ft1,32(a5)
+  56:	0206b887          	fld	fa7,32(a3)
+  5a:	0287b007          	fld	ft0,40(a5)
+  5e:	1ac7f1c3          	fmadd.d	ft3,fa5,fa2,ft3
+  62:	0286b807          	fld	fa6,40(a3)
+  66:	3b8c                	fld	fa1,48(a5)
+  68:	0306b387          	fld	ft7,48(a3)
+  6c:	3f90                	fld	fa2,56(a5)
+  6e:	0386b307          	fld	ft6,56(a3)
+  72:	23b4                	fld	fa3,64(a5)
+  74:	1a5771c3          	fmadd.d	ft3,fa4,ft5,ft3
+  78:	0406b287          	fld	ft5,64(a3)
+  7c:	27bc                	fld	fa5,72(a5)
+  7e:	00e587b3          	add	a5,a1,a4
+  82:	2398                	fld	fa4,0(a5)
+  84:	00e607b3          	add	a5,a2,a4
+  88:	0721                	addi	a4,a4,8
+  8a:	1bc17143          	fmadd.d	ft2,ft2,ft8,ft3
+  8e:	1310f0c3          	fmadd.d	ft1,ft1,fa7,ft2
+  92:	0b007043          	fmadd.d	ft0,ft0,fa6,ft1
+  96:	0275f5c3          	fmadd.d	fa1,fa1,ft7,ft0
+  9a:	5a667643          	fmadd.d	fa2,fa2,ft6,fa1
+  9e:	6256f6c3          	fmadd.d	fa3,fa3,ft5,fa2
+  a2:	26b0                	fld	fa2,72(a3)
+  a4:	6ac7f7c3          	fmadd.d	fa5,fa5,fa2,fa3
+  a8:	02a7f7d3          	fadd.d	fa5,fa5,fa0
+  ac:	0af777d3          	fsub.d	fa5,fa4,fa5
+  b0:	a39c                	fsd	fa5,0(a5)
+  b2:	f7c71fe3          	bne	a4,t3,30 <.L3>
+  b6:	f20007d3          	fmv.d.x	fa5,zero
+  ba:	01c60733          	add	a4,a2,t3
+  be:	87b2                	mv	a5,a2
 
-000000000000003e <.L3>:
-  3e:	2394                	fld	fa3,0(a5)
-  40:	2318                	fld	fa4,0(a4)
-  42:	07a1                	addi	a5,a5,8
-  44:	0721                	addi	a4,a4,8
-  46:	7ae6f7c3          	fmadd.d	fa5,fa3,fa4,fa5
-  4a:	fef81ae3          	bne	a6,a5,3e <.L3>
-  4e:	02a7f7d3          	fadd.d	fa5,fa5,fa0
-  52:	011587b3          	add	a5,a1,a7
-  56:	2398                	fld	fa4,0(a5)
-  58:	011607b3          	add	a5,a2,a7
-  5c:	08a1                	addi	a7,a7,8
-  5e:	0af777d3          	fsub.d	fa5,fa4,fa5
-  62:	a39c                	fsd	fa5,0(a5)
-  64:	fdd894e3          	bne	a7,t4,2c <.L10>
-  68:	f20007d3          	fmv.d.x	fa5,zero
-  6c:	01d60733          	add	a4,a2,t4
-  70:	87b2                	mv	a5,a2
+00000000000000c0 <.L4>:
+  c0:	2398                	fld	fa4,0(a5)
+  c2:	07a1                	addi	a5,a5,8
+  c4:	02e7f7d3          	fadd.d	fa5,fa5,fa4
+  c8:	fef71ce3          	bne	a4,a5,c0 <.L4>
+  cc:	1a47f7d3          	fdiv.d	fa5,fa5,ft4
+  d0:	82b6                	mv	t0,a3
+  d2:	4881                	li	a7,0
+  d4:	53d7f543          	fmadd.d	fa0,fa5,ft9,fa0
 
-0000000000000072 <.L5>:
-  72:	2398                	fld	fa4,0(a5)
-  74:	07a1                	addi	a5,a5,8
-  76:	02e7f7d3          	fadd.d	fa5,fa5,fa4
-  7a:	fef71ce3          	bne	a4,a5,72 <.L5>
-  7e:	1a07f7d3          	fdiv.d	fa5,fa5,ft0
-  82:	4881                	li	a7,0
-  84:	52b7f543          	fmadd.d	fa0,fa5,fa1,fa0
+00000000000000d8 <.L5>:
+  d8:	f20007d3          	fmv.d.x	fa5,zero
+  dc:	87aa                	mv	a5,a0
+  de:	8832                	mv	a6,a2
 
-0000000000000088 <.L6>:
-  88:	f20007d3          	fmv.d.x	fa5,zero
-  8c:	87aa                	mv	a5,a0
-  8e:	8832                	mv	a6,a2
+00000000000000e0 <.L6>:
+  e0:	6398                	ld	a4,0(a5)
+  e2:	00083707          	fld	fa4,0(a6)
+  e6:	07a1                	addi	a5,a5,8
+  e8:	9746                	add	a4,a4,a7
+  ea:	2314                	fld	fa3,0(a4)
+  ec:	0821                	addi	a6,a6,8
+  ee:	7ae6f7c3          	fmadd.d	fa5,fa3,fa4,fa5
+  f2:	fe6797e3          	bne	a5,t1,e0 <.L6>
+  f6:	0002b707          	fld	fa4,0(t0)
+  fa:	02a1                	addi	t0,t0,8
+  fc:	08a1                	addi	a7,a7,8
+  fe:	73f7f7c3          	fmadd.d	fa5,fa5,ft11,fa4
+ 102:	fef2bc27          	fsd	fa5,-8(t0)
+ 106:	fdd899e3          	bne	a7,t4,d8 <.L5>
+ 10a:	3f7d                	addiw	t5,t5,-1
+ 10c:	f20f11e3          	bnez	t5,2e <.L2>
+ 110:	8082                	ret
 
-0000000000000090 <.L7>:
-  90:	6398                	ld	a4,0(a5)
-  92:	00083707          	fld	fa4,0(a6)
-  96:	07a1                	addi	a5,a5,8
-  98:	9746                	add	a4,a4,a7
-  9a:	2314                	fld	fa3,0(a4)
-  9c:	0821                	addi	a6,a6,8
-  9e:	7ae6f7c3          	fmadd.d	fa5,fa3,fa4,fa5
-  a2:	fef317e3          	bne	t1,a5,90 <.L7>
-  a6:	000e3707          	fld	fa4,0(t3)
-  aa:	0e21                	addi	t3,t3,8
-  ac:	08a1                	addi	a7,a7,8
-  ae:	72c7f7c3          	fmadd.d	fa5,fa5,fa2,fa4
-  b2:	fefe3c27          	fsd	fa5,-8(t3)
-  b6:	fde899e3          	bne	a7,t5,88 <.L6>
-  ba:	3ffd                	addiw	t6,t6,-1
-  bc:	f60f97e3          	bnez	t6,2a <.L2>
-  c0:	8082                	ret
+0000000000000112 <predict>:
+ 112:	6705                	lui	a4,0x1
+ 114:	f2000e53          	fmv.d.x	ft8,zero
+ 118:	dd070713          	addi	a4,a4,-560 # dd0 <.L27+0xacc>
+ 11c:	972e                	add	a4,a4,a1
 
-00000000000000c2 <predict>:
-  c2:	6805                	lui	a6,0x1
-  c4:	dd080813          	addi	a6,a6,-560 # dd0 <core+0xc72>
-  c8:	982e                	add	a6,a6,a1
+000000000000011e <.L14>:
+ 11e:	619c                	ld	a5,0(a1)
+ 120:	00063087          	fld	ft1,0(a2)
+ 124:	2614                	fld	fa3,8(a2)
+ 126:	2398                	fld	fa4,0(a5)
+ 128:	279c                	fld	fa5,8(a5)
+ 12a:	01063187          	fld	ft3,16(a2)
+ 12e:	e2177743          	fmadd.d	fa4,fa4,ft1,ft8
+ 132:	0107b107          	fld	ft2,16(a5)
+ 136:	0187b087          	fld	ft1,24(a5)
+ 13a:	01863887          	fld	fa7,24(a2)
+ 13e:	0207b007          	fld	ft0,32(a5)
+ 142:	02063807          	fld	fa6,32(a2)
+ 146:	378c                	fld	fa1,40(a5)
+ 148:	72d7f7c3          	fmadd.d	fa5,fa5,fa3,fa4
+ 14c:	02863387          	fld	ft7,40(a2)
+ 150:	3b90                	fld	fa2,48(a5)
+ 152:	03063307          	fld	ft6,48(a2)
+ 156:	3f94                	fld	fa3,56(a5)
+ 158:	03863287          	fld	ft5,56(a2)
+ 15c:	23b8                	fld	fa4,64(a5)
+ 15e:	7a317143          	fmadd.d	ft2,ft2,ft3,fa5
+ 162:	04063207          	fld	ft4,64(a2)
+ 166:	27bc                	fld	fa5,72(a5)
+ 168:	04863187          	fld	ft3,72(a2)
+ 16c:	0521                	addi	a0,a0,8
+ 16e:	05a1                	addi	a1,a1,8
+ 170:	1310f0c3          	fmadd.d	ft1,ft1,fa7,ft2
+ 174:	0b007043          	fmadd.d	ft0,ft0,fa6,ft1
+ 178:	0275f5c3          	fmadd.d	fa1,fa1,ft7,ft0
+ 17c:	5a667643          	fmadd.d	fa2,fa2,ft6,fa1
+ 180:	6256f6c3          	fmadd.d	fa3,fa3,ft5,fa2
+ 184:	6a477743          	fmadd.d	fa4,fa4,ft4,fa3
+ 188:	7237f7c3          	fmadd.d	fa5,fa5,ft3,fa4
+ 18c:	02a7f7d3          	fadd.d	fa5,fa5,fa0
+ 190:	fef53c27          	fsd	fa5,-8(a0)
+ 194:	f8b715e3          	bne	a4,a1,11e <.L14>
+ 198:	8082                	ret
 
-00000000000000ca <.L16>:
-  ca:	619c                	ld	a5,0(a1)
-  cc:	f20007d3          	fmv.d.x	fa5,zero
-  d0:	8732                	mv	a4,a2
-  d2:	05078693          	addi	a3,a5,80
+000000000000019a <r2_score>:
+ 19a:	6705                	lui	a4,0x1
+ 19c:	f20007d3          	fmv.d.x	fa5,zero
+ 1a0:	dd070713          	addi	a4,a4,-560 # dd0 <.L27+0xacc>
+ 1a4:	972e                	add	a4,a4,a1
+ 1a6:	87ae                	mv	a5,a1
 
-00000000000000d6 <.L17>:
-  d6:	2394                	fld	fa3,0(a5)
-  d8:	2318                	fld	fa4,0(a4)
-  da:	07a1                	addi	a5,a5,8
-  dc:	0721                	addi	a4,a4,8
-  de:	7ae6f7c3          	fmadd.d	fa5,fa3,fa4,fa5
-  e2:	fef69ae3          	bne	a3,a5,d6 <.L17>
-  e6:	02a7f7d3          	fadd.d	fa5,fa5,fa0
-  ea:	0521                	addi	a0,a0,8
-  ec:	05a1                	addi	a1,a1,8
-  ee:	fef53c27          	fsd	fa5,-8(a0)
-  f2:	fcb81ce3          	bne	a6,a1,ca <.L16>
-  f6:	8082                	ret
+00000000000001a8 <.L17>:
+ 1a8:	2398                	fld	fa4,0(a5)
+ 1aa:	07a1                	addi	a5,a5,8
+ 1ac:	02e7f7d3          	fadd.d	fa5,fa5,fa4
+ 1b0:	fef71ce3          	bne	a4,a5,1a8 <.L17>
+ 1b4:	000007b7          	lui	a5,0x0
+ 1b8:	0007b707          	fld	fa4,0(a5) # 0 <core_kernel>
+ 1bc:	f20006d3          	fmv.d.x	fa3,zero
+ 1c0:	87ae                	mv	a5,a1
+ 1c2:	1ae7f753          	fdiv.d	fa4,fa5,fa4
 
-00000000000000f8 <r2_score>:
-  f8:	6705                	lui	a4,0x1
-  fa:	f20007d3          	fmv.d.x	fa5,zero
-  fe:	dd070713          	addi	a4,a4,-560 # dd0 <core+0xc72>
- 102:	972e                	add	a4,a4,a1
- 104:	87ae                	mv	a5,a1
+00000000000001c6 <.L18>:
+ 1c6:	239c                	fld	fa5,0(a5)
+ 1c8:	2110                	fld	fa2,0(a0)
+ 1ca:	07a1                	addi	a5,a5,8
+ 1cc:	0521                	addi	a0,a0,8
+ 1ce:	0ac7f7d3          	fsub.d	fa5,fa5,fa2
+ 1d2:	6af7f6c3          	fmadd.d	fa3,fa5,fa5,fa3
+ 1d6:	fef718e3          	bne	a4,a5,1c6 <.L18>
+ 1da:	f2000653          	fmv.d.x	fa2,zero
 
-0000000000000106 <.L21>:
- 106:	2398                	fld	fa4,0(a5)
- 108:	07a1                	addi	a5,a5,8
- 10a:	02e7f7d3          	fadd.d	fa5,fa5,fa4
- 10e:	fef71ce3          	bne	a4,a5,106 <.L21>
- 112:	000007b7          	lui	a5,0x0
- 116:	0007b707          	fld	fa4,0(a5) # 0 <core_kernel>
- 11a:	f20006d3          	fmv.d.x	fa3,zero
- 11e:	87ae                	mv	a5,a1
- 120:	1ae7f753          	fdiv.d	fa4,fa5,fa4
+00000000000001de <.L19>:
+ 1de:	219c                	fld	fa5,0(a1)
+ 1e0:	05a1                	addi	a1,a1,8
+ 1e2:	0ae7f7d3          	fsub.d	fa5,fa5,fa4
+ 1e6:	62f7f643          	fmadd.d	fa2,fa5,fa5,fa2
+ 1ea:	feb71ae3          	bne	a4,a1,1de <.L19>
+ 1ee:	1ac6f6d3          	fdiv.d	fa3,fa3,fa2
+ 1f2:	000007b7          	lui	a5,0x0
+ 1f6:	0007b507          	fld	fa0,0(a5) # 0 <core_kernel>
+ 1fa:	0ad57553          	fsub.d	fa0,fa0,fa3
+ 1fe:	8082                	ret
 
-0000000000000124 <.L22>:
- 124:	239c                	fld	fa5,0(a5)
- 126:	2110                	fld	fa2,0(a0)
- 128:	07a1                	addi	a5,a5,8
- 12a:	0521                	addi	a0,a0,8
- 12c:	0ac7f7d3          	fsub.d	fa5,fa5,fa2
- 130:	6af7f6c3          	fmadd.d	fa3,fa5,fa5,fa3
- 134:	fef718e3          	bne	a4,a5,124 <.L22>
- 138:	f2000653          	fmv.d.x	fa2,zero
+0000000000000200 <core>:
+ 200:	7139                	addi	sp,sp,-64
+ 202:	f822                	sd	s0,48(sp)
+ 204:	f426                	sd	s1,40(sp)
+ 206:	ec4e                	sd	s3,24(sp)
+ 208:	e852                	sd	s4,16(sp)
+ 20a:	84b2                	mv	s1,a2
+ 20c:	fc06                	sd	ra,56(sp)
+ 20e:	f04a                	sd	s2,32(sp)
+ 210:	a422                	fsd	fs0,8(sp)
+ 212:	a026                	fsd	fs1,0(sp)
+ 214:	8a2a                	mv	s4,a0
+ 216:	8636                	mv	a2,a3
+ 218:	843a                	mv	s0,a4
+ 21a:	89be                	mv	s3,a5
+ 21c:	c02027f3          	rdinstret	a5
+ 220:	00000937          	lui	s2,0x0
+ 224:	86ba                	mv	a3,a4
+ 226:	85a6                	mv	a1,s1
+ 228:	00f93023          	sd	a5,0(s2) # 0 <core_kernel>
+ 22c:	00000097          	auipc	ra,0x0
+ 230:	000080e7          	jalr	ra # 22c <core+0x2c>
+ 234:	6685                	lui	a3,0x1
+ 236:	f20001d3          	fmv.d.x	ft3,zero
+ 23a:	dd068693          	addi	a3,a3,-560 # dd0 <.L27+0xacc>
+ 23e:	8552                	mv	a0,s4
+ 240:	87ce                	mv	a5,s3
+ 242:	96d2                	add	a3,a3,s4
+ 244:	864e                	mv	a2,s3
 
-000000000000013c <.L23>:
- 13c:	219c                	fld	fa5,0(a1)
- 13e:	05a1                	addi	a1,a1,8
- 140:	0ae7f7d3          	fsub.d	fa5,fa5,fa4
- 144:	62f7f643          	fmadd.d	fa2,fa5,fa5,fa2
- 148:	feb71ae3          	bne	a4,a1,13c <.L23>
- 14c:	1ac6f6d3          	fdiv.d	fa3,fa3,fa2
- 150:	000007b7          	lui	a5,0x0
- 154:	0007b507          	fld	fa0,0(a5) # 0 <core_kernel>
- 158:	0ad57553          	fsub.d	fa0,fa0,fa3
- 15c:	8082                	ret
+0000000000000246 <.L24>:
+ 246:	6118                	ld	a4,0(a0)
+ 248:	00043087          	fld	ft1,0(s0)
+ 24c:	2414                	fld	fa3,8(s0)
+ 24e:	2318                	fld	fa4,0(a4)
+ 250:	271c                	fld	fa5,8(a4)
+ 252:	01043207          	fld	ft4,16(s0)
+ 256:	1a177743          	fmadd.d	fa4,fa4,ft1,ft3
+ 25a:	01073107          	fld	ft2,16(a4)
+ 25e:	01873087          	fld	ft1,24(a4)
+ 262:	01843e07          	fld	ft8,24(s0)
+ 266:	02073007          	fld	ft0,32(a4)
+ 26a:	02043887          	fld	fa7,32(s0)
+ 26e:	370c                	fld	fa1,40(a4)
+ 270:	72d7f7c3          	fmadd.d	fa5,fa5,fa3,fa4
+ 274:	02843807          	fld	fa6,40(s0)
+ 278:	3b10                	fld	fa2,48(a4)
+ 27a:	03043387          	fld	ft7,48(s0)
+ 27e:	3f14                	fld	fa3,56(a4)
+ 280:	03843307          	fld	ft6,56(s0)
+ 284:	2338                	fld	fa4,64(a4)
+ 286:	7a417143          	fmadd.d	ft2,ft2,ft4,fa5
+ 28a:	04043287          	fld	ft5,64(s0)
+ 28e:	273c                	fld	fa5,72(a4)
+ 290:	04843207          	fld	ft4,72(s0)
+ 294:	0621                	addi	a2,a2,8
+ 296:	0521                	addi	a0,a0,8
+ 298:	13c0f0c3          	fmadd.d	ft1,ft1,ft8,ft2
+ 29c:	0b107043          	fmadd.d	ft0,ft0,fa7,ft1
+ 2a0:	0305f5c3          	fmadd.d	fa1,fa1,fa6,ft0
+ 2a4:	5a767643          	fmadd.d	fa2,fa2,ft7,fa1
+ 2a8:	6266f6c3          	fmadd.d	fa3,fa3,ft6,fa2
+ 2ac:	6a577743          	fmadd.d	fa4,fa4,ft5,fa3
+ 2b0:	7247f7c3          	fmadd.d	fa5,fa5,ft4,fa4
+ 2b4:	02a7f7d3          	fadd.d	fa5,fa5,fa0
+ 2b8:	fef63c27          	fsd	fa5,-8(a2)
+ 2bc:	f8a695e3          	bne	a3,a0,246 <.L24>
+ 2c0:	6705                	lui	a4,0x1
+ 2c2:	f20007d3          	fmv.d.x	fa5,zero
+ 2c6:	dd070713          	addi	a4,a4,-560 # dd0 <.L27+0xacc>
+ 2ca:	86a6                	mv	a3,s1
+ 2cc:	9726                	add	a4,a4,s1
+ 2ce:	8626                	mv	a2,s1
 
-000000000000015e <core>:
- 15e:	7139                	addi	sp,sp,-64
- 160:	f426                	sd	s1,40(sp)
- 162:	f04a                	sd	s2,32(sp)
- 164:	ec4e                	sd	s3,24(sp)
- 166:	e852                	sd	s4,16(sp)
- 168:	fc06                	sd	ra,56(sp)
- 16a:	f822                	sd	s0,48(sp)
- 16c:	a422                	fsd	fs0,8(sp)
- 16e:	8932                	mv	s2,a2
- 170:	8a2a                	mv	s4,a0
- 172:	8636                	mv	a2,a3
- 174:	89ba                	mv	s3,a4
- 176:	84be                	mv	s1,a5
- 178:	c02027f3          	rdinstret	a5
- 17c:	00000437          	lui	s0,0x0
- 180:	86ba                	mv	a3,a4
- 182:	85ca                	mv	a1,s2
- 184:	00f43023          	sd	a5,0(s0) # 0 <core_kernel>
- 188:	00000097          	auipc	ra,0x0
- 18c:	000080e7          	jalr	ra # 188 <core+0x2a>
- 190:	864e                	mv	a2,s3
- 192:	85d2                	mv	a1,s4
- 194:	8526                	mv	a0,s1
- 196:	00000097          	auipc	ra,0x0
- 19a:	000080e7          	jalr	ra # 196 <core+0x38>
- 19e:	85ca                	mv	a1,s2
- 1a0:	8526                	mv	a0,s1
- 1a2:	00000097          	auipc	ra,0x0
- 1a6:	000080e7          	jalr	ra # 1a2 <core+0x44>
- 1aa:	22a50453          	fmv.d	fs0,fa0
- 1ae:	c02027f3          	rdinstret	a5
- 1b2:	00043583          	ld	a1,0(s0)
- 1b6:	00000537          	lui	a0,0x0
- 1ba:	00000737          	lui	a4,0x0
- 1be:	863e                	mv	a2,a5
- 1c0:	00050513          	mv	a0,a0
- 1c4:	00f73023          	sd	a5,0(a4) # 0 <core_kernel>
- 1c8:	00000097          	auipc	ra,0x0
- 1cc:	000080e7          	jalr	ra # 1c8 <core+0x6a>
- 1d0:	70e2                	ld	ra,56(sp)
- 1d2:	7442                	ld	s0,48(sp)
- 1d4:	22840553          	fmv.d	fa0,fs0
- 1d8:	74a2                	ld	s1,40(sp)
- 1da:	7902                	ld	s2,32(sp)
- 1dc:	69e2                	ld	s3,24(sp)
- 1de:	6a42                	ld	s4,16(sp)
- 1e0:	2422                	fld	fs0,8(sp)
- 1e2:	6121                	addi	sp,sp,64
- 1e4:	8082                	ret
+00000000000002d0 <.L25>:
+ 2d0:	2218                	fld	fa4,0(a2)
+ 2d2:	0621                	addi	a2,a2,8
+ 2d4:	02e7f7d3          	fadd.d	fa5,fa5,fa4
+ 2d8:	fec71ce3          	bne	a4,a2,2d0 <.L25>
+ 2dc:	00000637          	lui	a2,0x0
+ 2e0:	00063707          	fld	fa4,0(a2) # 0 <core_kernel>
+ 2e4:	f2000453          	fmv.d.x	fs0,zero
+ 2e8:	1ae7f7d3          	fdiv.d	fa5,fa5,fa4
+
+00000000000002ec <.L26>:
+ 2ec:	2098                	fld	fa4,0(s1)
+ 2ee:	2394                	fld	fa3,0(a5)
+ 2f0:	04a1                	addi	s1,s1,8
+ 2f2:	07a1                	addi	a5,a5,8
+ 2f4:	0ad77753          	fsub.d	fa4,fa4,fa3
+ 2f8:	42e77443          	fmadd.d	fs0,fa4,fa4,fs0
+ 2fc:	fe9718e3          	bne	a4,s1,2ec <.L26>
+ 300:	f20004d3          	fmv.d.x	fs1,zero
+
+0000000000000304 <.L27>:
+ 304:	2298                	fld	fa4,0(a3)
+ 306:	06a1                	addi	a3,a3,8
+ 308:	0af77753          	fsub.d	fa4,fa4,fa5
+ 30c:	4ae774c3          	fmadd.d	fs1,fa4,fa4,fs1
+ 310:	fed71ae3          	bne	a4,a3,304 <.L27>
+ 314:	c02027f3          	rdinstret	a5
+ 318:	00093583          	ld	a1,0(s2)
+ 31c:	00000537          	lui	a0,0x0
+ 320:	863e                	mv	a2,a5
+ 322:	00000737          	lui	a4,0x0
+ 326:	00050513          	mv	a0,a0
+ 32a:	00f73023          	sd	a5,0(a4) # 0 <core_kernel>
+ 32e:	00000097          	auipc	ra,0x0
+ 332:	000080e7          	jalr	ra # 32e <.L27+0x2a>
+ 336:	1a947453          	fdiv.d	fs0,fs0,fs1
+ 33a:	000007b7          	lui	a5,0x0
+ 33e:	0007b507          	fld	fa0,0(a5) # 0 <core_kernel>
+ 342:	70e2                	ld	ra,56(sp)
+ 344:	7442                	ld	s0,48(sp)
+ 346:	74a2                	ld	s1,40(sp)
+ 348:	7902                	ld	s2,32(sp)
+ 34a:	69e2                	ld	s3,24(sp)
+ 34c:	6a42                	ld	s4,16(sp)
+ 34e:	2482                	fld	fs1,0(sp)
+ 350:	0a857553          	fsub.d	fa0,fa0,fs0
+ 354:	2422                	fld	fs0,8(sp)
+ 356:	6121                	addi	sp,sp,64
+ 358:	8082                	ret

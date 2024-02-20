@@ -51,7 +51,7 @@ Disassembly of section .text:
   72:	01c28e3b          	addw	t3,t0,t3
   76:	02f777d3          	fadd.d	fa5,fa4,fa5
   7a:	fef6bc27          	fsd	fa5,-8(a3)
-  7e:	fbd69ae3          	bne	a3,t4,32 <.L3>
+  7e:	fade9ae3          	bne	t4,a3,32 <.L3>
 
 0000000000000082 <.L2>:
   82:	c02027f3          	rdinstret	a5

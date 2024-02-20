@@ -34,10 +34,10 @@ const kernelSizeMap = {
 
 // read type and size from command line
 const typeMap = {
-    'B': 'byte',
+    /*'B': 'byte',
     'H': 'half-word',
     'I': 'integer',
-    'F': 'float',
+    'F': 'float',*/
     'D': 'double'
 };
 

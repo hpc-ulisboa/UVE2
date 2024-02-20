@@ -21,7 +21,7 @@ Disassembly of section .text:
   20:	0711                	addi	a4,a4,4
   22:	0791                	addi	a5,a5,4
   24:	fef72e27          	fsw	fa5,-4(a4)
-  28:	ffc79ae3          	bne	a5,t3,1c <.L3>
+  28:	fefe1ae3          	bne	t3,a5,1c <.L3>
   2c:	87ae                	mv	a5,a1
   2e:	00d60eb3          	add	t4,a2,a3
   32:	832e                	mv	t1,a1
@@ -33,7 +33,7 @@ Disassembly of section .text:
   3c:	0711                	addi	a4,a4,4
   3e:	10a7f7d3          	fmul.s	fa5,fa5,fa0
   42:	fef32e27          	fsw	fa5,-4(t1)
-  46:	feee98e3          	bne	t4,a4,36 <.L4>
+  46:	ffd718e3          	bne	a4,t4,36 <.L4>
   4a:	872e                	mv	a4,a1
 
 000000000000004c <.L5>:

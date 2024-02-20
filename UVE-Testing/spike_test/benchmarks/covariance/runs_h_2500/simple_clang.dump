@@ -7,146 +7,167 @@ Disassembly of section .text:
        0: 01 00        	nop
 
 0000000000000002 <core>:
-       2: 01 11        	addi	sp, sp, -32
-       4: 22 ec        	sd	s0, 24(sp)
-       6: 26 e8        	sd	s1, 16(sp)
-       8: 4a e4        	sd	s2, 8(sp)
-       a: 73 28 20 c0  	rdinstret	a6
-       e: 37 04 00 00  	lui	s0, 0
-      12: 23 30 04 01  	sd	a6, 0(s0)
-      16: 93 98 05 02  	slli	a7, a1, 32
-      1a: 13 18 15 00  	slli	a6, a0, 1
+       2: 79 71        	addi	sp, sp, -48
+       4: 06 f4        	sd	ra, 40(sp)
+       6: 22 f0        	sd	s0, 32(sp)
+       8: 26 ec        	sd	s1, 24(sp)
+       a: 4a e8        	sd	s2, 16(sp)
+       c: 4e e4        	sd	s3, 8(sp)
+       e: 52 e0        	sd	s4, 0(sp)
+      10: 3a 8a        	mv	s4, a4
+      12: 73 27 20 c0  	rdinstret	a4
+      16: 37 09 00 00  	lui	s2, 0
+      1a: 23 30 e9 00  	sd	a4, 0(s2)
       1e: 63 50 a0 00  	blez	a0, 0x1e <core+0x1c>
-      22: 81 42        	li	t0, 0
-      24: 13 d3 08 02  	srli	t1, a7, 32
-      28: b6 83        	mv	t2, a3
-      2a: 01 a0        	j	0x2a <core+0x28>
+      22: 93 19 05 02  	slli	s3, a0, 32
+      26: 63 50 b0 00  	blez	a1, 0x26 <core+0x24>
+      2a: 81 42        	li	t0, 0
+      2c: 13 d8 09 02  	srli	a6, s3, 32
+      30: 93 13 15 00  	slli	t2, a0, 1
+      34: b6 88        	mv	a7, a3
 
-000000000000002c <.LBB0_2>:
-      2c: c2 1e        	slli	t4, t4, 48
-      2e: 13 d4 0e 43  	srai	s0, t4, 48
-      32: 3b 44 c4 02  	divw	s0, s0, a2
-      36: 23 10 8e 00  	sh	s0, 0(t3)
-      3a: 85 02        	addi	t0, t0, 1
-      3c: 89 03        	addi	t2, t2, 2
-      3e: 63 80 a2 00  	beq	t0, a0, 0x3e <.LBB0_2+0x12>
+0000000000000036 <.LBB0_3>:
+      36: 01 4e        	li	t3, 0
+      38: 13 93 12 00  	slli	t1, t0, 1
+      3c: 3e 93        	add	t1, t1, a5
+      3e: 23 10 03 00  	sh	zero, 0(t1)
+      42: 2e 87        	mv	a4, a1
+      44: 46 84        	mv	s0, a7
 
-0000000000000042 <.LBB0_3>:
-      42: 13 9e 12 00  	slli	t3, t0, 1
-      46: 3e 9e        	add	t3, t3, a5
-      48: 23 10 0e 00  	sh	zero, 0(t3)
-      4c: 81 4e        	li	t4, 0
-      4e: 63 50 b0 00  	blez	a1, 0x4e <.LBB0_3+0xc>
-      52: 1a 8f        	mv	t5, t1
-      54: 9e 8f        	mv	t6, t2
+0000000000000046 <.LBB0_4>:
+      46: 83 14 04 00  	lh	s1, 0(s0)
+      4a: 26 9e        	add	t3, t3, s1
+      4c: 23 10 c3 01  	sh	t3, 0(t1)
+      50: 7d 17        	addi	a4, a4, -1
+      52: 1e 94        	add	s0, s0, t2
+      54: 01 e3        	bnez	a4, 0x54 <.LBB0_4+0xe>
+      56: 42 1e        	slli	t3, t3, 48
+      58: 13 57 0e 43  	srai	a4, t3, 48
+      5c: 3b 47 c7 02  	divw	a4, a4, a2
+      60: 23 10 e3 00  	sh	a4, 0(t1)
+      64: 85 02        	addi	t0, t0, 1
+      66: 89 08        	addi	a7, a7, 2
+      68: 63 90 02 01  	bne	t0, a6, 0x68 <.LBB0_4+0x22>
+      6c: 63 50 b0 00  	blez	a1, 0x6c <.LBB0_4+0x26>
+      70: 63 50 a0 00  	blez	a0, 0x70 <.LBB0_4+0x2a>
+      74: 81 42        	li	t0, 0
+      76: 13 97 05 02  	slli	a4, a1, 32
+      7a: 93 58 07 02  	srli	a7, a4, 32
+      7e: 36 83        	mv	t1, a3
 
-0000000000000056 <.LBB0_5>:
-      56: 03 94 0f 00  	lh	s0, 0(t6)
-      5a: a2 9e        	add	t4, t4, s0
-      5c: 23 10 de 01  	sh	t4, 0(t3)
-      60: 7d 1f        	addi	t5, t5, -1
-      62: c2 9f        	add	t6, t6, a6
-      64: 63 10 0f 00  	bnez	t5, 0x64 <.LBB0_5+0xe>
-      68: 01 a0        	j	0x68 <.LBB0_5+0x12>
+0000000000000080 <.LBB0_9>:
+      80: aa 8e        	mv	t4, a0
+      82: 3e 84        	mv	s0, a5
+      84: 9a 84        	mv	s1, t1
 
-000000000000006a <.LBB0_6>:
-      6a: 63 50 b0 00  	blez	a1, 0x6a <.LBB0_6>
-      6e: 81 42        	li	t0, 0
-      70: 13 14 05 02  	slli	s0, a0, 32
-      74: 13 53 04 02  	srli	t1, s0, 32
-      78: b6 83        	mv	t2, a3
-      7a: 01 a0        	j	0x7a <.LBB0_6+0x10>
+0000000000000086 <.LBB0_10>:
+      86: 03 1e 04 00  	lh	t3, 0(s0)
+      8a: 03 97 04 00  	lh	a4, 0(s1)
+      8e: 3b 07 c7 41  	subw	a4, a4, t3
+      92: 23 90 e4 00  	sh	a4, 0(s1)
+      96: 89 04        	addi	s1, s1, 2
+      98: fd 1e        	addi	t4, t4, -1
+      9a: 09 04        	addi	s0, s0, 2
+      9c: 63 90 0e 00  	bnez	t4, 0x9c <.LBB0_10+0x16>
+      a0: 85 02        	addi	t0, t0, 1
+      a2: 1e 93        	add	t1, t1, t2
+      a4: 63 90 12 01  	bne	t0, a7, 0xa4 <.LBB0_10+0x1e>
 
-000000000000007c <.LBB0_8>:
-      7c: 85 02        	addi	t0, t0, 1
-      7e: c2 93        	add	t2, t2, a6
-      80: 63 80 b2 00  	beq	t0, a1, 0x80 <.LBB0_8+0x4>
+00000000000000a8 <.LBB0_12>:
+      a8: 63 50 a0 00  	blez	a0, 0xa8 <.LBB0_12>
+      ac: 63 50 b0 00  	blez	a1, 0xac <.LBB0_12+0x4>
+      b0: 01 43        	li	t1, 0
+      b2: 7d 36        	addiw	a2, a2, -1
+      b4: 42 16        	slli	a2, a2, 48
+      b6: 93 58 06 43  	srai	a7, a2, 48
+      ba: 13 df f9 01  	srli	t5, s3, 31
 
-0000000000000084 <.LBB0_9>:
-      84: 1a 8e        	mv	t3, t1
-      86: be 8e        	mv	t4, a5
-      88: 9e 8f        	mv	t6, t2
-      8a: 63 50 a0 00  	blez	a0, 0x8a <.LBB0_9+0x6>
+00000000000000be <.LBB0_15>:
+      be: b3 02 03 03  	mul	t0, t1, a6
+      c2: b6 83        	mv	t2, a3
+      c4: 1a 8e        	mv	t3, t1
 
-000000000000008e <.LBB0_10>:
-      8e: 03 9f 0e 00  	lh	t5, 0(t4)
-      92: 03 94 0f 00  	lh	s0, 0(t6)
-      96: 3b 04 e4 41  	subw	s0, s0, t5
-      9a: 23 90 8f 00  	sh	s0, 0(t6)
-      9e: 89 0f        	addi	t6, t6, 2
-      a0: 7d 1e        	addi	t3, t3, -1
-      a2: 89 0e        	addi	t4, t4, 2
-      a4: 63 10 0e 00  	bnez	t3, 0xa4 <.LBB0_10+0x16>
-      a8: 01 a0        	j	0xa8 <.LBB0_10+0x1a>
+00000000000000c6 <.LBB0_16>:
+      c6: 81 44        	li	s1, 0
+      c8: 33 06 5e 00  	add	a2, t3, t0
+      cc: 06 06        	slli	a2, a2, 1
+      ce: b3 0e ca 00  	add	t4, s4, a2
+      d2: 23 90 0e 00  	sh	zero, 0(t4)
+      d6: 2e 87        	mv	a4, a1
+      d8: b6 87        	mv	a5, a3
+      da: 1e 84        	mv	s0, t2
 
-00000000000000aa <.LBB0_11>:
-      aa: 63 50 a0 00  	blez	a0, 0xaa <.LBB0_11>
-      ae: 81 43        	li	t2, 0
-      b0: 7d 36        	addiw	a2, a2, -1
-      b2: 42 16        	slli	a2, a2, 48
-      b4: 93 52 06 43  	srai	t0, a2, 48
-      b8: 93 d8 08 02  	srli	a7, a7, 32
-      bc: 01 a0        	j	0xbc <.LBB0_11+0x12>
+00000000000000dc <.LBB0_17>:
+      dc: 03 96 07 00  	lh	a2, 0(a5)
+      e0: 03 15 04 00  	lh	a0, 0(s0)
+      e4: 33 05 c5 02  	mul	a0, a0, a2
+      e8: aa 94        	add	s1, s1, a0
+      ea: 23 90 9e 00  	sh	s1, 0(t4)
+      ee: 7a 94        	add	s0, s0, t5
+      f0: 7d 17        	addi	a4, a4, -1
+      f2: fa 97        	add	a5, a5, t5
+      f4: 01 e3        	bnez	a4, 0xf4 <.LBB0_17+0x18>
+      f6: c2 14        	slli	s1, s1, 48
+      f8: c1 94        	srai	s1, s1, 48
+      fa: 3b c5 14 03  	divw	a0, s1, a7
+      fe: 23 90 ae 00  	sh	a0, 0(t4)
+     102: 33 06 0e 03  	mul	a2, t3, a6
+     106: 1a 96        	add	a2, a2, t1
+     108: 06 06        	slli	a2, a2, 1
+     10a: 52 96        	add	a2, a2, s4
+     10c: 23 10 a6 00  	sh	a0, 0(a2)
+     110: 05 0e        	addi	t3, t3, 1
+     112: 89 03        	addi	t2, t2, 2
+     114: 63 10 0e 01  	bne	t3, a6, 0x114 <.LBB0_17+0x38>
+     118: 05 03        	addi	t1, t1, 1
+     11a: 89 06        	addi	a3, a3, 2
+     11c: 63 10 03 01  	bne	t1, a6, 0x11c <.LBB0_17+0x40>
+     120: 01 a0        	j	0x120 <.LBB0_17+0x44>
 
-00000000000000be <.LBB0_13>:
-      be: 85 03        	addi	t2, t2, 1
-      c0: 89 06        	addi	a3, a3, 2
-      c2: 63 80 a3 00  	beq	t2, a0, 0xc2 <.LBB0_13+0x4>
+0000000000000122 <.LBB0_20>:
+     122: 13 16 15 00  	slli	a2, a0, 1
+     126: 3e 85        	mv	a0, a5
+     128: 81 45        	li	a1, 0
+     12a: 97 00 00 00  	auipc	ra, 0
+     12e: e7 80 00 00  	jalr	ra
 
-00000000000000c6 <.LBB0_14>:
-      c6: 33 83 a3 02  	mul	t1, t2, a0
-      ca: 36 8e        	mv	t3, a3
-      cc: 9e 8e        	mv	t4, t2
-      ce: 01 a0        	j	0xce <.LBB0_14+0x8>
+0000000000000132 <.LBB0_21>:
+     132: 01 45        	li	a0, 0
+     134: 93 d5 09 02  	srli	a1, s3, 32
+     138: 93 d6 f9 01  	srli	a3, s3, 31
+     13c: 13 84 26 00  	addi	s0, a3, 2
+     140: 2e 87        	mv	a4, a1
 
-00000000000000d0 <.LBB0_15>:
-      d0: c2 1f        	slli	t6, t6, 48
-      d2: 13 d6 0f 43  	srai	a2, t6, 48
-      d6: 3b 46 56 02  	divw	a2, a2, t0
-      da: 23 10 cf 00  	sh	a2, 0(t5)
-      de: b3 87 ae 02  	mul	a5, t4, a0
-      e2: 9e 97        	add	a5, a5, t2
-      e4: 86 07        	slli	a5, a5, 1
-      e6: ba 97        	add	a5, a5, a4
-      e8: 23 90 c7 00  	sh	a2, 0(a5)
-      ec: 85 0e        	addi	t4, t4, 1
-      ee: 09 0e        	addi	t3, t3, 2
-      f0: 63 80 ae 00  	beq	t4, a0, 0xf0 <.LBB0_15+0x20>
+0000000000000142 <.LBB0_22>:
+     142: ba 87        	mv	a5, a4
+     144: d2 84        	mv	s1, s4
+     146: 52 86        	mv	a2, s4
 
-00000000000000f4 <.LBB0_16>:
-      f4: 33 86 6e 00  	add	a2, t4, t1
-      f8: 06 06        	slli	a2, a2, 1
-      fa: 33 0f c7 00  	add	t5, a4, a2
-      fe: 23 10 0f 00  	sh	zero, 0(t5)
-     102: 81 4f        	li	t6, 0
-     104: 63 50 b0 00  	blez	a1, 0x104 <.LBB0_16+0x10>
-     108: 46 86        	mv	a2, a7
-     10a: b6 87        	mv	a5, a3
-     10c: 72 84        	mv	s0, t3
+0000000000000148 <.LBB0_23>:
+     148: 23 90 04 00  	sh	zero, 0(s1)
+     14c: 23 10 06 00  	sh	zero, 0(a2)
+     150: 36 96        	add	a2, a2, a3
+     152: fd 17        	addi	a5, a5, -1
+     154: 89 04        	addi	s1, s1, 2
+     156: 81 e3        	bnez	a5, 0x156 <.LBB0_23+0xe>
+     158: 05 05        	addi	a0, a0, 1
+     15a: 22 9a        	add	s4, s4, s0
+     15c: 7d 17        	addi	a4, a4, -1
+     15e: 63 10 b5 00  	bne	a0, a1, 0x15e <.LBB0_23+0x16>
 
-000000000000010e <.LBB0_18>:
-     10e: 03 99 07 00  	lh	s2, 0(a5)
-     112: 83 14 04 00  	lh	s1, 0(s0)
-     116: b3 84 24 03  	mul	s1, s1, s2
-     11a: a6 9f        	add	t6, t6, s1
-     11c: 23 10 ff 01  	sh	t6, 0(t5)
-     120: 42 94        	add	s0, s0, a6
-     122: 7d 16        	addi	a2, a2, -1
-     124: c2 97        	add	a5, a5, a6
-     126: 01 e2        	bnez	a2, 0x126 <.LBB0_18+0x18>
-     128: 01 a0        	j	0x128 <.LBB0_18+0x1a>
-
-000000000000012a <.LBB0_19>:
-     12a: 73 26 20 c0  	rdinstret	a2
-     12e: 37 05 00 00  	lui	a0, 0
-     132: 83 35 05 00  	ld	a1, 0(a0)
-     136: b7 06 00 00  	lui	a3, 0
-     13a: 37 05 00 00  	lui	a0, 0
-     13e: 13 05 05 00  	mv	a0, a0
-     142: 23 b0 c6 00  	sd	a2, 0(a3)
-     146: 62 64        	ld	s0, 24(sp)
-     148: c2 64        	ld	s1, 16(sp)
-     14a: 22 69        	ld	s2, 8(sp)
-     14c: 05 61        	addi	sp, sp, 32
-     14e: 17 03 00 00  	auipc	t1, 0
-     152: 67 00 03 00  	jr	t1
+0000000000000162 <.LBB0_25>:
+     162: 73 26 20 c0  	rdinstret	a2
+     166: 83 35 09 00  	ld	a1, 0(s2)
+     16a: b7 06 00 00  	lui	a3, 0
+     16e: 37 05 00 00  	lui	a0, 0
+     172: 13 05 05 00  	mv	a0, a0
+     176: 23 b0 c6 00  	sd	a2, 0(a3)
+     17a: a2 70        	ld	ra, 40(sp)
+     17c: 02 74        	ld	s0, 32(sp)
+     17e: e2 64        	ld	s1, 24(sp)
+     180: 42 69        	ld	s2, 16(sp)
+     182: a2 69        	ld	s3, 8(sp)
+     184: 02 6a        	ld	s4, 0(sp)
+     186: 45 61        	addi	sp, sp, 48
+     188: 17 03 00 00  	auipc	t1, 0
+     18c: 67 00 03 00  	jr	t1

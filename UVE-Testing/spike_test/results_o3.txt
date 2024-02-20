@@ -177,9 +177,9 @@ benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that in
                 ^
 benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 67402 less instructions
+UVE executed 81226 less instructions
 RVV executed 105787 less instructions
-UVE executed 104170 less instructions than RVV
+UVE executed 117994 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -187,11 +187,11 @@ UVE executed 104170 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 95063    | 27661  | -67402     | -70.90         |
+| 95063    | 13837  | -81226     | -85.44         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 131831   | 27661  | -104170    | -79.02         |
+| 131831   | 13837  | -117994    | -89.50         |
 |----------|--------|------------|----------------|
 
 
@@ -205,9 +205,9 @@ benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that in
                 ^
 benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 67401 less instructions
+UVE executed 81225 less instructions
 RVV executed 71326 less instructions
-UVE executed 140936 less instructions than RVV
+UVE executed 154760 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -215,11 +215,11 @@ UVE executed 140936 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 95062    | 27661  | -67401     | -70.90         |
+| 95062    | 13837  | -81225     | -85.44         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 168597   | 27661  | -140936    | -83.59         |
+| 168597   | 13837  | -154760    | -91.79         |
 |----------|--------|------------|----------------|
 
 
@@ -233,9 +233,9 @@ benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that in
                 ^
 benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 67254 less instructions
+UVE executed 81078 less instructions
 RVV executed 2215 more instructions
-UVE executed 214477 less instructions than RVV
+UVE executed 228301 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -243,11 +243,11 @@ UVE executed 214477 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 94915    | 27661  | -67254     | -70.86         |
+| 94915    | 13837  | -81078     | -85.42         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 242138   | 27661  | -214477    | -88.58         |
+| 242138   | 13837  | -228301    | -94.29         |
 |----------|--------|------------|----------------|
 
 
@@ -261,9 +261,9 @@ benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that in
                 ^
 benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 48823 less instructions
+UVE executed 62647 less instructions
 RVV executed 16040 more instructions
-UVE executed 207567 less instructions than RVV
+UVE executed 221391 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -271,11 +271,11 @@ UVE executed 207567 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 76484    | 27661  | -48823     | -63.83         |
+| 76484    | 13837  | -62647     | -81.91         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 235228   | 27661  | -207567    | -88.24         |
+| 235228   | 13837  | -221391    | -94.12         |
 |----------|--------|------------|----------------|
 
 
@@ -289,9 +289,9 @@ benchmarks/convolution/kernel.c:251:17: remark: the cost-model indicates that in
                 ^
 benchmarks/convolution/kernel.c:251:17: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
 
-UVE executed 48823 less instructions
+UVE executed 55735 less instructions
 RVV executed 4696 less instructions
-UVE executed 186831 less instructions than RVV
+UVE executed 193743 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | RVV    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
@@ -299,11 +299,11 @@ UVE executed 186831 less instructions than RVV
 |----------|--------|------------|----------------|
 | Original | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 76484    | 27661  | -48823     | -63.83         |
+| 76484    | 20749  | -55735     | -72.87         |
 |----------|--------|------------|----------------|
 | RVV      | UVE    | Difference | Difference (%) |
 |----------|--------|------------|----------------|
-| 214492   | 27661  | -186831    | -87.10         |
+| 214492   | 20749  | -193743    | -90.33         |
 |----------|--------|------------|----------------|
 
 

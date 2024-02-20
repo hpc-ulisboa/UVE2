@@ -7,269 +7,86 @@ Disassembly of section .text:
        0: 01 00        	nop
 
 0000000000000002 <core>:
-       2: 11 71        	addi	sp, sp, -256
-       4: 86 fd        	sd	ra, 248(sp)
-       6: a2 f9        	sd	s0, 240(sp)
-       8: a6 f5        	sd	s1, 232(sp)
-       a: ca f1        	sd	s2, 224(sp)
-       c: ce ed        	sd	s3, 216(sp)
-       e: d2 e9        	sd	s4, 208(sp)
-      10: d6 e5        	sd	s5, 200(sp)
-      12: da e1        	sd	s6, 192(sp)
-      14: 5e fd        	sd	s7, 184(sp)
-      16: 62 f9        	sd	s8, 176(sp)
-      18: 66 f5        	sd	s9, 168(sp)
-      1a: 6a f1        	sd	s10, 160(sp)
-      1c: 6e ed        	sd	s11, 152(sp)
-      1e: ae 8f        	mv	t6, a1
-      20: f3 25 20 c0  	rdinstret	a1
-      24: 93 27 37 00  	slti	a5, a4, 3
-      28: 93 a4 36 00  	slti	s1, a3, 3
-      2c: c5 8f        	or	a5, a5, s1
-      2e: b7 04 00 00  	lui	s1, 0
-      32: 23 b0 b4 00  	sd	a1, 0(s1)
-      36: 63 90 07 00  	bnez	a5, 0x36 <core+0x34>
-      3a: 9b 05 f7 ff  	addiw	a1, a4, -1
-      3e: 9b 87 f6 ff  	addiw	a5, a3, -1
-      42: 93 96 05 02  	slli	a3, a1, 32
-      46: 82 17        	slli	a5, a5, 32
-      48: 13 dc 07 02  	srli	s8, a5, 32
-      4c: 13 09 17 00  	addi	s2, a4, 1
-      50: b3 09 87 01  	add	s3, a4, s8
-      54: 13 0a 1c 00  	addi	s4, s8, 1
-      58: f3 20 20 c2  	csrr	ra, vlenb
-      5c: c1 45        	li	a1, 16
-      5e: 93 17 17 00  	slli	a5, a4, 1
-      62: be f0        	sd	a5, 96(sp)
-      64: 63 e0 15 00  	bltu	a1, ra, 0x64 <core+0x62>
-      68: c1 40        	li	ra, 16
+       2: 41 11        	addi	sp, sp, -16
+       4: f3 27 20 c2  	csrr	a5, vlenb
+       8: 8e 07        	slli	a5, a5, 3
+       a: 33 01 f1 40  	sub	sp, sp, a5
+       e: f3 28 20 c0  	rdinstret	a7
+      12: 13 28 37 00  	slti	a6, a4, 3
+      16: 93 a7 36 00  	slti	a5, a3, 3
+      1a: b3 67 f8 00  	or	a5, a6, a5
+      1e: 37 08 00 00  	lui	a6, 0
+      22: 23 30 18 01  	sd	a7, 0(a6)
+      26: 81 e3        	bnez	a5, 0x26 <core+0x24>
+      28: 9b 07 f7 ff  	addiw	a5, a4, -1
+      2c: fd 36        	addiw	a3, a3, -1
+      2e: 82 17        	slli	a5, a5, 32
+      30: 93 d8 07 02  	srli	a7, a5, 32
+      34: 82 16        	slli	a3, a3, 32
+      36: 13 d3 06 02  	srli	t1, a3, 32
+      3a: d7 76 b0 0d  	vsetvli	a3, zero, e64, m8, ta, ma
+      3e: 57 a4 08 52  	vid.v	v8
+      42: 57 b8 8f 02  	vadd.vi	v16, v8, -1
+      46: 14 08        	addi	a3, sp, 16
+      48: 27 88 86 e2  	vs8r.v	v16, (a3)
+      4c: 57 30 81 72  	vmsleu.vi	v0, v8, 2
+      50: 0d 4f        	li	t5, 3
+      52: 57 68 8f 96  	vmul.vx	v16, v8, t5
+      56: 85 42        	li	t0, 1
+      58: 57 70 00 0c  	vsetvli	zero, zero, e8, m1, ta, ma
+      5c: 57 3c 00 5e  	vmv.v.i	v24, 0
 
-000000000000006a <.LBB0_3>:
-      6a: 01 4f        	li	t5, 0
-      6c: 81 92        	srli	a3, a3, 32
-      6e: b6 f4        	sd	a3, 104(sp)
-      70: 93 05 96 00  	addi	a1, a2, 9
-      74: ae ec        	sd	a1, 88(sp)
-      76: 93 85 19 00  	addi	a1, s3, 1
-      7a: ae e8        	sd	a1, 80(sp)
-      7c: 86 7c        	ld	s9, 96(sp)
-      7e: b3 05 9a 01  	add	a1, s4, s9
-      82: ae e4        	sd	a1, 72(sp)
-      84: 93 05 fc ff  	addi	a1, s8, -1
-      88: ae fc        	sd	a1, 120(sp)
-      8a: b3 05 e5 00  	add	a1, a0, a4
-      8e: 2e e9        	sd	a1, 144(sp)
-      90: b3 05 95 01  	add	a1, a0, s9
-      94: 2e e5        	sd	a1, 136(sp)
-      96: b3 8b 2f 01  	add	s7, t6, s2
-      9a: b3 8d ef 00  	add	s11, t6, a4
-      9e: 93 0a 15 00  	addi	s5, a0, 1
-      a2: d6 9c        	add	s9, s9, s5
-      a4: 33 0b 25 01  	add	s6, a0, s2
-      a8: 85 46        	li	a3, 1
-      aa: 2a 8d        	mv	s10, a0
-      ac: 2a fc        	sd	a0, 56(sp)
-      ae: 4a f8        	sd	s2, 48(sp)
-      b0: 4e f4        	sd	s3, 40(sp)
-      b2: 52 f0        	sd	s4, 32(sp)
-      b4: 06 ec        	sd	ra, 24(sp)
-      b6: 7e e8        	sd	t6, 16(sp)
-      b8: 3a e4        	sd	a4, 8(sp)
-      ba: 01 a0        	j	0xba <.LBB0_3+0x50>
+0000000000000060 <.LBB0_2>:
+      60: b3 83 e2 02  	mul	t2, t0, a4
+      64: 57 70 b0 0d  	vsetvli	zero, zero, e64, m8, ta, ma
+      68: 14 08        	addi	a3, sp, 16
+      6a: 07 84 86 e2  	vl8r.v	v8, (a3)
+      6e: 57 c4 82 0e  	vrsub.vx	v8, v8, t0
+      72: 57 64 87 96  	vmul.vx	v8, v8, a4
+      76: 09 4e        	li	t3, 2
+      78: 85 4e        	li	t4, 1
 
-00000000000000bc <.LBB0_4>:
-      bc: 8a 66        	ld	a3, 128(sp)
-      be: 85 06        	addi	a3, a3, 1
-      c0: 05 0f        	addi	t5, t5, 1
-      c2: 3a 9d        	add	s10, s10, a4
-      c4: ca 65        	ld	a1, 144(sp)
-      c6: ba 95        	add	a1, a1, a4
-      c8: 2e e9        	sd	a1, 144(sp)
-      ca: aa 65        	ld	a1, 136(sp)
-      cc: ba 95        	add	a1, a1, a4
-      ce: 2e e5        	sd	a1, 136(sp)
-      d0: ba 9b        	add	s7, s7, a4
-      d2: ba 9d        	add	s11, s11, a4
-      d4: ba 9c        	add	s9, s9, a4
-      d6: ba 9a        	add	s5, s5, a4
-      d8: 3a 9b        	add	s6, s6, a4
-      da: a6 75        	ld	a1, 104(sp)
-      dc: 63 80 b6 00  	beq	a3, a1, 0xdc <.LBB0_4+0x20>
+000000000000007a <.LBB0_3>:
+      7a: 81 47        	li	a5, 0
+      7c: 81 4f        	li	t6, 0
+      7e: f2 86        	mv	a3, t3
 
-00000000000000e0 <.LBB0_5>:
-      e0: 36 e1        	sd	a3, 128(sp)
-      e2: 05 44        	li	s0, 1
-      e4: e6 75        	ld	a1, 120(sp)
-      e6: 63 e0 15 00  	bltu	a1, ra, 0xe6 <.LBB0_5+0x6>
-      ea: 33 08 ef 02  	mul	a6, t5, a4
-      ee: a6 65        	ld	a1, 72(sp)
-      f0: c2 95        	add	a1, a1, a6
-      f2: b3 08 b5 00  	add	a7, a0, a1
-      f6: 06 74        	ld	s0, 96(sp)
-      f8: 42 94        	add	s0, s0, a6
-      fa: b3 02 85 00  	add	t0, a0, s0
-      fe: c6 65        	ld	a1, 80(sp)
-     100: c2 95        	add	a1, a1, a6
-     102: 33 03 b5 00  	add	t1, a0, a1
-     106: 33 04 e5 00  	add	s0, a0, a4
-     10a: b3 03 04 01  	add	t2, s0, a6
-     10e: b3 05 0a 01  	add	a1, s4, a6
-     112: 33 0e b5 00  	add	t3, a0, a1
-     116: b3 0e 05 01  	add	t4, a0, a6
-     11a: b3 85 09 01  	add	a1, s3, a6
-     11e: fe 95        	add	a1, a1, t6
-     120: 4a 98        	add	a6, a6, s2
-     122: 7e 98        	add	a6, a6, t6
-     124: fa f8        	sd	t5, 112(sp)
-     126: e6 66        	ld	a3, 88(sp)
-     128: 33 3f d8 00  	sltu	t5, a6, a3
-     12c: 33 34 b6 00  	sltu	s0, a2, a1
-     130: 33 7f 8f 00  	and	t5, t5, s0
-     134: 33 3e c8 01  	sltu	t3, a6, t3
-     138: 33 b4 be 00  	sltu	s0, t4, a1
-     13c: 33 74 8e 00  	and	s0, t3, s0
-     140: 33 6e 8f 00  	or	t3, t5, s0
-     144: 46 7f        	ld	t5, 112(sp)
-     146: 33 33 68 00  	sltu	t1, a6, t1
-     14a: 33 b4 b3 00  	sltu	s0, t2, a1
-     14e: 33 73 83 00  	and	t1, t1, s0
-     152: 33 34 18 01  	sltu	s0, a6, a7
-     156: b3 b5 b2 00  	sltu	a1, t0, a1
-     15a: e1 8d        	and	a1, a1, s0
-     15c: b3 65 b3 00  	or	a1, t1, a1
-     160: b3 65 be 00  	or	a1, t3, a1
-     164: 05 44        	li	s0, 1
-     166: 81 e1        	bnez	a1, 0x166 <.LBB0_5+0x86>
-     168: 01 48        	li	a6, 0
-     16a: f3 28 20 c2  	csrr	a7, vlenb
-     16e: 93 85 f8 ff  	addi	a1, a7, -1
-     172: 66 75        	ld	a0, 120(sp)
-     174: e9 8d        	and	a1, a1, a0
-     176: 83 42 06 00  	lbu	t0, 0(a2)
-     17a: 03 43 36 00  	lbu	t1, 3(a2)
-     17e: 03 4f 66 00  	lbu	t5, 6(a2)
-     182: 83 4f 16 00  	lbu	t6, 1(a2)
-     186: 03 49 46 00  	lbu	s2, 4(a2)
-     18a: 83 43 76 00  	lbu	t2, 7(a2)
-     18e: 03 4e 26 00  	lbu	t3, 2(a2)
-     192: 03 4a 56 00  	lbu	s4, 5(a2)
-     196: 83 4e 86 00  	lbu	t4, 8(a2)
-     19a: ae e0        	sd	a1, 64(sp)
-     19c: b3 09 b5 40  	sub	s3, a0, a1
-     1a0: 13 84 19 00  	addi	s0, s3, 1
-     1a4: d7 70 00 0c  	vsetvli	ra, zero, e8, m1, ta, ma
-     1a8: ca 66        	ld	a3, 144(sp)
-     1aa: aa 64        	ld	s1, 136(sp)
+0000000000000080 <.LBB0_4>:
+      80: 57 70 00 08  	vsetvli	zero, zero, e8, m1, tu, ma
+      84: d7 3c 80 9f  	vmv1r.v	v25, v24
+      88: d7 ec 0f 42  	vmv.s.x	v25, t6
+      8c: b3 0f f6 00  	add	t6, a2, a5
+      90: 57 70 00 0c  	vsetvli	zero, zero, e8, m1, ta, ma
+      94: 07 fd 0f 05  	vluxei64.v	v26, (t6), v16, v0.t
+      98: b3 0f d5 00  	add	t6, a0, a3
+      9c: 87 fd 8f 04  	vluxei64.v	v27, (t6), v8, v0.t
+      a0: d7 2d 9d a7  	vmadd.vv	v27, v26, v25
+      a4: d7 8c 9d 5d  	vmerge.vvm	v25, v25, v27, v0
+      a8: 57 6d 00 42  	vmv.s.x	v26, zero
+      ac: d7 2c 9d 03  	vredsum.vs	v25, v25, v26
+      b0: d7 2f 90 43  	vmv.x.s	t6, v25
+      b4: 85 07        	addi	a5, a5, 1
+      b6: fd 16        	addi	a3, a3, -1
+      b8: 63 90 e7 01  	bne	a5, t5, 0xb8 <.LBB0_4+0x38>
+      bc: b3 86 7e 00  	add	a3, t4, t2
+      c0: ae 96        	add	a3, a3, a1
+      c2: 23 80 f6 01  	sb	t6, 0(a3)
+      c6: 85 0e        	addi	t4, t4, 1
+      c8: 05 0e        	addi	t3, t3, 1
+      ca: 63 90 6e 00  	bne	t4, t1, 0xca <.LBB0_4+0x4a>
+      ce: 85 02        	addi	t0, t0, 1
+      d0: 63 90 12 01  	bne	t0, a7, 0xd0 <.LBB0_4+0x50>
 
-00000000000001ac <.LBB0_8>:
-     1ac: 33 85 06 01  	add	a0, a3, a6
-     1b0: 93 05 25 00  	addi	a1, a0, 2
-     1b4: 07 84 85 02  	vl1r.v	v8, (a1)
-     1b8: b3 87 04 01  	add	a5, s1, a6
-     1bc: 93 85 27 00  	addi	a1, a5, 2
-     1c0: 87 84 85 02  	vl1r.v	v9, (a1)
-     1c4: 57 64 83 96  	vmul.vx	v8, v8, t1
-     1c8: 33 07 0d 01  	add	a4, s10, a6
-     1cc: 93 05 27 00  	addi	a1, a4, 2
-     1d0: 07 85 85 02  	vl1r.v	v10, (a1)
-     1d4: 93 85 17 00  	addi	a1, a5, 1
-     1d8: 87 85 85 02  	vl1r.v	v11, (a1)
-     1dc: 93 05 15 00  	addi	a1, a0, 1
-     1e0: 07 86 85 02  	vl1r.v	v12, (a1)
-     1e4: 57 e4 92 b6  	vmacc.vx	v8, t0, v9
-     1e8: 57 65 8f a6  	vmadd.vx	v10, t5, v8
-     1ec: d7 e5 af a6  	vmadd.vx	v11, t6, v10
-     1f0: 57 66 b9 a6  	vmadd.vx	v12, s2, v11
-     1f4: 93 05 17 00  	addi	a1, a4, 1
-     1f8: 07 84 85 02  	vl1r.v	v8, (a1)
-     1fc: 87 84 87 02  	vl1r.v	v9, (a5)
-     200: 07 05 85 02  	vl1r.v	v10, (a0)
-     204: 87 05 87 02  	vl1r.v	v11, (a4)
-     208: 57 e4 c3 a6  	vmadd.vx	v8, t2, v12
-     20c: d7 64 8e a6  	vmadd.vx	v9, t3, v8
-     210: 57 65 9a a6  	vmadd.vx	v10, s4, v9
-     214: d7 e5 ae a6  	vmadd.vx	v11, t4, v10
-     218: 33 85 0b 01  	add	a0, s7, a6
-     21c: 46 98        	add	a6, a6, a7
-     21e: a7 05 85 02  	vs1r.v	v11, (a0)
-     222: 63 90 09 01  	bne	s3, a6, 0x222 <.LBB0_8+0x76>
-     226: 22 67        	ld	a4, 8(sp)
-     228: c2 6f        	ld	t6, 16(sp)
-     22a: 62 75        	ld	a0, 56(sp)
-     22c: 42 79        	ld	s2, 48(sp)
-     22e: a2 79        	ld	s3, 40(sp)
-     230: 02 7a        	ld	s4, 32(sp)
-     232: e2 60        	ld	ra, 24(sp)
-     234: 46 7f        	ld	t5, 112(sp)
-     236: 86 65        	ld	a1, 64(sp)
-     238: 63 80 05 00  	beqz	a1, 0x238 <.LBB0_8+0x8c>
-
-000000000000023c <.LBB0_10>:
-     23c: 83 07 06 00  	lb	a5, 0(a2)
-     240: b3 85 8c 00  	add	a1, s9, s0
-     244: 83 86 05 00  	lb	a3, 0(a1)
-     248: 3b 88 f6 02  	mulw	a6, a3, a5
-     24c: 83 08 36 00  	lb	a7, 3(a2)
-     250: b3 0e 8b 00  	add	t4, s6, s0
-     254: 83 82 0e 00  	lb	t0, 0(t4)
-     258: 03 03 66 00  	lb	t1, 6(a2)
-     25c: b3 87 8a 00  	add	a5, s5, s0
-     260: 83 83 07 00  	lb	t2, 0(a5)
-     264: 03 0e 16 00  	lb	t3, 1(a2)
-     268: 83 86 f5 ff  	lb	a3, -1(a1)
-     26c: bb 84 12 03  	mulw	s1, t0, a7
-     270: 26 98        	add	a6, a6, s1
-     272: bb 84 63 02  	mulw	s1, t2, t1
-     276: bb 86 c6 03  	mulw	a3, a3, t3
-     27a: a6 96        	add	a3, a3, s1
-     27c: 36 98        	add	a6, a6, a3
-     27e: 83 08 46 00  	lb	a7, 4(a2)
-     282: 83 82 fe ff  	lb	t0, -1(t4)
-     286: 03 03 76 00  	lb	t1, 7(a2)
-     28a: 83 83 f7 ff  	lb	t2, -1(a5)
-     28e: 03 0e 26 00  	lb	t3, 2(a2)
-     292: 83 85 e5 ff  	lb	a1, -2(a1)
-     296: bb 84 12 03  	mulw	s1, t0, a7
-     29a: bb 86 63 02  	mulw	a3, t2, t1
-     29e: b3 88 96 00  	add	a7, a3, s1
-     2a2: bb 85 c5 03  	mulw	a1, a1, t3
-     2a6: 83 02 56 00  	lb	t0, 5(a2)
-     2aa: 83 86 ee ff  	lb	a3, -2(t4)
-     2ae: 83 04 86 00  	lb	s1, 8(a2)
-     2b2: 83 87 e7 ff  	lb	a5, -2(a5)
-     2b6: c6 95        	add	a1, a1, a7
-     2b8: c2 95        	add	a1, a1, a6
-     2ba: bb 86 56 02  	mulw	a3, a3, t0
-     2be: bb 87 97 02  	mulw	a5, a5, s1
-     2c2: be 96        	add	a3, a3, a5
-     2c4: ae 96        	add	a3, a3, a1
-     2c6: b3 85 8d 00  	add	a1, s11, s0
-     2ca: 05 04        	addi	s0, s0, 1
-     2cc: 23 80 d5 00  	sb	a3, 0(a1)
-     2d0: 63 10 8c 00  	bne	s8, s0, 0x2d0 <.LBB0_10+0x94>
-     2d4: 01 a0        	j	0x2d4 <.LBB0_10+0x98>
-
-00000000000002d6 <.LBB0_11>:
-     2d6: 73 26 20 c0  	rdinstret	a2
-     2da: 37 05 00 00  	lui	a0, 0
-     2de: 83 35 05 00  	ld	a1, 0(a0)
-     2e2: b7 06 00 00  	lui	a3, 0
-     2e6: 37 05 00 00  	lui	a0, 0
-     2ea: 13 05 05 00  	mv	a0, a0
-     2ee: 23 b0 c6 00  	sd	a2, 0(a3)
-     2f2: ee 70        	ld	ra, 248(sp)
-     2f4: 4e 74        	ld	s0, 240(sp)
-     2f6: ae 74        	ld	s1, 232(sp)
-     2f8: 0e 79        	ld	s2, 224(sp)
-     2fa: ee 69        	ld	s3, 216(sp)
-     2fc: 4e 6a        	ld	s4, 208(sp)
-     2fe: ae 6a        	ld	s5, 200(sp)
-     300: 0e 6b        	ld	s6, 192(sp)
-     302: ea 7b        	ld	s7, 184(sp)
-     304: 4a 7c        	ld	s8, 176(sp)
-     306: aa 7c        	ld	s9, 168(sp)
-     308: 0a 7d        	ld	s10, 160(sp)
-     30a: ea 6d        	ld	s11, 152(sp)
-     30c: 11 61        	addi	sp, sp, 256
-     30e: 17 03 00 00  	auipc	t1, 0
-     312: 67 00 03 00  	jr	t1
+00000000000000d4 <.LBB0_7>:
+      d4: 73 26 20 c0  	rdinstret	a2
+      d8: 83 35 08 00  	ld	a1, 0(a6)
+      dc: b7 06 00 00  	lui	a3, 0
+      e0: 37 05 00 00  	lui	a0, 0
+      e4: 13 05 05 00  	mv	a0, a0
+      e8: 23 b0 c6 00  	sd	a2, 0(a3)
+      ec: f3 26 20 c2  	csrr	a3, vlenb
+      f0: 8e 06        	slli	a3, a3, 3
+      f2: 36 91        	add	sp, sp, a3
+      f4: 41 01        	addi	sp, sp, 16
+      f6: 17 03 00 00  	auipc	t1, 0
+      fa: 67 00 03 00  	jr	t1
