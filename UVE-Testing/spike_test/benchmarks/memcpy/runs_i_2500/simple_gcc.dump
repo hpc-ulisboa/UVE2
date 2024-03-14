@@ -5,51 +5,25 @@ kernel.o:     file format elf64-littleriscv
 Disassembly of section .text:
 
 0000000000000000 <core>:
-   0:	c0202673          	rdinstret	a2
-   4:	00858793          	addi	a5,a1,8
-   8:	00850713          	addi	a4,a0,8
-   c:	00f537b3          	sltu	a5,a0,a5
-  10:	00e5b733          	sltu	a4,a1,a4
-  14:	00174713          	xori	a4,a4,1
-  18:	0017c793          	xori	a5,a5,1
-  1c:	000006b7          	lui	a3,0x0
-  20:	8fd9                	or	a5,a5,a4
-  22:	6709                	lui	a4,0x2
-  24:	71070713          	addi	a4,a4,1808 # 2710 <.L5+0x26a8>
-  28:	00c6b023          	sd	a2,0(a3) # 0 <core>
-  2c:	972e                	add	a4,a4,a1
-  2e:	cf8d                	beqz	a5,68 <.L5>
-  30:	00b567b3          	or	a5,a0,a1
-  34:	8b9d                	andi	a5,a5,7
-  36:	eb8d                	bnez	a5,68 <.L5>
+   0:	c02027f3          	rdinstret	a5
+   4:	6709                	lui	a4,0x2
+   6:	000006b7          	lui	a3,0x0
+   a:	71070713          	addi	a4,a4,1808 # 2710 <.L2+0x26fc>
+   e:	00f6b023          	sd	a5,0(a3) # 0 <core>
+  12:	972e                	add	a4,a4,a1
 
-0000000000000038 <.L3>:
-  38:	619c                	ld	a5,0(a1)
-  3a:	0521                	addi	a0,a0,8
-  3c:	05a1                	addi	a1,a1,8
-  3e:	fef53c23          	sd	a5,-8(a0)
-  42:	fee59be3          	bne	a1,a4,38 <.L3>
-
-0000000000000046 <.L4>:
-  46:	c02027f3          	rdinstret	a5
-  4a:	0006b583          	ld	a1,0(a3)
-  4e:	00000537          	lui	a0,0x0
-  52:	00000737          	lui	a4,0x0
-  56:	863e                	mv	a2,a5
-  58:	00050513          	mv	a0,a0
-  5c:	00f73023          	sd	a5,0(a4) # 0 <core>
-  60:	00000317          	auipc	t1,0x0
-  64:	00030067          	jr	t1 # 60 <.L4+0x1a>
-
-0000000000000068 <.L5>:
-  68:	419c                	lw	a5,0(a1)
-  6a:	0511                	addi	a0,a0,4
-  6c:	0591                	addi	a1,a1,4
-  6e:	fef52e23          	sw	a5,-4(a0) # fffffffffffffffc <.L5+0xffffffffffffff94>
-  72:	fcb70ae3          	beq	a4,a1,46 <.L4>
-  76:	419c                	lw	a5,0(a1)
-  78:	0511                	addi	a0,a0,4
-  7a:	0591                	addi	a1,a1,4
-  7c:	fef52e23          	sw	a5,-4(a0)
-  80:	feb714e3          	bne	a4,a1,68 <.L5>
-  84:	b7c9                	j	46 <.L4>
+0000000000000014 <.L2>:
+  14:	419c                	lw	a5,0(a1)
+  16:	0511                	addi	a0,a0,4
+  18:	0591                	addi	a1,a1,4
+  1a:	fef52e23          	sw	a5,-4(a0)
+  1e:	fee59be3          	bne	a1,a4,14 <.L2>
+  22:	c02027f3          	rdinstret	a5
+  26:	0006b583          	ld	a1,0(a3)
+  2a:	00000537          	lui	a0,0x0
+  2e:	00000737          	lui	a4,0x0
+  32:	863e                	mv	a2,a5
+  34:	00050513          	mv	a0,a0
+  38:	00f73023          	sd	a5,0(a4) # 0 <core>
+  3c:	00000317          	auipc	t1,0x0
+  40:	00030067          	jr	t1 # 3c <.L2+0x28>

@@ -89,7 +89,7 @@ Disassembly of section .text:
   ea:	2314                	fld	fa3,0(a4)
   ec:	0821                	addi	a6,a6,8
   ee:	7ae6f7c3          	fmadd.d	fa5,fa3,fa4,fa5
-  f2:	fe6797e3          	bne	a5,t1,e0 <.L6>
+  f2:	fef317e3          	bne	t1,a5,e0 <.L6>
   f6:	0002b707          	fld	fa4,0(t0)
   fa:	02a1                	addi	t0,t0,8
   fc:	08a1                	addi	a7,a7,8

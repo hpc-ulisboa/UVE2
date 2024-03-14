@@ -41,7 +41,7 @@ const typeMap = {
     'D': 'double'
 };
 
-const compileFlags = ["-O3", "-fno-unroll-loops", "-Wall", "-pedantic"];
+const compileFlags = ["-O3", "-fno-tree-vectorize", "-fno-unroll-loops", "-Wall", "-pedantic"];
 const linkFlags = ["-O3", "-Wall", "-pedantic", "-static"];
 const clangFlagsV = ["-O3", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
 const clangFlags = ["-O3", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math",  "-fno-vectorize", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gc"];

@@ -47,6 +47,7 @@ Note that this is a work-in-progress version and some bugs may still exist.
 ## Directory layout
 ```
    .
+   ├── documentation.pdf            # Documentation
    ├── spike                        # Modified RISC-V ISA Simulator (Spike) with UVE support
    │   ├── ...
    │   ├── build                    # Build directory
@@ -76,6 +77,7 @@ Note that this is a work-in-progress version and some bugs may still exist.
           │   │   ├── simple.log    # (automatically generated) Execution log (without UVE)
           │   │   └── uve.log       # (automatically generated) Execution log (with UVE)
           │   └── ...               # Other benchmarks
+          ├── clean.js              # Clean directories from run logs
           └── validate.js           # Benchmark validation script
 ```
 ## Setup
