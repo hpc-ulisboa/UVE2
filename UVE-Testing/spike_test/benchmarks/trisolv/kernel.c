@@ -65,13 +65,13 @@ void core(void *src1, void *src2, void *src3) {
         // L(i,j) stream load
         "ss.sta.ld.w           u1, %[src1], %[sn], %[sn] \t\n" // D2: slide verticaly stride N access size N-1
         "ss.app.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
-        "ss.app                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
+        "ss.end                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
         "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
 
         // x(j) stream load
         "ss.sta.ld.w           u2, %[src3], %[sn], zero \t\n"  // D2: Repeat N-1 times [dummy dimension]
         "ss.app.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
-        "ss.app                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
+        "ss.end                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
         "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
 
         // b stream scalar load (?)
@@ -119,13 +119,13 @@ void core(void *src1, void *src2, void *src3) {
         // L(i,j) stream load
         "ss.sta.ld.w           u1, %[src1], %[sn], %[sn] \t\n" // D2: slide verticaly stride N access size N-1
         "ss.app.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
-        "ss.app                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
+        "ss.end                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
         "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
 
         // x(j) stream load
         "ss.sta.ld.w           u2, %[src3], %[sn], zero \t\n"  // D2: Repeat N-1 times [dummy dimension]
         "ss.app.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
-        "ss.app                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
+        "ss.end                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
         "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
 
         // b stream scalar load (?)
@@ -173,13 +173,13 @@ void core(void *src1, void *src2, void *src3) {
         // L(i,j) stream load
         "ss.sta.ld.h           u1, %[src1], %[sn], %[sn] \t\n" // D2: slide verticaly stride N access size N-1
         "ss.app.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
-        "ss.app                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
+        "ss.end                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
         "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
 
         // x(j) stream load
         "ss.sta.ld.h           u2, %[src3], %[sn], zero \t\n"  // D2: Repeat N-1 times [dummy dimension]
         "ss.app.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
-        "ss.app                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
+        "ss.end                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
         "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
 
         // b stream scalar load (?)
@@ -227,13 +227,13 @@ void core(void *src1, void *src2, void *src3) {
         // L(i,j) stream load
         "ss.sta.ld.b           u1, %[src1], %[sn], %[sn] \t\n" // D2: slide verticaly stride N access size N-1
         "ss.app.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
-        "ss.app                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
+        "ss.end                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
         "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
 
         // x(j) stream load
         "ss.sta.ld.b           u2, %[src3], %[sn], zero \t\n"  // D2: Repeat N-1 times [dummy dimension]
         "ss.app.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
-        "ss.app                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
+        "ss.end                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
         "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
 
         // b stream scalar load (?)

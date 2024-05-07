@@ -12,11 +12,11 @@ Disassembly of section .text:
    e:	c0202773          	rdinstret	a4
   12:	6cd5408b          	ss.sta.ld.b	u1,a0,a3,a3
   16:	3008408b          	ss.app.mod.siz.inc	u1,a6,t1
-  1a:	3000008b          	ss.app	u1,zero,zero,t1
+  1a:	3200008b          	ss.end	u1,zero,zero,t1
   1e:	0000108b          	ss.cfg.vec	u1
   22:	04d6410b          	ss.sta.ld.b	u2,a2,a3,zero
   26:	3008410b          	ss.app.mod.siz.inc	u2,a6,t1
-  2a:	3000010b          	ss.app	u2,zero,zero,t1
+  2a:	3200010b          	ss.end	u2,zero,zero,t1
   2e:	0000110b          	ss.cfg.vec	u2
   32:	36d5c18b          	ss.ld.b	u3,a1,a3,t1
   36:	8ed5420b          	ss.ld.b	u4,a0,a3,a7
