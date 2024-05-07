@@ -1,0 +1,6 @@
+kernel,size,datatype,original_clang,rvv,original_gcc,uve
+trisolv,2500,byte,11980,11980,12996,412
+trisolv,2500,half-word,12030,12030,12949,463
+trisolv,2500,integer,11930,11930,10499,565
+trisolv,2500,float,10705,10705,9274,565
+trisolv,2500,double,10705,10705,9274,790
