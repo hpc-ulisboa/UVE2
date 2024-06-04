@@ -5,14 +5,31 @@
 #define gMMU(p) (*(p->get_mmu()))
 
 template <typename T>
-void streamRegister_t<T>::addModifier(std::shared_ptr<modifier_t> mod) {
-    /* A recently added modifier alters the dimension inserted before the last one */
-    // const auto modIndex = dimensions.size() - 2;
+void streamRegister_t<T>::addStaticModifier(staticModifier_t mod) {
     assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
-    const auto modIndex = -1; // next dimension to be added (will increment as dimensions are added)
-    auto iter = modifiers.find(modIndex);
-    // assert_msg("Trying to add a modifier, when one already exists in this index", iter == modifiers.end());
-    modifiers.insert({modIndex, mod});
+    staticModifiers.insert({0, mod});
+    /* print modifiers
+    std::cout << "\nModifiers: ";
+    for (auto &m : modifiers)
+        std::cout << m.first << "  ";
+    std::cout << std::endl;*/
+}
+
+template <typename T>
+void streamRegister_t<T>::addDynamicModifier(dynamicModifier_t mod) {
+    assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
+    dynamicModifiers.insert({0, mod});
+    /* print modifiers
+    std::cout << "\nModifiers: ";
+    for (auto &m : modifiers)
+        std::cout << m.first << "  ";
+    std::cout << std::endl;*/
+}
+
+template <typename T>
+void streamRegister_t<T>::addScatterGModifier(scatterGModifier_t mod) {
+    assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
+    scatterGModifiers.insert({0, mod});
     /* print modifiers
     std::cout << "\nModifiers: ";
     for (auto &m : modifiers)
@@ -28,16 +45,34 @@ void streamRegister_t<T>::addDimension(dimension_t dim) {
 
     vecCfg.push_front(false);
 
-    std::unordered_multimap<int, std::shared_ptr<modifier_t>> updatedModifiers;
+    std::unordered_multimap<int, staticModifier_t> updatedModifiers;
 
-    // Increment all modifiers' indexes
-    for (auto &m : modifiers) {
+    // Increment all static modifiers' indexes
+    for (auto &m : staticModifiers) {
         updatedModifiers.insert(std::make_pair(m.first + 1, m.second));
     }
 
-    modifiers.swap(updatedModifiers);
+    staticModifiers.swap(updatedModifiers);
 
-    /* print modifiers
+    std::unordered_multimap<int, dynamicModifier_t> updatedModifiers1;
+
+    // Increment all dynamic modifiers' indexes
+    for (auto &m : dynamicModifiers) {
+        updatedModifiers1.insert(std::make_pair(m.first + 1, m.second));
+    }
+
+    dynamicModifiers.swap(updatedModifiers1);
+
+    std::unordered_multimap<int, scatterGModifier_t> updatedModifiers2;
+
+    // Increment all scatter-gather modifiers' indexes
+    for (auto &m : scatterGModifiers) {
+        updatedModifiers2.insert(std::make_pair(m.first + 1, m.second));
+    }
+
+    scatterGModifiers.swap(updatedModifiers2);
+
+    /* print2 modifiers
     std::cout << "Modifiers u" << registerN << ": ";
     for (auto &m : modifiers)
         std::cout << m.first << "  ";
@@ -69,6 +104,17 @@ void streamRegister_t<T>::startConfiguration(dimension_t dim) {
 template <typename T>
 void streamRegister_t<T>::endConfiguration() {
     status = RegisterStatus::Running;
+
+    //print dimensions and modifiers
+    std::cout << "Dimensions: ";
+    for (auto &d : dimensions)
+        std::cout << d.getSize() << " ";
+    std::cout << std::endl;
+    
+    std::cout << "Modifiers: ";
+    for (auto &m : staticModifiers)
+        std::cout << m.first << " ";
+    std::cout << std::endl;
 }
 
 template <typename T>
@@ -94,7 +140,7 @@ bool streamRegister_t<T>::getDynModElement(int &value) {
     // check if any EOD flag is set in EODTable
     for (auto &eod : su->EODTable.at(registerN)) {
         if (eod)
-            return 0;
+            return 0; 
     }
 
     return 1;
@@ -238,22 +284,34 @@ bool streamRegister_t<T>::tryGenerateAddress(size_t &address) {
 
 template <typename T>
 void streamRegister_t<T>::applyDynamicMods(size_t dimN) {
-    auto currentModifierIters = modifiers.equal_range(dimN);
+    auto currentModifierIters = dynamicModifiers.equal_range(dimN);
     for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-        if (it->second->isDynamic() && !it->second->isApplied()){
+        if (!it->second.isApplied()){
             //std::cout << "u" << registerN << "    Applying dynamic modifier to dim " << dimN << std::endl;
-            it->second->modDimension(dimensions.at(dimN), elementWidth);
+            it->second.modDimension(dimensions, elementWidth);
+        }
+    }
+    auto currentModifierIters1 = scatterGModifiers.equal_range(dimN);
+    for (auto it = currentModifierIters1.first; it != currentModifierIters1.second; ++it) {
+        if (!it->second.isApplied()){
+            //std::cout << "u" << registerN << "    Applying scatter-gather modifier to dim " << dimN << std::endl;
+            it->second.modDimension(dimensions.at(dimN), elementWidth);
         }
     }
 }
 
 template <typename T>
-void streamRegister_t<T>::setDynamicModsNotApplied(size_t dimN, bool ifScatter) {
-    auto currentModifierIters = modifiers.equal_range(dimN);
-    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-        if (it->second->isDynamic() && it->second->isScatter() == ifScatter)
-            it->second->setApplied(false);
-    }
+void streamRegister_t<T>::setDynamicModsNotApplied(size_t dimN) {
+    auto currentModifierIters = dynamicModifiers.equal_range(dimN);
+    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it)
+        it->second.setApplied(false);
+}
+
+template <typename T>
+void streamRegister_t<T>::setSGModsNotApplied(size_t dimN) {
+    auto currentModifierIters = scatterGModifiers.equal_range(dimN);
+    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it)
+        it->second.setApplied(false);
 }
 
 template <typename T>
@@ -288,21 +346,18 @@ void streamRegister_t<T>::updateIteration() {
 
         // Reset EOD flag of current dimension
         currDim.setEndOfDimension(false);
-        // Unflag regular dynamic modifiers of current dimension
-        setDynamicModsNotApplied(i, false);
+        // Unflag dynamic modifiers of current dimension
+        setDynamicModsNotApplied(i);
         
         // Iterate upper dimension
         nextDim.advance();
-        // Unflag scatter dynamic modifiers of upper dimension
-        setDynamicModsNotApplied(i+1, true);
+        // Unflag scatter dynamic modifiers of upper  dimension
+        setSGModsNotApplied(i+1);
 
-        // Apply static modifiers to current dimension
-        auto currentModifierIters = modifiers.equal_range(i);
+        // Apply static modifiers associated with upper dimension to target dimensions
+        auto currentModifierIters = staticModifiers.equal_range(i+1);
         for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-            if (!it->second->isDynamic()) {
-                //std::cout << "u" << registerN << "    Applying static modifier to dim " << i << std::endl;
-                it->second->modDimension(currDim, elementWidth);
-            }
+            it->second.modDimension(dimensions, elementWidth);
         }
 
         // The values at lower dimensions might have been modified. As such, we need to reset them before next iteration
@@ -364,7 +419,7 @@ void streamRegister_t<T>::updateAsLoad() {
             std::cout << "u" << registerN << "    Loaded Value: " << readAS<int>(value) << std::endl;*/
         ++validElements;
         for (size_t i = 0; i < dimensions.size() - 1; i++)
-            setDynamicModsNotApplied(i, true);
+            setSGModsNotApplied(i);
         if (tryGenerateAddress(offset)) {
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;

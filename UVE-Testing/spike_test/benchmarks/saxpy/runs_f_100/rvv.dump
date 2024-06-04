@@ -1,0 +1,79 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: f3 26 20 c0  	rdinstret	a3
+       6: 37 08 00 00  	lui	a6, 0
+       a: 73 27 20 c2  	csrr	a4, vlenb
+       e: 13 56 27 00  	srli	a2, a4, 2
+      12: 91 47        	li	a5, 4
+      14: 23 30 d8 00  	sd	a3, 0(a6)
+      18: 63 e0 c7 00  	bltu	a5, a2, 0x18 <core+0x16>
+      1c: 11 46        	li	a2, 4
+
+000000000000001e <.LBB0_2>:
+      1e: 93 06 40 06  	li	a3, 100
+      22: 63 e0 c6 00  	bltu	a3, a2, 0x22 <.LBB0_2+0x4>
+      26: 13 06 05 19  	addi	a2, a0, 400
+      2a: 93 86 05 19  	addi	a3, a1, 400
+      2e: b3 36 d5 00  	sltu	a3, a0, a3
+      32: 33 b6 c5 00  	sltu	a2, a1, a2
+      36: 75 8e        	and	a2, a2, a3
+      38: 01 c2        	beqz	a2, 0x38 <.LBB0_2+0x1a>
+
+000000000000003a <.LBB0_4>:
+      3a: 81 48        	li	a7, 0
+
+000000000000003c <.LBB0_5>:
+      3c: 13 96 28 00  	slli	a2, a7, 2
+      40: 32 95        	add	a0, a0, a2
+      42: b2 95        	add	a1, a1, a2
+      44: 13 86 c8 f9  	addi	a2, a7, -100
+
+0000000000000048 <.LBB0_6>:
+      48: 07 a0 05 00  	flw	ft0, 0(a1)
+      4c: 87 20 05 00  	flw	ft1, 0(a0)
+      50: 43 70 a0 08  	fmadd.s	ft0, ft0, fa0, ft1
+      54: 27 20 05 00  	fsw	ft0, 0(a0)
+      58: 11 05        	addi	a0, a0, 4
+      5a: 05 06        	addi	a2, a2, 1
+      5c: 91 05        	addi	a1, a1, 4
+      5e: 01 e2        	bnez	a2, 0x5e <.LBB0_6+0x16>
+
+0000000000000060 <.LBB0_7>:
+      60: 73 26 20 c0  	rdinstret	a2
+      64: 37 05 00 00  	lui	a0, 0
+      68: 83 35 05 00  	ld	a1, 0(a0)
+      6c: b7 06 00 00  	lui	a3, 0
+      70: 37 05 00 00  	lui	a0, 0
+      74: 13 05 05 00  	mv	a0, a0
+      78: 23 b0 c6 00  	sd	a2, 0(a3)
+      7c: 17 03 00 00  	auipc	t1, 0
+      80: 67 00 03 00  	jr	t1
+
+0000000000000084 <.LBB0_8>:
+      84: 93 52 27 00  	srli	t0, a4, 2
+      88: 1b 86 f2 ff  	addiw	a2, t0, -1
+      8c: 13 78 46 06  	andi	a6, a2, 100
+      90: 93 48 48 06  	xori	a7, a6, 100
+      94: 57 76 00 0d  	vsetvli	a2, zero, e32, m1, ta, ma
+      98: c6 86        	mv	a3, a7
+      9a: 2a 86        	mv	a2, a0
+      9c: ae 87        	mv	a5, a1
+
+000000000000009e <.LBB0_9>:
+      9e: 07 e4 87 02  	vl1re32.v	v8, (a5)
+      a2: 87 64 86 02  	vl1re32.v	v9, (a2)
+      a6: d7 54 85 b2  	vfmacc.vf	v9, fa0, v8
+      aa: a7 04 86 02  	vs1r.v	v9, (a2)
+      ae: ba 97        	add	a5, a5, a4
+      b0: b3 86 56 40  	sub	a3, a3, t0
+      b4: 3a 96        	add	a2, a2, a4
+      b6: 81 e2        	bnez	a3, 0xb6 <.LBB0_9+0x18>
+      b8: 63 10 08 00  	bnez	a6, 0xb8 <.LBB0_9+0x1a>
+      bc: 01 a0        	j	0xbc <.LBB0_9+0x1e>

@@ -28,18 +28,18 @@ const kernelSizeMap = {
 	"sgd": 0,
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
-	"stream": size*size,
-	"trisolv": size*/
-	"triangular_acc": size
+	"stream": size*size,*/
+	"trisolv": size//,
+	//"triangular_acc": size
 };
 
 // read type and size from command line
 const typeMap = {
-    //'B': 'byte',
-    //'H': 'half-word',
-    'I': 'integer'//,
-    //'F': 'float'//,
-    //'D': 'double'
+    'B': 'byte',
+	'H': 'half-word',
+    'I': 'integer',
+    'F': 'float',
+    'D': 'double'
 };
 
 const compileFlags = ["-O3", "-fno-tree-vectorize", "-fno-unroll-loops", "-Wall", "-pedantic"];

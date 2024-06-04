@@ -46,6 +46,7 @@ private:
     //friend class modifier_t;
 	friend class staticModifier_t;
 	friend class dynamicModifier_t;
+	friend class scatterGModifier_t;
 };
 
 enum class Target {
@@ -54,7 +55,12 @@ enum class Target {
     Stride
 };
 
-enum class Behaviour {
+enum class staticBehaviour {
+    Increment,
+    Decrement
+};
+
+enum class dynamicBehaviour {
     Increment,
     Decrement,
     Set,
@@ -62,81 +68,88 @@ enum class Behaviour {
     Subtract
 };
 
-struct modifier_t {
-    modifier_t(Target target, Behaviour behaviour)
-        : target(target), behaviour(behaviour) {
+struct staticModifier_t {
+    staticModifier_t(Target t, staticBehaviour b, int d = 0, unsigned int td = 0)
+        :target(t), behaviour(b), displacement(d), targetDim(td) {
+    }
+
+	void modDimension(std::deque<dimension_t> &dims, const size_t elementWidth);
+
+private:
+    const Target target;
+    const staticBehaviour behaviour;
+
+    const int displacement;
+    const int targetDim;
+};
+
+struct dynamicModifier_t {
+    dynamicModifier_t(Target t, dynamicBehaviour b, const size_t src, streamingUnit_t *su, int td = 0)
+        : target(t), behaviour(b), sourceStream(src), su(su), targetDim(td) {
+            indirectRegisterValue = 0;
+            sourceEnd = false;
             modApplied = false;
         }
 
-    virtual void modDimension(dimension_t &dim, const size_t elementWidth) = 0;
-
-    virtual bool isDynamic() const {
-        return false;
-    }
-
-    virtual bool isScatter() const {
-        return false;
-    }
+	void modDimension(std::deque<dimension_t> &dims, const size_t elementWidth);
 
     bool isApplied() const {
         return modApplied;
     }
 
-    virtual void setApplied(const bool s) {
+    void setApplied(const bool s) {
         modApplied = s;
     }
 
-protected:
+private:
     const Target target;
-    const Behaviour behaviour;
+    const dynamicBehaviour behaviour;
 
     bool modApplied;
 
-    streamingUnit_t *su;
-
-    // void modStatic(dimension_t& dim) const;
-
-    // void modIndirect(dimension_t& dim) const;
-};
-
-struct staticModifier_t : public modifier_t {
-    staticModifier_t(Target t, Behaviour b, int d = 0, unsigned int s = 0)
-        : modifier_t(t, b), displacement(d) {
-        assert_msg("Static modifier must be of type Increment or Decrement", b == Behaviour::Decrement || b == Behaviour::Increment);
-    }
-
-	void modDimension(dimension_t &dim, const size_t elementWidth) override;
-
-private:
-    const int displacement;
-};
-
-struct dynamicModifier_t : public modifier_t {
-    dynamicModifier_t(Target t, Behaviour b, const size_t src, streamingUnit_t *su, bool sc = false /*default must be discussed*/)
-        : modifier_t(t, b), sourceStream(src), scatter(sc), su(su) {
-            indirectRegisterValue = 0;
-            sourceEnd = false;
-        }
-
-	void modDimension(dimension_t &dim, const size_t elementWidth) override;
-
-    bool isDynamic() const override{
-        return true;
-    }
-
-    bool isScatter() const override{
-        return scatter;
-    }
-
-private:
     const size_t sourceStream;
-    bool scatter;
     int indirectRegisterValue;
     bool sourceEnd;
 
     streamingUnit_t *su;
 
-    void calculateValueChange(auto &target, auto baseValue, Behaviour behaviour, int valueChange);
+    const int targetDim;
+
+    void calculateValueChange(auto &target, auto baseValue, dynamicBehaviour behaviour, int valueChange);
+    void getIndirectRegisterValues();
+};
+
+struct scatterGModifier_t {
+    scatterGModifier_t(dynamicBehaviour b, const size_t src, streamingUnit_t *su)
+        : behaviour(b), sourceStream(src), su(su) {
+            indirectRegisterValue = 0;
+            sourceEnd = false;
+            modApplied = false;
+        }
+
+	void modDimension(dimension_t &dim, const size_t elementWidth);
+
+    bool isApplied() const {
+        return modApplied;
+    }
+
+    void setApplied(const bool s) {
+        modApplied = s;
+    }
+
+private:
+    const Target target = Target::Offset; // Only offset is supported for now
+    const dynamicBehaviour behaviour;
+
+    bool modApplied;
+
+    const size_t sourceStream;
+    int indirectRegisterValue;
+    bool sourceEnd;
+
+    streamingUnit_t *su;
+
+    void calculateValueChange(auto &target, auto baseValue, dynamicBehaviour behaviour, int valueChange);
     void getIndirectRegisterValues();
 };
 

@@ -22,9 +22,9 @@ auto baseBehaviour = [](auto &value, auto &src, auto &pred, auto extra) {
 };
 
 std::visit(overloaded{
-    [&](StreamReg8 &src) { uint8_t value = READ_REG(destReg); baseBehaviour(destReg, src, predReg, (signed char){}); WRITE_REG(destReg, value); },
-    [&](StreamReg16 &src) { uint16_t value = READ_REG(destReg); baseBehaviour(destReg, src, predReg, (short int){}); WRITE_REG(destReg, value); },
-    [&](StreamReg32 &src) { uint32_t value = READ_REG(destReg); baseBehaviour(destReg, src, predReg, int{}); WRITE_REG(destReg, value); },
-    [&](StreamReg64 &src) { uint64_t value = READ_REG(destReg); baseBehaviour(destReg, src, predReg, (long int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg8 &src) { uint8_t value = READ_REG(destReg); baseBehaviour(value, src, predReg, (signed char){}); WRITE_REG(destReg, value); },
+    [&](StreamReg16 &src) { uint16_t value = READ_REG(destReg); baseBehaviour(value, src, predReg, (short int){}); WRITE_REG(destReg, value); },
+    [&](StreamReg32 &src) { uint32_t value = READ_REG(destReg); baseBehaviour(value, src, predReg, int{}); WRITE_REG(destReg, value); },
+    [&](StreamReg64 &src) { uint64_t value = READ_REG(destReg); baseBehaviour(value, src, predReg, (long int){}); WRITE_REG(destReg, value); },
     [&](auto &src) { assert_msg("Invoking so.a.adds.acc.sg with invalid parameter sizes", false); }
 }, srcReg);

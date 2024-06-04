@@ -8,7 +8,7 @@ int main() {
     DataType a[SIZE];
 
     initArray2D(A, SIZE, SIZE);
-    initArray(a, SIZE);
+    initZero(a, SIZE);
 
     core(a, A);
 

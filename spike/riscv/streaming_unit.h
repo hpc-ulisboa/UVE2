@@ -63,7 +63,9 @@ struct streamRegister_t {
         validElements = vLen;
     }
 
-    void addModifier(std::shared_ptr<modifier_t> mod);
+    void addStaticModifier(staticModifier_t mod);
+    void addDynamicModifier(dynamicModifier_t mod);
+    void addScatterGModifier(scatterGModifier_t mod);
     void addDimension(dimension_t dim);
     void configureDim();
     void startConfiguration(dimension_t dim);
@@ -101,7 +103,9 @@ private:
     configuration. As such, it is better to have a container that maps a dimension's
     index to its modifier. When updating stream the iterators, we can test if a dimension
     for the given index exists before the calculations */
-    std::unordered_multimap<int, std::shared_ptr<modifier_t>> modifiers;
+    std::unordered_multimap<int, staticModifier_t> staticModifiers;
+    std::unordered_multimap<int, dynamicModifier_t> dynamicModifiers;
+    std::unordered_multimap<int, scatterGModifier_t> scatterGModifiers;
     RegisterConfig type;
     RegisterStatus status;
     RegisterMode mode;
@@ -115,7 +119,8 @@ private:
     bool isStreamDone() const;
     bool tryGenerateAddress(size_t &address);
     void applyDynamicMods(size_t dimN);
-    void setDynamicModsNotApplied(size_t dimN, bool ifScatter);
+    void setDynamicModsNotApplied(size_t dimN);
+    void setSGModsNotApplied(size_t dimN);
     void updateIteration();
     void updateAsLoad();
     void updateAsStore();

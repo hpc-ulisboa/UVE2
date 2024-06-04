@@ -1,0 +1,80 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: 73 27 20 c0  	rdinstret	a4
+       6: 37 08 00 00  	lui	a6, 0
+       a: 73 23 20 c2  	csrr	t1, vlenb
+       e: 93 56 23 00  	srli	a3, t1, 2
+      12: 91 47        	li	a5, 4
+      14: 23 30 e8 00  	sd	a4, 0(a6)
+      18: 63 e0 d7 00  	bltu	a5, a3, 0x18 <core+0x16>
+      1c: 91 46        	li	a3, 4
+
+000000000000001e <.LBB0_2>:
+      1e: 13 07 40 06  	li	a4, 100
+      22: 63 60 d7 00  	bltu	a4, a3, 0x22 <.LBB0_2+0x4>
+      26: 93 06 05 19  	addi	a3, a0, 400
+      2a: 13 87 05 19  	addi	a4, a1, 400
+      2e: 33 37 e5 00  	sltu	a4, a0, a4
+      32: b3 b6 d5 00  	sltu	a3, a1, a3
+      36: f9 8e        	and	a3, a3, a4
+      38: 81 c2        	beqz	a3, 0x38 <.LBB0_2+0x1a>
+
+000000000000003a <.LBB0_4>:
+      3a: 81 48        	li	a7, 0
+
+000000000000003c <.LBB0_5>:
+      3c: 93 96 28 00  	slli	a3, a7, 2
+      40: 36 95        	add	a0, a0, a3
+      42: b6 95        	add	a1, a1, a3
+      44: 93 86 c8 f9  	addi	a3, a7, -100
+
+0000000000000048 <.LBB0_6>:
+      48: 98 41        	lw	a4, 0(a1)
+      4a: 1c 41        	lw	a5, 0(a0)
+      4c: 3b 07 c7 02  	mulw	a4, a4, a2
+      50: 3e 97        	add	a4, a4, a5
+      52: 18 c1        	sw	a4, 0(a0)
+      54: 11 05        	addi	a0, a0, 4
+      56: 85 06        	addi	a3, a3, 1
+      58: 91 05        	addi	a1, a1, 4
+      5a: 81 e2        	bnez	a3, 0x5a <.LBB0_6+0x12>
+
+000000000000005c <.LBB0_7>:
+      5c: 73 26 20 c0  	rdinstret	a2
+      60: 37 05 00 00  	lui	a0, 0
+      64: 83 35 05 00  	ld	a1, 0(a0)
+      68: b7 06 00 00  	lui	a3, 0
+      6c: 37 05 00 00  	lui	a0, 0
+      70: 13 05 05 00  	mv	a0, a0
+      74: 23 b0 c6 00  	sd	a2, 0(a3)
+      78: 17 03 00 00  	auipc	t1, 0
+      7c: 67 00 03 00  	jr	t1
+
+0000000000000080 <.LBB0_8>:
+      80: 93 52 23 00  	srli	t0, t1, 2
+      84: 9b 86 f2 ff  	addiw	a3, t0, -1
+      88: 13 f8 46 06  	andi	a6, a3, 100
+      8c: 93 48 48 06  	xori	a7, a6, 100
+      90: d7 76 00 0d  	vsetvli	a3, zero, e32, m1, ta, ma
+      94: 46 87        	mv	a4, a7
+      96: aa 86        	mv	a3, a0
+      98: ae 87        	mv	a5, a1
+
+000000000000009a <.LBB0_9>:
+      9a: 07 e4 87 02  	vl1re32.v	v8, (a5)
+      9e: 87 e4 86 02  	vl1re32.v	v9, (a3)
+      a2: d7 64 86 b6  	vmacc.vx	v9, a2, v8
+      a6: a7 84 86 02  	vs1r.v	v9, (a3)
+      aa: 9a 97        	add	a5, a5, t1
+      ac: 33 07 57 40  	sub	a4, a4, t0
+      b0: 9a 96        	add	a3, a3, t1
+      b2: 01 e3        	bnez	a4, 0xb2 <.LBB0_9+0x18>
+      b4: 63 10 08 00  	bnez	a6, 0xb4 <.LBB0_9+0x1a>
+      b8: 01 a0        	j	0xb8 <.LBB0_9+0x1e>

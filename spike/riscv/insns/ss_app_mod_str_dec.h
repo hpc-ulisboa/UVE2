@@ -6,5 +6,5 @@ auto dispReg = insn.uve_mod_disp();
 int32_t disp = READ_REG(dispReg);
 
 std::visit([&](auto &reg) {
-    reg.addModifier(std::make_shared<staticModifier_t>(Target::Stride, Behaviour::Decrement, disp/*, size*/));
+    reg.addStaticModifier(staticModifier_t(Target::Stride, staticBehaviour::Decrement, disp/*, size*/));
 }, destReg);

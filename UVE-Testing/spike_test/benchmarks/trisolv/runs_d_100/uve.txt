@@ -1,0 +1,80 @@
+Dimensions: 0 10 
+Modifiers: 1 
+Dimensions: 0 10 
+Modifiers: 1 
+Dimensions: 10 
+Modifiers: 
+Dimensions: 10 
+Modifiers: 
+Dimensions: 10 
+Modifiers: 
+Dimensions: 
+Modifiers: 
+Dimensions: 
+Modifiers: 
+u1    Applying static modifiers of dim 1
+u1    Applying static modifier
+
+u2    Applying static modifiers of dim 1
+u2    Applying static modifier
+
+u1    Applying static modifiers of dim 1
+u1    Applying static modifier
+
+u2    Applying static modifiers of dim 1
+u2    Applying static modifier
+
+u1    Applying static modifiers of dim 1
+u1    Applying static modifier
+
+u2    Applying static modifiers of dim 1
+u2    Applying static modifier
+
+u1    Applying static modifiers of dim 1
+u1    Applying static modifier
+
+u2    Applying static modifiers of dim 1
+u2    Applying static modifier
+
+u1    Applying static modifiers of dim 1
+u1    Applying static modifier
+
+u2    Applying static modifiers of dim 1
+u2    Applying static modifier
+
+u1    Applying static modifiers of dim 1
+u1    Applying static modifier
+
+u2    Applying static modifiers of dim 1
+u2    Applying static modifier
+
+u1    Applying static modifiers of dim 1
+u1    Applying static modifier
+
+u2    Applying static modifiers of dim 1
+u2    Applying static modifier
+
+u1    Applying static modifiers of dim 1
+u1    Applying static modifier
+
+u2    Applying static modifiers of dim 1
+u2    Applying static modifier
+
+u1    Applying static modifiers of dim 1
+u1    Applying static modifier
+
+u2    Applying static modifiers of dim 1
+u2    Applying static modifier
+
+5820311
+5820406
+1.000000
+-3.129207
+-0.253952
+-3.609517
+7.812131
+0.731037
+7.243785
+-59.993792
+-22.652025
+86.907666
