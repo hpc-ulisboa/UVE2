@@ -104,17 +104,6 @@ void streamRegister_t<T>::startConfiguration(dimension_t dim) {
 template <typename T>
 void streamRegister_t<T>::endConfiguration() {
     status = RegisterStatus::Running;
-
-    //print dimensions and modifiers
-    std::cout << "Dimensions: ";
-    for (auto &d : dimensions)
-        std::cout << d.getSize() << " ";
-    std::cout << std::endl;
-    
-    std::cout << "Modifiers: ";
-    for (auto &m : staticModifiers)
-        std::cout << m.first << " ";
-    std::cout << std::endl;
 }
 
 template <typename T>
