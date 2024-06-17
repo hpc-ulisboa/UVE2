@@ -1,0 +1,61 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: 01 43        	li	t1, 0
+       4: f3 26 20 c0  	rdinstret	a3
+       8: 37 07 00 00  	lui	a4, 0
+       c: 23 30 d7 00  	sd	a3, 0(a4)
+      10: 13 08 c0 02  	li	a6, 44
+      14: a9 48        	li	a7, 10
+      16: aa 82        	mv	t0, a0
+      18: 01 a0        	j	0x18 <core+0x16>
+
+000000000000001a <.LBB0_1>:
+      1a: b3 06 03 03  	mul	a3, t1, a6
+      1e: aa 96        	add	a3, a3, a0
+      20: 94 42        	lw	a3, 0(a3)
+      22: bb 46 de 02  	divw	a3, t3, a3
+      26: 23 a0 d3 00  	sw	a3, 0(t2)
+      2a: 05 03        	addi	t1, t1, 1
+      2c: 93 82 82 02  	addi	t0, t0, 40
+      30: 63 00 13 01  	beq	t1, a7, 0x30 <.LBB0_1+0x16>
+
+0000000000000034 <.LBB0_2>:
+      34: 93 13 23 00  	slli	t2, t1, 2
+      38: b3 86 75 00  	add	a3, a1, t2
+      3c: 03 ae 06 00  	lw	t3, 0(a3)
+      40: b2 93        	add	t2, t2, a2
+      42: 23 a0 c3 01  	sw	t3, 0(t2)
+      46: 1a 8f        	mv	t5, t1
+      48: b2 87        	mv	a5, a2
+      4a: 16 87        	mv	a4, t0
+      4c: 63 00 03 00  	beqz	t1, 0x4c <.LBB0_2+0x18>
+
+0000000000000050 <.LBB0_3>:
+      50: 83 2e 07 00  	lw	t4, 0(a4)
+      54: 94 43        	lw	a3, 0(a5)
+      56: bb 86 d6 03  	mulw	a3, a3, t4
+      5a: 3b 0e de 40  	subw	t3, t3, a3
+      5e: 23 a0 c3 01  	sw	t3, 0(t2)
+      62: 11 07        	addi	a4, a4, 4
+      64: 7d 1f        	addi	t5, t5, -1
+      66: 91 07        	addi	a5, a5, 4
+      68: 63 10 0f 00  	bnez	t5, 0x68 <.LBB0_3+0x18>
+      6c: 01 a0        	j	0x6c <.LBB0_3+0x1c>
+
+000000000000006e <.LBB0_4>:
+      6e: 73 26 20 c0  	rdinstret	a2
+      72: 37 05 00 00  	lui	a0, 0
+      76: 83 35 05 00  	ld	a1, 0(a0)
+      7a: b7 06 00 00  	lui	a3, 0
+      7e: 37 05 00 00  	lui	a0, 0
+      82: 13 05 05 00  	mv	a0, a0
+      86: 23 b0 c6 00  	sd	a2, 0(a3)
+      8a: 17 03 00 00  	auipc	t1, 0
+      8e: 67 00 03 00  	jr	t1

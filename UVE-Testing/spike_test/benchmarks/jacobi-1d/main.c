@@ -6,7 +6,7 @@ extern void core(DataType A[SIZE], DataType B[SIZE], DataType ct);
 int main() {
   DataType A[SIZE];
   DataType B[SIZE];
-  DataType ct = 3;
+  DataType ct = 0.33333;
 
   initArray(A, SIZE);
   initArray(B, SIZE);

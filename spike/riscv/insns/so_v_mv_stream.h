@@ -9,7 +9,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
     /* We can only operate on the first available values of the stream */
     auto elements = src.getElements(false); // doesn't iterate the stream
     auto destElements = dest.getElements(false); // doesn't iterate the stream
-    auto validElementsIndex = src.getValidIndex();
+    auto validElementsIndex = src.getValidElements();
     std::vector<StorageType> out(dest.getVLen());
     auto pi = pred.getPredicate();
     
@@ -17,7 +17,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred) {
         out.at(i) = pi.at((i+1)*sizeof(StorageType)-1) ? elements.at(i) : destElements.at(i);
 
     dest.setValidIndex(validElementsIndex);
-    dest.setElements(true, out);
+    dest.setElements(out);
 
 };
 

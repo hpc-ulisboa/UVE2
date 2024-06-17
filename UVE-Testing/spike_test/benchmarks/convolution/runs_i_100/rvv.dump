@@ -1,0 +1,113 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: 79 71        	addi	sp, sp, -48
+       4: 22 f4        	sd	s0, 40(sp)
+       6: 26 f0        	sd	s1, 32(sp)
+       8: 4a ec        	sd	s2, 24(sp)
+       a: 4e e8        	sd	s3, 16(sp)
+       c: 52 e4        	sd	s4, 8(sp)
+       e: 56 e0        	sd	s5, 0(sp)
+      10: f3 27 20 c0  	rdinstret	a5
+      14: 93 24 37 00  	slti	s1, a4, 3
+      18: 13 a4 36 00  	slti	s0, a3, 3
+      1c: 45 8c        	or	s0, s0, s1
+      1e: 37 08 00 00  	lui	a6, 0
+      22: 23 30 f8 00  	sd	a5, 0(a6)
+      26: 01 e0        	bnez	s0, 0x26 <core+0x24>
+      28: 7d 37        	addiw	a4, a4, -1
+      2a: 9b 87 f6 ff  	addiw	a5, a3, -1
+      2e: 02 17        	slli	a4, a4, 32
+      30: 93 58 07 02  	srli	a7, a4, 32
+      34: 82 17        	slli	a5, a5, 32
+      36: 93 d2 07 02  	srli	t0, a5, 32
+      3a: f3 23 20 c2  	csrr	t2, vlenb
+      3e: 93 d4 23 00  	srli	s1, t2, 2
+      42: 33 07 90 40  	neg	a4, s1
+      46: 33 f3 e4 00  	and	t1, s1, a4
+      4a: 57 77 90 0d  	vsetvli	a4, zero, e64, m2, ta, ma
+      4e: 57 a4 08 52  	vid.v	v8
+      52: 57 b5 8f 02  	vadd.vi	v10, v8, -1
+      56: 13 97 13 00  	slli	a4, t2, 1
+      5a: ba 93        	add	t2, t2, a4
+      5c: 85 4a        	li	s5, 1
+      5e: 57 70 00 0d  	vsetvli	zero, zero, e32, m1, ta, ma
+      62: 57 36 00 5e  	vmv.v.i	v12, 0
+      66: 31 4e        	li	t3, 12
+      68: 89 4e        	li	t4, 2
+
+000000000000006a <.LBB0_2>:
+      6a: 33 8f da 02  	mul	t5, s5, a3
+      6e: 85 4f        	li	t6, 1
+
+0000000000000070 <.LBB0_3>:
+      70: 01 4a        	li	s4, 0
+      72: 7d 59        	li	s2, -1
+      74: b2 89        	mv	s3, a2
+
+0000000000000076 <.LBB0_4>:
+      76: 01 47        	li	a4, 0
+      78: 33 84 2f 41  	sub	s0, t6, s2
+      7c: 05 09        	addi	s2, s2, 1
+      7e: 57 70 00 09  	vsetvli	zero, zero, e32, m1, tu, ma
+      82: 57 38 c0 9e  	vmv1r.v	v16, v12
+      86: 57 68 0a 42  	vmv.s.x	v16, s4
+      8a: ce 87        	mv	a5, s3
+      8c: 57 b7 a0 9e  	vmv2r.v	v14, v10
+
+0000000000000090 <.LBB0_5>:
+      90: 57 70 90 0d  	vsetvli	zero, zero, e64, m2, ta, ma
+      94: 57 49 87 82  	vsaddu.vx	v18, v8, a4
+      98: 57 30 21 73  	vmsleu.vi	v0, v18, 2
+      9c: d7 36 00 9f  	vmv1r.v	v13, v16
+      a0: 87 e8 c7 09  	vlse32.v	v17, (a5), t3, v0.t
+      a4: 57 c9 ea 0e  	vrsub.vx	v18, v14, s5
+      a8: 57 4a 04 5e  	vmv.v.x	v20, s0
+      ac: 57 ea 26 b7  	vmacc.vx	v20, a3, v18
+      b0: 57 39 41 97  	vsll.vi	v18, v20, 2
+      b4: 57 70 00 0d  	vsetvli	zero, zero, e32, m1, ta, ma
+      b8: 07 78 25 05  	vluxei64.v	v16, (a0), v18, v0.t
+      bc: 57 a8 d8 a6  	vmadd.vv	v16, v17, v13
+      c0: 26 97        	add	a4, a4, s1
+      c2: 57 70 90 0d  	vsetvli	zero, zero, e64, m2, ta, ma
+      c6: 57 c7 e4 02  	vadd.vx	v14, v14, s1
+      ca: 9e 97        	add	a5, a5, t2
+      cc: 63 10 e3 00  	bne	t1, a4, 0xcc <.LBB0_5+0x3c>
+      d0: 57 70 00 0d  	vsetvli	zero, zero, e32, m1, ta, ma
+      d4: d7 06 d8 5c  	vmerge.vvm	v13, v13, v16, v0
+      d8: 57 67 00 42  	vmv.s.x	v14, zero
+      dc: d7 26 d7 02  	vredsum.vs	v13, v13, v14
+      e0: 57 2a d0 42  	vmv.x.s	s4, v13
+      e4: 91 09        	addi	s3, s3, 4
+      e6: 63 10 d9 01  	bne	s2, t4, 0xe6 <.LBB0_5+0x56>
+      ea: 33 87 ef 01  	add	a4, t6, t5
+      ee: 0a 07        	slli	a4, a4, 2
+      f0: 2e 97        	add	a4, a4, a1
+      f2: 85 0f        	addi	t6, t6, 1
+      f4: 23 20 47 01  	sw	s4, 0(a4)
+      f8: 63 90 5f 00  	bne	t6, t0, 0xf8 <.LBB0_5+0x68>
+      fc: 85 0a        	addi	s5, s5, 1
+      fe: 63 90 1a 01  	bne	s5, a7, 0xfe <.LBB0_5+0x6e>
+
+0000000000000102 <.LBB0_9>:
+     102: 73 26 20 c0  	rdinstret	a2
+     106: 83 35 08 00  	ld	a1, 0(a6)
+     10a: b7 06 00 00  	lui	a3, 0
+     10e: 37 05 00 00  	lui	a0, 0
+     112: 13 05 05 00  	mv	a0, a0
+     116: 23 b0 c6 00  	sd	a2, 0(a3)
+     11a: 22 74        	ld	s0, 40(sp)
+     11c: 82 74        	ld	s1, 32(sp)
+     11e: 62 69        	ld	s2, 24(sp)
+     120: c2 69        	ld	s3, 16(sp)
+     122: 22 6a        	ld	s4, 8(sp)
+     124: 82 6a        	ld	s5, 0(sp)
+     126: 45 61        	addi	sp, sp, 48
+     128: 17 03 00 00  	auipc	t1, 0
+     12c: 67 00 03 00  	jr	t1

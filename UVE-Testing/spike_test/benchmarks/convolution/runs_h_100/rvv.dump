@@ -1,0 +1,86 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: f3 28 20 c0  	rdinstret	a7
+       6: 13 28 37 00  	slti	a6, a4, 3
+       a: 93 a7 36 00  	slti	a5, a3, 3
+       e: b3 67 f8 00  	or	a5, a6, a5
+      12: 37 08 00 00  	lui	a6, 0
+      16: 23 30 18 01  	sd	a7, 0(a6)
+      1a: 81 e3        	bnez	a5, 0x1a <core+0x18>
+      1c: 7d 37        	addiw	a4, a4, -1
+      1e: 9b 87 f6 ff  	addiw	a5, a3, -1
+      22: 02 17        	slli	a4, a4, 32
+      24: 93 58 07 02  	srli	a7, a4, 32
+      28: 82 17        	slli	a5, a5, 32
+      2a: 13 d3 07 02  	srli	t1, a5, 32
+      2e: 57 77 a0 0d  	vsetvli	a4, zero, e64, m4, ta, ma
+      32: 57 a6 08 52  	vid.v	v12
+      36: 57 b4 cf 02  	vadd.vi	v8, v12, -1
+      3a: 57 30 c1 72  	vmsleu.vi	v0, v12, 2
+      3e: 0d 4f        	li	t5, 3
+      40: 57 66 cf 96  	vmul.vx	v12, v12, t5
+      44: 85 42        	li	t0, 1
+      46: 57 70 80 0c  	vsetvli	zero, zero, e16, m1, ta, ma
+      4a: 57 38 00 5e  	vmv.v.i	v16, 0
+
+000000000000004e <.LBB0_2>:
+      4e: b3 83 d2 02  	mul	t2, t0, a3
+      52: 57 70 a0 0d  	vsetvli	zero, zero, e64, m4, ta, ma
+      56: 57 ca 82 0e  	vrsub.vx	v20, v8, t0
+      5a: 57 ea 46 97  	vmul.vx	v20, v20, a3
+      5e: 09 4e        	li	t3, 2
+      60: 85 4e        	li	t4, 1
+
+0000000000000062 <.LBB0_3>:
+      62: 81 47        	li	a5, 0
+      64: 81 4f        	li	t6, 0
+      66: 72 87        	mv	a4, t3
+
+0000000000000068 <.LBB0_4>:
+      68: 57 70 80 08  	vsetvli	zero, zero, e16, m1, tu, ma
+      6c: d7 38 00 9f  	vmv1r.v	v17, v16
+      70: d7 e8 0f 42  	vmv.s.x	v17, t6
+      74: 57 70 a0 0d  	vsetvli	zero, zero, e64, m4, ta, ma
+      78: 57 cc c7 02  	vadd.vx	v24, v12, a5
+      7c: 57 0c 8c 03  	vadd.vv	v24, v24, v24
+      80: 57 70 80 0c  	vsetvli	zero, zero, e16, m1, ta, ma
+      84: 07 79 86 05  	vluxei64.v	v18, (a2), v24, v0.t
+      88: 57 70 a0 0d  	vsetvli	zero, zero, e64, m4, ta, ma
+      8c: 57 4c 47 03  	vadd.vx	v24, v20, a4
+      90: 57 0c 8c 03  	vadd.vv	v24, v24, v24
+      94: 57 70 80 0c  	vsetvli	zero, zero, e16, m1, ta, ma
+      98: 87 79 85 05  	vluxei64.v	v19, (a0), v24, v0.t
+      9c: d7 29 19 a7  	vmadd.vv	v19, v18, v17
+      a0: d7 88 19 5d  	vmerge.vvm	v17, v17, v19, v0
+      a4: 57 69 00 42  	vmv.s.x	v18, zero
+      a8: d7 28 19 03  	vredsum.vs	v17, v17, v18
+      ac: d7 2f 10 43  	vmv.x.s	t6, v17
+      b0: 85 07        	addi	a5, a5, 1
+      b2: 7d 17        	addi	a4, a4, -1
+      b4: 63 90 e7 01  	bne	a5, t5, 0xb4 <.LBB0_4+0x4c>
+      b8: 33 87 7e 00  	add	a4, t4, t2
+      bc: 06 07        	slli	a4, a4, 1
+      be: 2e 97        	add	a4, a4, a1
+      c0: 23 10 f7 01  	sh	t6, 0(a4)
+      c4: 85 0e        	addi	t4, t4, 1
+      c6: 05 0e        	addi	t3, t3, 1
+      c8: 63 90 6e 00  	bne	t4, t1, 0xc8 <.LBB0_4+0x60>
+      cc: 85 02        	addi	t0, t0, 1
+      ce: 63 90 12 01  	bne	t0, a7, 0xce <.LBB0_4+0x66>
+
+00000000000000d2 <.LBB0_7>:
+      d2: 73 26 20 c0  	rdinstret	a2
+      d6: 83 35 08 00  	ld	a1, 0(a6)
+      da: b7 06 00 00  	lui	a3, 0
+      de: 37 05 00 00  	lui	a0, 0
+      e2: 13 05 05 00  	mv	a0, a0
+      e6: 23 b0 c6 00  	sd	a2, 0(a3)
+      ea: 17 03 00 00  	auipc	t1, 0
+      ee: 67 00 03 00  	jr	t1

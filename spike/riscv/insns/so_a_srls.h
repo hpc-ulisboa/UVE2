@@ -15,9 +15,9 @@ auto baseBehaviour = [](auto &dest, auto &src, uint64_t shiftValue, auto &pred, 
     /* We can only operate on the first available values of the stream */
     size_t vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
 bool zeroing = src.getType() == RegisterConfig::Load;
-    auto values = src.getElements(true);
+    auto values = src.getElements();
     auto destElements = dest.getElements(false);
-    auto validElementsIndex = src.getValidIndex();
+    auto validElementsIndex = src.getValidElements();
 
     auto pi = pred.getPredicate();
 
@@ -37,7 +37,7 @@ bool zeroing = src.getType() == RegisterConfig::Load;
             out.at(i) = 0; // zeroing out the rest of the elements
     }
     dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
-    dest.setElements(true, out);
+    dest.setElements(out);
     // std::cout << "\n\nOUT: " << out.size() << "\n\n";
     //dest.setValidIndex(dest.vLen);
 };

@@ -52,21 +52,37 @@ Mkfile.old
 dkms.conf
 
 # Spike Tools
-UVE-Testing/spike_test/spike 
-UVE-Testing/spike_test/pk
+UVE-Testing/spike 
+UVE-Testing/pk
 
 # Log files that may be too big to commit
 log*
-*.log
+*/debug.log
+
+# Auxiliary files
+clang.txt
+
+# Directories
+UVE-Testing/compiler_test
+UVE-Testing/spike_test/benchmarks/others
+UVE-Testing/spike_test/benchmarks/floyd-warshall
+UVE-Testing/spike_test/benchmarks/pred
+UVE-Testing/spike_test/benchmarks/ind
+UVE-Testing/spike_test/benchmarks/pvr
+UVE-Testing/spike_test/benchmarks/knn
 
 ### VisualStudioCode ###
+vscode
+.vscode
 .vscode/*
+.vscode/settings.json
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 *.code_workspace
+*.code-workspace
 
 # Local History for Visual Studio Code
 .history/

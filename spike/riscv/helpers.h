@@ -7,9 +7,20 @@
 #include <cstring>  // Include the header for std::memcpy
 #include <type_traits>
 
+#include <algorithm>
+#include <array>
+#include <cstddef> // size_t
+#include <deque>
+#include <iostream>
+#include <memory>
+#include <numeric>
+#include <unordered_map>
+#include <variant>
+#include <vector>
+
 /* Helper to make assert throwing contain a message. Value cond
   is expected to be an invariant. If it fails, the assert fails */
-#define assert_msg(msg, cond) assert(((void)msg, (bool)cond))
+#define assert_msg(msg, cond) assert(((void)msg, cond))
 
 template <class>
 inline constexpr bool always_false_v = false;
@@ -52,5 +63,14 @@ using ComputationTypeSg = std::conditional_t<
 
 template <typename Storage>
 using ComputationTypeUs = Storage;
+
+/* Copied from cppreference as it provides a generic overloaded visitor implementation  */
+template <class... Ts>
+struct overloaded : Ts... {
+    using Ts::operator()...;
+};
+// explicit deduction guide (not needed as of C++20)
+template <class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
 
 #endif // HELPERS_HPP

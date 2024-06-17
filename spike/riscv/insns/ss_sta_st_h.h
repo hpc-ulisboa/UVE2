@@ -6,9 +6,9 @@ auto baseReg = insn.uve_conf_base();
 auto sizeReg = insn.uve_conf_size();
 auto strideReg = insn.uve_conf_stride();
 
-reg_t  base   = READ_REG(baseReg);
-size_t size   = READ_REG(sizeReg);
-size_t stride = READ_REG(strideReg);
+uint64_t base = READ_REG(baseReg);
+unsigned int size = READ_REG(sizeReg);
+int stride = READ_REG(strideReg);
 
 
 P.SU.makeStreamRegister<std::uint16_t>(streamReg, RegisterConfig::Store);

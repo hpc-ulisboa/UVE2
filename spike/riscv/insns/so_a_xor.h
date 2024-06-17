@@ -1,8 +1,3 @@
-
-
-
-
-
 auto streamReg = insn.uve_rd();
 auto &destReg = P.SU.registers[streamReg];
 auto &src1Reg = P.SU.registers[insn.uve_rs1()];
@@ -15,14 +10,14 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto extra) {
     /* Each stream's elements must have the same width for content to be
      * operated on */
-    assert_msg("Given vectors have different widths", src1.getElementsWidth() == src2.getElementsWidth());
+    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
     size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
     /* We can only operate on the first available values of the stream */
-    auto elements1 = src1.getElements(true);
-    auto elements2 = src2.getElements(true);
+    auto elements1 = src1.getElements();
+    auto elements2 = src2.getElements();
     auto destElements = dest.getElements(false);
-    auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
+    auto validElementsIndex = std::min(src1.getValidElements(), src2.getValidElements());
 
     auto pi = pred.getPredicate();
 
@@ -34,8 +29,8 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     for (size_t i = 0; i < vLen; i++) {
         if (i < validElementsIndex){
             if (pi.at((i + 1) * sizeof(OperationType) - 1)) {
-                auto e1 = readAS<OperationType>(elements1.at(i));
-                auto e2 = readAS<OperationType>(elements2.at(i));
+                OperationType e1 = readAS<OperationType>(elements1.at(i));
+                OperationType e2 = readAS<OperationType>(elements2.at(i));
                 out.at(i) = readAS<StorageType>(e1 ^ e2);
                 //std::cout << "ADD element1: " << e1 << " element2: " << e2 << " result: " << value << "\n";
             }
@@ -43,7 +38,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
             out.at(i) = 0; // zeroing out the rest of the elements
     }
     dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
-    dest.setElements(true, out);
+    dest.setElements(out);
     // std::cout << "\n\nOUT: " << out.size() << "\n\n";
     //dest.setValidIndex(dest.vLen);
 };

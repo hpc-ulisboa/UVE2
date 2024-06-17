@@ -12,9 +12,13 @@ int main() {
 
   core(A, B);
 
-  for (int i = 0; i < SIZE; ++i)
-    for (int j = 0; j < SIZE; ++j)
-      printf( DataFormat("", "\n"), A[i*SIZE+j]);
+  if (SIZE*SIZE <= 2500)
+    for (int i = 0; i < SIZE*SIZE; ++i)
+        printf( DataFormat("", "\n"), A[i]);
+  else
+    for (int i = 0; i < SIZE*SIZE; i+=SIZE/20)
+        printf( DataFormat("", "\n"), A[i]);
+  
 
   return 0;
 }

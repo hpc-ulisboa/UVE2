@@ -1,0 +1,110 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+   0:	1101                	addi	sp,sp,-32
+   2:	ec22                	sd	s0,24(sp)
+   4:	e826                	sd	s1,16(sp)
+   6:	e44a                	sd	s2,8(sp)
+   8:	7382                	ld	t2,32(sp)
+   a:	7f22                	ld	t5,40(sp)
+   c:	c0202373          	rdinstret	t1
+  10:	00000fb7          	lui	t6,0x0
+  14:	006fb023          	sd	t1,0(t6) # 0 <core>
+  18:	0a0f0b63          	beqz	t5,ce <.L3>
+  1c:	0f0e                	slli	t5,t5,0x3
+  1e:	82aa                	mv	t0,a0
+  20:	01e58933          	add	s2,a1,t5
+  24:	01e60433          	add	s0,a2,t5
+  28:	84aa                	mv	s1,a0
+
+000000000000002a <.L5>:
+  2a:	8eba                	mv	t4,a4
+  2c:	8e32                	mv	t3,a2
+  2e:	8326                	mv	t1,s1
+
+0000000000000030 <.L4>:
+  30:	000e3007          	fld	ft0,0(t3)
+  34:	00033607          	fld	fa2,0(t1)
+  38:	2198                	fld	fa4,0(a1)
+  3a:	000eb687          	fld	fa3,0(t4)
+  3e:	229c                	fld	fa5,0(a3)
+  40:	62077743          	fmadd.d	fa4,fa4,ft0,fa2
+  44:	0321                	addi	t1,t1,8
+  46:	0e21                	addi	t3,t3,8
+  48:	0ea1                	addi	t4,t4,8
+  4a:	72d7f7c3          	fmadd.d	fa5,fa5,fa3,fa4
+  4e:	fef33c27          	fsd	fa5,-8(t1)
+  52:	fdc41fe3          	bne	s0,t3,30 <.L4>
+  56:	05a1                	addi	a1,a1,8
+  58:	94fa                	add	s1,s1,t5
+  5a:	06a1                	addi	a3,a3,8
+  5c:	fcb917e3          	bne	s2,a1,2a <.L5>
+  60:	01e805b3          	add	a1,a6,t5
+  64:	01e88333          	add	t1,a7,t5
+  68:	8642                	mv	a2,a6
+
+000000000000006a <.L6>:
+  6a:	2218                	fld	fa4,0(a2)
+  6c:	8746                	mv	a4,a7
+  6e:	86aa                	mv	a3,a0
+
+0000000000000070 <.L7>:
+  70:	229c                	fld	fa5,0(a3)
+  72:	2314                	fld	fa3,0(a4)
+  74:	0721                	addi	a4,a4,8
+  76:	12f5f7d3          	fmul.d	fa5,fa1,fa5
+  7a:	96fa                	add	a3,a3,t5
+  7c:	72d7f743          	fmadd.d	fa4,fa5,fa3,fa4
+  80:	a218                	fsd	fa4,0(a2)
+  82:	fee317e3          	bne	t1,a4,70 <.L7>
+  86:	0621                	addi	a2,a2,8
+  88:	0521                	addi	a0,a0,8
+  8a:	fec590e3          	bne	a1,a2,6a <.L6>
+  8e:	8742                	mv	a4,a6
+
+0000000000000090 <.L9>:
+  90:	231c                	fld	fa5,0(a4)
+  92:	0003b707          	fld	fa4,0(t2)
+  96:	0721                	addi	a4,a4,8
+  98:	03a1                	addi	t2,t2,8
+  9a:	02e7f7d3          	fadd.d	fa5,fa5,fa4
+  9e:	fef73c27          	fsd	fa5,-8(a4)
+  a2:	fee597e3          	bne	a1,a4,90 <.L9>
+  a6:	01e78633          	add	a2,a5,t5
+
+00000000000000aa <.L10>:
+  aa:	2398                	fld	fa4,0(a5)
+  ac:	8742                	mv	a4,a6
+  ae:	8696                	mv	a3,t0
+
+00000000000000b0 <.L11>:
+  b0:	229c                	fld	fa5,0(a3)
+  b2:	2314                	fld	fa3,0(a4)
+  b4:	0721                	addi	a4,a4,8
+  b6:	12f577d3          	fmul.d	fa5,fa0,fa5
+  ba:	06a1                	addi	a3,a3,8
+  bc:	72d7f743          	fmadd.d	fa4,fa5,fa3,fa4
+  c0:	a398                	fsd	fa4,0(a5)
+  c2:	fee597e3          	bne	a1,a4,b0 <.L11>
+  c6:	07a1                	addi	a5,a5,8
+  c8:	92fa                	add	t0,t0,t5
+  ca:	fef610e3          	bne	a2,a5,aa <.L10>
+
+00000000000000ce <.L3>:
+  ce:	c02027f3          	rdinstret	a5
+  d2:	6462                	ld	s0,24(sp)
+  d4:	64c2                	ld	s1,16(sp)
+  d6:	6922                	ld	s2,8(sp)
+  d8:	000fb583          	ld	a1,0(t6)
+  dc:	00000737          	lui	a4,0x0
+  e0:	00000537          	lui	a0,0x0
+  e4:	00f73023          	sd	a5,0(a4) # 0 <core>
+  e8:	863e                	mv	a2,a5
+  ea:	00050513          	mv	a0,a0
+  ee:	6105                	addi	sp,sp,32
+  f0:	00000317          	auipc	t1,0x0
+  f4:	00030067          	jr	t1 # f0 <.L3+0x22>

@@ -2,22 +2,12 @@
 #define STREAMING_UNIT_HPP
 
 #include "descriptors.h"
-// #include "processor.h"
 #include "helpers.h"
-#include <algorithm>
-#include <array>
-#include <cstddef> // size_t
-#include <deque>
-#include <iostream>
-#include <numeric>
-#include <type_traits>
-#include <unordered_map>
-#include <variant>
-#include <vector>
 
 /* Necessary for using MMU */
 class processor_t;
-class streamingUnit_t;
+//class streamingUnit_t;
+
 // extern processor_t *globalProcessor;
 #define gMMU(p) (*(p->get_mmu()))
 
@@ -45,10 +35,10 @@ struct streamRegister_t {
     //static constexpr size_t registerLength = 16; // in Bytes
     /* During computations, we test if two streams have the same element width
     using this property */
-    static constexpr size_t elementsWidth = sizeof(ElementsType);
+    static constexpr size_t elementWidth = sizeof(ElementsType);
     /* This property limits how many elements can be manipulated during a
     computation and also how many can be loaded/stored at a time */
-    static constexpr size_t vLen = registerLength / elementsWidth;
+    static constexpr size_t vLen = registerLength / elementWidth;
 
     /* In this implementation, the concept of a stream and register are heavily
     intertwined. As such, stream attributes, such as dimensions, modifiers, EOD flags,
@@ -63,29 +53,35 @@ struct streamRegister_t {
     // static constexpr size_t maxDimensions = 8;
     // static constexpr size_t maxModifiers = su->maxDimensions - 1;
 
+    /* FOR DEBUGGING */
+    size_t registerN;
+
     streamRegister_t(streamingUnit_t *su = nullptr, RegisterConfig t = RegisterConfig::NoStream, size_t regN = -1) :
-     su(su), registerN(regN), type(t) {
+     registerN(regN), su(su), type(t) {
         status = RegisterStatus::NotConfigured;
         mode = RegisterMode::Vector;
-        validIndex = vLen;
+        validElements = vLen;
     }
 
-    void addModifier(Modifier mod);
-    void addDimension(Dimension dim);
+    void addStaticModifier(staticModifier_t mod);
+    void addDynamicModifier(dynamicModifier_t mod);
+    void addScatterGModifier(scatterGModifier_t mod);
+    void addDimension(dimension_t dim);
     void configureDim();
-    void startConfiguration(Dimension dim);
+    void startConfiguration(dimension_t dim);
     void endConfiguration();
-    std::vector<ElementsType> getElements(bool causesUpdate);
-    void setElements(bool causesUpdate, std::vector<ElementsType> e);
+    std::vector<ElementsType> getElements(bool causesUpdate = true);
+    bool getDynModElement(int &value);
+    void setElements(std::vector<ElementsType> e, bool causesUpdate = true);
     void setValidIndex(const size_t i);
     void setMode(const RegisterMode m);
     bool hasStreamFinished() const;
     //void clearEndOfDimensionOfDim(size_t i);
     bool isEndOfDimensionOfDim(size_t i) const;
 
-    size_t getElementsWidth() const;
+    size_t getElementWidth() const;
     size_t getVLen() const;
-    size_t getValidIndex() const;
+    size_t getValidElements() const;
     size_t getRegisterLength() const;
     RegisterConfig getType() const;
     RegisterStatus getStatus() const;
@@ -98,18 +94,18 @@ struct streamRegister_t {
 
 private:
     streamingUnit_t *su;
-    /* FOR DEBUGGING */
-    size_t registerN;
     std::vector<ElementsType> elements = std::vector<ElementsType>(vLen);
-    size_t validIndex;
+    size_t validElements;
     /* Same ordeal as above. Although the amount of dimensions is capped, we can avoid
     indexing by just calling the size method */
-    std::deque<Dimension> dimensions;
+    std::deque<dimension_t> dimensions;
     /* Modifiers are different in that they don't have to scale linearly in a stream
     configuration. As such, it is better to have a container that maps a dimension's
     index to its modifier. When updating stream the iterators, we can test if a dimension
     for the given index exists before the calculations */
-    std::unordered_multimap<int, Modifier> modifiers;
+    std::unordered_multimap<int, staticModifier_t> staticModifiers;
+    std::unordered_multimap<int, dynamicModifier_t> dynamicModifiers;
+    std::unordered_multimap<int, scatterGModifier_t> scatterGModifiers;
     RegisterConfig type;
     RegisterStatus status;
     RegisterMode mode;
@@ -118,11 +114,13 @@ private:
     is controlled using the instruction ss_cfg_vec */
     std::deque<bool> vecCfg;
 
-    void updateStreamValues();
-    size_t generateOffset();
-    bool isDimensionFullyDone(const std::deque<Dimension>::const_iterator start, const std::deque<Dimension>::const_iterator end) const;
+    size_t generateAddress();
+    bool isDimensionFullyDone(const std::deque<dimension_t>::const_iterator start, const std::deque<dimension_t>::const_iterator end) const;
     bool isStreamDone() const;
-    bool tryGenerateOffset(size_t &address);
+    bool tryGenerateAddress(size_t &address);
+    void applyDynamicMods(size_t dimN);
+    void setDynamicModsNotApplied(size_t dimN);
+    void setSGModsNotApplied(size_t dimN);
     void updateIteration();
     void updateAsLoad();
     void updateAsStore();
@@ -130,12 +128,12 @@ private:
 
 /* --- Predicate Registers --- */
 
-struct PredRegister {
+struct predRegister_t {
     static constexpr size_t registerLength = 64; // in Bytes
-    static constexpr size_t elementsWidth = sizeof(uint8_t);
-    static constexpr size_t vLen = registerLength / elementsWidth;
+    static constexpr size_t elementWidth = sizeof(uint8_t);
+    static constexpr size_t vLen = registerLength / elementWidth;
 
-    PredRegister(std::vector<uint8_t> e = std::vector<uint8_t>(vLen)) {
+    predRegister_t(std::vector<uint8_t> e = std::vector<uint8_t>(vLen)) {
         elements = e;
     }
 
@@ -171,7 +169,7 @@ struct streamingUnit_t {
     std::array<std::array<bool, maxDimensions>, registerCount> EODTable;
 
     std::array<RegisterType, registerCount> registers;
-    std::array<PredRegister, predRegCount> predicates;
+    std::array<predRegister_t, predRegCount> predicates;
 
     streamingUnit_t() {
         predicates.at(0).elements = std::vector<uint8_t>(predicates.at(0).vLen, 1);

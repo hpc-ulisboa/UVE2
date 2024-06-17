@@ -10,13 +10,13 @@ auto &predReg = P.SU.predicates[insn.uve_pred()];
 auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto extra) {
     /* Each stream's elements must have the same width for content to be
      * operated on */
-    assert_msg("Given vectors have different widths", src1.getElementsWidth() == src2.getElementsWidth());
+    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
     auto vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     /* We can only operate on the first available values of the stream */
-    auto elements1 = src1.getElements(true);
-    auto elements2 = src2.getElements(true);
+    auto elements1 = src1.getElements();
+    auto elements2 = src2.getElements();
     auto destElements = dest.getElements(false);
-    auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
+    auto validElementsIndex = std::min(src1.getValidElements(), src2.getValidElements());
 
     auto pi = pred.getPredicate();
 
@@ -34,7 +34,7 @@ auto baseBehaviour = [](auto &dest, auto &src1, auto &src2, auto &pred, auto ext
     }
     //dest.setValidIndex(dest.vLen);
     dest.setMode(dest.getVLen() == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
-    dest.setElements(true, out);
+    dest.setElements(out);
 };
 
 /* If the destination register is not configured, we have to build it before the

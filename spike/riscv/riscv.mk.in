@@ -39,6 +39,7 @@ riscv_install_hdrs = \
 	triggers.h \
 	vector_unit.h \
 	descriptors.h \
+	descriptors.h \
 	streaming_unit.h \
 
 riscv_precompiled_hdrs = \
@@ -1394,10 +1395,23 @@ riscv_insn_ext_uve = \
 	so_p_eqs_fp \
 	so_p_lt_fp \
 	so_p_lts_fp \
+	so_p_egt_sg \
+	so_p_egts_sg \
+	so_p_eq_sg \
+	so_p_eqs_sg \
+	so_p_lt_sg \
+	so_p_lts_sg \
+	so_p_egt_us \
+	so_p_egts_us \
+	so_p_eq_us \
+	so_p_eqs_us \
+	so_p_lt_us \
+	so_p_lts_us \
 	so_p_mv \
 	so_p_mvt \
 	so_p_not \
 	so_p_one \
+	so_p_vr \
 	so_p_zero \
 	so_v_dp_b \
 	so_v_dp_d \
@@ -1407,11 +1421,36 @@ riscv_insn_ext_uve = \
 	so_v_mvt \
 	so_v_mv_stream \
 	so_v_mvt_stream \
+	so_v_mvsv_b \
+	so_v_mvsv_h \
+	so_v_mvsv_w \
+	so_v_mvsv_d \
+	so_v_mvvs \
 	ss_app \
 	ss_cfg_vec \
 	ss_end \
+	ss_app_ind_ofs_add_1 \
+	ss_app_indl_ofs_add \
+	ss_app_indl_ofs_dec \
+	ss_app_indl_ofs_inc \
+	ss_app_indl_ofs_set \
+	ss_app_indl_ofs_sub \
+	ss_app_indl_siz_add \
+	ss_app_indl_siz_dec \
+	ss_app_indl_siz_inc \
+	ss_app_indl_siz_set \
+	ss_app_indl_siz_sub \
+	ss_app_indl_str_add \
+	ss_app_indl_str_dec \
+	ss_app_indl_str_inc \
+	ss_app_indl_str_set \
+	ss_app_indl_str_sub \
+	ss_app_mod_ofs_dec \
+	ss_app_mod_ofs_inc \
 	ss_app_mod_siz_dec \
 	ss_app_mod_siz_inc \
+	ss_app_mod_str_dec \
+	ss_app_mod_str_inc \
 	ss_ld_b \
 	ss_ld_d \
 	ss_ld_h \
@@ -1440,15 +1479,14 @@ riscv_insn_list = \
 	$(riscv_insn_ext_zfh) \
 	$(riscv_insn_ext_b) \
 	$(riscv_insn_ext_h) \
-	$(riscv_insn_ext_u) \
 	$(riscv_insn_priv) \
 	$(riscv_insn_svinval) \
 	$(riscv_insn_ext_cmo) \
 	$(riscv_insn_ext_uve) \
-    # $(riscv_insn_ext_k) \
-	# $(if $(HAVE_INT128),$(riscv_insn_ext_v),) \
-	# $(riscv_insn_ext_p) \
-	# $(riscv_insn_ext_q) \
+    $(riscv_insn_ext_k) \
+	$(if $(HAVE_INT128),$(riscv_insn_ext_v),) \
+	$(riscv_insn_ext_p) \
+	$(riscv_insn_ext_q) \
 
 riscv_gen_srcs = $(addsuffix .cc,$(riscv_insn_list))
 

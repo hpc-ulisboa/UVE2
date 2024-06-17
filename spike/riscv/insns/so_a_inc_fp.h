@@ -8,9 +8,9 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
     bool zeroing = src.getType() == RegisterConfig::Load;
 
-    auto elements = src.getElements(true);
+    auto elements = src.getElements();
     auto destElements = dest.getElements(false);
-    auto validElementsIndex = src.getValidIndex();
+    auto validElementsIndex = src.getValidElements();
     auto pi = pred.getPredicate();
 
     using StorageType = typename std::remove_reference_t<decltype(dest)>::ElementsType;
@@ -21,7 +21,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     for (size_t i = 0; i < vLen; i++) {
         if (i < validElementsIndex){
             if (pi.at((i+1)*sizeof(OperationType)-1)){
-                auto e = readAS<OperationType>(elements.at(i)) + 1.0;
+                OperationType e = readAS<OperationType>(elements.at(i)) + 1.0;
                 out.at(i) = readAS<StorageType>(e);
             }
         } else 
@@ -29,7 +29,7 @@ auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
     }
     //dest.setValidIndex(dest.vLen);
     dest.setMode(vLen == 1 ? RegisterMode::Scalar : RegisterMode::Vector);
-    dest.setElements(true, out);
+    dest.setElements(out);
 };
 
 // If the destination register is not configured, we have to build it before the operation so that its element size matches before any calculations are done

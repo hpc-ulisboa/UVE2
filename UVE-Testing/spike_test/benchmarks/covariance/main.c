@@ -1,24 +1,31 @@
 #include <stdio.h>
 #include "Functions.h"
 
-extern void core(void *src1, void *src2, void *src3);
+extern void core(int sizeM, int sizeN, DataType datat_n, DataType *data, DataType *cov, DataType *mean);
 
 
 int main() {
-  DataType src_1[SIZE*SIZE];
-  DataType src_2[SIZE*SIZE];
-  DataType src_3[SIZE];
+  int sizeM = SIZE;
+  int sizeN = SIZE;
 
-  initArray2D(src_1, SIZE, SIZE);
-  initArray2D(src_2, SIZE, SIZE);
-  initZero(src_3, SIZE);
+  DataType data[sizeN*sizeM];
+  DataType cov[sizeM*sizeM];
+  DataType mean[sizeM];
 
+  initArray2D(data, sizeN, sizeM);
+  initArray2D(cov, sizeM, sizeM);
+  initZero(mean, sizeM);
 
-  core(src_1, src_2, src_3);
+  DataType n = sizeN;
+
+  core(sizeM, sizeN, n, data, cov, mean);
 
   // cov
-  for (int i = 0; i < SIZE; i++) {
-    printf( DataFormat("", "\n"), src_2[i]);
+  //printf("\ncov:\n");
+  for (int i = 0; i < sizeM; i++) {
+    for (int j = 0; j < sizeM; j++)
+      printf( DataFormat("", "\n"), cov[i*sizeM + j]);
+    //printf("\n");
   }
 
   return 0;

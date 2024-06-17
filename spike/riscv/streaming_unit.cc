@@ -5,33 +5,79 @@
 #define gMMU(p) (*(p->get_mmu()))
 
 template <typename T>
-void streamRegister_t<T>::addModifier(Modifier mod) {
-    /* A recently added modifier alters the dimension inserted before the last one */
-    //const auto modIndex = dimensions.size() - 2;
+void streamRegister_t<T>::addStaticModifier(staticModifier_t mod) {
     assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
-    const auto modIndex = -1; // next dimension to be added (will increment as dimensions are added)
-    auto iter = modifiers.find(modIndex);
-    assert_msg("Trying to add a modifier, when one already exists in this index", iter == modifiers.end());
-    modifiers.insert({modIndex, mod});
+    staticModifiers.insert({0, mod});
+    /* print modifiers
+    std::cout << "\nModifiers: ";
+    for (auto &m : modifiers)
+        std::cout << m.first << "  ";
+    std::cout << std::endl;*/
 }
 
 template <typename T>
-void streamRegister_t<T>::addDimension(Dimension dim) {
+void streamRegister_t<T>::addDynamicModifier(dynamicModifier_t mod) {
+    assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
+    dynamicModifiers.insert({0, mod});
+    /* print modifiers
+    std::cout << "\nModifiers: ";
+    for (auto &m : modifiers)
+        std::cout << m.first << "  ";
+    std::cout << std::endl;*/
+}
+
+template <typename T>
+void streamRegister_t<T>::addScatterGModifier(scatterGModifier_t mod) {
+    assert_msg("Cannot append more modifiers as max dimensions were reached", dimensions.size() + 1 < su->maxDimensions);
+    scatterGModifiers.insert({0, mod});
+    /* print modifiers
+    std::cout << "\nModifiers: ";
+    for (auto &m : modifiers)
+        std::cout << m.first << "  ";
+    std::cout << std::endl;*/
+}
+
+template <typename T>
+void streamRegister_t<T>::addDimension(dimension_t dim) {
     assert_msg("Cannot append more dimensions as the max value was reached", dimensions.size() < su->maxDimensions);
-    //dimensions.push_back(dim);
-    //vecCfg.push_back(false);
+
     dimensions.push_front(dim);
+
     vecCfg.push_front(false);
 
-    // Increment all modifiers' indexes
-    for (auto &m : modifiers) {
-        auto n = modifiers.extract(m.first);
-        ++n.key();
-        modifiers.insert(std::move(n));
+    std::unordered_multimap<int, staticModifier_t> updatedModifiers;
+
+    // Increment all static modifiers' indexes
+    for (auto &m : staticModifiers) {
+        updatedModifiers.insert(std::make_pair(m.first + 1, m.second));
     }
 
-    // print dimensions
-    // std::cout << "Added dimension with offset " << dim.offset << ", size " << dim.size << " and stride " << dim.stride << std::endl;
+    staticModifiers.swap(updatedModifiers);
+
+    std::unordered_multimap<int, dynamicModifier_t> updatedModifiers1;
+
+    // Increment all dynamic modifiers' indexes
+    for (auto &m : dynamicModifiers) {
+        updatedModifiers1.insert(std::make_pair(m.first + 1, m.second));
+    }
+
+    dynamicModifiers.swap(updatedModifiers1);
+
+    std::unordered_multimap<int, scatterGModifier_t> updatedModifiers2;
+
+    // Increment all scatter-gather modifiers' indexes
+    for (auto &m : scatterGModifiers) {
+        updatedModifiers2.insert(std::make_pair(m.first + 1, m.second));
+    }
+
+    scatterGModifiers.swap(updatedModifiers2);
+
+    /* print2 modifiers
+    std::cout << "Modifiers u" << registerN << ": ";
+    for (auto &m : modifiers)
+        std::cout << m.first << "  ";
+    std::cout << std::endl;*/
+
     // print dimensions size
     // std::cout << "Dimensions size: " << dimensions.size() << std::endl;
 }
@@ -39,17 +85,17 @@ void streamRegister_t<T>::addDimension(Dimension dim) {
 template <typename T>
 void streamRegister_t<T>::configureDim() {
     mode = RegisterMode::Vector;
-    validIndex = vLen;
-    //const auto cfgIndex = dimensions.size() - 1;
+    validElements = vLen;
+    // const auto cfgIndex = dimensions.size() - 1;
     const auto cfgIndex = 0;
     vecCfg.at(cfgIndex) = true;
 }
 
 template <typename T>
-void streamRegister_t<T>::startConfiguration(Dimension dim) {
+void streamRegister_t<T>::startConfiguration(dimension_t dim) {
     status = RegisterStatus::NotConfigured;
     mode = RegisterMode::Scalar;
-    validIndex = 1;
+    validElements = 1;
     dimensions.clear();
     dimensions.push_back(dim);
     vecCfg.push_back(false);
@@ -58,17 +104,23 @@ void streamRegister_t<T>::startConfiguration(Dimension dim) {
 template <typename T>
 void streamRegister_t<T>::endConfiguration() {
     status = RegisterStatus::Running;
-    /*if (this->type == RegisterConfig::Load) {
-      updateAsLoad();
-    }*/
+
+    //print dimensions and modifiers
+    std::cout << "Dimensions: ";
+    for (auto &d : dimensions)
+        std::cout << d.getSize() << " ";
+    std::cout << std::endl;
+    
+    std::cout << "Modifiers: ";
+    for (auto &m : staticModifiers)
+        std::cout << m.first << " ";
+    std::cout << std::endl;
 }
 
 template <typename T>
 std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
-    // assert_msg("Trying to get values from a store stream", type != RegisterConfig::Store);
-
-    if (causesUpdate)
-        updateStreamValues();
+    if (causesUpdate && this->type == RegisterConfig::Load)
+        updateAsLoad();
 
     std::vector<T> e(elements.begin(), elements.end());
 
@@ -76,29 +128,48 @@ std::vector<T> streamRegister_t<T>::getElements(bool causesUpdate) {
 }
 
 template <typename T>
-void streamRegister_t<T>::setElements(bool causesUpdate, std::vector<T> e) {
+bool streamRegister_t<T>::getDynModElement(int &value) {
+    mode = RegisterMode::Scalar;
+    validElements = 1;
+    assert_msg("Dynamic modifier source is not correctly configured", this->type == RegisterConfig::Load);
+    
+    updateAsLoad();
+
+    value = readAS<int>(elements.at(0));
+
+    // check if any EOD flag is set in EODTable
+    for (auto &eod : su->EODTable.at(registerN)) {
+        if (eod)
+            return 0; 
+    }
+
+    return 1;
+}
+
+template <typename T>
+void streamRegister_t<T>::setElements(std::vector<T> e, bool causesUpdate) {
     assert_msg("Trying to set values to a load stream", type != RegisterConfig::Load);
 
     elements = e;
-
-    if (causesUpdate)
-        updateStreamValues();
+ 
+    if (causesUpdate && this->type == RegisterConfig::Store)
+        updateAsStore();
 }
 
 template <typename T>
 void streamRegister_t<T>::setValidIndex(const size_t i) {
     assert_msg("Trying to set valid index to invalid value", i <= vLen);
 
-    validIndex = i;
+    validElements = i;
 }
 
 template <typename T>
 void streamRegister_t<T>::setMode(const RegisterMode m) {
     mode = m;
     if (m == RegisterMode::Scalar)
-        validIndex = 1;
+        validElements = 1;
     else
-        validIndex = vLen;
+        validElements = vLen;
 }
 
 template <typename T>
@@ -106,26 +177,15 @@ bool streamRegister_t<T>::hasStreamFinished() const {
     return status == RegisterStatus::Finished;
 }
 
-/*
-template <typename T>
-void streamRegister_t<T>::clearEndOfDimensionOfDim(size_t i) {
-    assert_msg("Trying to clear eof of invalid dimension", i < dimensions.size());
-    // Cannot clear this flag when the stream has finished, it would prevent us from knowing that
-    if (isStreamDone())
-        return;
-    dimensions.at(i).setEndOfDimension(false);
-}
-*/
-
 template <typename T>
 bool streamRegister_t<T>::isEndOfDimensionOfDim(size_t i) const {
-    assert_msg("Trying to check eof of invalid dimension", i < dimensions.size());
+    assert_msg("Trying to check EOD of invalid dimension", i < dimensions.size());
     return dimensions.at(i).isEndOfDimension();
 }
 
 template <typename T>
-size_t streamRegister_t<T>::getElementsWidth() const {
-    return elementsWidth;
+size_t streamRegister_t<T>::getElementWidth() const {
+    return elementWidth;
 }
 
 template <typename T>
@@ -134,8 +194,8 @@ size_t streamRegister_t<T>::getVLen() const {
 }
 
 template <typename T>
-size_t streamRegister_t<T>::getValidIndex() const {
-    return validIndex;
+size_t streamRegister_t<T>::getValidElements() const {
+    return validElements;
 }
 
 template <typename T>
@@ -156,45 +216,33 @@ RegisterMode streamRegister_t<T>::getMode() const {
 /* FOR DEBUGGING*/
 template <typename T>
 void streamRegister_t<T>::printRegN(char *str) {
-    if (registerN >= 0)
-        fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
-    else
+    if (registerN >= 0) {
+        if (registerN == 16)
+            fprintf(stdout, "%s\n", str);
+            //fprintf(stderr, ">>> UVE Register u%ld %s <<<\n", registerN, str);
+    } else
         fprintf(stderr, ">>> Register number not set for debugging. %s<<<", str);
 }
 
 template <typename T>
-void streamRegister_t<T>::updateStreamValues() {
-    // std::cout << "Updating stream values" << std::endl;
-    if (this->type == RegisterConfig::Load) {
-        updateAsLoad();
-    } else if (this->type == RegisterConfig::Store) {
-        updateAsStore();
-    } else if (this->type == RegisterConfig::NoStream) {
-        // do nothing
-    } else {
-        assert_msg("Unhandled type of stream was asked to update", false);
-    }
-}
-
-template <typename T>
-size_t streamRegister_t<T>::generateOffset() {
+size_t streamRegister_t<T>::generateAddress() {
     /* Result will be the final accumulation of all offsets calculated per dimension */
     size_t init = 0;
-    int counter = 0;
-    return std::accumulate(dimensions.begin(), dimensions.end(), init, [&](size_t acc, Dimension &dim) {
-        if (dim.isLastIteration() && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + counter)) {
-            // std::cout << "Last iteration of dimension " << counter << std::endl;
+    int dimN = 0;
+
+    return std::accumulate(dimensions.begin(), dimensions.end(), init, [&](size_t acc, dimension_t &dim) {
+        if (dim.isLastIteration() && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + dimN)) {
             dim.setEndOfDimension(true);
         }
-        ++counter;
-        // std::cout << "Accumulating dimension " << ++counter << std::endl;
-        return acc + dim.calcOffset(elementsWidth);
+        ++dimN;
+        // std::cout << "Accumulating dimension " << ++dimN << std::endl;
+        return acc + dim.calcAddress(elementWidth);
     });
 }
 
 template <typename T>
-bool streamRegister_t<T>::isDimensionFullyDone(const std::deque<Dimension>::const_iterator start, const std::deque<Dimension>::const_iterator end) const {
-    return std::accumulate(start, end, true, [](bool acc, const Dimension &dim) {
+bool streamRegister_t<T>::isDimensionFullyDone(const std::deque<dimension_t>::const_iterator start, const std::deque<dimension_t>::const_iterator end) const {
+    return std::accumulate(start, end, true, [](bool acc, const dimension_t &dim) {
         return acc && dim.isEndOfDimension();
     });
 }
@@ -205,7 +253,7 @@ bool streamRegister_t<T>::isStreamDone() const {
 }
 
 template <typename T>
-bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
+bool streamRegister_t<T>::tryGenerateAddress(size_t &address) {
     /* There are two situations that prevent us from generating offsets/iterating a stream:
     1) We are at the last iteration of the outermost dimension
     2) We just finished the last iteration of a dimension and there is a configure
@@ -213,20 +261,57 @@ bool streamRegister_t<T>::tryGenerateOffset(size_t &address) {
     only resume after an exterior call to setEndOfDimension(false) */
 
     /* The outermost dimension is the last one in the container */
+
     if (isStreamDone()) {
+        /*if(registerN == 2)
+		    std:: cout << "u" << registerN << "    Stream is done" << std::endl;*/
         status = RegisterStatus::Finished;
         type = RegisterConfig::NoStream;
         return false;
     }
 
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
+        applyDynamicMods(i);
         if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)) {
-            // std::cout << "Stop dimension loading " << i+1 << std::endl;
+            /*if(registerN == 2)
+                std::cout << "u" << registerN << "    Stop dimension loading " << i << std::endl;*/
             return false;
         }
     }
-    address = generateOffset();
+    address = generateAddress();
     return true;
+}
+
+template <typename T>
+void streamRegister_t<T>::applyDynamicMods(size_t dimN) {
+    auto currentModifierIters = dynamicModifiers.equal_range(dimN);
+    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+        if (!it->second.isApplied()){
+            //std::cout << "u" << registerN << "    Applying dynamic modifier to dim " << dimN << std::endl;
+            it->second.modDimension(dimensions, elementWidth);
+        }
+    }
+    auto currentModifierIters1 = scatterGModifiers.equal_range(dimN);
+    for (auto it = currentModifierIters1.first; it != currentModifierIters1.second; ++it) {
+        if (!it->second.isApplied()){
+            //std::cout << "u" << registerN << "    Applying scatter-gather modifier to dim " << dimN << std::endl;
+            it->second.modDimension(dimensions.at(dimN), elementWidth);
+        }
+    }
+}
+
+template <typename T>
+void streamRegister_t<T>::setDynamicModsNotApplied(size_t dimN) {
+    auto currentModifierIters = dynamicModifiers.equal_range(dimN);
+    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it)
+        it->second.setApplied(false);
+}
+
+template <typename T>
+void streamRegister_t<T>::setSGModsNotApplied(size_t dimN) {
+    auto currentModifierIters = scatterGModifiers.equal_range(dimN);
+    for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it)
+        it->second.setApplied(false);
 }
 
 template <typename T>
@@ -238,8 +323,8 @@ void streamRegister_t<T>::updateIteration() {
     }
 
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
-    // std::cout << "Advancing dimension no 1" << std::endl;
     dimensions.at(0).advance();
+
 
     /* No extra processing is needed if there is only 1 dimension */
     if (dimensions.size() == 1)
@@ -248,38 +333,42 @@ void streamRegister_t<T>::updateIteration() {
     // std::cout << "Updating iteration. Dimensions: " << dimensions.size() << std::endl;
     for (size_t i = 0; i < dimensions.size() - 1; ++i) {
         auto &currDim = dimensions.at(i);
+        auto &nextDim = dimensions.at(i + 1);
         /* The following calculations are only necessary if we ARE in the
         last iteration of a dimension */
 
-        if (!currDim.isEndOfDimension())
-            // if (!isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1))
+        if (!currDim.isEndOfDimension()){
+            //std::cout << "dimension_t " << i << " is not EOD" << std::endl;
             continue;
-
-        // std::cout << "Dimension " << i + 1 << " is fully done" << std::endl;
+        }
 
         // std::cout << "Looking for modifiers of dimension " << i << std::endl;
-        auto currentModifierIter = modifiers.find(i);
-        const bool modifierExists = currentModifierIter != modifiers.end();
 
-        // currDim.resetIndex();
-        // printRegN("Updating EOD of dimension.");
-        // std::cout << "Advancing dimension no " << i + 2 << std::endl;
-        dimensions.at(i + 1).advance();
+        // Reset EOD flag of current dimension
         currDim.setEndOfDimension(false);
-        if (modifierExists) {
-            // printRegN("Applying modifier.");
-            currentModifierIter->second.modDimension(currDim);
+        // Unflag dynamic modifiers of current dimension
+        setDynamicModsNotApplied(i);
+        
+        // Iterate upper dimension
+        nextDim.advance();
+        // Unflag scatter dynamic modifiers of upper  dimension
+        setSGModsNotApplied(i+1);
+
+        // Apply static modifiers associated with upper dimension to target dimensions
+        auto currentModifierIters = staticModifiers.equal_range(i+1);
+        for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+            it->second.modDimension(dimensions, elementWidth);
         }
 
         // The values at lower dimensions might have been modified. As such, we need to reset them before next iteration
-        for (size_t j = 0; j < i; j++) {
+        for (size_t j = 0; j < i; j++)
             dimensions.at(j).resetIterValues();
-        }
     }
 }
 
 template <typename T>
 void streamRegister_t<T>::updateAsLoad() {
+    assert_msg("Trying to update as load a non-load stream", type == RegisterConfig::Load);
     if (isStreamDone()) { // doesn't try to load if stream has finished
         status = RegisterStatus::Finished;
         type = RegisterConfig::NoStream;
@@ -290,7 +379,7 @@ void streamRegister_t<T>::updateAsLoad() {
     // elements.reserve(vLen);
 
     size_t eCount = 0;
-    validIndex = 0; // reset valid index
+    validElements = 0; // reset valid index
 
     /*----------------------------------- Loading pipeline -----------------------------------
     ************************************* THIS IS OUTDATED ***********************************
@@ -311,8 +400,7 @@ void streamRegister_t<T>::updateAsLoad() {
 
     size_t max = mode == RegisterMode::Vector ? vLen : 1;
 
-    while (eCount < max && tryGenerateOffset(offset)) {
-        // std::cout << "Can generate offset before (eCount = " << eCount << ")" << std::endl;
+    while (eCount < max && tryGenerateAddress(offset)) {
         auto value = [this](auto address) -> ElementsType {
             if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint8_t>(address));
@@ -323,25 +411,36 @@ void streamRegister_t<T>::updateAsLoad() {
             else
                 return readAS<ElementsType>(gMMU(su->p).template load<std::uint64_t>(address));
         }(offset);
+
         // elements.push_back(value);
+        // std::cout << "u"<< registerN << "   Loaded Value: " << readAS<double>(value) << std::endl;
         elements.at(eCount) = value;
-        ++validIndex;
-        if (tryGenerateOffset(offset)) {
-            //std::cout << "Can generate offset after (eCount = " << eCount << ")" << std::endl;
+        /*if (registerN==2)
+            std::cout << "u" << registerN << "    Loaded Value: " << readAS<int>(value) << std::endl;*/
+        ++validElements;
+        for (size_t i = 0; i < dimensions.size() - 1; i++)
+            setSGModsNotApplied(i);
+        if (tryGenerateAddress(offset)) {
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;
-        } else
-            break;
+        } else{
+			break;
+		}
     }
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
     // std::cout << "eCount: " << eCount << std::endl;
     // std::cout << "vLen: " << vLen << std::endl;
-    if (eCount < max)     // iteration is already updated when register is full
+    if (eCount < max) {      // iteration is already updated when register is full
         updateIteration(); // reset EOD flags and iterate stream
+        /*for (size_t i = 0; i < dimensions.size() - 1; i++)
+            setDynamicModsNotApplied(i, true);*/
+    }
 }
 
 template <typename T>
 void streamRegister_t<T>::updateAsStore() {
+    assert_msg("Trying to update as store a non-store stream", type == RegisterConfig::Store);
+
     // std::cout << "Updating as store" << std::endl;
     if (isStreamDone()) {
         status = RegisterStatus::Finished;
@@ -354,7 +453,7 @@ void streamRegister_t<T>::updateAsStore() {
     size_t eCount = 0;
 
     /*
-    std::cout << "Storing " << validIndex << " elements." << std::endl;
+    std::cout << "Storing " << validElements << " elements." << std::endl;
     // print vecCfg
     printRegN("\nvecCfg: ");
     for (auto &v : vecCfg)
@@ -362,12 +461,12 @@ void streamRegister_t<T>::updateAsStore() {
     std::cout << std::endl;
     */
 
-    while (eCount < validIndex && tryGenerateOffset(offset)) {
+    while (eCount < validElements && tryGenerateAddress(offset)) {
         // auto value = elements.front();
         // elements.erase(elements.begin());
         // elements.pop_front(); //-- std::array
         auto value = elements.at(eCount);
-        //std::cout << "\nStored Values: " << readAS<double>(value) << " ";
+        // std::cout << "\nStored Values: " << readAS<double>(value) << " ";
         if constexpr (std::is_same_v<ElementsType, std::uint8_t>)
             gMMU(su->p).template store<std::uint8_t>(offset, readAS<ElementsType>(value));
         else if constexpr (std::is_same_v<ElementsType, std::uint16_t>)
@@ -376,20 +475,21 @@ void streamRegister_t<T>::updateAsStore() {
             gMMU(su->p).template store<std::uint32_t>(offset, readAS<ElementsType>(value));
         else
             gMMU(su->p).template store<std::uint64_t>(offset, readAS<ElementsType>(value));
-        if (tryGenerateOffset(offset)) {
+
+        if (tryGenerateAddress(offset)) {
             updateIteration(); // reset EOD flags and iterate stream
             ++eCount;
         } else
             break;
     }
-    //std::cout << std::endl;
+    // std::cout << std::endl;
     su->updateEODTable(registerN); // save current state of the stream so that branches can catch EOD flags
-    if (eCount < validIndex)       // iteration is already updated when register is full
+    if (eCount < validElements)       // iteration is already updated when register is full
         updateIteration();         // reset EOD flags and iterate stream
     // elements.clear();
 }
 
-std::vector<uint8_t> PredRegister::getPredicate() const {
+std::vector<uint8_t> predRegister_t::getPredicate() const {
     return elements;
 }
 
@@ -398,7 +498,7 @@ void streamingUnit_t::updateEODTable(const size_t stream) {
     std::visit([&](const auto reg) {
         int d = 0;
         for (const auto dim : reg.dimensions) {
-            EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension(); // flags are only necessary if dimensions are vector coupled
+            EODTable.at(stream).at(d) = /*reg.vecCfg.at(d) &&*/ dim.isEndOfDimension();
             // fprintf(stderr, "EOD of u%d: %d\n", stream, EODTable.at(stream).at(d));
             ++d;
         }
@@ -407,7 +507,7 @@ void streamingUnit_t::updateEODTable(const size_t stream) {
 
 template <typename T>
 void streamingUnit_t::makeStreamRegister(size_t streamRegister, RegisterConfig type) {
-    assert_msg("Tried to use a register index higher than the available register", streamRegister < registerCount);
+    assert_msg("Tried to use a register index higher than the available registers", streamRegister < registerCount);
     if constexpr (std::is_same_v<T, std::uint8_t>) {
         registers.at(streamRegister) = StreamReg8{this, type, streamRegister};
     } else if constexpr (std::is_same_v<T, std::uint16_t>) {

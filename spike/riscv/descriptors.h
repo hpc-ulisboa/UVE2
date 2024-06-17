@@ -2,42 +2,51 @@
 #define DIMENSION_HPP
 
 #include "helpers.h"
-#include <cstddef> // size_t
+//#include "streaming_unit.h"
 
-struct Dimension {
-    Dimension(size_t offset, size_t size, size_t stride);
+class streamingUnit_t;
+
+struct dimension_t {
+    dimension_t(size_t offset, size_t size, int stride)
+        : offset(offset), size(size), stride(stride) {
+
+        iter_offset = offset;
+        iter_size = size;
+        iter_stride = stride;
+        iter_index = 0;
+        endOfDimension = iter_size == 0;
+
+        // endOfDimension = false;
+        // std::cout << "offset: " << offset << ", size: " << size << ", stride: "
+        // << stride << std::endl;
+    }
 
     // void resetIndex();
 
     void resetIterValues();
-
     bool isEmpty() const;
-
     void advance();
-
     bool isLastIteration() const;
-
-    // bool triggerIterationUpdate() const;
-
+    bool isModApplied() const;
     bool isEndOfDimension() const;
-
     void setEndOfDimension(bool b);
-
-    size_t calcOffset(size_t width) const;
-
+    size_t calcAddress(size_t width) const;
     size_t getSize() const;
 
 private:
     const size_t offset;
     const size_t size;
-    const size_t stride;
+    const int stride;
     size_t iter_offset;
     size_t iter_size;
-    size_t iter_stride;
+    int iter_stride;
     size_t iter_index;
     bool endOfDimension;
 
-    friend class Modifier;
+    //friend class modifier_t;
+	friend class staticModifier_t;
+	friend class dynamicModifier_t;
+	friend class scatterGModifier_t;
 };
 
 enum class Target {
@@ -46,45 +55,102 @@ enum class Target {
     Stride
 };
 
-enum class Behaviour {
+enum class staticBehaviour {
+    Increment,
+    Decrement
+};
+
+enum class dynamicBehaviour {
     Increment,
     Decrement,
-    SetValue,
+    Set,
     Add,
     Subtract
 };
 
-struct Modifier {
-    Modifier(Target target, Behaviour behaviour)
-        : target(target), behaviour(behaviour) {}
+struct staticModifier_t {
+    staticModifier_t(Target t, staticBehaviour b, int d = 0, unsigned int td = 0)
+        :target(t), behaviour(b), displacement(d), targetDim(td) {
+    }
 
-    virtual void modDimension(Dimension &dim, const size_t elementWidth) = 0;
+	void modDimension(std::deque<dimension_t> &dims, const size_t elementWidth);
 
 private:
     const Target target;
-    const Behaviour behaviour;
-    // void modStatic(Dimension& dim) const;
+    const staticBehaviour behaviour;
 
-    // void modIndirect(Dimension& dim) const;
+    const int displacement;
+    const int targetDim;
 };
 
-struct StaticModifier : public Modifier {
-    StaticModifier(Target t, Behaviour b, size_t d = 0, size_t s = 0)
-        : Modifier(t, b), displacement(d), size(s) {
-        assert_msg(((Behaviour)b == Behaviour::Decrement || (Behaviour)b == Behaviour::Increment), "Static modifier must be of type Increment or Decrement");
+struct dynamicModifier_t {
+    dynamicModifier_t(Target t, dynamicBehaviour b, const size_t src, streamingUnit_t *su, int td = 0)
+        : target(t), behaviour(b), sourceStream(src), su(su), targetDim(td) {
+            indirectRegisterValue = 0;
+            sourceEnd = false;
+            modApplied = false;
+        }
+
+	void modDimension(std::deque<dimension_t> &dims, const size_t elementWidth);
+
+    bool isApplied() const {
+        return modApplied;
+    }
+
+    void setApplied(const bool s) {
+        modApplied = s;
     }
 
 private:
-    const size_t displacement;
-    const size_t size;
+    const Target target;
+    const dynamicBehaviour behaviour;
+
+    bool modApplied;
+
+    const size_t sourceStream;
+    int indirectRegisterValue;
+    bool sourceEnd;
+
+    streamingUnit_t *su;
+
+    const int targetDim;
+
+    void calculateValueChange(auto &target, auto baseValue, dynamicBehaviour behaviour, int valueChange);
+    void getIndirectRegisterValues();
 };
 
-struct DynamicModifier : public Modifier {
-    DynamicModifier(Target t, Behaviour b, size_t src)
-        : Modifier(t, b), streamSource(src) {}
+struct scatterGModifier_t {
+    scatterGModifier_t(dynamicBehaviour b, const size_t src, streamingUnit_t *su)
+        : behaviour(b), sourceStream(src), su(su) {
+            indirectRegisterValue = 0;
+            sourceEnd = false;
+            modApplied = false;
+        }
+
+	void modDimension(dimension_t &dim, const size_t elementWidth);
+
+    bool isApplied() const {
+        return modApplied;
+    }
+
+    void setApplied(const bool s) {
+        modApplied = s;
+    }
 
 private:
-    const size_t streamSource;
+    const Target target = Target::Offset; // Only offset is supported for now
+    const dynamicBehaviour behaviour;
+
+    bool modApplied;
+
+    const size_t sourceStream;
+    int indirectRegisterValue;
+    bool sourceEnd;
+
+    streamingUnit_t *su;
+
+    void calculateValueChange(auto &target, auto baseValue, dynamicBehaviour behaviour, int valueChange);
+    void getIndirectRegisterValues();
 };
 
 #endif // DIMENSION_HPP

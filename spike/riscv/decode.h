@@ -167,10 +167,13 @@ public:
   // Registers for modifier configuration instructions
   int64_t uve_mod_size() { return x(15, 5); } // RS1
   int64_t uve_mod_disp() { return x(27, 5); } // RS3
+  // Registers for dynamic modifier configuration instructions
+  int64_t uve_mod_origin() { return x(15, 5); } // RS1
   // Registers for branching instructions
   int64_t uve_branch_rs() { return x(15, 5); } // RS1
   // Calculate offset for UVE branching instruction
-  int64_t uve_branch_imm() { return (x(8, 4) << 1) + (x(22, 6) << 5) + (x(7, 1) << 11) + (imm_sign() << 12); }
+  //int64_t uve_branch_imm() { return (x(8, 4) << 1) + (x(22, 6) << 5) + (x(7, 1) << 11) + (imm_sign() << 12); }
+  int64_t uve_branch_imm() { return (x(8, 4) << 1) + (x(22, 6) << 5) + (x(7, 1) << 11) + ( xs(28, 1) << 12); }
   // Registers for predicate instructions
   uint64_t uve_pred_rd() { return x(7, 4); }  // RD
   int64_t uve_pred_rs1() { return x(15, 4); } // Source: predicate register

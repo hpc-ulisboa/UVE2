@@ -9,12 +9,12 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
      * operated on */
 
     
-    assert_msg("Given vectors have different widths", src1.getElementsWidth() == src2.getElementsWidth());
+    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
     /* We can only operate on the first available values of the stream */
-    auto elements1 = src1.getElements(true);
-    auto elements2 = src2.getElements(true);
+    auto elements1 = src1.getElements();
+    auto elements2 = src2.getElements();
     auto destElements = destP.getPredicate();
-    auto validElementsIndex = std::min(src1.getValidIndex(), src2.getValidIndex());
+    auto validElementsIndex = std::min(src1.getValidElements(), src2.getValidElements());
 
     auto pi = pred.getPredicate();
     std::vector<uint8_t> predicate(pred.vLen);
@@ -25,10 +25,10 @@ auto baseBehaviour = [](auto &destP, auto &src1, auto &src2, auto &pred, auto ex
         /* Grab used types for storage and operation */
         using OperationType = decltype(extra);
         uint8_t value = 0;
-        auto e2 = readAS<OperationType>(elements2.at(0));
+        OperationType e2 = readAS<OperationType>(elements2.at(0));
         for (size_t i = 0; i < validElementsIndex; i++) {
             if(pi.at((i+1)*sizeof(OperationType)-1)){
-                auto e1 = readAS<OperationType>(elements1.at(i));
+                OperationType e1 = readAS<OperationType>(elements1.at(i));
                 value = e1 >= e2;
             } else
                 value = readAS<OperationType>(destElements.at(i));
