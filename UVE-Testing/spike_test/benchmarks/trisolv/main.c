@@ -1,7 +1,7 @@
 #include "Functions.h"
 #include <stdio.h>
 
-extern void core(DataType *L, DataType *b, DataType *x);
+extern void core(DataType *x, DataType *y, DataType *z);
 
 int main() {
     DataType L[SIZE * SIZE];

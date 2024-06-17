@@ -58,7 +58,7 @@ void core(void *src1, void *src2, void *src3) {
 }
 #endif // D_TYPE
 #ifdef F_TYPE
-void core(void *src1, void *src2, void *src3) {
+/*void core(void *src1, void *src2, void *src3) {
     asm volatile(
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
@@ -109,6 +109,49 @@ void core(void *src1, void *src2, void *src3) {
     );
 
     printf("%ld\n%ld\n", start, end);
+}*/
+void core(void *x, void *y, void *z)
+{
+    asm volatile(
+        "addi t1, x0, 3          \n\t" // %snm1 = 3
+        "addi t2, x0, 3          \n\t" // %snp1 = 3
+        "addi t3, x0, 3          \n\t" // %sn = 3
+        "addi t4, x0, 1          \n\t" // %one = 1
+        "addi t5, x0, 0          \n\t" // %zero = 0
+        // Original stream info:
+        // Stream Name: %u1, Address: %x, Dimensions: [(%zero, %sn, %sn)], Modifiers [(siz, inc, %one , %zero , %snm1)]
+        "ss.sta.ld.w u1, %[x], t3, t3   \n\t"
+        "ss.end u1, t5, t5, t4          \n\t"
+        "ss.app.mod.siz.inc u1, t1, t4  \n\t"
+        "ss.cfg.vec u1                  \n\t"
+        // Original stream info:
+        // Stream Name: %u2, Address: %z, Dimensions: [(%zero, %zero, %sn)], Modifiers [(siz, inc, %one , %zero , %snm1)]
+        "ss.sta.ld.w u2, %[z], t3, t5   \n\t"
+        "ss.end u2, t5, t5, t4          \n\t"
+        "ss.app.mod.siz.inc u2, t1, t4  \n\t"
+        "ss.cfg.vec u2                  \n\t"
+        // Original stream info:
+        // Stream Name: %u3, Address: %y, Dimensions: [(%zero, %one, %sn)], Modifiers []
+        "ss.ld.w u3, %[y], t3, t4       \n\t"
+        // Original stream info:
+        // Stream Name: %u4, Address: %x, Dimensions: [(%zero, %snp1, %sn)], Modifiers []
+        "ss.ld.w u4, %[x], t3, t2       \n\t"
+        // Original stream info:
+        // Stream Name: %u5, Address: %z, Dimensions: [(%zero, %one, %sn)], Modifiers []
+        "ss.st.w u5, %[z], t3, t4       \n\t"
+        "so.v.dp.w u7, t5, p0           \n\t"
+        ".Loop_0:                       \n\t"
+        ".Loop_1:                       \n\t"
+        "so.a.mul.fp u7, u2, u1, p0     \n\t"
+        "so.a.sub.fp u6, u6, u7, p0     \n\t"
+        "so.b.ndc.1 u1, .Loop_1         \n\t"
+        "so.a.adde.fp u7, u6, p0        \n\t"
+        "so.a.add.fp u7, u7, u3, p0     \n\t"
+        "so.a.div.fp u5, u7, u4, p0     \n\t"
+        "so.b.nc u1, .Loop_0            \n\t"
+
+        :
+        : [x] "r"(x), [y] "r"(y), [z] "r"(z));
 }
 #endif // F_TYPE
 #ifdef I_TYPE
