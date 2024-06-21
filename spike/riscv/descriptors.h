@@ -75,6 +75,10 @@ struct staticModifier_t {
 
 	void modDimension(std::deque<dimension_t> &dims, const size_t elementWidth);
 
+    int getTargetDim() const {
+        return targetDim;
+    }
+
 private:
     const Target target;
     const staticBehaviour behaviour;
@@ -99,6 +103,10 @@ struct dynamicModifier_t {
 
     void setApplied(const bool s) {
         modApplied = s;
+    }
+
+    int getTargetDim() const {
+        return targetDim;
     }
 
 private:

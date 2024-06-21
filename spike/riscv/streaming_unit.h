@@ -61,13 +61,14 @@ struct streamRegister_t {
         status = RegisterStatus::NotConfigured;
         mode = RegisterMode::Vector;
         validElements = vLen;
+        vecCfgDim = su->maxDimensions;
     }
 
     void addStaticModifier(staticModifier_t mod);
     void addDynamicModifier(dynamicModifier_t mod);
     void addScatterGModifier(scatterGModifier_t mod);
     void addDimension(dimension_t dim);
-    void configureDim();
+    void configureVecDim();
     void startConfiguration(dimension_t dim);
     void endConfiguration();
     std::vector<ElementsType> getElements(bool causesUpdate = true);
@@ -112,7 +113,7 @@ private:
     /* This structure holds an array of bits indicating whether the corresponding dimension
     is configured to only load elements while the current dimension is not over or not. It
     is controlled using the instruction ss_cfg_vec */
-    std::deque<bool> vecCfg;
+    unsigned int vecCfgDim;
 
     size_t generateAddress();
     bool isDimensionFullyDone(const std::deque<dimension_t>::const_iterator start, const std::deque<dimension_t>::const_iterator end) const;

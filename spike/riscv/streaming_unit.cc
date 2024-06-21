@@ -43,8 +43,6 @@ void streamRegister_t<T>::addDimension(dimension_t dim) {
 
     dimensions.push_front(dim);
 
-    vecCfg.push_front(false);
-
     std::unordered_multimap<int, staticModifier_t> updatedModifiers;
 
     // Increment all static modifiers' indexes
@@ -83,12 +81,10 @@ void streamRegister_t<T>::addDimension(dimension_t dim) {
 }
 
 template <typename T>
-void streamRegister_t<T>::configureDim() {
+void streamRegister_t<T>::configureVecDim(const unsigned int cfgIndex) {
     mode = RegisterMode::Vector;
     validElements = vLen;
-    // const auto cfgIndex = dimensions.size() - 1;
-    const auto cfgIndex = 0;
-    vecCfg.at(cfgIndex) = true;
+    vecCfgDim = cfgIndex;
 }
 
 template <typename T>
@@ -98,7 +94,6 @@ void streamRegister_t<T>::startConfiguration(dimension_t dim) {
     validElements = 1;
     dimensions.clear();
     dimensions.push_back(dim);
-    vecCfg.push_back(false);
 }
 
 template <typename T>
@@ -272,7 +267,7 @@ bool streamRegister_t<T>::tryGenerateAddress(size_t &address) {
 
     for (size_t i = 0; i < dimensions.size() - 1; i++) {
         applyDynamicMods(i);
-        if (vecCfg.at(i) && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)) {
+        if (i == vecCfgDim && isDimensionFullyDone(dimensions.begin(), dimensions.begin() + i + 1)) {
             /*if(registerN == 2)
                 std::cout << "u" << registerN << "    Stop dimension loading " << i << std::endl;*/
             return false;
@@ -297,7 +292,7 @@ void streamRegister_t<T>::applyDynamicMods(size_t dimN) {
             //std::cout << "u" << registerN << "    Applying scatter-gather modifier to dim " << dimN << std::endl;
             it->second.modDimension(dimensions.at(dimN), elementWidth);
         }
-    }
+    } 
 }
 
 template <typename T>
@@ -325,44 +320,42 @@ void streamRegister_t<T>::updateIteration() {
     /* Iteration starts from the innermost dimension and updates the next if the current reaches an overflow */
     dimensions.at(0).advance();
 
-
-    /* No extra processing is needed if there is only 1 dimension */
-    if (dimensions.size() == 1)
-        return;
-
     // std::cout << "Updating iteration. Dimensions: " << dimensions.size() << std::endl;
     for (size_t i = 0; i < dimensions.size() - 1; ++i) {
         auto &currDim = dimensions.at(i);
-        auto &nextDim = dimensions.at(i + 1);
         /* The following calculations are only necessary if we ARE in the
         last iteration of a dimension */
 
-        if (!currDim.isEndOfDimension()){
-            //std::cout << "dimension_t " << i << " is not EOD" << std::endl;
-            continue;
-        }
+        if (currDim.isEndOfDimension()){
 
-        // std::cout << "Looking for modifiers of dimension " << i << std::endl;
+            auto &nextDim = dimensions.at(i + 1);
 
-        // Reset EOD flag of current dimension
-        currDim.setEndOfDimension(false);
-        // Unflag dynamic modifiers of current dimension
-        setDynamicModsNotApplied(i);
-        
-        // Iterate upper dimension
-        nextDim.advance();
-        // Unflag scatter dynamic modifiers of upper  dimension
-        setSGModsNotApplied(i+1);
+            // Reset EOD flag of current dimension
+            currDim.setEndOfDimension(false);
 
-        // Apply static modifiers associated with upper dimension to target dimensions
-        auto currentModifierIters = staticModifiers.equal_range(i+1);
-        for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
-            it->second.modDimension(dimensions, elementWidth);
-        }
+            // Unflag dynamic modifiers of current dimension
+            setDynamicModsNotApplied(i);
+            
+            // Iterate upper dimension
+            nextDim.advance();
+            
+            // Unflag scatter dynamic modifiers of upper  dimension
+            setSGModsNotApplied(i+1);
 
-        // The values at lower dimensions might have been modified. As such, we need to reset them before next iteration
-        for (size_t j = 0; j < i; j++)
-            dimensions.at(j).resetIterValues();
+            // Apply static modifiers associated with upper dimension to target dimensions
+            auto upperModifierIters = staticModifiers.equal_range(i+1);
+            for (auto it = upperModifierIters.first; it != upperModifierIters.second; ++it) {
+                it->second.modDimension(dimensions, elementWidth);
+            }
+
+            // If modifiers exist, the values at targetted dimensions might have been modified.
+            // As such, we need to reset them before next iteration.
+            auto currentModifierIters = staticModifiers.equal_range(i);
+            for (auto it = currentModifierIters.first; it != currentModifierIters.second; ++it) {
+                int target = it->second.getTargetDim();
+                dimensions.at(target).resetIterValues();
+            }
+        } 
     }
 }
 

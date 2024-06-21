@@ -1427,46 +1427,70 @@ riscv_insn_ext_uve = \
 	so_v_mvsv_d \
 	so_v_mvvs \
 	ss_app \
-	ss_cfg_vec \
 	ss_end \
 	ss_app_ind_ofs_add_1 \
-	ss_app_indl_ofs_add \
-	ss_app_indl_ofs_dec \
-	ss_app_indl_ofs_inc \
-	ss_app_indl_ofs_set \
-	ss_app_indl_ofs_sub \
-	ss_app_indl_siz_add \
-	ss_app_indl_siz_dec \
-	ss_app_indl_siz_inc \
-	ss_app_indl_siz_set \
-	ss_app_indl_siz_sub \
-	ss_app_indl_str_add \
-	ss_app_indl_str_dec \
-	ss_app_indl_str_inc \
-	ss_app_indl_str_set \
-	ss_app_indl_str_sub \
-	ss_app_mod_ofs_dec \
-	ss_app_mod_ofs_inc \
-	ss_app_mod_siz_dec \
-	ss_app_mod_siz_inc \
-	ss_app_mod_str_dec \
-	ss_app_mod_str_inc \
-	ss_ld_b \
-	ss_ld_d \
-	ss_ld_h \
-	ss_ld_w \
-	ss_st_b \
-	ss_st_d \
-	ss_st_h \
-	ss_st_w \
+	ss_app_ind_ofs_add_1 \
+	ss_app_ind_ofs_dec_1 \
+	ss_app_ind_ofs_inc_1 \
+	ss_app_ind_ofs_set_1 \
+	ss_app_ind_ofs_sub_1 \
+	ss_app_ind_ofs_sg_add \
+	ss_app_ind_ofs_sg_add \
+	ss_app_ind_ofs_sg_dec \
+	ss_app_ind_ofs_sg_inc \
+	ss_app_ind_ofs_sg_set \
+	ss_app_ind_ofs_sg_sub \
+	ss_app_ind_siz_add_1 \
+	ss_app_ind_siz_dec_1 \
+	ss_app_ind_siz_inc_1 \
+	ss_app_ind_siz_set_1 \
+	ss_app_ind_siz_sub_1 \
+	ss_app_ind_str_add_1 \
+	ss_app_ind_str_dec_1 \
+	ss_app_ind_str_inc_1 \
+	ss_app_ind_str_set_1 \
+	ss_app_ind_str_sub_1 \
+	ss_app_mod_ofs_dec_1 \
+	ss_app_mod_ofs_inc_1 \
+	ss_app_mod_siz_dec_1 \
+	ss_app_mod_siz_inc_1 \
+	ss_app_mod_str_dec_1 \
+	ss_app_mod_str_inc_1 \
+	ss_end_ind_ofs_sg_add \
+	ss_end_ind_ofs_sg_add \
+	ss_end_ind_ofs_sg_dec \
+	ss_end_ind_ofs_sg_inc \
+	ss_end_ind_ofs_sg_set \
+	ss_end_ind_ofs_sg_sub \
 	ss_sta_ld_b \
 	ss_sta_ld_d \
 	ss_sta_ld_h \
 	ss_sta_ld_w \
+	ss_sta_ld_b_inds \
+	ss_sta_ld_d_inds \
+	ss_sta_ld_h_inds \
+	ss_sta_ld_w_inds \
+	ss_sta_ld_b_v \
+	ss_sta_ld_d_v \
+	ss_sta_ld_h_v \
+	ss_sta_ld_w_v \
+	ss_sta_ld_b_v_1 \
+	ss_sta_ld_d_v_1 \
+	ss_sta_ld_h_v_1 \
+	ss_sta_ld_w_v_1 \
 	ss_sta_st_b \
 	ss_sta_st_d \
 	ss_sta_st_h \
 	ss_sta_st_w \
+	ss_sta_st_b_v \
+	ss_sta_st_d_v \
+	ss_sta_st_h_v \
+	ss_sta_st_w_v \
+	ss_sta_st_b_v_1 \
+	ss_sta_st_d_v_1 \
+	ss_sta_st_h_v_1 \
+	ss_sta_st_w_v_1 \
+	
 	
 
 riscv_insn_list = \

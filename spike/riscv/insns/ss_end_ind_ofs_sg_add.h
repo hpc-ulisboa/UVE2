@@ -5,4 +5,5 @@ auto origin = insn.uve_mod_origin();
 
 std::visit([&](auto &reg) {
     reg.addScatterGModifier(scatterGModifier_t(dynamicBehaviour::Add, origin, &(P.SU)));
+    reg.endConfiguration();
 }, destReg);

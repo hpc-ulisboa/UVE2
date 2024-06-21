@@ -8,12 +8,11 @@ uint64_t base = READ_REG(baseReg);
 unsigned int size = READ_REG(sizeReg);
 int stride = READ_REG(strideReg);
 
-P.SU.makeStreamRegister<std::uint8_t>(streamReg, RegisterConfig::Load);
+P.SU.makeStreamRegister<std::uint16_t>(streamReg, RegisterConfig::Load);
 /*operateRegister(P.SU, streamReg, [=](auto& reg) {
     reg.startConfiguration({ base, size, stride });
-    reg.endConfiguration();
 });*/
 std::visit([&](auto& reg){
     reg.startConfiguration({ base, size, stride });
-    reg.endConfiguration();
+    reg.configureVecDim(0);
 }, destReg);
