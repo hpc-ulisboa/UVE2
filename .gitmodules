@@ -1,0 +1,6 @@
+[submodule "spike/riscv-isa-sim"]
+	path = spike/riscv-isa-sim
+	url = https://github.com/riscv-software-src/riscv-isa-sim
+[submodule "riscv-isa-sim"]
+	path = riscv-isa-sim
+	url = https://github.com/riscv-software-src/riscv-isa-sim
