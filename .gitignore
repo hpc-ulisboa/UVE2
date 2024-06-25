@@ -71,6 +71,10 @@ UVE-Testing/spike_test/benchmarks/ind
 UVE-Testing/spike_test/benchmarks/pvr
 UVE-Testing/spike_test/benchmarks/knn
 
+# Modified Spike
+riscv-isa-sim
+new_spike
+
 ### VisualStudioCode ###
 vscode
 .vscode
