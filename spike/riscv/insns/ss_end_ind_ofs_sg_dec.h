@@ -4,6 +4,6 @@ auto &destReg = P.SU.registers[insn.uve_rd()];
 auto origin = insn.uve_mod_origin();
 
 std::visit([&](auto &reg) {
-    reg.addScatterGModifier(scatterGModifier_t(dynamicBehaviour::Dec, origin, &(P.SU)));
+    reg.addScatterGModifier(scatterGModifier_t(dynamicBehaviour::Decrement, origin, &(P.SU)));
     reg.endConfiguration();
 }, destReg);

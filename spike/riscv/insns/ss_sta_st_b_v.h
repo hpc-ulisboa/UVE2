@@ -17,5 +17,5 @@ P.SU.makeStreamRegister<std::uint8_t>(streamReg, RegisterConfig::Store);
 });*/
 std::visit([&](auto& reg){
     reg.startConfiguration({ base, size, stride });
-    reg.configureVecDim(P.SU.maxDimensions);
+    reg.configureVecDim();
 }, destReg);

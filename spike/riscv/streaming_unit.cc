@@ -81,7 +81,7 @@ void streamRegister_t<T>::addDimension(dimension_t dim) {
 }
 
 template <typename T>
-void streamRegister_t<T>::configureVecDim(const unsigned int cfgIndex) {
+void streamRegister_t<T>::configureVecDim(const int cfgIndex = -1) {
     mode = RegisterMode::Vector;
     validElements = vLen;
     vecCfgDim = cfgIndex;

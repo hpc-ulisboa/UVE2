@@ -39,7 +39,6 @@ riscv_install_hdrs = \
 	triggers.h \
 	vector_unit.h \
 	descriptors.h \
-	descriptors.h \
 	streaming_unit.h \
 
 riscv_precompiled_hdrs = \
