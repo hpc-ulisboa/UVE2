@@ -9,14 +9,14 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
-        "ss.ld.d u1, %[src1], %[size], %[stride] \t\n"
-        "ss.cfg.vec u1 \t\n"
+        "ss.sta.ld.d.v u1, %[src1] \t\n"
+        "ss.end        u1, zero, %[size], %[stride] \t\n"
 
-        "ss.ld.d u2, %[src2], %[size], %[stride] \t\n"
-        "ss.cfg.vec u2 \t\n"
+        "ss.sta.ld.d.v u2, %[src2] \t\n"
+        "ss.end        u2, zero, %[size], %[stride] \t\n"
 
-        "ss.st.d u3, %[dest], %[size], %[stride] \t\n"
-        "ss.cfg.vec u3 \t\n"
+        "ss.sta.st.d.v.1 u3, %[dest] \t\n"
+        "ss.end          u3, zero, %[size], %[stride] \t\n"
 
         "so.v.dp.d u4, %[value], p0\t\n"
 
@@ -44,14 +44,14 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
-        "ss.ld.w u1, %[src1], %[size], %[stride] \t\n"
-        "ss.cfg.vec u1 \t\n"
+        "ss.sta.ld.w.v u1, %[src1] \t\n"
+        "ss.end        u1, zero, %[size], %[stride] \t\n"
 
-        "ss.ld.w u2, %[src2], %[size], %[stride] \t\n"
-        "ss.cfg.vec u2 \t\n"
+        "ss.sta.ld.w.v u2, %[src2] \t\n"
+        "ss.end        u2, zero, %[size], %[stride] \t\n"
 
-        "ss.st.w u3, %[dest], %[size], %[stride] \t\n"
-        "ss.cfg.vec u3 \t\n"
+        "ss.sta.st.w.v u3, %[dest] \t\n"
+        "ss.end        u3, zero, %[size], %[stride] \t\n"
 
         "so.v.dp.w u4, %[value], p0\t\n"
 
@@ -79,14 +79,14 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
-        "ss.ld.w u1, %[src1], %[size], %[stride] \t\n"
-        "ss.cfg.vec u1 \t\n"
+        "ss.sta.ld.w.v u1, %[src1] \t\n"
+        "ss.end        u1, zero, %[size], %[stride] \t\n"
 
-        "ss.ld.w u2, %[src2], %[size], %[stride] \t\n"
-        "ss.cfg.vec u2 \t\n"
+        "ss.sta.ld.w.v u2, %[src2] \t\n"
+        "ss.end        u2, zero, %[size], %[stride] \t\n"
 
-        "ss.st.w u3, %[dest], %[size], %[stride] \t\n"
-        "ss.cfg.vec u3 \t\n"
+        "ss.sta.st.w.v u3, %[dest] \t\n"
+        "ss.end        u3, zero, %[size], %[stride] \t\n"
 
         "so.v.dp.w u4, %[value], p0\t\n"
 
@@ -114,14 +114,14 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
-        "ss.ld.h u1, %[src1], %[size], %[stride] \t\n"
-        "ss.cfg.vec u1 \t\n"
+        "ss.sta.ld.h.v u1, %[src1] \t\n"
+        "ss.end        u1, zero, %[size], %[stride] \t\n"
 
-        "ss.ld.h u2, %[src2], %[size], %[stride] \t\n"
-        "ss.cfg.vec u2 \t\n"
+        "ss.sta.ld.h.v u2, %[src2] \t\n"
+        "ss.end        u2, zero, %[size], %[stride] \t\n"
 
-        "ss.st.h u3, %[dest], %[size], %[stride] \t\n"
-        "ss.cfg.vec u3 \t\n"
+        "ss.sta.st.h.v u3, %[dest] \t\n"
+        "ss.end        u3, zero, %[size], %[stride] \t\n"
 
         "so.v.dp.h u4, %[value], p0\t\n"
 
@@ -149,14 +149,14 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
         //"csrrs %[start], instret, x0 \t\n" // start counting instructions after values have been loaded into registers
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
-        "ss.ld.b u1, %[src1], %[size], %[stride] \t\n"
-        "ss.cfg.vec u1 \t\n"
+        "ss.sta.ld.b.v u1, %[src1] \t\n"
+        "ss.end        u1, zero, %[size], %[stride] \t\n"
 
-        "ss.ld.b u2, %[src2], %[size], %[stride] \t\n"
-        "ss.cfg.vec u2 \t\n"
+        "ss.sta.ld.b.v u2, %[src2] \t\n"
+        "ss.end        u2, zero, %[size], %[stride] \t\n"
 
-        "ss.st.b u3, %[dest], %[size], %[stride] \t\n"
-        "ss.cfg.vec u3 \t\n"
+        "ss.sta.st.b.v u3, %[dest] \t\n"
+        "ss.end        u3, zero, %[size], %[stride] \t\n"
 
         "so.v.dp.b u4, %[value], p0\t\n"
 

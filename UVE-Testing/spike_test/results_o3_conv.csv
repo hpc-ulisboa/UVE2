@@ -1,6 +1,0 @@
-kernel,size,datatype,original_clang,rvv,original_gcc,uve
-convolution,2500,byte,237618,97874,95063,904
-convolution,2500,half-word,239923,38504,95061,1768
-convolution,2500,integer,239923,8601,94915,2632
-convolution,2500,float,219188,8212,76483,2632
-convolution,2500,double,219188,12820,76483,5224

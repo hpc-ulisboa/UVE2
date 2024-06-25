@@ -27,19 +27,19 @@ const kernelSizeMap = {
 	"saxpy": size*size,
 	"sgd": 0,
 	"spmv_ellpack": 0,
-	"spmv_ellpack_delimiters": 0,
-	"stream": size*size,*/
-	"trisolv": size//,
-	//"triangular_acc": size
+	"spmv_ellpack_delimiters": 0,*/
+	"stream": size*size/*,
+	"trisolv": size,
+	"triangular_acc": size*/
 };
 
 // read type and size from command line
 const typeMap = {
-    //'B': 'byte',
-	//'H': 'half-word',
-    //'I': 'integer',
-    'F': 'float'//,
-    //'D': 'double'
+    'B': 'byte',
+	'H': 'half-word',
+    'I': 'integer',
+    'F': 'float',
+    'D': 'double'
 };
 
 const compileFlags = ["-O3", "-fno-tree-vectorize", "-fno-unroll-loops", "-Wall", "-pedantic"];
@@ -120,7 +120,7 @@ function compileKernel(command, args, flag = false) {
 	}
 }
 
-function aproximateEqual(stdout1, stdout2, stdout3, stdout4, kernel, t, s, dir) {
+function aproximateEqual(stdout1, stdout2, /*stdout3, stdout4,*/ kernel, t, s, dir) {
 	let flag = true;
 	/* Write log files */
 	fs.writeFile(`${dir}/simple_gcc.txt`, stdout1, (err) => {
@@ -131,72 +131,72 @@ function aproximateEqual(stdout1, stdout2, stdout3, stdout4, kernel, t, s, dir) 
 		if (err) throw err;
 	});
 
-	fs.writeFile(`${dir}/simple_clang.txt`, stdout3, (err) => {
+	/*fs.writeFile(`${dir}/simple_clang.txt`, stdout3, (err) => {
 		if (err) throw err;
-	});
+	});*/
 
-	fs.writeFile(`${dir}/rvv.txt`, stdout4, (err) => {
+	/*fs.writeFile(`${dir}/rvv.txt`, stdout4, (err) => {
 		if (err) throw err;
-	});
+	});*/
 
 	/* Compare values */
 	const original_gcc = stdout1.split("\n");
 	const uve = stdout2.split("\n");
-	const original_clang = stdout3.split("\n");
-	const rvv = stdout4.split("\n");
+	//const original_clang = stdout3.split("\n");
+	//const rvv = stdout4.split("\n");
 
-	if (original_gcc.length !== uve.length || original_gcc.length !== original_clang.length || original_gcc.length !== rvv.length) {
+	if (original_gcc.length !== uve.length /*|| original_gcc.length !== original_clang.length || original_gcc.length !== rvv.length*/) {
 		console.log(`Tests did not generate same amount of values`);
 		return false;
 	}
 
 	const start1 = parseInt(original_gcc[0]);
 	const start2 = parseInt(uve[0]);
-	const start3 = parseInt(original_clang[0]);
-	const start4 = parseInt(rvv[0]);
+	//const start3 = parseInt(original_clang[0]);
+	//const start4 = parseInt(rvv[0]);
 	const end1 = parseInt(original_gcc[1]);
 	const end2 = parseInt(uve[1]);
-	const end3 = parseInt(original_clang[1]);
-	const end4 = parseInt(rvv[1]);
+	//const end3 = parseInt(original_clang[1]);
+	//const end4 = parseInt(rvv[1]);
 
 	for (i = 2; i < original_gcc.length; i++) {
 		const value1 = parseFloat(original_gcc[i]);
 		const value2 = parseFloat(uve[i]);
 
-		const value3 = parseFloat(original_clang[i]);
-		const value4 = parseFloat(rvv[i]);
+		//const value3 = parseFloat(original_clang[i]);
+		//const value4 = parseFloat(rvv[i]);
 
 		const diff = Math.abs(value1 - value2);
-		const diff2 = Math.abs(value3 - value4);
+		//const diff2 = Math.abs(value3 - value4);
 		if (diff > 0.1) {
 			console.error(`UVE: Values were ${original_gcc[i]} and ${uve[i]} with difference of ${diff} at index ${i-2}`);
 			flag = false;
 		}
-		if (diff2 > 0.1) {
+		/*if (diff2 > 0.1) {
 			console.error(`RVV: Values were ${original_clang[i]} and ${rvv[i]} with difference of ${diff2} at index ${i-2}`);
 			flag = false;
-		}
+		}*/
 	}
 
 	const insnsOGCC = end1-start1;
 	const insnsUVE = end2-start2;
-	const insnsOCLANG = end3-start3;
-	const insnsRVV = end4-start4;
+	//const insnsOCLANG = end3-start3;
+	//const insnsRVV = end4-start4;
 	const diffInsnsUVE = insnsUVE-insnsOGCC;
-	const diffInsnsRVV = insnsRVV-insnsOCLANG;
-	const diffInsnsUVE_RVV = insnsUVE - insnsRVV;
+	//const diffInsnsRVV = insnsRVV-insnsOCLANG;
+	//const diffInsnsUVE_RVV = insnsUVE - insnsRVV;
 
 	// difference in percentage
 	const diffInsnsPuve = (diffInsnsUVE/insnsOGCC)*100;
-	const diffInsnsPrvv = (diffInsnsRVV/insnsOCLANG)*100;
-	const diffInsnsPuve_rvv = (diffInsnsUVE_RVV/insnsRVV)*100;
+	//const diffInsnsPrvv = (diffInsnsRVV/insnsOCLANG)*100;
+	//const diffInsnsPuve_rvv = (diffInsnsUVE_RVV/insnsRVV)*100;
 
 	if (diffInsnsUVE < 0)
 		console.log(`UVE executed ${-diffInsnsUVE} less instructions`);
 	else if (diffInsnsUVE > 0)
 		console.log(`UVE executed ${diffInsnsUVE} more instructions`);
 
-	if (diffInsnsRVV < 0)
+	/*if (diffInsnsRVV < 0)
 		console.log(`RVV executed ${-diffInsnsRVV} less instructions`);
 	else if (diffInsnsRVV > 0)
 		console.log(`RVV executed ${diffInsnsRVV} more instructions`);
@@ -204,15 +204,15 @@ function aproximateEqual(stdout1, stdout2, stdout3, stdout4, kernel, t, s, dir) 
 	if (diffInsnsUVE_RVV < 0)
 		console.log(`UVE executed ${-diffInsnsUVE_RVV} less instructions than RVV`);
 	else if (diffInsnsUVE_RVV > 0)
-		console.log(`UVE executed ${diffInsnsUVE_RVV} more instructions than RVV`);
+		console.log(`UVE executed ${diffInsnsUVE_RVV} more instructions than RVV`);*/
 
 	const data = [
-		['Original', 'RVV', 'Difference', 'Difference (%)'],
-		[insnsOCLANG, insnsRVV, diffInsnsRVV, diffInsnsPrvv.toFixed(2)],
+		//['Original', 'RVV', 'Difference', 'Difference (%)'],
+		//[insnsOCLANG, insnsRVV, diffInsnsRVV, diffInsnsPrvv.toFixed(2)],
 		['Original', 'UVE', 'Difference', 'Difference (%)'],
 		[insnsOGCC, insnsUVE, diffInsnsUVE, diffInsnsPuve.toFixed(2)],
-		['RVV', 'UVE', 'Difference', 'Difference (%)'],
-		[insnsRVV, insnsUVE, diffInsnsUVE_RVV, diffInsnsPuve_rvv.toFixed(2)]
+		//['RVV', 'UVE', 'Difference', 'Difference (%)'],
+		//[insnsRVV, insnsUVE, diffInsnsUVE_RVV, diffInsnsPuve_rvv.toFixed(2)]
 	];
 
 	// Call the function to adjust table width and print the table
@@ -222,10 +222,10 @@ function aproximateEqual(stdout1, stdout2, stdout3, stdout4, kernel, t, s, dir) 
 
 	// export to csv
 	// kernel, size, datatype, original_clang, rvv, original_gcc, uve
-	const csv = `${kernel},${s},${typeMap[t]},${insnsOCLANG},${insnsRVV},${insnsOGCC},${insnsUVE}\n`;
+	/*const csv = `${kernel},${s},${typeMap[t]},${insnsOCLANG},${insnsRVV},${insnsOGCC},${insnsUVE}\n`;
 	fs.appendFile(csvFilename, csv, (err) => {
 		if (err) throw err;
-	});
+	});*/
 
 	return flag;
 }
@@ -281,7 +281,7 @@ for (let kernel in kernelSizeMap) {
 		});
 
 		/* Compile for RVV with clang */
-		compileKernel(clangPath, [...clangFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
+		/*compileKernel(clangPath, [...clangFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
 		compileKernel(clangPath, [...clangFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
 		compileKernel(clangPath, [...clangFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"], true);
 		compileKernel(clangPath, [...clangFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple_clang}`]);
@@ -299,17 +299,17 @@ for (let kernel in kernelSizeMap) {
 		stdoutO = objDump.stdout.toString();
 		fs.writeFile(`${dir}/rvv.dump`, stdoutO, (err) => {
 			if (err) throw err;
-		});
+		});*/
 
 		/* Run each kernel file */
 		const execSimpleGCC = executableRun(spikePath, [pkPath, `${dir}/${bin_simple_gcc}`, kernel]);
 		const execUVE = executableRun(spikePath, [pkPath, `${dir}/${bin_uve}`, kernel]);
-		const execSimpleClang = executableRun(spikePath, [pkPath, `${dir}/${bin_simple_clang}`, kernel]);
-		const execRVV = executableRun(spikePath, ["--isa=rv64gcv",  "--varch=vlen:512,elen:64", pkPath, `${dir}/${bin_rvv}`, kernel]);
+		//const execSimpleClang = executableRun(spikePath, [pkPath, `${dir}/${bin_simple_clang}`, kernel]);
+		//const execRVV = executableRun(spikePath, ["--isa=rv64gcv",  "--varch=vlen:512,elen:64", pkPath, `${dir}/${bin_rvv}`, kernel]);
 
 		/* Test if generated values are similar */
 
-		if (aproximateEqual(execSimpleGCC.stdout.toString(),  execUVE.stdout.toString(), execSimpleClang.stdout.toString(), execRVV.stdout.toString(), kernel, type, sizeCSV, dir)) {
+		if (aproximateEqual(execSimpleGCC.stdout.toString(),  execUVE.stdout.toString(), /*execSimpleClang.stdout.toString(), execRVV.stdout.toString(),*/ kernel, type, sizeCSV, dir)) {
 			console.log(`Kernel ${kernel} is similar enough`);
 		} else {
 			console.error(`Kernel ${kernel}: Did not generate result similar enough`);

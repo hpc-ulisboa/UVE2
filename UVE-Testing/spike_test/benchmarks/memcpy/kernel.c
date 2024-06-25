@@ -8,11 +8,11 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
 		"rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
-		"ss.st.d  u1, %[dest], %[size], %[stride] \t\n"
-		"ss.cfg.vec u1 \t\n"
+		"ss.sta.st.d.v  u1, %[dest] \t\n"
+		"ss.end		    u1, zero, %[size], %[stride] \t\n"
 		
-		"ss.ld.d  u2,  %[src], %[size], %[stride] \t\n"
-		"ss.cfg.vec u2 \t\n"
+		"ss.sta.ld.d.v  u2, %[src] \t\n"
+		"ss.end		    u2, zero, %[size], %[stride] \t\n"
 
 		".uve_loop%= : \t\n"
 			"so.v.mv u1, u2, p0 \n\t"
@@ -34,11 +34,11 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
 		"rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
-		"ss.st.w  u1, %[dest], %[size], %[stride] \t\n"
-		"ss.cfg.vec u1 \t\n"
+		"ss.sta.st.w.v  u1, %[dest] \t\n"
+		"ss.end		    u1, zero, %[size], %[stride] \t\n"
 		
-		"ss.ld.w  u2,  %[src], %[size], %[stride] \t\n"
-		"ss.cfg.vec u2 \t\n"
+		"ss.sta.ld.w.v  u2, %[src] \t\n"
+		"ss.end		    u2, zero, %[size], %[stride] \t\n"
 
 		".uve_loop%= : \t\n"
 			"so.v.mv u1, u2, p0 \n\t"
@@ -60,11 +60,11 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
 		"rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
-		"ss.st.h  u1, %[dest], %[size], %[stride] \t\n"
-		"ss.cfg.vec u1 \t\n"
+		"ss.sta.st.h.v  u1, %[dest] \t\n"
+		"ss.end		    u1, zero, %[size], %[stride] \t\n"
 		
-		"ss.ld.h  u2,  %[src], %[size], %[stride] \t\n"
-		"ss.cfg.vec u2 \t\n"
+		"ss.sta.ld.h.v  u2, %[src] \t\n"
+		"ss.end		    u2, zero, %[size], %[stride] \t\n"
 
 		".uve_loop%= : \t\n"
 			"so.v.mv u1, u2, p0 \n\t"
@@ -86,11 +86,11 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
 		"rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
-		"ss.st.b  u1, %[dest], %[size], %[stride] \t\n"
-		"ss.cfg.vec u1 \t\n"
+		"ss.sta.st.b.v  u1, %[dest] \t\n"
+		"ss.end		    u1, zero, %[size], %[stride] \t\n"
 		
-		"ss.ld.b  u2,  %[src], %[size], %[stride] \t\n"
-		"ss.cfg.vec u2 \t\n"
+		"ss.sta.ld.b.v  u2, %[src] \t\n"
+		"ss.end		    u2, zero, %[size], %[stride] \t\n"
 
 		".uve_loop%= : \t\n"
 			"so.v.mv u1, u2, p0 \n\t"
