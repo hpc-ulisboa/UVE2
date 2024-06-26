@@ -8,20 +8,21 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.d           u1, %[src1], %[si], %[sk] \t\n" // D2: slide verticaly stride sizeK access size sizeI
-		"ss.app                u1, zero, %[sj], zero \t\n"     // repeat: for each 'j'
-		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontaly by 1, access size sizeK
-		"ss.cfg.vec            u1                      \t\n"
+		"ss.sta.ld.d.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
+		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
+		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.d           u2, %[src2], %[si], zero \t\n"  // D2: slide horizontaly by 1, access size sizeJ  
-		"ss.app                u2, zero, %[sj], %[one] \t\n"   // repeat: for each 'i'   
-		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide verticaly stride sizeJ ('sizeK' times)
-		"ss.cfg.vec            u2                     \t\n"
+		"ss.sta.ld.d.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
+		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
+		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
 
 		// C stream store (IxJ)
-		"ss.sta.st.d           u4, %[src3], %[si], %[sj] \t\n"   // D2: slide verticaly stride sizeJ access size sizeI
-		"ss.end                u4, zero, %[sj], %[one] \t\n"     // D1: slide horizontaly by 1, access size sizeJ
+		"ss.sta.st.d           u4, %[src3] \t\n"			   // Store C, scalar
+		"ss.app				   u4, zero, %[si], %[sj] \t\n"    // D2: slide vertically (stride sizeJ), access size sizeI
+		"ss.end                u4, zero, %[sj], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeJ
 
 		".iLoop1%=: \t\n"    
             "so.v.dp.d u21, zero, p0 \t\n"
@@ -49,20 +50,21 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.w           u1, %[src1], %[si], %[sk] \t\n" // D2: slide verticaly stride sizeK access size sizeI
-		"ss.app                u1, zero, %[sj], zero \t\n"     // repeat: for each 'j'
-		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontaly by 1, access size sizeK
-		"ss.cfg.vec            u1                      \t\n"
+		"ss.sta.ld.w.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
+		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
+		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.w           u2, %[src2], %[si], zero \t\n"  // D2: slide horizontaly by 1, access size sizeJ  
-		"ss.app                u2, zero, %[sj], %[one] \t\n"   // repeat: for each 'i'   
-		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide verticaly stride sizeJ ('sizeK' times)
-		"ss.cfg.vec            u2                     \t\n"
+		"ss.sta.ld.w.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
+		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
+		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
 
 		// C stream store (IxJ)
-		"ss.sta.st.w           u4, %[src3], %[si], %[sj] \t\n"   // D2: slide verticaly stride sizeJ access size sizeI
-		"ss.end                u4, zero, %[sj], %[one] \t\n"     // D1: slide horizontaly by 1, access size sizeJ
+		"ss.sta.st.w           u4, %[src3] \t\n"			   // Store C, scalar
+		"ss.app				   u4, zero, %[si], %[sj] \t\n"    // D2: slide vertically (stride sizeJ), access size sizeI
+		"ss.end                u4, zero, %[sj], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeJ
 
 		".iLoop1%=: \t\n"    
             "so.v.dp.w u21, zero, p0 \t\n"
@@ -90,20 +92,21 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.w           u1, %[src1], %[si], %[sk] \t\n" // D2: slide verticaly stride sizeK access size sizeI
-		"ss.app                u1, zero, %[sj], zero \t\n"     // repeat: for each 'j'
-		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontaly by 1, access size sizeK
-		"ss.cfg.vec            u1                      \t\n"
+		"ss.sta.ld.w.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
+		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
+		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.w           u2, %[src2], %[si], zero \t\n"  // D2: slide horizontaly by 1, access size sizeJ  
-		"ss.app                u2, zero, %[sj], %[one] \t\n"   // repeat: for each 'i'   
-		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide verticaly stride sizeJ ('sizeK' times)
-		"ss.cfg.vec            u2                     \t\n"
+		"ss.sta.ld.w.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
+		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
+		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
 
 		// C stream store (IxJ)
-		"ss.sta.st.w           u4, %[src3], %[si], %[sj] \t\n"   // D2: slide verticaly stride sizeJ access size sizeI
-		"ss.end                u4, zero, %[sj], %[one] \t\n"     // D1: slide horizontaly by 1, access size sizeJ
+		"ss.sta.st.w           u4, %[src3] \t\n"			   // Store C, scalar
+		"ss.app				   u4, zero, %[si], %[sj] \t\n"    // D2: slide vertically (stride sizeJ), access size sizeI
+		"ss.end                u4, zero, %[sj], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeJ
 
 		".iLoop1%=: \t\n"    
             "so.v.dp.w u21, zero, p0 \t\n"
@@ -131,20 +134,21 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.h           u1, %[src1], %[si], %[sk] \t\n" // D2: slide verticaly stride sizeK access size sizeI
-		"ss.app                u1, zero, %[sj], zero \t\n"     // repeat: for each 'j'
-		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontaly by 1, access size sizeK
-		"ss.cfg.vec            u1                      \t\n"
+		"ss.sta.ld.h.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
+		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
+		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.h           u2, %[src2], %[si], zero \t\n"  // D2: slide horizontaly by 1, access size sizeJ  
-		"ss.app                u2, zero, %[sj], %[one] \t\n"   // repeat: for each 'i'   
-		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide verticaly stride sizeJ ('sizeK' times)
-		"ss.cfg.vec            u2                     \t\n"
+		"ss.sta.ld.h.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
+		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
+		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
 
 		// C stream store (IxJ)
-		"ss.sta.st.h           u4, %[src3], %[si], %[sj] \t\n"   // D2: slide verticaly stride sizeJ access size sizeI
-		"ss.end                u4, zero, %[sj], %[one] \t\n"     // D1: slide horizontaly by 1, access size sizeJ
+		"ss.sta.st.h           u4, %[src3] \t\n"			   // Store C, scalar
+		"ss.app				   u4, zero, %[si], %[sj] \t\n"    // D2: slide vertically (stride sizeJ), access size sizeI
+		"ss.end                u4, zero, %[sj], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeJ
 
 		".iLoop1%=: \t\n"    
             "so.v.dp.h u21, zero, p0 \t\n"
@@ -172,21 +176,21 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.b           u1, %[src1], %[si], %[sk] \t\n" // D2: slide verticaly stride sizeK access size sizeI
-		"ss.app                u1, zero, %[sj], zero \t\n"     // repeat: for each 'j'
-		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontaly by 1, access size sizeK
-		"ss.cfg.vec            u1                      \t\n"
+		"ss.sta.ld.b.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
+		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
+		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.b           u2, %[src2], %[si], zero \t\n"  // D2: slide horizontaly by 1, access size sizeJ  
-		"ss.app                u2, zero, %[sj], %[one] \t\n"   // repeat: for each 'i'   
-		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide verticaly stride sizeJ ('sizeK' times)
-		"ss.cfg.vec            u2                     \t\n"
+		"ss.sta.ld.b.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
+		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
+		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
 
 		// C stream store (IxJ)
-		"ss.sta.st.b           u4, %[src3], %[si], %[sj] \t\n"   // D2: slide verticaly stride sizeJ access size sizeI
-		"ss.end                u4, zero, %[sj], %[one] \t\n"     // D1: slide horizontaly by 1, access size sizeJ
-
+		"ss.sta.st.b           u4, %[src3] \t\n"			   // Store C, scalar
+		"ss.app				   u4, zero, %[si], %[sj] \t\n"    // D2: slide vertically (stride sizeJ), access size sizeI
+		"ss.end                u4, zero, %[sj], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeJ
 		".iLoop1%=: \t\n"    
             "so.v.dp.b u21, zero, p0 \t\n"
             ".kloop1%=: \t\n"

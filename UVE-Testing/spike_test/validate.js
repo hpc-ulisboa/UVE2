@@ -15,7 +15,7 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original_clang,rvv,original_gcc,
 
 // kernel size map
 const kernelSizeMap = {
-	/*"3mm": size,
+	"3mm": size/*,
 	"convolution": size,
 	"covariance": size,
 	"gemm": size,
@@ -27,8 +27,8 @@ const kernelSizeMap = {
 	"saxpy": size*size,
 	"sgd": 0,
 	"spmv_ellpack": 0,
-	"spmv_ellpack_delimiters": 0,*/
-	"stream": size*size/*,
+	"spmv_ellpack_delimiters": 0,
+	"stream": size*size,
 	"trisolv": size,
 	"triangular_acc": size*/
 };
