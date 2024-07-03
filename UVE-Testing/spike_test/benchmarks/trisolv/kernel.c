@@ -9,25 +9,28 @@ void core(void *src1, void *src2, void *src3) {
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
         // L(i,j) stream load
-        "ss.sta.ld.d           u1, %[src1], %[sn], %[sn] \t\n" // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.d.v.1       u1, %[src1] \t\n"
+        "ss.app                u1, zero, %[sn], %[sn] \t\n"    // D2: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.1  u1, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
-        "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
 
         // x(j) stream load
-        "ss.sta.ld.d           u2, %[src3], %[sn], zero \t\n"  // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.d.v.1       u2, %[src3] \t\n"
+        "ss.app                u2, zero, %[sn], zero \t\n"     // D2: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.1  u2, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
-        "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
 
         // b stream scalar load (?)
-        "ss.ld.d               u3, %[src2], %[sn], %[one] \t\n"  // D1: scalar access
+        "ss.sta.ld.d           u3, %[src2] \t\n"
+        "ss.end                u3, zero, %[sn], %[one] \t\n"  // D1: scalar access
 
         // L(i,i) stream scalar load (?)
-        "ss.ld.d               u4, %[src1], %[sn], %[snp1] \t\n"   // D1: scalar access
+        "ss.sta.ld.d           u4, %[src1] \t\n"
+        "ss.end                u4, zero, %[sn], %[snp1] \t\n"   // D1: scalar access
 
         // x stream scalar store (?)
-        "ss.st.d               u5, %[src3], %[sn], %[one] \t\n" // D1: vector - linear access
+        "ss.sta.st.d           u5, %[src3] \t\n"
+        "ss.end                u5, zero, %[sn], %[one] \t\n" // D1: vector - linear access
 
 
         // "so.a.div.fp    u5, u3, u4, p0  \n\t" //  x = b / L
@@ -51,37 +54,40 @@ void core(void *src1, void *src2, void *src3) {
 
         : [start] "=&r"(start), [end] "=&r"(end)
         : [src1] "r"(src1), [src2] "r"(src2), [src3] "r"(src3),
-        [sn] "r"(SIZE), [snm1] "r"(SIZE - 1), [snp1] "r"(SIZE + 1), [one] "r"(1)
+        [sn] "r"(SIZE), [snp1] "r"(SIZE + 1), [one] "r"(1)
     );
 
     printf("%ld\n%ld\n", start, end);
 }
 #endif // D_TYPE
 #ifdef F_TYPE
-/*void core(void *src1, void *src2, void *src3) {
+void core(void *src1, void *src2, void *src3) {
     asm volatile(
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
         // L(i,j) stream load
-        "ss.sta.ld.w           u1, %[src1], %[sn], %[sn] \t\n" // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.w.v.1       u1, %[src1] \t\n"
+        "ss.app                u1, zero, %[sn], %[sn] \t\n"    // D2: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.1  u1, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
-        "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
 
         // x(j) stream load
-        "ss.sta.ld.w           u2, %[src3], %[sn], zero \t\n"  // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.w.v.1       u2, %[src3] \t\n"
+        "ss.app                u2, zero, %[sn], zero \t\n"     // D2: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.1  u2, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
-        "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
 
         // b stream scalar load (?)
-        "ss.ld.w               u3, %[src2], %[sn], %[one] \t\n"  // D1: scalar access
+        "ss.sta.ld.w           u3, %[src2] \t\n"
+        "ss.end                u3, zero, %[sn], %[one] \t\n"    // D1: scalar access
 
         // L(i,i) stream scalar load (?)
-        "ss.ld.w               u4, %[src1], %[sn], %[snp1] \t\n"   // D1: scalar access
+        "ss.sta.ld.w           u4, %[src1] \t\n"
+        "ss.end                u4, zero, %[sn], %[snp1] \t\n"   // D1: scalar access
 
         // x stream scalar store (?)
-        "ss.st.w               u5, %[src3], %[sn], %[one] \t\n" // D1: vector - linear access
+        "ss.sta.st.w           u5, %[src3] \t\n"
+        "ss.end                u5, zero, %[sn], %[one] \t\n" // D1: vector - linear access
 
 
         // "so.a.div.fp    u5, u3, u4, p0  \n\t" //  x = b / L
@@ -105,53 +111,10 @@ void core(void *src1, void *src2, void *src3) {
 
         : [start] "=&r"(start), [end] "=&r"(end)
         : [src1] "r"(src1), [src2] "r"(src2), [src3] "r"(src3),
-        [sn] "r"(SIZE), [snm1] "r"(SIZE - 1), [snp1] "r"(SIZE + 1), [one] "r"(1)
+        [sn] "r"(SIZE), [snp1] "r"(SIZE + 1), [one] "r"(1)
     );
 
     printf("%ld\n%ld\n", start, end);
-}*/
-void core(void *x, void *y, void *z)
-{
-    asm volatile(
-        "addi t1, x0, 3          \n\t" // %snm1 = 3
-        "addi t2, x0, 3          \n\t" // %snp1 = 3
-        "addi t3, x0, 3          \n\t" // %sn = 3
-        "addi t4, x0, 1          \n\t" // %one = 1
-        "addi t5, x0, 0          \n\t" // %zero = 0
-        // Original stream info:
-        // Stream Name: %u1, Address: %x, Dimensions: [(%zero, %sn, %sn)], Modifiers [(siz, inc, %one , %zero , %snm1)]
-        "ss.sta.ld.w u1, %[x], t3, t3   \n\t"
-        "ss.end u1, t5, t5, t4          \n\t"
-        "ss.app.mod.siz.inc u1, t1, t4  \n\t"
-        "ss.cfg.vec u1                  \n\t"
-        // Original stream info:
-        // Stream Name: %u2, Address: %z, Dimensions: [(%zero, %zero, %sn)], Modifiers [(siz, inc, %one , %zero , %snm1)]
-        "ss.sta.ld.w u2, %[z], t3, t5   \n\t"
-        "ss.end u2, t5, t5, t4          \n\t"
-        "ss.app.mod.siz.inc u2, t1, t4  \n\t"
-        "ss.cfg.vec u2                  \n\t"
-        // Original stream info:
-        // Stream Name: %u3, Address: %y, Dimensions: [(%zero, %one, %sn)], Modifiers []
-        "ss.ld.w u3, %[y], t3, t4       \n\t"
-        // Original stream info:
-        // Stream Name: %u4, Address: %x, Dimensions: [(%zero, %snp1, %sn)], Modifiers []
-        "ss.ld.w u4, %[x], t3, t2       \n\t"
-        // Original stream info:
-        // Stream Name: %u5, Address: %z, Dimensions: [(%zero, %one, %sn)], Modifiers []
-        "ss.st.w u5, %[z], t3, t4       \n\t"
-        "so.v.dp.w u7, t5, p0           \n\t"
-        ".Loop_0:                       \n\t"
-        ".Loop_1:                       \n\t"
-        "so.a.mul.fp u7, u2, u1, p0     \n\t"
-        "so.a.sub.fp u6, u6, u7, p0     \n\t"
-        "so.b.ndc.1 u1, .Loop_1         \n\t"
-        "so.a.adde.fp u7, u6, p0        \n\t"
-        "so.a.add.fp u7, u7, u3, p0     \n\t"
-        "so.a.div.fp u5, u7, u4, p0     \n\t"
-        "so.b.nc u1, .Loop_0            \n\t"
-
-        :
-        : [x] "r"(x), [y] "r"(y), [z] "r"(z));
 }
 #endif // F_TYPE
 #ifdef I_TYPE
@@ -160,25 +123,28 @@ void core(void *src1, void *src2, void *src3) {
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
         // L(i,j) stream load
-        "ss.sta.ld.w           u1, %[src1], %[sn], %[sn] \t\n" // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.w.v.1       u1, %[src1] \t\n"
+        "ss.app                u1, zero, %[sn], %[sn] \t\n"    // D2: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.1  u1, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
-        "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
 
         // x(j) stream load
-        "ss.sta.ld.w           u2, %[src3], %[sn], zero \t\n"  // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.w.v.1       u2, %[src3] \t\n"
+        "ss.app                u2, zero, %[sn], zero \t\n"     // D2: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.1  u2, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
-        "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
 
         // b stream scalar load (?)
-        "ss.ld.w               u3, %[src2], %[sn], %[one] \t\n"  // D1: scalar access
+        "ss.sta.ld.w           u3, %[src2] \t\n"
+        "ss.end                u3, zero, %[sn], %[one] \t\n"   // D1: scalar access
 
         // L(i,i) stream scalar load (?)
-        "ss.ld.w               u4, %[src1], %[sn], %[snp1] \t\n"   // D1: scalar access
+        "ss.sta.ld.w           u4, %[src1] \t\n"
+        "ss.end                u4, zero, %[sn], %[snp1] \t\n"   // D1: scalar access
 
         // x stream scalar store (?)
-        "ss.st.w               u5, %[src3], %[sn], %[one] \t\n" // D1: vector - linear access
+        "ss.sta.st.w           u5, %[src3] \t\n"
+        "ss.end                u5, zero, %[sn], %[one] \t\n" // D1: vector - linear access
 
 
         // "so.a.div.fp    u5, u3, u4, p0  \n\t" //  x = b / L
@@ -202,7 +168,7 @@ void core(void *src1, void *src2, void *src3) {
 
         : [start] "=&r"(start), [end] "=&r"(end)
         : [src1] "r"(src1), [src2] "r"(src2), [src3] "r"(src3),
-        [sn] "r"(SIZE), [snm1] "r"(SIZE - 1), [snp1] "r"(SIZE + 1), [one] "r"(1)
+        [sn] "r"(SIZE), [snp1] "r"(SIZE + 1), [one] "r"(1)
     );
 
     printf("%ld\n%ld\n", start, end);
@@ -214,25 +180,28 @@ void core(void *src1, void *src2, void *src3) {
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
         // L(i,j) stream load
-        "ss.sta.ld.h           u1, %[src1], %[sn], %[sn] \t\n" // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.h.v.1       u1, %[src1] \t\n"
+        "ss.app                u1, zero, %[sn], %[sn] \t\n"    // D2: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.1  u1, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
-        "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
 
         // x(j) stream load
-        "ss.sta.ld.h           u2, %[src3], %[sn], zero \t\n"  // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.h.v.1       u2, %[src3] \t\n"
+        "ss.app                u2, zero, %[sn], zero \t\n"     // D2: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.1  u2, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
-        "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
 
         // b stream scalar load (?)
-        "ss.ld.h               u3, %[src2], %[sn], %[one] \t\n"  // D1: scalar access
+        "ss.sta.ld.h           u3, %[src2] \t\n"
+        "ss.end                u3, zero, %[sn], %[one] \t\n"   // D1: scalar access
 
         // L(i,i) stream scalar load (?)
-        "ss.ld.h               u4, %[src1], %[sn], %[snp1] \t\n"   // D1: scalar access
+        "ss.sta.ld.h           u4, %[src1] \t\n"
+        "ss.end                u4, zero, %[sn], %[snp1] \t\n"   // D1: scalar access
 
         // x stream scalar store (?)
-        "ss.st.h               u5, %[src3], %[sn], %[one] \t\n" // D1: vector - linear access
+        "ss.sta.st.h           u5, %[src3] \t\n"
+        "ss.end                u5, zero, %[sn], %[one] \t\n" // D1: vector - linear access
 
 
         // "so.a.div.fp    u5, u3, u4, p0  \n\t" //  x = b / L
@@ -256,7 +225,7 @@ void core(void *src1, void *src2, void *src3) {
 
         : [start] "=&r"(start), [end] "=&r"(end)
         : [src1] "r"(src1), [src2] "r"(src2), [src3] "r"(src3),
-        [sn] "r"(SIZE), [snm1] "r"(SIZE - 1), [snp1] "r"(SIZE + 1), [one] "r"(1)
+        [sn] "r"(SIZE), [snp1] "r"(SIZE + 1), [one] "r"(1)
     );
 
     printf("%ld\n%ld\n", start, end);
@@ -268,25 +237,28 @@ void core(void *src1, void *src2, void *src3) {
         "rdinstret %[start] \t\n" // start counting instructions after values have been loaded into registers
 
         // L(i,j) stream load
-        "ss.sta.ld.b           u1, %[src1], %[sn], %[sn] \t\n" // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc    u1, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.b.v.1       u1, %[src1] \t\n"
+        "ss.app                u1, zero, %[sn], %[sn] \t\n"    // D2: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.1  u1, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u1, zero, zero, %[one] \t\n"    // D1: linear access (initial size: 0)
-        "ss.cfg.vec            u1 \t\n"                        // D1: configure as vector binded
 
         // x(j) stream load
-        "ss.sta.ld.b           u2, %[src3], %[sn], zero \t\n"  // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc    u2, %[snm1], %[one] \t\n"       // modifier_t->D1: increment D1 size N-1
+        "ss.sta.ld.b.v.1       u2, %[src3] \t\n"
+        "ss.app                u2, zero, %[sn], zero \t\n"     // D2: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.1  u2, %[one] \t\n"                // modifier_t->D1: increment D1 size N-1
         "ss.end                u2, zero, zero, %[one] \t\n"    // D1: vector - linear access (initial size: 0)
-        "ss.cfg.vec            u2 \t\n"                        // D1: configure as vector binded
 
         // b stream scalar load (?)
-        "ss.ld.b               u3, %[src2], %[sn], %[one] \t\n"  // D1: scalar access
+        "ss.sta.ld.b           u3, %[src2] \t\n"
+        "ss.end                u3, zero, %[sn], %[one] \t\n"   // D1: scalar access
 
         // L(i,i) stream scalar load (?)
-        "ss.ld.b               u4, %[src1], %[sn], %[snp1] \t\n"   // D1: scalar access
+        "ss.sta.ld.b           u4, %[src1] \t\n"
+        "ss.end                u4, zero, %[sn], %[snp1] \t\n"   // D1: scalar access
 
         // x stream scalar store (?)
-        "ss.st.b               u5, %[src3], %[sn], %[one] \t\n" // D1: vector - linear access
+        "ss.sta.st.b           u5, %[src3] \t\n"
+        "ss.end                u5, zero, %[sn], %[one] \t\n" // D1: vector - linear access
 
 
         // "so.a.div.fp    u5, u3, u4, p0  \n\t" //  x = b / L
@@ -310,7 +282,7 @@ void core(void *src1, void *src2, void *src3) {
 
         : [start] "=&r"(start), [end] "=&r"(end)
         : [src1] "r"(src1), [src2] "r"(src2), [src3] "r"(src3),
-        [sn] "r"(SIZE), [snm1] "r"(SIZE - 1), [snp1] "r"(SIZE + 1), [one] "r"(1)
+        [sn] "r"(SIZE), [snp1] "r"(SIZE + 1), [one] "r"(1)
     );
 
     printf("%ld\n%ld\n", start, end);

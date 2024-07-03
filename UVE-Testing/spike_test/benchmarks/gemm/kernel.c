@@ -9,38 +9,38 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 		"rdinstret %[s] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.d u1, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u1, zero, %[sizeJ], %[one]\t\n"
-		"ss.cfg.vec u1 \t\n"
+		"ss.sta.st.d.v.1 u1, %[C] \t\n"
+		"ss.app		     u1, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 	     u1, zero, %[sizeJ], %[one]\t\n"
 
 		// C_ij Load
-		"ss.sta.ld.d u3, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u3, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u3 \t\n"
+		"ss.sta.ld.d.v.1 u3, %[C] \n\t"
+		"ss.app			 u3, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 		 u3, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.d u5, %[C], %[sizeI], %[sizeJ]\t\n"
-		"ss.app u5, zero, %[sizeK], zero \t\n"
-		"ss.end u5, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.st.d.v.1 u5, %[C] \t\n"
+		"ss.app		 	 u5, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u5, zero, %[sizeK], zero \t\n"
+		"ss.end          u5, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Load
-		"ss.sta.ld.d u12, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.app u12, zero, %[sizeK], zero \t\n"
-		"ss.end u12, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u12 \t\n"
+		"ss.sta.ld.d.v.1 u12, %[C] \t\n"
+		"ss.app			 u12, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u12, zero, %[sizeK], zero \t\n"
+		"ss.end          u12, zero, %[sizeJ], %[one] \t\n"
 
 		// B_kj
-		"ss.sta.ld.d u11, %[B], %[sizeI], zero \t\n"
-		"ss.end u11, zero, %[sizeK], %[sizeJ] \t\n"
-		"ss.app u11, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u11 \t\n"
+		"ss.sta.ld.d.v.1 u11, %[B] \t\n"
+		"ss.app			 u11, zero, %[sizeI], zero \t\n"
+		"ss.end 		 u11, zero, %[sizeK], %[sizeJ] \t\n"
+		"ss.app          u11, zero, %[sizeJ], %[one] \t\n"
 
 		// A_ik
-		"ss.sta.ld.d u9, %[A], %[sizeI], %[sizeK] \t\n"
-		"ss.app u9, zero, %[sizeK], %[one]\t\n"
-		"ss.end u9, zero, %[sizeJ], zero \t\n"
-		"ss.cfg.vec u9 \t\n"
+		"ss.sta.ld.d.v.1 u9, %[A] \t\n"
+		"ss.app			 u9, zero, %[sizeI], %[sizeK] \t\n"
+		"ss.app 		 u9, zero, %[sizeK], %[one]\t\n"
+		"ss.end 		 u9, zero, %[sizeJ], zero \t\n"
 
 		"so.v.dp.d u4, %[beta], p0 \t\n"
 		"so.v.dp.d u10, %[alpha], p0 \t\n"
@@ -73,38 +73,38 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 		"rdinstret %[s] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.w u1, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u1, zero, %[sizeJ], %[one]\t\n"
-		"ss.cfg.vec u1 \t\n"
+		"ss.sta.st.w.v.1 u1, %[C] \t\n"
+		"ss.app		     u1, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 	     u1, zero, %[sizeJ], %[one]\t\n"
 
 		// C_ij Load
-		"ss.sta.ld.w u3, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u3, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u3 \t\n"
+		"ss.sta.ld.w.v.1 u3, %[C] \n\t"
+		"ss.app			 u3, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 		 u3, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.w u5, %[C], %[sizeI], %[sizeJ]\t\n"
-		"ss.app u5, zero, %[sizeK], zero \t\n"
-		"ss.end u5, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.st.w.v.1 u5, %[C] \t\n"
+		"ss.app		 	 u5, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u5, zero, %[sizeK], zero \t\n"
+		"ss.end          u5, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Load
-		"ss.sta.ld.w u12, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.app u12, zero, %[sizeK], zero \t\n"
-		"ss.end u12, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u12 \t\n"
+		"ss.sta.ld.w.v.1 u12, %[C] \t\n"
+		"ss.app			 u12, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u12, zero, %[sizeK], zero \t\n"
+		"ss.end          u12, zero, %[sizeJ], %[one] \t\n"
 
 		// B_kj
-		"ss.sta.ld.w u11, %[B], %[sizeI], zero \t\n"
-		"ss.end u11, zero, %[sizeK], %[sizeJ] \t\n"
-		"ss.app u11, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u11 \t\n"
+		"ss.sta.ld.w.v.1 u11, %[B] \t\n"
+		"ss.app			 u11, zero, %[sizeI], zero \t\n"
+		"ss.end 		 u11, zero, %[sizeK], %[sizeJ] \t\n"
+		"ss.app          u11, zero, %[sizeJ], %[one] \t\n"
 
 		// A_ik
-		"ss.sta.ld.w u9, %[A], %[sizeI], %[sizeK] \t\n"
-		"ss.app u9, zero, %[sizeK], %[one]\t\n"
-		"ss.end u9, zero, %[sizeJ], zero \t\n"
-		"ss.cfg.vec u9 \t\n"
+		"ss.sta.ld.w.v.1 u9, %[A] \t\n"
+		"ss.app			 u9, zero, %[sizeI], %[sizeK] \t\n"
+		"ss.app 		 u9, zero, %[sizeK], %[one]\t\n"
+		"ss.end 		 u9, zero, %[sizeJ], zero \t\n"
 
 		"so.v.dp.w u4, %[beta], p0 \t\n"
 		"so.v.dp.w u10, %[alpha], p0 \t\n"
@@ -137,38 +137,38 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 		"rdinstret %[s] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.w u1, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u1, zero, %[sizeJ], %[one]\t\n"
-		"ss.cfg.vec u1 \t\n"
+		"ss.sta.st.w.v.1 u1, %[C] \t\n"
+		"ss.app		     u1, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 	     u1, zero, %[sizeJ], %[one]\t\n"
 
 		// C_ij Load
-		"ss.sta.ld.w u3, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u3, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u3 \t\n"
+		"ss.sta.ld.w.v.1 u3, %[C] \n\t"
+		"ss.app			 u3, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 		 u3, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.w u5, %[C], %[sizeI], %[sizeJ]\t\n"
-		"ss.app u5, zero, %[sizeK], zero \t\n"
-		"ss.end u5, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.st.w.v.1 u5, %[C] \t\n"
+		"ss.app		 	 u5, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u5, zero, %[sizeK], zero \t\n"
+		"ss.end          u5, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Load
-		"ss.sta.ld.w u12, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.app u12, zero, %[sizeK], zero \t\n"
-		"ss.end u12, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u12 \t\n"
+		"ss.sta.ld.w.v.1 u12, %[C] \t\n"
+		"ss.app			 u12, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u12, zero, %[sizeK], zero \t\n"
+		"ss.end          u12, zero, %[sizeJ], %[one] \t\n"
 
 		// B_kj
-		"ss.sta.ld.w u11, %[B], %[sizeI], zero \t\n"
-		"ss.end u11, zero, %[sizeK], %[sizeJ] \t\n"
-		"ss.app u11, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u11 \t\n"
+		"ss.sta.ld.w.v.1 u11, %[B] \t\n"
+		"ss.app			 u11, zero, %[sizeI], zero \t\n"
+		"ss.end 		 u11, zero, %[sizeK], %[sizeJ] \t\n"
+		"ss.app          u11, zero, %[sizeJ], %[one] \t\n"
 
 		// A_ik
-		"ss.sta.ld.w u9, %[A], %[sizeI], %[sizeK] \t\n"
-		"ss.app u9, zero, %[sizeK], %[one]\t\n"
-		"ss.end u9, zero, %[sizeJ], zero \t\n"
-		"ss.cfg.vec u9 \t\n"
+		"ss.sta.ld.w.v.1 u9, %[A] \t\n"
+		"ss.app			 u9, zero, %[sizeI], %[sizeK] \t\n"
+		"ss.app 		 u9, zero, %[sizeK], %[one]\t\n"
+		"ss.end 		 u9, zero, %[sizeJ], zero \t\n"
 
 		"so.v.dp.w u4, %[beta], p0 \t\n"
 		"so.v.dp.w u10, %[alpha], p0 \t\n"
@@ -201,38 +201,38 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 		"rdinstret %[s] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.h u1, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u1, zero, %[sizeJ], %[one]\t\n"
-		"ss.cfg.vec u1 \t\n"
+		"ss.sta.st.h.v.1 u1, %[C] \t\n"
+		"ss.app		     u1, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 	     u1, zero, %[sizeJ], %[one]\t\n"
 
 		// C_ij Load
-		"ss.sta.ld.h u3, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u3, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u3 \t\n"
+		"ss.sta.ld.h.v.1 u3, %[C] \n\t"
+		"ss.app			 u3, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 		 u3, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.h u5, %[C], %[sizeI], %[sizeJ]\t\n"
-		"ss.app u5, zero, %[sizeK], zero \t\n"
-		"ss.end u5, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.st.h.v.1 u5, %[C] \t\n"
+		"ss.app		 	 u5, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u5, zero, %[sizeK], zero \t\n"
+		"ss.end          u5, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Load
-		"ss.sta.ld.h u12, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.app u12, zero, %[sizeK], zero \t\n"
-		"ss.end u12, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u12 \t\n"
+		"ss.sta.ld.h.v.1 u12, %[C] \t\n"
+		"ss.app			 u12, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u12, zero, %[sizeK], zero \t\n"
+		"ss.end          u12, zero, %[sizeJ], %[one] \t\n"
 
 		// B_kj
-		"ss.sta.ld.h u11, %[B], %[sizeI], zero \t\n"
-		"ss.end u11, zero, %[sizeK], %[sizeJ] \t\n"
-		"ss.app u11, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u11 \t\n"
+		"ss.sta.ld.h.v.1 u11, %[B] \t\n"
+		"ss.app			 u11, zero, %[sizeI], zero \t\n"
+		"ss.end 		 u11, zero, %[sizeK], %[sizeJ] \t\n"
+		"ss.app          u11, zero, %[sizeJ], %[one] \t\n"
 
 		// A_ik
-		"ss.sta.ld.h u9, %[A], %[sizeI], %[sizeK] \t\n"
-		"ss.app u9, zero, %[sizeK], %[one]\t\n"
-		"ss.end u9, zero, %[sizeJ], zero \t\n"
-		"ss.cfg.vec u9 \t\n"
+		"ss.sta.ld.h.v.1 u9, %[A] \t\n"
+		"ss.app			 u9, zero, %[sizeI], %[sizeK] \t\n"
+		"ss.app 		 u9, zero, %[sizeK], %[one]\t\n"
+		"ss.end 		 u9, zero, %[sizeJ], zero \t\n"
 
 		"so.v.dp.h u4, %[beta], p0 \t\n"
 		"so.v.dp.h u10, %[alpha], p0 \t\n"
@@ -265,38 +265,38 @@ void core(DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, 
 		"rdinstret %[s] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.b u1, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u1, zero, %[sizeJ], %[one]\t\n"
-		"ss.cfg.vec u1 \t\n"
+		"ss.sta.st.b.v.1 u1, %[C] \t\n"
+		"ss.app		     u1, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 	     u1, zero, %[sizeJ], %[one]\t\n"
 
 		// C_ij Load
-		"ss.sta.ld.b u3, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.end u3, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u3 \t\n"
+		"ss.sta.ld.b.v.1 u3, %[C] \n\t"
+		"ss.app			 u3, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.end 		 u3, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Store
-		"ss.sta.st.b u5, %[C], %[sizeI], %[sizeJ]\t\n"
-		"ss.app u5, zero, %[sizeK], zero \t\n"
-		"ss.end u5, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.st.b.v.1 u5, %[C] \t\n"
+		"ss.app		 	 u5, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u5, zero, %[sizeK], zero \t\n"
+		"ss.end          u5, zero, %[sizeJ], %[one] \t\n"
 
 		// C_ij Load
-		"ss.sta.ld.b u12, %[C], %[sizeI], %[sizeJ] \t\n"
-		"ss.app u12, zero, %[sizeK], zero \t\n"
-		"ss.end u12, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u12 \t\n"
+		"ss.sta.ld.b.v.1 u12, %[C] \t\n"
+		"ss.app			 u12, zero, %[sizeI], %[sizeJ] \t\n"
+		"ss.app 	     u12, zero, %[sizeK], zero \t\n"
+		"ss.end          u12, zero, %[sizeJ], %[one] \t\n"
 
 		// B_kj
-		"ss.sta.ld.b u11, %[B], %[sizeI], zero \t\n"
-		"ss.end u11, zero, %[sizeK], %[sizeJ] \t\n"
-		"ss.app u11, zero, %[sizeJ], %[one] \t\n"
-		"ss.cfg.vec u11 \t\n"
+		"ss.sta.ld.b.v.1 u11, %[B] \t\n"
+		"ss.app			 u11, zero, %[sizeI], zero \t\n"
+		"ss.end 		 u11, zero, %[sizeK], %[sizeJ] \t\n"
+		"ss.app          u11, zero, %[sizeJ], %[one] \t\n"
 
 		// A_ik
-		"ss.sta.ld.b u9, %[A], %[sizeI], %[sizeK] \t\n"
-		"ss.app u9, zero, %[sizeK], %[one]\t\n"
-		"ss.end u9, zero, %[sizeJ], zero \t\n"
-		"ss.cfg.vec u9 \t\n"
+		"ss.sta.ld.b.v.1 u9, %[A] \t\n"
+		"ss.app			 u9, zero, %[sizeI], %[sizeK] \t\n"
+		"ss.app 		 u9, zero, %[sizeK], %[one]\t\n"
+		"ss.end 		 u9, zero, %[sizeJ], zero \t\n"
 
 		"so.v.dp.b u4, %[beta], p0 \t\n"
 		"so.v.dp.b u10, %[alpha], p0 \t\n"

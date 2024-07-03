@@ -6,65 +6,69 @@ long int start = 0, end = 0;
 #ifdef D_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
     asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.d u4, %[A], %[sizeN], %[sizeN] \t\n"
-		"ss.end u4, zero, %[sizeN], %[one]  \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.d.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.d u5, %[y_1], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.d.v.1 u5, %[y_1] \n"
+		"ss.app 		 u5, zero, %[sizeN], zero \n"
+		"ss.end 	     u5, zero, %[sizeN], %[one] \n"
 
 		// x_1 stream load
-		"ss.ld.d u7, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.d u7, %[x_1] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 		
 		// x_1 stream store
-		"ss.st.d u1, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.st.d u1, %[x_1] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_1%=: \t\n"
-			"so.v.dp.d u2, zero, p0 \t\n"
+		".SLOOP_1%=: \n"
+			"so.v.dp.d u2, zero, p0 \n"
 
-			".SLOOP_1_0%=: \t\n"
-				"so.a.mul.fp  u3, u4, u5, p0 \t\n"
-				"so.a.add.fp  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \t\n"
+			".SLOOP_1_0%=: \n"
+				"so.a.mul.fp  u3, u4, u5, p0 \n"
+				"so.a.add.fp  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
 
-			"so.a.adde.fp  u3, u2, p0 \t\n"
-			"so.a.add.fp  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_1%= \t\n"
+			"so.a.adde.fp  u3, u2, p0 \n"
+			"so.a.add.fp  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.d u4, %[A], %[sizeN], %[one] \t\n"
-		"ss.end u4, zero, %[sizeN], %[sizeN] \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.d.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.d u5, %[y_2], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.d.v.1 u5, %[y_2] \n"
+		"ss.app			 u5, zero, %[sizeN], zero \n"
+		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream load
-		"ss.ld.d u7, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.d u7, %[x_2] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream store
-		"ss.st.d u1, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.st.d u1, %[x_2] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_2%=: \t\n"
-			"so.v.dp.d u2, zero, p0 \t\n"
+		".SLOOP_2%=: \n"
+			"so.v.dp.d u2, zero, p0 \n"
 
-			".SLOOP_2_0%=: \t\n"
-				"so.a.mul.fp  u3, u4, u5, p0 \t\n"
-				"so.a.add.fp  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \t\n"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.fp  u3, u4, u5, p0 \n"
+				"so.a.add.fp  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
 
-			"so.a.adde.fp  u3, u2, p0 \t\n"
-			"so.a.add.fp  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_2%= \t\n"
+			"so.a.adde.fp  u3, u2, p0 \n"
+			"so.a.add.fp  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \t\n"
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
@@ -78,65 +82,69 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 #ifdef F_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
     asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.w u4, %[A], %[sizeN], %[sizeN] \t\n"
-		"ss.end u4, zero, %[sizeN], %[one]  \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.w.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.w u5, %[y_1], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.w.v.1 u5, %[y_1] \n"
+		"ss.app 		 u5, zero, %[sizeN], zero \n"
+		"ss.end 	     u5, zero, %[sizeN], %[one] \n"
 
 		// x_1 stream load
-		"ss.ld.w u7, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.w u7, %[x_1] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 		
 		// x_1 stream store
-		"ss.st.w u1, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.st.w u1, %[x_1] \n"
+		"ss.end 	 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_1%=: \t\n"
-			"so.v.dp.w u2, zero, p0 \t\n"
+		".SLOOP_1%=: \n"
+			"so.v.dp.w u2, zero, p0 \n"
 
-			".SLOOP_1_0%=: \t\n"
-				"so.a.mul.fp  u3, u4, u5, p0 \t\n"
-				"so.a.add.fp  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \t\n"
+			".SLOOP_1_0%=: \n"
+				"so.a.mul.fp  u3, u4, u5, p0 \n"
+				"so.a.add.fp  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
 
-			"so.a.adde.fp  u3, u2, p0 \t\n"
-			"so.a.add.fp  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_1%= \t\n"
+			"so.a.adde.fp  u3, u2, p0 \n"
+			"so.a.add.fp  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.w u4, %[A], %[sizeN], %[one] \t\n"
-		"ss.end u4, zero, %[sizeN], %[sizeN] \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.w.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.w u5, %[y_2], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.w.v.1 u5, %[y_2] \n"
+		"ss.app			 u5, zero, %[sizeN], zero \n"
+		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream load
-		"ss.ld.w u7, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.w u7, %[x_2] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream store
-		"ss.st.w u1, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.st.w u1, %[x_2] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_2%=: \t\n"
-			"so.v.dp.w u2, zero, p0 \t\n"
+		".SLOOP_2%=: \n"
+			"so.v.dp.w u2, zero, p0 \n"
 
-			".SLOOP_2_0%=: \t\n"
-				"so.a.mul.fp  u3, u4, u5, p0 \t\n"
-				"so.a.add.fp  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \t\n"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.fp  u3, u4, u5, p0 \n"
+				"so.a.add.fp  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
 
-			"so.a.adde.fp  u3, u2, p0 \t\n"
-			"so.a.add.fp  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_2%= \t\n"
+			"so.a.adde.fp  u3, u2, p0 \n"
+			"so.a.add.fp  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \t\n"
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
@@ -150,65 +158,69 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 #ifdef I_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
     asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.w u4, %[A], %[sizeN], %[sizeN] \t\n"
-		"ss.end u4, zero, %[sizeN], %[one]  \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.w.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.w u5, %[y_1], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.w.v.1 u5, %[y_1] \n"
+		"ss.app 		 u5, zero, %[sizeN], zero \n"
+		"ss.end 	     u5, zero, %[sizeN], %[one] \n"
 
 		// x_1 stream load
-		"ss.ld.w u7, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.w u7, %[x_1] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 		
 		// x_1 stream store
-		"ss.st.w u1, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.st.w u1, %[x_1] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_1%=: \t\n"
-			"so.v.dp.w u2, zero, p0 \t\n"
+		".SLOOP_1%=: \n"
+			"so.v.dp.w u2, zero, p0 \n"
 
-			".SLOOP_1_0%=: \t\n"
-				"so.a.mul.sg  u3, u4, u5, p0 \t\n"
-				"so.a.add.sg  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \t\n"
+			".SLOOP_1_0%=: \n"
+				"so.a.mul.sg  u3, u4, u5, p0 \n"
+				"so.a.add.sg  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
 
-			"so.a.adde.sg  u3, u2, p0 \t\n"
-			"so.a.add.sg  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_1%= \t\n"
+			"so.a.adde.sg  u3, u2, p0 \n"
+			"so.a.add.sg  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.w u4, %[A], %[sizeN], %[one] \t\n"
-		"ss.end u4, zero, %[sizeN], %[sizeN] \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.w.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.w u5, %[y_2], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.w.v.1 u5, %[y_2] \n"
+		"ss.app			 u5, zero, %[sizeN], zero \n"
+		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream load
-		"ss.ld.w u7, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.w u7, %[x_2] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream store
-		"ss.st.w u1, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.st.w u1, %[x_2] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_2%=: \t\n"
-			"so.v.dp.w u2, zero, p0 \t\n"
+		".SLOOP_2%=: \n"
+			"so.v.dp.w u2, zero, p0 \n"
 
-			".SLOOP_2_0%=: \t\n"
-				"so.a.mul.sg  u3, u4, u5, p0 \t\n"
-				"so.a.add.sg  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \t\n"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.sg  u3, u4, u5, p0 \n"
+				"so.a.add.sg  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
 
-			"so.a.adde.sg  u3, u2, p0 \t\n"
-			"so.a.add.sg  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_2%= \t\n"
+			"so.a.adde.sg  u3, u2, p0 \n"
+			"so.a.add.sg  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \t\n"
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
@@ -222,65 +234,69 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 #ifdef H_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
     asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.h u4, %[A], %[sizeN], %[sizeN] \t\n"
-		"ss.end u4, zero, %[sizeN], %[one]  \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.h.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.h u5, %[y_1], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.h.v.1 u5, %[y_1] \n"
+		"ss.app 		 u5, zero, %[sizeN], zero \n"
+		"ss.end 	     u5, zero, %[sizeN], %[one] \n"
 
 		// x_1 stream load
-		"ss.ld.h u7, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.h u7, %[x_1] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 		
 		// x_1 stream store
-		"ss.st.h u1, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.st.h u1, %[x_1] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_1%=: \t\n"
-			"so.v.dp.h u2, zero, p0 \t\n"
+		".SLOOP_1%=: \n"
+			"so.v.dp.h u2, zero, p0 \n"
 
-			".SLOOP_1_0%=: \t\n"
-				"so.a.mul.sg  u3, u4, u5, p0 \t\n"
-				"so.a.add.sg  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \t\n"
+			".SLOOP_1_0%=: \n"
+				"so.a.mul.sg  u3, u4, u5, p0 \n"
+				"so.a.add.sg  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
 
-			"so.a.adde.sg  u3, u2, p0 \t\n"
-			"so.a.add.sg  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_1%= \t\n"
+			"so.a.adde.sg  u3, u2, p0 \n"
+			"so.a.add.sg  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.h u4, %[A], %[sizeN], %[one] \t\n"
-		"ss.end u4, zero, %[sizeN], %[sizeN] \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.h.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.h u5, %[y_2], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.h.v.1 u5, %[y_2] \n"
+		"ss.app			 u5, zero, %[sizeN], zero \n"
+		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream load
-		"ss.ld.h u7, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.h u7, %[x_2] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream store
-		"ss.st.h u1, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.st.h u1, %[x_2]\n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_2%=: \t\n"
-			"so.v.dp.h u2, zero, p0 \t\n"
+		".SLOOP_2%=: \n"
+			"so.v.dp.h u2, zero, p0 \n"
 
-			".SLOOP_2_0%=: \t\n"
-				"so.a.mul.sg  u3, u4, u5, p0 \t\n"
-				"so.a.add.sg  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \t\n"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.sg  u3, u4, u5, p0 \n"
+				"so.a.add.sg  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
 
-			"so.a.adde.sg  u3, u2, p0 \t\n"
-			"so.a.add.sg  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_2%= \t\n"
+			"so.a.adde.sg  u3, u2, p0 \n"
+			"so.a.add.sg  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \t\n"
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
@@ -294,65 +310,69 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 #ifdef B_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
     asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.b u4, %[A], %[sizeN], %[sizeN] \t\n"
-		"ss.end u4, zero, %[sizeN], %[one]  \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.b.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.b u5, %[y_1], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.b.v.1 u5, %[y_1] \n"
+		"ss.app 		 u5, zero, %[sizeN], zero \n"
+		"ss.end 	     u5, zero, %[sizeN], %[one] \n"
 
 		// x_1 stream load
-		"ss.ld.b u7, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.b u7, %[x_1] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 		
 		// x_1 stream store
-		"ss.st.b u1, %[x_1], %[sizeN], %[one] \t\n"
+		"ss.sta.st.b u1, %[x_1] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_1%=: \t\n"
-			"so.v.dp.b u2, zero, p0 \t\n"
+		".SLOOP_1%=: \n"
+			"so.v.dp.b u2, zero, p0 \n"
 
-			".SLOOP_1_0%=: \t\n"
-				"so.a.mul.sg  u3, u4, u5, p0 \t\n"
-				"so.a.add.sg  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \t\n"
+			".SLOOP_1_0%=: \n"
+				"so.a.mul.sg  u3, u4, u5, p0 \n"
+				"so.a.add.sg  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
 
-			"so.a.adde.sg  u3, u2, p0 \t\n"
-			"so.a.add.sg  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_1%= \t\n"
+			"so.a.adde.sg  u3, u2, p0 \n"
+			"so.a.add.sg  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.b u4, %[A], %[sizeN], %[one] \t\n"
-		"ss.end u4, zero, %[sizeN], %[sizeN] \t\n"
-		"ss.cfg.vec u4 \t\n"
+		"ss.sta.ld.b.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.b u5, %[y_2], %[sizeN], zero \t\n"
-		"ss.end u5, zero, %[sizeN], %[one] \t\n"
-		"ss.cfg.vec u5 \t\n"
+		"ss.sta.ld.b.v.1 u5, %[y_2] \n"
+		"ss.app			 u5, zero, %[sizeN], zero \n"
+		"ss.end u5, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream load
-		"ss.ld.b u7, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.ld.b u7, %[x_2] \n"
+		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream store
-		"ss.st.b u1, %[x_2], %[sizeN], %[one] \t\n"
+		"ss.sta.st.b u1, %[x_2] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		".SLOOP_2%=: \t\n"
-			"so.v.dp.b u2, zero, p0 \t\n"
+		".SLOOP_2%=: \n"
+			"so.v.dp.b u2, zero, p0 \n"
 
-			".SLOOP_2_0%=: \t\n"
-				"so.a.mul.sg  u3, u4, u5, p0 \t\n"
-				"so.a.add.sg  u2, u2, u3, p0 \t\n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \t\n"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.sg  u3, u4, u5, p0 \n"
+				"so.a.add.sg  u2, u2, u3, p0 \n"
+			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
 
-			"so.a.adde.sg  u3, u2, p0 \t\n"
-			"so.a.add.sg  u1, u7, u3, p0 \t\n"
-		"so.b.nc u1, .SLOOP_2%= \t\n"
+			"so.a.adde.sg  u3, u2, p0 \n"
+			"so.a.add.sg  u1, u7, u3, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \t\n"
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
@@ -367,7 +387,7 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 
 #ifdef RUN_SIMPLE
 void core(DataType* A, DataType* x_1, DataType* x_2, DataType* y_1, DataType* y_2, uint64_t sizeN) {
-	asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
     for (int i = 0; i < sizeN; i++)
       for (int j = 0; j < sizeN; j++)
@@ -377,7 +397,7 @@ void core(DataType* A, DataType* x_1, DataType* x_2, DataType* y_1, DataType* y_
       for (int j = 0; j < sizeN; j++)
         x_2[i] = x_2[i] + A[j*sizeN+i] * y_2[j];
 
-	asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 	printf("%ld\n%ld\n", start, end);
 }
 

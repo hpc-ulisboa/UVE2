@@ -1,0 +1,68 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+   0:	c0202873          	rdinstret	a6
+   4:	000003b7          	lui	t2,0x0
+   8:	0103b023          	sd	a6,0(t2) # 0 <core>
+   c:	00f50f33          	add	t5,a0,a5
+  10:	00f582b3          	add	t0,a1,a5
+  14:	8faa                	mv	t6,a0
+  16:	cbb5                	beqz	a5,8a <.L3>
+
+0000000000000018 <.L5>:
+  18:	00058803          	lb	a6,0(a1)
+  1c:	8e36                	mv	t3,a3
+  1e:	88fe                	mv	a7,t6
+
+0000000000000020 <.L4>:
+  20:	0008c303          	lbu	t1,0(a7)
+  24:	000e4e83          	lbu	t4,0(t3)
+  28:	0885                	addi	a7,a7,1
+  2a:	0e05                	addi	t3,t3,1
+  2c:	03d3033b          	mulw	t1,t1,t4
+  30:	0103083b          	addw	a6,t1,a6
+  34:	0188181b          	slliw	a6,a6,0x18
+  38:	4188581b          	sraiw	a6,a6,0x18
+  3c:	01058023          	sb	a6,0(a1)
+  40:	ff1f10e3          	bne	t5,a7,20 <.L4>
+  44:	0585                	addi	a1,a1,1
+  46:	9fbe                	add	t6,t6,a5
+  48:	9f3e                	add	t5,t5,a5
+  4a:	fcb297e3          	bne	t0,a1,18 <.L5>
+  4e:	00f60eb3          	add	t4,a2,a5
+  52:	00e78e33          	add	t3,a5,a4
+
+0000000000000056 <.L6>:
+  56:	00060683          	lb	a3,0(a2)
+  5a:	85ba                	mv	a1,a4
+  5c:	88aa                	mv	a7,a0
+
+000000000000005e <.L7>:
+  5e:	0008c803          	lbu	a6,0(a7)
+  62:	0005c303          	lbu	t1,0(a1)
+  66:	0585                	addi	a1,a1,1
+  68:	98be                	add	a7,a7,a5
+  6a:	0268083b          	mulw	a6,a6,t1
+  6e:	00d806bb          	addw	a3,a6,a3
+  72:	0186969b          	slliw	a3,a3,0x18
+  76:	4186d69b          	sraiw	a3,a3,0x18
+  7a:	00d60023          	sb	a3,0(a2)
+  7e:	febe10e3          	bne	t3,a1,5e <.L7>
+  82:	0605                	addi	a2,a2,1
+  84:	0505                	addi	a0,a0,1
+  86:	fcce98e3          	bne	t4,a2,56 <.L6>
+
+000000000000008a <.L3>:
+  8a:	c02027f3          	rdinstret	a5
+  8e:	0003b583          	ld	a1,0(t2)
+  92:	00000537          	lui	a0,0x0
+  96:	00000737          	lui	a4,0x0
+  9a:	863e                	mv	a2,a5
+  9c:	00050513          	mv	a0,a0
+  a0:	00f73023          	sd	a5,0(a4) # 0 <core>
+  a4:	00000317          	auipc	t1,0x0
+  a8:	00030067          	jr	t1 # a4 <.L3+0x1a>

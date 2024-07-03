@@ -6,115 +6,117 @@ long int start = 0, end = 0;
 #ifdef D_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
 	asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
-		"ss.sta.st.d u1, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u1, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
+		"ss.sta.st.d.v.1 u1, %[A] \n"
+		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d u10, %[v2], %[sizeN], zero \n\t"
-		"ss.end u10, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u10 \n\t"
+		"ss.sta.ld.d.v.1 u10, %[v2] \n"
+		"ss.app			 u10, zero, %[sizeN], zero \n"
+		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d u9, %[u2], %[sizeN], %[one] \n\t"
-		"ss.end u9, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u9 \n\t"
+		"ss.sta.ld.d.v.1 u9, %[u2] \n"
+		"ss.app		     u9, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.d u7, %[v1], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.d.v.1 u7, %[v1] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d u6, %[u1], %[sizeN], %[one] \n\t"
-		"ss.end u6, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u6 \n\t"
+		"ss.sta.ld.d.v.1 u6, %[u1] \n"
+		"ss.app			 u6, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.d u4, %[A], %[sizeN], %[sizeN]\n\t"
-		"ss.end u4, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
+		"ss.sta.ld.d.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
-        ".SLOOP_1%=: \n\t"
-			"so.a.mul.fp  u5, u6, u7, p0 \n\t"
-			"so.a.add.fp  u3, u4, u5, p0 \n\t"
-			"so.a.mul.fp  u8, u9, u10, p0 \n\t"
-			"so.a.add.fp  u1, u3, u8, p0 \n\t"
-		"so.b.nc u1, .SLOOP_1%= \n\t"
+        ".SLOOP_1%=: \n"
+			"so.a.mul.fp  u5, u6, u7, p0 \n"
+			"so.a.add.fp  u3, u4, u5, p0 \n"
+			"so.a.mul.fp  u8, u9, u10, p0 \n"
+			"so.a.add.fp  u1, u3, u8, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.d u7, %[y], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.d.v.1 u7, %[y] \n"
+		"ss.app		     u7, zero, %[sizeN], zero \n"
+		"ss.end 	     u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d u5, %[A], %[sizeN], %[one] \n\t"
-		"ss.end u5, zero, %[sizeN], %[sizeN] \n\t"
-		"ss.cfg.vec u5 \n\t"
+		"ss.sta.ld.d.v.1 u5, %[A] \n"
+		"ss.app			 u5, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
-		"ss.st.d u1, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.st.d u1, %[x] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.ld.d u9, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.d u9, %[x] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
 
-		"so.v.dp.d u6, %[beta], p0 \n\t"
-
+		"so.v.dp.d u6, %[beta], p0 \n"
 		
-		".SLOOP_2%=: \n\t"
-			"so.v.dp.d u11, zero, p0 \n\t"
+		".SLOOP_2%=: \n"
+			"so.v.dp.d u11, zero, p0 \n"
 
-			".SLOOP_2_0%=: \n\t"
-				"so.a.mul.fp  u16, u5, u6, p0 \n\t"
-				"so.a.mul.fp  u29, u16, u7, p0 \n\t"
-				"so.a.adde.acc.fp  u11, u29, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.fp  u16, u5, u6, p0 \n"
+				"so.a.mul.fp  u29, u16, u7, p0 \n"
+				"so.a.adde.acc.fp  u11, u29, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
 
-			//"so.a.adde.fp  u30, u11, p0 \n\t"
-			//"so.a.add.fp  u1, u9, u30, p0 \n\t"
-			"so.a.add.fp  u1, u9, u11, p0 \n\t"
-		"so.b.nc u1, .SLOOP_2%= \n\t"
-		
-
-		"ss.st.d u1, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
-
-		"ss.ld.d u4, %[z], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
-
-		"ss.ld.d u3, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u3 \n\t"
-
-		".SLOOP_3%=: \n\t"
-			"so.a.add.fp  u1, u3, u4, p0 \n\t"
-		"so.b.nc u1, .SLOOP_3%= \n\t"
+			//"so.a.adde.fp  u30, u11, p0 \n"
+			//"so.a.add.fp  u1, u9, u30, p0 \n"
+			"so.a.add.fp  u1, u9, u11, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
 		
 
+		"ss.sta.st.d.v u1, %[x] \n"
+		"ss.end		   u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d u7, %[x], %[sizeN], zero \n\t"
-		"ss.end u7, zero,  %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.d.v u4, %[z] \n"
+		"ss.end 	   u4, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d u5, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u5, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u5 \n\t"
+		"ss.sta.ld.d.v u3, %[x] \n"
+		"ss.end 	   u3, zero, %[sizeN], %[one] \n"
 
-		"ss.st.d u1, %[w], %[sizeN], %[one] \n\t"
+		".SLOOP_3%=: \n"
+			"so.a.add.fp  u1, u3, u4, p0 \n"
+		"so.b.nc u1, .SLOOP_3%= \n"
+		
 
-		"ss.ld.d u9, %[w], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.d.v.1 u7, %[x] \n"
+		"ss.app		 	 u7, zero, %[sizeN], zero \n"
+		"ss.end      	 u7, zero, %[sizeN], %[one] \n"
 
-		"so.v.dp.d u12, %[alpha], p0 \n\t"
+		"ss.sta.ld.d.v.1 u5, %[A] \n"
+		"ss.app			 u5, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.st.d u1, %[w] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.d u9, %[w] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
+
+		"so.v.dp.d u12, %[alpha], p0 \n"
 
 		
-		".SLOOP_4%=: \n\t"
-			"so.v.dp.d u13, zero, p0 \n\t"
+		".SLOOP_4%=: \n"
+			"so.v.dp.d u13, zero, p0 \n"
 
-			".SLOOP_4_0%=: \n\t"
-				"so.a.mul.fp  u14, u5, u12, p0 \n\t"
-				"so.a.mul.fp  u15, u14, u7, p0 \n\t"
-				"so.a.adde.acc.fp  u13, u15, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
+			".SLOOP_4_0%=: \n"
+				"so.a.mul.fp  u14, u5, u12, p0 \n"
+				"so.a.mul.fp  u15, u14, u7, p0 \n"
+				"so.a.adde.acc.fp  u13, u15, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
 
-			//"so.a.adde.fp  u15, u13, p0 \n\t"
-			//"so.a.add.fp  u1, u9, u15, p0 \n\t"
-			"so.a.add.fp  u1, u9, u13, p0 \n\t"
-		"so.b.nc u1, .SLOOP_4%= \n\t"
+			//"so.a.adde.fp  u15, u13, p0 \n"
+			//"so.a.add.fp  u1, u9, u15, p0 \n"
+			"so.a.add.fp  u1, u9, u13, p0 \n"
+		"so.b.nc u1, .SLOOP_4%= \n"
 
-		"rdinstret %[e] \n\t"
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [u1] "r"(u1),
@@ -130,115 +132,118 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 #ifdef F_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
 	asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
-		"ss.sta.st.w u1, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u1, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
+		"ss.sta.st.w.v.1 u1, %[A] \n"
+		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w u10, %[v2], %[sizeN], zero \n\t"
-		"ss.end u10, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u10 \n\t"
+		"ss.sta.ld.w.v.1 u10, %[v2] \n"
+		"ss.app			 u10, zero, %[sizeN], zero \n"
+		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w u9, %[u2], %[sizeN], %[one] \n\t"
-		"ss.end u9, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u9 \n\t"
+		"ss.sta.ld.w.v.1 u9, %[u2] \n"
+		"ss.app		     u9, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.w u7, %[v1], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.w.v.1 u7, %[v1] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w u6, %[u1], %[sizeN], %[one] \n\t"
-		"ss.end u6, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u6 \n\t"
+		"ss.sta.ld.w.v.1 u6, %[u1] \n"
+		"ss.app			 u6, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.w u4, %[A], %[sizeN], %[sizeN]\n\t"
-		"ss.end u4, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
+		"ss.sta.ld.w.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
-        ".SLOOP_1%=: \n\t"
-			"so.a.mul.fp  u5, u6, u7, p0 \n\t"
-			"so.a.add.fp  u3, u4, u5, p0 \n\t"
-			"so.a.mul.fp  u8, u9, u10, p0 \n\t"
-			"so.a.add.fp  u1, u3, u8, p0 \n\t"
-		"so.b.nc u1, .SLOOP_1%= \n\t"
+        ".SLOOP_1%=: \n"
+			"so.a.mul.fp  u5, u6, u7, p0 \n"
+			"so.a.add.fp  u3, u4, u5, p0 \n"
+			"so.a.mul.fp  u8, u9, u10, p0 \n"
+			"so.a.add.fp  u1, u3, u8, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.w u7, %[y], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.w.v.1 u7, %[y] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w u5, %[A], %[sizeN], %[one] \n\t"
-		"ss.end u5, zero, %[sizeN], %[sizeN] \n\t"
-		"ss.cfg.vec u5 \n\t"
+		"ss.sta.ld.w.v.1 u5, %[A] \n"
+		"ss.app			 u5, zero, %[sizeN], %[one]	\n"
+		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
-		"ss.st.w u1, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.st.w u1, %[x] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.ld.w u9, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.w u9, %[x] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
 
-		"so.v.dp.w u6, %[beta], p0 \n\t"
-
-		
-		".SLOOP_2%=: \n\t"
-			"so.v.dp.w u11, zero, p0 \n\t"
-
-			".SLOOP_2_0%=: \n\t"
-				"so.a.mul.fp  u16, u5, u6, p0 \n\t"
-				"so.a.mul.fp  u29, u16, u7, p0 \n\t"
-				"so.a.adde.acc.fp  u11, u29, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
-
-			//"so.a.adde.fp  u30, u11, p0 \n\t"
-			//"so.a.add.fp  u1, u9, u30, p0 \n\t"
-			"so.a.add.fp  u1, u9, u11, p0 \n\t"
-		"so.b.nc u1, .SLOOP_2%= \n\t"
-		
-
-		"ss.st.w u1, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
-
-		"ss.ld.w u4, %[z], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
-
-		"ss.ld.w u3, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u3 \n\t"
-
-		".SLOOP_3%=: \n\t"
-			"so.a.add.fp  u1, u3, u4, p0 \n\t"
-		"so.b.nc u1, .SLOOP_3%= \n\t"
-		
-
-
-		"ss.sta.ld.w u7, %[x], %[sizeN], zero \n\t"
-		"ss.end u7, zero,  %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
-
-		"ss.sta.ld.w u5, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u5, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u5 \n\t"
-
-		"ss.st.w u1, %[w], %[sizeN], %[one] \n\t"
-
-		"ss.ld.w u9, %[w], %[sizeN], %[one] \n\t"
-
-		"so.v.dp.w u12, %[alpha], p0 \n\t"
+		"so.v.dp.w u6, %[beta], p0 \n"
 
 		
-		".SLOOP_4%=: \n\t"
-			"so.v.dp.w u13, zero, p0 \n\t"
+		".SLOOP_2%=: \n"
+			"so.v.dp.w u11, zero, p0 \n"
 
-			".SLOOP_4_0%=: \n\t"
-				"so.a.mul.fp  u14, u5, u12, p0 \n\t"
-				"so.a.mul.fp  u15, u14, u7, p0 \n\t"
-				"so.a.adde.acc.fp  u13, u15, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.fp  u16, u5, u6, p0 \n"
+				"so.a.mul.fp  u29, u16, u7, p0 \n"
+				"so.a.adde.acc.fp  u11, u29, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
 
-			//"so.a.adde.fp  u15, u13, p0 \n\t"
-			//"so.a.add.fp  u1, u9, u15, p0 \n\t"
-			"so.a.add.fp  u1, u9, u13, p0 \n\t"
-		"so.b.nc u1, .SLOOP_4%= \n\t"
+			//"so.a.adde.fp  u30, u11, p0 \n"
+			//"so.a.add.fp  u1, u9, u30, p0 \n"
+			"so.a.add.fp  u1, u9, u11, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
+		
 
-		"rdinstret %[e] \n\t"
+		"ss.sta.st.w.v u1, %[x] \n"
+		"ss.end		   u1, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.w.v u4, %[z] \n"
+		"ss.end 	   u4, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.w.v u3, %[x] \n"
+		"ss.end 	   u3, zero, %[sizeN], %[one] \n"
+
+		".SLOOP_3%=: \n"
+			"so.a.add.fp  u1, u3, u4, p0 \n"
+		"so.b.nc u1, .SLOOP_3%= \n"
+		
+
+		"ss.sta.ld.w.v.1 u7, %[x] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero,  %[sizeN], %[one] \n"
+
+		"ss.sta.ld.w.v.1 u5, %[A] \n"
+		"ss.app		     u5, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.st.w u1, %[w] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.w u9, %[w] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
+
+		"so.v.dp.w u12, %[alpha], p0 \n"
+
+		
+		".SLOOP_4%=: \n"
+			"so.v.dp.w u13, zero, p0 \n"
+
+			".SLOOP_4_0%=: \n"
+				"so.a.mul.fp  u14, u5, u12, p0 \n"
+				"so.a.mul.fp  u15, u14, u7, p0 \n"
+				"so.a.adde.acc.fp  u13, u15, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
+
+			//"so.a.adde.fp  u15, u13, p0 \n"
+			//"so.a.add.fp  u1, u9, u15, p0 \n"
+			"so.a.add.fp  u1, u9, u13, p0 \n"
+		"so.b.nc u1, .SLOOP_4%= \n"
+
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [u1] "r"(u1),
@@ -254,115 +259,119 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 #ifdef I_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
 	asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
-		"ss.sta.st.w u1, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u1, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
+		"ss.sta.st.w.v.1 u1, %[A] \n"
+		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
+		"ss.end			 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w u10, %[v2], %[sizeN], zero \n\t"
-		"ss.end u10, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u10 \n\t"
+		"ss.sta.ld.w.v.1 u10, %[v2] \n"
+		"ss.app			 u10, zero, %[sizeN], zero \n"
+		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w u9, %[u2], %[sizeN], %[one] \n\t"
-		"ss.end u9, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u9 \n\t"
+		"ss.sta.ld.w.v.1 u9, %[u2] \n"
+		"ss.app		     u9, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.w u7, %[v1], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.w.v.1 u7, %[v1] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w u6, %[u1], %[sizeN], %[one] \n\t"
-		"ss.end u6, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u6 \n\t"
+		"ss.sta.ld.w.v.1 u6, %[u1] \n"
+		"ss.app			 u6, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.w u4, %[A], %[sizeN], %[sizeN]\n\t"
-		"ss.end u4, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
+		"ss.sta.ld.w.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
-        ".SLOOP_1%=: \n\t"
-			"so.a.mul.sg  u5, u6, u7, p0 \n\t"
-			"so.a.add.sg  u3, u4, u5, p0 \n\t"
-			"so.a.mul.sg  u8, u9, u10, p0 \n\t"
-			"so.a.add.sg  u1, u3, u8, p0 \n\t"
-		"so.b.nc u1, .SLOOP_1%= \n\t"
+        ".SLOOP_1%=: \n"
+			"so.a.mul.sg  u5, u6, u7, p0 \n"
+			"so.a.add.sg  u3, u4, u5, p0 \n"
+			"so.a.mul.sg  u8, u9, u10, p0 \n"
+			"so.a.add.sg  u1, u3, u8, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.w u7, %[y], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.w.v.1 u7, %[y] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w u5, %[A], %[sizeN], %[one] \n\t"
-		"ss.end u5, zero, %[sizeN], %[sizeN] \n\t"
-		"ss.cfg.vec u5 \n\t"
+		"ss.sta.ld.w.v.1 u5, %[A] \n"
+		"ss.app			 u5, zero, %[sizeN], %[one]	\n"
+		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
-		"ss.st.w u1, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.st.w u1, %[x] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.ld.w u9, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.w u9, %[x] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
 
-		"so.v.dp.w u6, %[beta], p0 \n\t"
-
-		
-		".SLOOP_2%=: \n\t"
-			"so.v.dp.w u11, zero, p0 \n\t"
-
-			".SLOOP_2_0%=: \n\t"
-				"so.a.mul.sg  u16, u5, u6, p0 \n\t"
-				"so.a.mul.sg  u29, u16, u7, p0 \n\t"
-				"so.a.adde.acc.sg  u11, u29, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
-
-			//"so.a.adde.sg  u30, u11, p0 \n\t"
-			//"so.a.add.sg  u1, u9, u30, p0 \n\t"
-			"so.a.add.sg  u1, u9, u11, p0 \n\t"
-		"so.b.nc u1, .SLOOP_2%= \n\t"
-		
-
-		"ss.st.w u1, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
-
-		"ss.ld.w u4, %[z], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
-
-		"ss.ld.w u3, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u3 \n\t"
-
-		".SLOOP_3%=: \n\t"
-			"so.a.add.sg  u1, u3, u4, p0 \n\t"
-		"so.b.nc u1, .SLOOP_3%= \n\t"
-		
-
-
-		"ss.sta.ld.w u7, %[x], %[sizeN], zero \n\t"
-		"ss.end u7, zero,  %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
-
-		"ss.sta.ld.w u5, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u5, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u5 \n\t"
-
-		"ss.st.w u1, %[w], %[sizeN], %[one] \n\t"
-
-		"ss.ld.w u9, %[w], %[sizeN], %[one] \n\t"
-
-		"so.v.dp.w u12, %[alpha], p0 \n\t"
+		"so.v.dp.w u6, %[beta], p0 \n"
 
 		
-		".SLOOP_4%=: \n\t"
-			"so.v.dp.w u13, zero, p0 \n\t"
+		".SLOOP_2%=: \n"
+			"so.v.dp.w u11, zero, p0 \n"
 
-			".SLOOP_4_0%=: \n\t"
-				"so.a.mul.sg  u14, u5, u12, p0 \n\t"
-				"so.a.mul.sg  u15, u14, u7, p0 \n\t"
-				"so.a.adde.acc.sg  u13, u15, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.sg  u16, u5, u6, p0 \n"
+				"so.a.mul.sg  u29, u16, u7, p0 \n"
+				"so.a.adde.acc.sg  u11, u29, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
 
-			//"so.a.adde.sg  u15, u13, p0 \n\t"
-			//"so.a.add.sg  u1, u9, u15, p0 \n\t"
-			"so.a.add.sg  u1, u9, u13, p0 \n\t"
-		"so.b.nc u1, .SLOOP_4%= \n\t"
+			//"so.a.adde.sg  u30, u11, p0 \n"
+			//"so.a.add.sg  u1, u9, u30, p0 \n"
+			"so.a.add.sg  u1, u9, u11, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
+		
 
-		"rdinstret %[e] \n\t"
+		"ss.sta.st.w u1, %[x] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.w.v u4, %[z] \n"
+		"ss.end 	   u4, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.w.v u3, %[x] \n"
+		"ss.end 	   u3, zero, %[sizeN], %[one] \n"
+
+		".SLOOP_3%=: \n"
+			"so.a.add.sg  u1, u3, u4, p0 \n"
+		"so.b.nc u1, .SLOOP_3%= \n"
+		
+
+
+		"ss.sta.ld.w.v.1 u7, %[x] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero,  %[sizeN], %[one] \n"
+
+		"ss.sta.ld.w.v.1 u5, %[A] \n"
+		"ss.app		     u5, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.st.w u1, %[w] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.w u9, %[w] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
+
+		"so.v.dp.w u12, %[alpha], p0 \n"
+
+		
+		".SLOOP_4%=: \n"
+			"so.v.dp.w u13, zero, p0 \n"
+
+			".SLOOP_4_0%=: \n"
+				"so.a.mul.sg  u14, u5, u12, p0 \n"
+				"so.a.mul.sg  u15, u14, u7, p0 \n"
+				"so.a.adde.acc.sg  u13, u15, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
+
+			//"so.a.adde.sg  u15, u13, p0 \n"
+			//"so.a.add.sg  u1, u9, u15, p0 \n"
+			"so.a.add.sg  u1, u9, u13, p0 \n"
+		"so.b.nc u1, .SLOOP_4%= \n"
+
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [u1] "r"(u1),
@@ -378,115 +387,119 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 #ifdef H_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
 	asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
-		"ss.sta.st.h u1, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u1, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
+		"ss.sta.st.h.v.1 u1, %[A] \n"
+		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
+		"ss.end			 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.h u10, %[v2], %[sizeN], zero \n\t"
-		"ss.end u10, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u10 \n\t"
+		"ss.sta.ld.h.v.1 u10, %[v2] \n"
+		"ss.app			 u10, zero, %[sizeN], zero \n"
+		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.h u9, %[u2], %[sizeN], %[one] \n\t"
-		"ss.end u9, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u9 \n\t"
+		"ss.sta.ld.h.v.1 u9, %[u2] \n"
+		"ss.app		     u9, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.h u7, %[v1], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.h.v.1 u7, %[v1] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.h u6, %[u1], %[sizeN], %[one] \n\t"
-		"ss.end u6, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u6 \n\t"
+		"ss.sta.ld.h.v.1 u6, %[u1] \n"
+		"ss.app			 u6, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.h u4, %[A], %[sizeN], %[sizeN]\n\t"
-		"ss.end u4, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
+		"ss.sta.ld.h.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
-        ".SLOOP_1%=: \n\t"
-			"so.a.mul.sg  u5, u6, u7, p0 \n\t"
-			"so.a.add.sg  u3, u4, u5, p0 \n\t"
-			"so.a.mul.sg  u8, u9, u10, p0 \n\t"
-			"so.a.add.sg  u1, u3, u8, p0 \n\t"
-		"so.b.nc u1, .SLOOP_1%= \n\t"
+        ".SLOOP_1%=: \n"
+			"so.a.mul.sg  u5, u6, u7, p0 \n"
+			"so.a.add.sg  u3, u4, u5, p0 \n"
+			"so.a.mul.sg  u8, u9, u10, p0 \n"
+			"so.a.add.sg  u1, u3, u8, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.h u7, %[y], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.h.v.1 u7, %[y] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.h u5, %[A], %[sizeN], %[one] \n\t"
-		"ss.end u5, zero, %[sizeN], %[sizeN] \n\t"
-		"ss.cfg.vec u5 \n\t"
+		"ss.sta.ld.h.v.1 u5, %[A] \n"
+		"ss.app			 u5, zero, %[sizeN], %[one]	\n"
+		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
-		"ss.st.h u1, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.st.h u1, %[x] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.ld.h u9, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.h u9, %[x] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
 
-		"so.v.dp.h u6, %[beta], p0 \n\t"
-
-		
-		".SLOOP_2%=: \n\t"
-			"so.v.dp.h u11, zero, p0 \n\t"
-
-			".SLOOP_2_0%=: \n\t"
-				"so.a.mul.sg  u16, u5, u6, p0 \n\t"
-				"so.a.mul.sg  u29, u16, u7, p0 \n\t"
-				"so.a.adde.acc.sg  u11, u29, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
-
-			//"so.a.adde.sg  u30, u11, p0 \n\t"
-			//"so.a.add.sg  u1, u9, u30, p0 \n\t"
-			"so.a.add.sg  u1, u9, u11, p0 \n\t"
-		"so.b.nc u1, .SLOOP_2%= \n\t"
-		
-
-		"ss.st.h u1, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
-
-		"ss.ld.h u4, %[z], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
-
-		"ss.ld.h u3, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u3 \n\t"
-
-		".SLOOP_3%=: \n\t"
-			"so.a.add.sg  u1, u3, u4, p0 \n\t"
-		"so.b.nc u1, .SLOOP_3%= \n\t"
-		
-
-
-		"ss.sta.ld.h u7, %[x], %[sizeN], zero \n\t"
-		"ss.end u7, zero,  %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
-
-		"ss.sta.ld.h u5, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u5, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u5 \n\t"
-
-		"ss.st.h u1, %[w], %[sizeN], %[one] \n\t"
-
-		"ss.ld.h u9, %[w], %[sizeN], %[one] \n\t"
-
-		"so.v.dp.h u12, %[alpha], p0 \n\t"
+		"so.v.dp.h u6, %[beta], p0 \n"
 
 		
-		".SLOOP_4%=: \n\t"
-			"so.v.dp.h u13, zero, p0 \n\t"
+		".SLOOP_2%=: \n"
+			"so.v.dp.h u11, zero, p0 \n"
 
-			".SLOOP_4_0%=: \n\t"
-				"so.a.mul.sg  u14, u5, u12, p0 \n\t"
-				"so.a.mul.sg  u15, u14, u7, p0 \n\t"
-				"so.a.adde.acc.sg  u13, u15, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.sg  u16, u5, u6, p0 \n"
+				"so.a.mul.sg  u29, u16, u7, p0 \n"
+				"so.a.adde.acc.sg  u11, u29, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
 
-			//"so.a.adde.sg  u15, u13, p0 \n\t"
-			//"so.a.add.sg  u1, u9, u15, p0 \n\t"
-			"so.a.add.sg  u1, u9, u13, p0 \n\t"
-		"so.b.nc u1, .SLOOP_4%= \n\t"
+			//"so.a.adde.sg  u30, u11, p0 \n"
+			//"so.a.add.sg  u1, u9, u30, p0 \n"
+			"so.a.add.sg  u1, u9, u11, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
+		
 
-		"rdinstret %[e] \n\t"
+		"ss.sta.st.h u1, %[x] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.h.v u4, %[z] \n"
+		"ss.end 	   u4, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.h.v u3, %[x] \n"
+		"ss.end 	   u3, zero, %[sizeN], %[one] \n"
+
+		".SLOOP_3%=: \n"
+			"so.a.add.sg  u1, u3, u4, p0 \n"
+		"so.b.nc u1, .SLOOP_3%= \n"
+		
+
+
+		"ss.sta.ld.h.v.1 u7, %[x] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero,  %[sizeN], %[one] \n"
+
+		"ss.sta.ld.h.v.1 u5, %[A] \n"
+		"ss.app		     u5, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.st.h u1, %[w] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.h u9, %[w] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
+
+		"so.v.dp.h u12, %[alpha], p0 \n"
+
+		
+		".SLOOP_4%=: \n"
+			"so.v.dp.h u13, zero, p0 \n"
+
+			".SLOOP_4_0%=: \n"
+				"so.a.mul.sg  u14, u5, u12, p0 \n"
+				"so.a.mul.sg  u15, u14, u7, p0 \n"
+				"so.a.adde.acc.sg  u13, u15, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
+
+			//"so.a.adde.sg  u15, u13, p0 \n"
+			//"so.a.add.sg  u1, u9, u15, p0 \n"
+			"so.a.add.sg  u1, u9, u13, p0 \n"
+		"so.b.nc u1, .SLOOP_4%= \n"
+
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [u1] "r"(u1),
@@ -502,115 +515,119 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 #ifdef B_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
 	asm volatile(
-		"rdinstret %[s] \t\n"
+		"rdinstret %[s] \n"
 
-		"ss.sta.st.b u1, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u1, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
+		"ss.sta.st.b.v.1 u1, %[A] \n"
+		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
+		"ss.end			 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.b u10, %[v2], %[sizeN], zero \n\t"
-		"ss.end u10, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u10 \n\t"
+		"ss.sta.ld.b.v.1 u10, %[v2] \n"
+		"ss.app			 u10, zero, %[sizeN], zero \n"
+		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.b u9, %[u2], %[sizeN], %[one] \n\t"
-		"ss.end u9, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u9 \n\t"
+		"ss.sta.ld.b.v.1 u9, %[u2] \n"
+		"ss.app		     u9, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.b u7, %[v1], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.b.v.1 u7, %[v1] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.b u6, %[u1], %[sizeN], %[one] \n\t"
-		"ss.end u6, zero, %[sizeN], zero \n\t"
-		"ss.cfg.vec u6 \n\t"
+		"ss.sta.ld.b.v.1 u6, %[u1] \n"
+		"ss.app			 u6, zero, %[sizeN], %[one] \n"
+		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.b u4, %[A], %[sizeN], %[sizeN]\n\t"
-		"ss.end u4, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
+		"ss.sta.ld.b.v.1 u4, %[A] \n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
-        ".SLOOP_1%=: \n\t"
-			"so.a.mul.sg  u5, u6, u7, p0 \n\t"
-			"so.a.add.sg  u3, u4, u5, p0 \n\t"
-			"so.a.mul.sg  u8, u9, u10, p0 \n\t"
-			"so.a.add.sg  u1, u3, u8, p0 \n\t"
-		"so.b.nc u1, .SLOOP_1%= \n\t"
+        ".SLOOP_1%=: \n"
+			"so.a.mul.sg  u5, u6, u7, p0 \n"
+			"so.a.add.sg  u3, u4, u5, p0 \n"
+			"so.a.mul.sg  u8, u9, u10, p0 \n"
+			"so.a.add.sg  u1, u3, u8, p0 \n"
+		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.b u7, %[y], %[sizeN], zero \n\t"
-		"ss.end u7, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
+		"ss.sta.ld.b.v.1 u7, %[y] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.b u5, %[A], %[sizeN], %[one] \n\t"
-		"ss.end u5, zero, %[sizeN], %[sizeN] \n\t"
-		"ss.cfg.vec u5 \n\t"
+		"ss.sta.ld.b.v.1 u5, %[A] \n"
+		"ss.app			 u5, zero, %[sizeN], %[one]	\n"
+		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
-		"ss.st.b u1, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.st.b u1, %[x] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.ld.b u9, %[x], %[sizeN], %[one] \n\t"
+		"ss.sta.ld.b u9, %[x] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
 
-		"so.v.dp.b u6, %[beta], p0 \n\t"
-
-		
-		".SLOOP_2%=: \n\t"
-			"so.v.dp.b u11, zero, p0 \n\t"
-
-			".SLOOP_2_0%=: \n\t"
-				"so.a.mul.sg  u16, u5, u6, p0 \n\t"
-				"so.a.mul.sg  u29, u16, u7, p0 \n\t"
-				"so.a.adde.acc.sg  u11, u29, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n\t"
-
-			//"so.a.adde.sg  u30, u11, p0 \n\t"
-			//"so.a.add.sg  u1, u9, u30, p0 \n\t"
-			"so.a.add.sg  u1, u9, u11, p0 \n\t"
-		"so.b.nc u1, .SLOOP_2%= \n\t"
-		
-
-		"ss.st.b u1, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u1 \n\t"
-
-		"ss.ld.b u4, %[z], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u4 \n\t"
-
-		"ss.ld.b u3, %[x], %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u3 \n\t"
-
-		".SLOOP_3%=: \n\t"
-			"so.a.add.sg  u1, u3, u4, p0 \n\t"
-		"so.b.nc u1, .SLOOP_3%= \n\t"
-		
-
-
-		"ss.sta.ld.b u7, %[x], %[sizeN], zero \n\t"
-		"ss.end u7, zero,  %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u7 \n\t"
-
-		"ss.sta.ld.b u5, %[A], %[sizeN], %[sizeN] \n\t"
-		"ss.end u5, zero, %[sizeN], %[one] \n\t"
-		"ss.cfg.vec u5 \n\t"
-
-		"ss.st.b u1, %[w], %[sizeN], %[one] \n\t"
-
-		"ss.ld.b u9, %[w], %[sizeN], %[one] \n\t"
-
-		"so.v.dp.b u12, %[alpha], p0 \n\t"
+		"so.v.dp.b u6, %[beta], p0 \n"
 
 		
-		".SLOOP_4%=: \n\t"
-			"so.v.dp.b u13, zero, p0 \n\t"
+		".SLOOP_2%=: \n"
+			"so.v.dp.b u11, zero, p0 \n"
 
-			".SLOOP_4_0%=: \n\t"
-				"so.a.mul.sg  u14, u5, u12, p0 \n\t"
-				"so.a.mul.sg  u15, u14, u7, p0 \n\t"
-				"so.a.adde.acc.sg  u13, u15, p0 \n\t"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n\t"
+			".SLOOP_2_0%=: \n"
+				"so.a.mul.sg  u16, u5, u6, p0 \n"
+				"so.a.mul.sg  u29, u16, u7, p0 \n"
+				"so.a.adde.acc.sg  u11, u29, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
 
-			//"so.a.adde.sg  u15, u13, p0 \n\t"
-			//"so.a.add.sg  u1, u9, u15, p0 \n\t"
-			"so.a.add.sg  u1, u9, u13, p0 \n\t"
-		"so.b.nc u1, .SLOOP_4%= \n\t"
+			//"so.a.adde.sg  u30, u11, p0 \n"
+			//"so.a.add.sg  u1, u9, u30, p0 \n"
+			"so.a.add.sg  u1, u9, u11, p0 \n"
+		"so.b.nc u1, .SLOOP_2%= \n"
+		
 
-		"rdinstret %[e] \n\t"
+		"ss.sta.st.b u1, %[x] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.b.v u4, %[z] \n"
+		"ss.end 	   u4, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.b.v u3, %[x] \n"
+		"ss.end 	   u3, zero, %[sizeN], %[one] \n"
+
+		".SLOOP_3%=: \n"
+			"so.a.add.sg  u1, u3, u4, p0 \n"
+		"so.b.nc u1, .SLOOP_3%= \n"
+		
+
+
+		"ss.sta.ld.b.v.1 u7, %[x] \n"
+		"ss.app			 u7, zero, %[sizeN], zero \n"
+		"ss.end 		 u7, zero,  %[sizeN], %[one] \n"
+
+		"ss.sta.ld.b.v.1 u5, %[A] \n"
+		"ss.app		     u5, zero, %[sizeN], %[sizeN] \n"
+		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.st.b u1, %[w] \n"
+		"ss.end		 u1, zero, %[sizeN], %[one] \n"
+
+		"ss.sta.ld.b u9, %[w] \n"
+		"ss.end 	 u9, zero, %[sizeN], %[one] \n"
+
+		"so.v.dp.b u12, %[alpha], p0 \n"
+
+		
+		".SLOOP_4%=: \n"
+			"so.v.dp.b u13, zero, p0 \n"
+
+			".SLOOP_4_0%=: \n"
+				"so.a.mul.sg  u14, u5, u12, p0 \n"
+				"so.a.mul.sg  u15, u14, u7, p0 \n"
+				"so.a.adde.acc.sg  u13, u15, p0 \n"
+			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
+
+			//"so.a.adde.sg  u15, u13, p0 \n"
+			//"so.a.add.sg  u1, u9, u15, p0 \n"
+			"so.a.add.sg  u1, u9, u13, p0 \n"
+		"so.b.nc u1, .SLOOP_4%= \n"
+
+		"rdinstret %[e] \n"
 
 		: [s] "=&r"(start), [e] "=&r"(end)
 		: [A] "r"(A), [u1] "r"(u1),
@@ -629,7 +646,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 void core(DataType* A, DataType* u1, DataType* v1, DataType* u2, DataType* v2, DataType* w,
  DataType* x, DataType* y, DataType* z, DataType alpha, DataType beta, uint64_t sizeN) {
 
-	asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
     int i,j;
 
@@ -648,7 +665,7 @@ void core(DataType* A, DataType* u1, DataType* v1, DataType* u2, DataType* v2, D
         for (j = 0; j < sizeN; j++)
         	w[i] = w[i] + alpha * A[i*sizeN + j] * x[j];
 
-	asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 	printf("%ld\n%ld\n", start, end);
 }
 
