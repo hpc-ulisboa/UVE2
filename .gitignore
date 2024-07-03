@@ -56,7 +56,9 @@ UVE-Testing/spike
 UVE-Testing/pk
 
 # Log files that may be too big to commit
-log*
+UVE-testing/log*
+UVE-testing/*.log
+UVE-testing/*/log*
 */debug.log
 
 # Auxiliary files
