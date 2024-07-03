@@ -89,6 +89,7 @@ You should also install the RISC-V Proxy Kernel, available at: https://github.co
 In order to install Spike, run these commands, assuming that the `RISCV` environment variable is set to the RISC-V tools install path:
 
 ```sh
+$ apt-get install device-tree-compiler
 $ mkdir spike/build
 $ cd spike/build
 $ ../configure --prefix=$RISCV
