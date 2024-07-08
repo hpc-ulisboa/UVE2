@@ -1,1 +1,2 @@
 kernel,size,datatype,original_clang,rvv,original_gcc,uve
+trisolv,25,float,175,175,57,52

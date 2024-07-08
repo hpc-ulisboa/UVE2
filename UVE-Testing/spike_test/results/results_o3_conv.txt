@@ -1,0 +1,140 @@
+
+### Attempting to compile and run kernel convolution (size: 2500, type: byte) ...
+
+
+benchmarks/convolution/kernel.c:585:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_J - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:585:9: remark: vectorized loop (vectorization width: vscale x 8, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 94159 less instructions
+RVV executed 139744 less instructions
+UVE executed 96970 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 237618   | 97874 | -139744    | -58.81         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 95063    | 904   | -94159     | -99.05         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 97874    | 904   | -96970     | -99.08         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: half-word) ...
+
+
+benchmarks/convolution/kernel.c:585:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_J - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:585:9: remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 93293 less instructions
+RVV executed 201419 less instructions
+UVE executed 36736 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 239923   | 38504 | -201419    | -83.95         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 95061    | 1768  | -93293     | -98.14         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 38504    | 1768  | -36736     | -95.41         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: integer) ...
+
+
+benchmarks/convolution/kernel.c:585:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_J - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:585:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 92283 less instructions
+RVV executed 231322 less instructions
+UVE executed 5969 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 239923   | 8601 | -231322    | -96.42         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 94915    | 2632 | -92283     | -97.23         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 8601     | 2632 | -5969      | -69.40         |
+|----------|------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: float) ...
+
+
+benchmarks/convolution/kernel.c:585:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_J - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:585:9: remark: vectorized loop (vectorization width: vscale x 2, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 73851 less instructions
+RVV executed 210976 less instructions
+UVE executed 5580 less instructions than RVV
+|----------|------|------------|----------------|
+| Original | RVV  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 219188   | 8212 | -210976    | -96.25         |
+|----------|------|------------|----------------|
+| Original | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 76483    | 2632 | -73851     | -96.56         |
+|----------|------|------------|----------------|
+| RVV      | UVE  | Difference | Difference (%) |
+|----------|------|------------|----------------|
+| 8212     | 2632 | -5580      | -67.95         |
+|----------|------|------------|----------------|
+
+
+Kernel convolution is similar enough
+
+### Attempting to compile and run kernel convolution (size: 2500, type: double) ...
+
+
+benchmarks/convolution/kernel.c:585:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+        for (x = 1; x < PB_J - 1; x++){
+        ^
+benchmarks/convolution/kernel.c:585:9: remark: vectorized loop (vectorization width: vscale x 1, interleaved count: 1) [-Rpass=loop-vectorize]
+
+UVE executed 71259 less instructions
+RVV executed 206368 less instructions
+UVE executed 7596 less instructions than RVV
+|----------|-------|------------|----------------|
+| Original | RVV   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 219188   | 12820 | -206368    | -94.15         |
+|----------|-------|------------|----------------|
+| Original | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 76483    | 5224  | -71259     | -93.17         |
+|----------|-------|------------|----------------|
+| RVV      | UVE   | Difference | Difference (%) |
+|----------|-------|------------|----------------|
+| 12820    | 5224  | -7596      | -59.25         |
+|----------|-------|------------|----------------|
+
+
+Kernel convolution is similar enough
