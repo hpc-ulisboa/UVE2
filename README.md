@@ -77,7 +77,8 @@ Note that this is a work-in-progress version and some bugs may still exist.
           │   │   ├── simple.log    # (automatically generated) Execution log (without UVE)
           │   │   └── uve.log       # (automatically generated) Execution log (with UVE)
           │   └── ...               # Other benchmarks
-          ├── clean.js              # Clean directories from run logs
+          ├── results               # Results directory
+          ├── clean.js              # Clean directories from run logs script
           └── validate.js           # Benchmark validation script
 ```
 ## Setup
