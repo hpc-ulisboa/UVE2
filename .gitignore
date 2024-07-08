@@ -64,6 +64,10 @@ UVE-testing/*/log*
 # Auxiliary files
 clang.txt
 
+# Result files
+*.csv
+*.txt
+
 # Directories
 UVE-Testing/compiler_test
 UVE-Testing/spike_test/benchmarks/others

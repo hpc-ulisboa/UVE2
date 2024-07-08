@@ -72,9 +72,9 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.d  u0, %[dst] \n"
-        "ss.app       u0, zero, %[inm2], %[jn] \n"
-        "ss.end       u0, %[one], %[jnm2], %[one] \n"
+        "ss.sta.st.d.v.1  u0, %[dst] \n"
+        "ss.app           u0, zero, %[inm2], %[jn] \n"
+        "ss.end           u0, %[one], %[jnm2], %[one] \n"
 
         ".loop_y%=: \n"
         
@@ -186,9 +186,9 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.w  u0, %[dst] \n"
-        "ss.app       u0, zero, %[inm2], %[jn] \n"
-        "ss.end       u0, %[one], %[jnm2], %[one] \n"
+        "ss.sta.st.w.v.1  u0, %[dst] \n"
+        "ss.app           u0, zero, %[inm2], %[jn] \n"
+        "ss.end           u0, %[one], %[jnm2], %[one] \n"
 
         ".loop_y%=: \n"
         
@@ -300,9 +300,9 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.w  u0, %[dst] \n"
-        "ss.app       u0, zero, %[inm2], %[jn] \n"
-        "ss.end       u0, %[one], %[jnm2], %[one] \n"
+        "ss.sta.st.w.v.1  u0, %[dst] \n"
+        "ss.app           u0, zero, %[inm2], %[jn] \n"
+        "ss.end           u0, %[one], %[jnm2], %[one] \n"
 
         ".loop_y%=: \n"
         
@@ -414,9 +414,9 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.h  u0, %[dst] \n"
-        "ss.app       u0, zero, %[inm2], %[jn] \n"
-        "ss.end       u0, %[one], %[jnm2], %[one] \n"
+        "ss.sta.st.h.v.1  u0, %[dst] \n"
+        "ss.app           u0, zero, %[inm2], %[jn] \n"
+        "ss.end           u0, %[one], %[jnm2], %[one] \n"
 
         ".loop_y%=: \n"
         
@@ -528,9 +528,9 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.b  u0, %[dst] \n"
-        "ss.app       u0, zero, %[inm2], %[jn] \n"
-        "ss.end       u0, %[one], %[jnm2], %[one] \n"
+        "ss.sta.st.b.v.1  u0, %[dst] \n"
+        "ss.app           u0, zero, %[inm2], %[jn] \n"
+        "ss.end           u0, %[one], %[jnm2], %[one] \n"
 
         ".loop_y%=: \n"
         
