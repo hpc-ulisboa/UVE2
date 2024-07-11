@@ -1,7 +1,28 @@
 # UVE 2.0
 ### Unlimited Vector Extension with Data Streaming Support
 
-Check our paper here: https://ieeexplore.ieee.org/document/9499750.
+Check our paper here: https://ieeexplore.ieee.org/document/10563191
+
+If you use this in your work, please cite as:
+
+   > A. Fernandes, L. Crespo, N. Neves, P. Tomás, N. Roma and G. Falcao, "Functional Validation of the RISC-V Unlimited Vector Extension," in IEEE Embedded Systems Letters, doi: 10.1109/LES.2024.3416820.
+
+Or in BibTeX:
+
+```bibtex
+@ARTICLE{10563191,
+  author={Fernandes, Ana and Crespo, Luís and Neves, Nuno and Tomás, Pedro and Roma, Nuno and Falcao, Gabriel},
+  journal={IEEE Embedded Systems Letters}, 
+  title={Functional Validation of the RISC-V Unlimited Vector Extension}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-1},
+  keywords={Vectors;Registers;Instruction sets;Three-dimensional displays;Mathematical models;Codes;Jacobian matrices;Data Streaming;RISC-V;Instruction Set Simulator;ISA SIMD Extensions;Unlimited Vector Extension},
+  doi={10.1109/LES.2024.3416820}}
+```
+
+For the initial specification (UVE 1.0) and performance evaluation, check our paper here: https://ieeexplore.ieee.org/document/9499750.
 
 Alternatively you can also take a look at the ISCA presentation: https://youtu.be/8sXGF7nNw_8.
 
