@@ -6,11 +6,11 @@
 #define MIN 0.
 #define MAX 10.0
 
-#ifndef D_TYPE
+#ifndef F_TYPE
 #error *Benchmark only available for double precision*
 #endif
 
-extern void core(DataType *nzval, uint32_t *cols, DataType *vec, DataType *out, int32_t M, int32_t K);
+extern void core(DataType *nzval, uint32_t *cols, DataType *vec, DataType *out, int32_t N, int32_t L);
 
 static void initVals(uint32_t *colind, DataType *nzval, DataType *x, int M, int K) {
     const uint32_t cols_data[] = colsSpmvEllpack;

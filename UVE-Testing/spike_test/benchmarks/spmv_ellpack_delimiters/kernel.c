@@ -5,47 +5,54 @@ long int start = 0, end = 0;
 #ifdef RUN_UVE
 void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint64_t N, uint64_t K) {
     asm volatile(
-        "rdinstret %[s] \t\n"
+        "rdinstret %[s] \n"
+
         // rowDelimiters stream (!!! this one should not be vectorial)
-        "ss.ld.w                  u3, %[rowDelimiters], %[sn], %[one] \t\n" // D1: linear access
-        "ss.ld.w                  u7, %[rowDelimiters], %[sn], %[one] \t\n" // D1: linear access
+        "ss.sta.ld.w.inds  u3, %[rowDelimiters] \n"
+        "ss.end            u3, zero, %[sn], %[one] \n" // D1: linear access
+
+        "ss.sta.ld.w.inds  u7, %[rowDelimiters] \n"
+        "ss.end            u7, zero, %[sn], %[one] \n" // D1: linear access
+
+        "ss.sta.ld.w.inds  u10, %[rowDelimiters] \n"
+        "ss.end            u10, zero, %[sn], %[one] \n" // D1: linear access
 
         // val stream
-        //"ss.sta.ld.d              u1, %[val], %[sn], zero \t\n"     // D1: linear access size 'unknown'
-        "ss.sta.ld.d              u1, %[val], %[sn], %[sk] \t\n"     // D1: linear access size 'unknown'
-        "ss.app.indl.siz.set      u1, u7 \t\n"                       // Indirection from stream u1 -> modify size
-        "ss.end                   u1, zero, zero, %[one] \t\n" // D2: new line stride 1
-        "ss.cfg.vec               u1 \t\n"
+        "ss.sta.ld.d.v.1       u1, %[val] \n"
+        "ss.app                u1, zero, %[sn], %[sk] \n" // D2
+        "ss.app.ind.siz.set.1  u1, u7 \n"                 // Indirection from stream u7 -> modify size
+        "ss.end                u1, zero, zero, %[one] \n" // D1: new line stride 1
 
         // cols stream
-        //"ss.sta.ld.w              u2, %[cols], %[sn], zero \t\n"    // D1: linear access size 'unknown'
-        "ss.sta.ld.w              u2, %[cols], %[sn], %[sk] \t\n"    // D1: linear access size 'unknown'
-        "ss.app.indl.siz.set      u2, u3 \t\n"                       // Indirection from stream u1 -> modify size
-        "ss.end                   u2, zero, zero, %[one] \t\n" // D2: new line stride 1
-        "ss.cfg.vec               u2 \t\n"
+        //"ss.sta.ld.w.v.1       u2, %[cols] \n"
+        "ss.sta.ld.w.inds      u2, %[cols] \n"
+        "ss.app                u2, zero, %[sn], %[sk] \n" // D2
+        "ss.app.ind.siz.set.1  u2, u3 \n"                 // Indirection from stream u3 -> modify size
+        "ss.end                u2, zero, zero, %[one] \n" // D1: new line stride 1
 
         // vec stream
-        "ss.sta.ld.d              u4, %[vec], %[sn], zero \t\n"   // Dummy D2
-        //"ss.app.ind.sca.ofs.add   u4, u2 \t\n"                      // Indirection from stream u2 -> add to base address
-        "ss.app.ind.ofs.add.1     u4, u2 \t\n"                        // to be done with new insn above
-        "ss.end                   u4, zero, zero, zero \t\n" // D1: new line stride N
-        "ss.cfg.vec               u4 \t\n"
+        "ss.sta.ld.d.v.1       u4, %[vec] \n"
+        "ss.app                u4, zero, %[sn], zero \n" //  D1: new line
+        "ss.app.ind.siz.set.1  u4, u10 \n"                 // Indirection from stream u3 -> modify size
+        "ss.app                u4, zero, zero, zero \n" //  D1: new line 
+        "ss.end.ind.ofs.sg.add u4, u2 \n"                // Indirection from stream u2 -> add to base address
 
         // out stream store
-        "ss.st.d              u5, %[out], %[sn], %[one] \t\n" // D1: linear access size N
+        "ss.sta.st.d  u5, %[out] \n"
+        "ss.end       u5, zero, %[sn], %[one] \n" // D1: linear access size N
 
-        ".iLoop1%=: \t\n"
-            "so.v.dp.d u8, zero, p0 \t\n"
+        ".iLoop1%=: \n"
+            "so.v.dp.d u8, zero, p0 \n"
 
-            ".jloop%=: \t\n"
-                "so.a.mul.fp u9, u1, u4, p0\n\t"
-                "so.a.add.fp u8, u8, u9, p0\n\t"
-            "so.b.ndc.1 u1, .jloop%= \n\t"
+            ".jloop%=: \n"
+                "so.a.mul.fp u9, u1, u4, p0 \n"
+                "so.a.add.fp u8, u8, u9, p0 \n"
+            "so.b.ndc.1 u1, .jloop%= \n"
 
-            "so.a.adde.fp u5, u8, p0 \n\t"
-        "so.b.nc	u1, .iLoop1%= \n\t"
+            "so.a.adde.fp u5, u8, p0 \n"
+        "so.b.nc	u1, .iLoop1%= \n"
 
-        "rdinstret %[e] \t\n"
+        "rdinstret %[e] \n"
 
         : [s] "=&r" (start), [e] "=&r" (end)
         : [val] "r"(val), [cols] "r"(cols), [rowDelimiters] "r"(rowDelimiters), [vec] "r"(vec), [out] "r"(out),
@@ -57,7 +64,7 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
 
 #ifdef RUN_SIMPLE
 void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec, DataType *out, uint64_t N, uint64_t K) {
-    asm volatile ("rdinstret %[s] \t\n":[s] "=&r"(start));
+    asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
     DataType t;
     int cur_nnz;
@@ -78,7 +85,7 @@ void core(DataType *val, uint32_t *cols, uint32_t *rowDelimiters, DataType *vec,
         //printf("out[%d]: %lf\n", i, out[i]);
     }
 
-    asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
+    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
     printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE

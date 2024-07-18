@@ -24,21 +24,22 @@ const kernelSizeMap = {
 	"jacobi-2d": size,
 	"memcpy": size*size,
 	"mvt": size,
-	"saxpy": size*size,*/
-	"sgd": 0/*,
-	"spmv_ellpack": 0,
+	"saxpy": size*size,
+	"sgd": 0,*/
+	"spmv_ellpack": 0/*,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
 	"trisolv": size*/
+	//"ind": size,
 };
 
 // read type and size from command line
 const typeMap = {
-    'B': 'byte',
+    /*'B': 'byte',
 	'H': 'half-word',
-    'I': 'integer',
-    'F': 'float',
-    'D': 'double'
+    'I': 'integer',*/
+    'F': 'float'/*,
+    'D': 'double'*/
 };
 
 const compileFlags = ["-O3", "-fno-tree-vectorize", "-fno-unroll-loops", "-Wall", "-pedantic"];
@@ -236,7 +237,7 @@ for (let kernel in kernelSizeMap) {
 		let dir; let s = kernelSizeMap[kernel];
 		// check if sgd, spmv_ellpack or spmv_ellpack_delimiters are wanted
 		if (kernel === "sgd" || kernel === "spmv_ellpack" || kernel === "spmv_ellpack_delimiters") {
-			if (type === "D") {
+			if (type === "F") {
 				dir = `benchmarks/${kernel}`;
 			} else {
 				continue;
