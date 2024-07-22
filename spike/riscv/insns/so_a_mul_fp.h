@@ -72,7 +72,7 @@ std::visit([&](auto &dest) {
             });*/
             dest.endConfiguration();
         } else
-            assert_msg("Trying to run so.a.adde.fp with invalid src type", false);
+            assert_msg("Trying to run so.a.mul.fp with invalid src type", false);
     }
 },
            destReg);

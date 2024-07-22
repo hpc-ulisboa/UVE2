@@ -35,11 +35,11 @@ const kernelSizeMap = {
 
 // read type and size from command line
 const typeMap = {
-    'B': 'byte',
-	'H': 'half-word',
-    'I': 'integer',
-    'F': 'float',
-    'D': 'double'
+    //'B': 'byte',
+	//'H': 'half-word',
+    //'I': 'integer',
+    'F': 'float'//,
+    //'D': 'double'
 };
 
 const compileFlags = ["-O3", "-fno-tree-vectorize", "-fno-unroll-loops", "-Wall", "-pedantic"];
