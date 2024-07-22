@@ -6,7 +6,7 @@
 #define MIN 0.
 #define MAX 10.0
 
-#ifndef F_TYPE
+#ifndef D_TYPE
 #error *Benchmark only available for double precision*
 #endif
 
