@@ -1,7 +1,7 @@
 # UVE 1.0
 ### Unlimited Vector Extension with Data Streaming Support
 
-## This branch refers to the old specification of UVE
+### This branch refers to the old specification of UVE
 
 Check our paper here: https://ieeexplore.ieee.org/document/10563191
 
