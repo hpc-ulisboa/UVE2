@@ -104,16 +104,17 @@ Note that this is a work-in-progress version and some bugs may still exist.
 ```
 ## Setup
 
-A cross-compiler familiar with UVE is needed, install it from here: https://github.com/hpc-ulisboa/UVE/tree/uve_compiler.
+A cross-compiler familiar with UVE is needed, install it from here: https://github.com/hpc-ulisboa/UVE/tree/new_spec.
 
 You should also install the RISC-V Proxy Kernel, available at: https://github.com/riscv-software-src/riscv-pk.
 
 In order to install Spike, run these commands, assuming that the `RISCV` environment variable is set to the RISC-V tools install path:
 
 ```sh
+$ git submodule update --init --recursive
 $ apt-get install device-tree-compiler
-$ mkdir spike/build
-$ cd spike/build
+$ mkdir riscv-isa-sim/build
+$ cd riscv-isa-sim/build
 $ ../configure --prefix=$RISCV
 $ sudo make -j$(nproc) -B
 $ sudo make install
