@@ -69,7 +69,7 @@ Note that this is a work-in-progress version and some bugs may still exist.
 ```
    .
    ├── documentation.pdf            # Documentation
-   ├── spike                        # Modified RISC-V ISA Simulator (Spike) with UVE support
+   ├── riscv-isa-sim                # Modified RISC-V ISA Simulator (Spike) submodule with preliminary UVE 2.0 support
    │   ├── ...
    │   ├── build                    # Build directory
    │   ├── riscv                    # RISC-V source code
