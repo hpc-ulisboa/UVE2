@@ -4398,7 +4398,7 @@ index 00000000..303b39e9
 +// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 +auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 +    auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src.getType() == RegisterConfig::Load;
++    bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +
 +    auto elements = src.getElements();
 +    auto destElements = dest.getElements(false);
@@ -4455,7 +4455,7 @@ index 00000000..7ddfa15d
 +// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 +auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 +    auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src.getType() == RegisterConfig::Load;
++    bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +
 +    auto elements = src.getElements();
 +    auto destElements = dest.getElements(false);
@@ -4526,7 +4526,7 @@ index 00000000..705de697
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar || src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -4604,7 +4604,7 @@ index 00000000..ffb0e3ab
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -4683,7 +4683,7 @@ index 00000000..18405dcc
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -5351,7 +5351,7 @@ index 00000000..bdea9077
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -5422,7 +5422,7 @@ index 00000000..09e8a18d
 +// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 +auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 +    auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src.getType() == RegisterConfig::Load;
++    bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +
 +    auto elements = src.getElements();
 +    auto destElements = dest.getElements(false);
@@ -5482,7 +5482,7 @@ index 00000000..93670b7f
 +// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 +auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 +    auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src.getType() == RegisterConfig::Load;
++    bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +
 +    auto elements = src.getElements();
 +    auto destElements = dest.getElements(false);
@@ -5550,7 +5550,7 @@ index 00000000..1d298212
 +// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 +auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 +    auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src.getType() == RegisterConfig::Load;
++    bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +
 +    auto elements = src.getElements();
 +    auto destElements = dest.getElements(false);
@@ -5624,7 +5624,7 @@ index 00000000..67698dbc
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -5702,7 +5702,7 @@ index 00000000..110ad108
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -5781,7 +5781,7 @@ index 00000000..2ee53677
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -5854,7 +5854,7 @@ index 00000000..c5f8ba76
 +// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 +auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 +    auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src.getType() == RegisterConfig::Load;
++    bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +
 +    auto elements = src.getElements();
 +    auto destElements = dest.getElements(false);
@@ -5914,7 +5914,7 @@ index 00000000..b12a8565
 +// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 +auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 +    auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src.getType() == RegisterConfig::Load;
++    bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +
 +    auto elements = src.getElements();
 +    auto destElements = dest.getElements(false);
@@ -5982,7 +5982,7 @@ index 00000000..e9cdb00c
 +// The extra argument is passed because we need to tell the lambda the computation type. In C++20 we would use a lambda template parameter, however in C++17 we don't have those. As such, we pass an extra value to later on infer its type and know the storage we need to use
 +auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 +    auto vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src.getType() == RegisterConfig::Load;
++    bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +
 +    auto elements = src.getElements();
 +    auto destElements = dest.getElements(false);
@@ -6056,7 +6056,7 @@ index 00000000..89d3588b
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +        
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -6149,7 +6149,7 @@ index 00000000..cf3ae2af
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +        
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -6230,7 +6230,7 @@ index 00000000..9ee9c8b5
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +        
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -6311,7 +6311,7 @@ index 00000000..46bbcaf8
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -6379,7 +6379,7 @@ index 00000000..6e8bda50
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -6454,7 +6454,7 @@ index 00000000..a0412e50
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -7117,7 +7117,7 @@ index 00000000..a6923d32
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
@@ -7210,7 +7210,7 @@ index 00000000..f09041c7
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
@@ -7299,7 +7299,7 @@ index 00000000..ca06ac9d
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
@@ -7391,7 +7391,7 @@ index 00000000..04e703d7
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -7468,7 +7468,7 @@ index 00000000..3e15edc7
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -7542,7 +7542,7 @@ index 00000000..e5e7e2d5
 +auto baseBehaviour = [](auto &dest, auto &src, auto &pred, auto extra) {
 +    /* We can only operate on the first available values of the stream */
 +    size_t vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+bool zeroing = src.getType() == RegisterConfig::Load;
++bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +    auto elements = src.getElements();
 +    auto destElements = dest.getElements(false);
 +    auto validElementsIndex = src.getValidElements();
@@ -7624,7 +7624,7 @@ index 00000000..9ff80652
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -7705,7 +7705,7 @@ index 00000000..15d092b5
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto values = src1.getElements();
 +    auto shiftValues = src2.getElements();
@@ -7786,7 +7786,7 @@ index 00000000..ecaa3f3f
 +auto baseBehaviour = [](auto &dest, auto &src, uint64_t shiftValue, auto &pred, auto extra) {
 +    /* We can only operate on the first available values of the stream */
 +    size_t vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+bool zeroing = src.getType() == RegisterConfig::Load;
++bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +    auto values = src.getElements();
 +    auto destElements = dest.getElements(false);
 +    auto validElementsIndex = src.getValidElements();
@@ -7864,7 +7864,7 @@ index 00000000..470e7bd2
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto values = src1.getElements();
 +    auto shiftValues = src2.getElements();
@@ -7945,7 +7945,7 @@ index 00000000..8291bc5b
 +auto baseBehaviour = [](auto &dest, auto &src, uint64_t shiftValue, auto &pred, auto extra) {
 +    /* We can only operate on the first available values of the stream */
 +    size_t vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+bool zeroing = src.getType() == RegisterConfig::Load;
++bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +    auto values = src.getElements();
 +    auto destElements = dest.getElements(false);
 +    auto validElementsIndex = src.getValidElements();
@@ -8028,7 +8028,7 @@ index 00000000..51a345d7
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto values = src1.getElements();
 +    auto shiftValues = src2.getElements();
@@ -8109,7 +8109,7 @@ index 00000000..9ec446f4
 +auto baseBehaviour = [](auto &dest, auto &src, uint64_t shiftValue, auto &pred, auto extra) {
 +    /* We can only operate on the first available values of the stream */
 +    size_t vLen = src.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+bool zeroing = src.getType() == RegisterConfig::Load;
++bool zeroing = src.getPredMode() == PredicateMode::Zeroing;
 +    auto values = src.getElements();
 +    auto destElements = dest.getElements(false);
 +    auto validElementsIndex = src.getValidElements();
@@ -8186,7 +8186,7 @@ index 00000000..3c47e2a4
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -8264,7 +8264,7 @@ index 00000000..9e643f3b
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -8343,7 +8343,7 @@ index 00000000..b8a8829c
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();
@@ -8422,7 +8422,7 @@ index 00000000..1d0eb794
 +     * operated on */
 +    assert_msg("Given vectors have different widths", src1.getElementWidth() == src2.getElementWidth());
 +    size_t vLen = src1.getMode() == RegisterMode::Scalar ||  src2.getMode() == RegisterMode::Scalar ? 1 : dest.getVLen();
-+    bool zeroing = src1.getType() == RegisterConfig::Load || src2.getType() == RegisterConfig::Load;
++    bool zeroing = src1.getPredMode() == PredicateMode::Zeroing && src2.getPredMode() == PredicateMode::Zeroing;
 +    /* We can only operate on the first available values of the stream */
 +    auto elements1 = src1.getElements();
 +    auto elements2 = src2.getElements();

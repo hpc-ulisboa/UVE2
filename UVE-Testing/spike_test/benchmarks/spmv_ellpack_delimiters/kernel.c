@@ -18,7 +18,7 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
         "ss.end            u10, zero, %[sn], %[one] \n" // D1: linear access
 
         // val stream
-        "ss.sta.ld.d.v.1       u1, %[val] \n"
+        "ss.sta.ld.d.v.1.m     u1, %[val] \n"
         "ss.app                u1, zero, %[sn], %[sk] \n" // D2
         "ss.app.ind.siz.set.1  u1, u7 \n"                 // Indirection from stream u7 -> modify size
         "ss.end                u1, zero, zero, %[one] \n" // D1: new line stride 1
@@ -31,7 +31,7 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
         "ss.end                u2, zero, zero, %[one] \n" // D1: new line stride 1
 
         // vec stream
-        "ss.sta.ld.d.v.1       u4, %[vec] \n"
+        "ss.sta.ld.d.v.1.m     u4, %[vec] \n"
         "ss.app                u4, zero, %[sn], zero \n" //  D1: new line
         "ss.app.ind.siz.set.1  u4, u10 \n"                 // Indirection from stream u3 -> modify size
         "ss.app                u4, zero, zero, zero \n" //  D1: new line 
@@ -45,8 +45,9 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
             "so.v.dp.d u8, zero, p0 \n"
 
             ".jloop%=: \n"
-                "so.a.mul.fp u9, u1, u4, p0 \n"
-                "so.a.add.fp u8, u8, u9, p0 \n"
+                /*"so.a.mul.fp u9, u1, u4, p0 \n"
+                "so.a.add.fp u8, u8, u9, p0 \n"*/
+                "so.a.mac.fp u8, u1, u4, p0 \n"
             "so.b.ndc.1 u1, .jloop%= \n"
 
             "so.a.adde.fp u5, u8, p0 \n"

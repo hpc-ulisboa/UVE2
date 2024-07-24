@@ -48,13 +48,13 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
 
         // kernel 3
   
-        "ss.sta.ld.d.v.1      u1, %[data] \n"
+        "ss.sta.ld.d.v.1.m    u1, %[data] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u1, %[one] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.end               u1, zero, %[N], %[M] \n"
 
-        "ss.sta.ld.d.v.1      u2, %[data] \n"
+        "ss.sta.ld.d.v.1.m    u2, %[data] \n"
         "ss.app               u2, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u2, %[one] \n"
         "ss.app               u2, zero, %[M], zero \n"
@@ -78,8 +78,9 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.dp.d      u6, zero, p0 \n"
 
             ".SLOOP_3_0_0%=: \n"
-                "so.a.mul.fp  u7, u2, u1, p0 \n"
-                "so.a.add.fp  u6, u6, u7, p0 \n"
+                "so.a.mac.fp  u6, u2, u1, p0 \n"
+                /*so.a.mul.fp  u7, u2, u1, p0 \n"
+                "so.a.add.fp  u6, u6, u7, p0 \n"*/
             "so.b.ndc.1 u2, .SLOOP_3_0_0%= \n"
 
             "so.a.adde.fp   u7, u6, p0 \n"
@@ -141,13 +142,13 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
 
         // kernel 3
   
-        "ss.sta.ld.w.v.1      u1, %[data] \n"
+        "ss.sta.ld.w.v.1.m    u1, %[data] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u1, %[one] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.end               u1, zero, %[N], %[M] \n"
 
-        "ss.sta.ld.w.v.1      u2, %[data] \n"
+        "ss.sta.ld.w.v.1.m    u2, %[data] \n"
         "ss.app               u2, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u2, %[one] \n"
         "ss.app               u2, zero, %[M], zero \n"
@@ -171,8 +172,9 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.dp.w      u6, zero, p0 \n"
 
             ".SLOOP_3_0_0%=: \n"
-                "so.a.mul.fp  u7, u2, u1, p0 \n"
-                "so.a.add.fp  u6, u6, u7, p0 \n"
+                /*"so.a.mul.fp  u7, u2, u1, p0 \n"
+                "so.a.add.fp  u6, u6, u7, p0 \n"*/
+                "so.a.mac.fp  u6, u2, u1, p0 \n"
             "so.b.ndc.1 u2, .SLOOP_3_0_0%= \n"
 
             "so.a.adde.fp   u7, u6, p0 \n"
@@ -234,13 +236,13 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
 
         // kernel 3
   
-        "ss.sta.ld.w.v.1      u1, %[data] \n"
+        "ss.sta.ld.w.v.1.m    u1, %[data] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u1, %[one] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.end               u1, zero, %[N], %[M] \n"
 
-        "ss.sta.ld.w.v.1      u2, %[data] \n"
+        "ss.sta.ld.w.v.1.m    u2, %[data] \n"
         "ss.app               u2, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u2, %[one] \n"
         "ss.app               u2, zero, %[M], zero \n"
@@ -264,8 +266,9 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.dp.w      u6, zero, p0 \n"
 
             ".SLOOP_3_0_0%=: \n"
-                "so.a.mul.sg  u7, u2, u1, p0 \n"
-                "so.a.add.sg  u6, u6, u7, p0 \n"
+                /*"so.a.mul.sg  u7, u2, u1, p0 \n"
+                "so.a.add.sg  u6, u6, u7, p0 \n"*/
+                "so.a.mac.sg  u6, u2, u1, p0 \n"
             "so.b.ndc.1 u2, .SLOOP_3_0_0%= \n"
 
             "so.a.adde.sg   u7, u6, p0 \n"
@@ -327,13 +330,13 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
 
         // kernel 3
   
-        "ss.sta.ld.h.v.1      u1, %[data] \n"
+        "ss.sta.ld.h.v.1.m    u1, %[data] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u1, %[one] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.end               u1, zero, %[N], %[M] \n"
 
-        "ss.sta.ld.h.v.1      u2, %[data] \n"
+        "ss.sta.ld.h.v.1.m    u2, %[data] \n"
         "ss.app               u2, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u2, %[one] \n"
         "ss.app               u2, zero, %[M], zero \n"
@@ -357,8 +360,9 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.dp.h      u6, zero, p0 \n"
 
             ".SLOOP_3_0_0%=: \n"
-                "so.a.mul.sg  u7, u2, u1, p0 \n"
-                "so.a.add.sg  u6, u6, u7, p0 \n"
+                /*"so.a.mul.sg  u7, u2, u1, p0 \n"
+                "so.a.add.sg  u6, u6, u7, p0 \n"*/
+                "so.a.mac.sg  u6, u2, u1, p0 \n"
             "so.b.ndc.1 u2, .SLOOP_3_0_0%= \n"
 
             "so.a.adde.sg   u7, u6, p0 \n"
@@ -420,13 +424,13 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
 
         // kernel 3
   
-        "ss.sta.ld.b.v.1      u1, %[data] \n"
+        "ss.sta.ld.b.v.1.m    u1, %[data] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u1, %[one] \n"
         "ss.app               u1, zero, %[M], %[one] \n"
         "ss.end               u1, zero, %[N], %[M] \n"
 
-        "ss.sta.ld.b.v.1      u2, %[data] \n"
+        "ss.sta.ld.b.v.1.m    u2, %[data] \n"
         "ss.app               u2, zero, %[M], %[one] \n"
         "ss.app.mod.siz.dec.2 u2, %[one] \n"
         "ss.app               u2, zero, %[M], zero \n"
@@ -450,8 +454,9 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.dp.b      u6, zero, p0 \n"
 
             ".SLOOP_3_0_0%=: \n"
-                "so.a.mul.sg  u7, u2, u1, p0 \n"
-                "so.a.add.sg  u6, u6, u7, p0 \n"
+                /*"so.a.mul.sg  u7, u2, u1, p0 \n"
+                "so.a.add.sg  u6, u6, u7, p0 \n"*/
+                "so.a.mac.sg  u6, u2, u1, p0 \n"
             "so.b.ndc.1 u2, .SLOOP_3_0_0%= \n"
 
             "so.a.adde.sg   u7, u6, p0 \n"

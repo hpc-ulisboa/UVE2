@@ -23,9 +23,9 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
         "so.v.dp.d  u5, %[ct], p0 \n"
 
         ".uve_loop1%=: \n"
-			"so.a.add.fp   u10, u1,  u2,  p0 \n"
-			"so.a.add.fp   u10, u10, u3,  p0 \n"
-			"so.a.mul.fp   u4,  u10, u5, p0 \n"
+			"so.a.add.fp   u10, u1, u2, p0 \n"
+			"so.a.add.fp   u10, u10, u3, p0 \n"
+			"so.a.mul.fp   u4, u10, u5, p0 \n"
         "so.b.nc  u1,  .uve_loop1%= \n"
 
         "ss.sta.ld.d.v u1, %[src2a] \n"

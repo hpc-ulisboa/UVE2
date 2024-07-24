@@ -8,13 +8,13 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.d.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.sta.ld.d.v.1.m     u1, %[src1] \t\n"			   // Load A, vectorised at D1
 		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
 		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
 		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.d.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.sta.ld.d.v.1.m     u2, %[src2] \t\n"			   // Load B, vectorised at D1
 		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
 		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
 		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
@@ -27,9 +27,7 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		".iLoop1%=: \t\n"    
             "so.v.dp.d u21, zero, p0 \t\n"
             ".kloop1%=: \t\n"
-				//"so.a.mac.fp u21, u1, u2, p0\n\t" // tmp += (.A) * B
-				"so.a.mul.fp u22, u1, u2, p0\n\t" // tmp1 = (.A) * B
-				"so.a.add.fp u21, u21, u22, p0\n\t" // tmp += tmp1
+				"so.a.mac.fp u21, u1, u2, p0\n\t" // tmp += (.A) * B
             "so.b.ndc.1 u2, .kloop1%= \n\t"
             "so.a.adde.fp  u4, u21, p0 \n\t" // store tmp to C 
         "so.b.nc	u2, .iLoop1%= \n\t"
@@ -50,13 +48,13 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.w.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.sta.ld.w.v.1.m     u1, %[src1] \t\n"			   // Load A, vectorised at D1
 		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
 		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
 		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.w.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.sta.ld.w.v.1.m     u2, %[src2] \t\n"			   // Load B, vectorised at D1
 		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
 		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
 		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
@@ -69,9 +67,7 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		".iLoop1%=: \t\n"    
             "so.v.dp.w u21, zero, p0 \t\n"
             ".kloop1%=: \t\n"
-				//"so.a.mac.fp u21, u1, u2, p0\n\t" // tmp += (.A) * B
-				"so.a.mul.fp u22, u1, u2, p0\n\t" // tmp1 = (.A) * B
-				"so.a.add.fp u21, u21, u22, p0\n\t" // tmp += tmp1
+				"so.a.mac.fp u21, u1, u2, p0\n\t" // tmp += (.A) * B
             "so.b.ndc.1 u2, .kloop1%= \n\t"
             "so.a.adde.fp  u4, u21, p0 \n\t" // store tmp to C 
         "so.b.nc	u2, .iLoop1%= \n\t"
@@ -92,13 +88,13 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.w.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.sta.ld.w.v.1.m     u1, %[src1] \t\n"			   // Load A, vectorised at D1
 		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
 		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
 		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.w.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.sta.ld.w.v.1.m     u2, %[src2] \t\n"			   // Load B, vectorised at D1
 		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
 		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
 		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
@@ -111,9 +107,7 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		".iLoop1%=: \t\n"    
             "so.v.dp.w u21, zero, p0 \t\n"
             ".kloop1%=: \t\n"
-				//"so.a.mac.sg u21, u1, u2, p0\n\t" // tmp += (.A) * B
-				"so.a.mul.sg u22, u1, u2, p0\n\t" // tmp1 = (.A) * B
-				"so.a.add.sg u21, u21, u22, p0\n\t" // tmp += tmp1
+				"so.a.mac.sg u21, u1, u2, p0\n\t" // tmp += (.A) * B
             "so.b.ndc.1 u2, .kloop1%= \n\t"
             "so.a.adde.sg  u4, u21, p0 \n\t" // store tmp to C 
         "so.b.nc	u2, .iLoop1%= \n\t"
@@ -134,13 +128,13 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.h.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.sta.ld.h.v.1.m     u1, %[src1] \t\n"			   // Load A, vectorised at D1
 		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
 		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
 		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.h.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.sta.ld.h.v.1.m     u2, %[src2] \t\n"			   // Load B, vectorised at D1
 		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
 		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
 		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
@@ -153,9 +147,7 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		".iLoop1%=: \t\n"    
             "so.v.dp.h u21, zero, p0 \t\n"
             ".kloop1%=: \t\n"
-				//"so.a.mac.sg u21, u1, u2, p0\n\t" // tmp += (.A) * B
-				"so.a.mul.sg u22, u1, u2, p0\n\t" // tmp1 = (.A) * B
-				"so.a.add.sg u21, u21, u22, p0\n\t" // tmp += tmp1
+				"so.a.mac.sg u21, u1, u2, p0\n\t" // tmp += (.A) * B
             "so.b.ndc.1 u2, .kloop1%= \n\t"
             "so.a.adde.sg  u4, u21, p0 \n\t" // store tmp to C 
         "so.b.nc	u2, .iLoop1%= \n\t"
@@ -176,13 +168,13 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		"rdinstret %[s] \t\n"
 
 		// A stream (IxK)
-		"ss.sta.ld.b.v.1       u1, %[src1] \t\n"			   // Load A, vectorised at D1
+		"ss.sta.ld.b.v.1.m     u1, %[src1] \t\n"			   // Load A, vectorised at D1
 		"ss.app				   u1, zero, %[si], %[sk] \t\n"    // D3: slide vertically (stride sizeK), access size sizeI
 		"ss.app                u1, zero, %[sj], zero \t\n"     // D2: repeat: for each 'j'
 		"ss.end                u1, zero, %[sk], %[one] \t\n"   // D1: slide horizontally by 1, access size sizeK
 
 		// B stream (KxJ)
-		"ss.sta.ld.b.v.1       u2, %[src2] \t\n"			   // Load B, vectorised at D1
+		"ss.sta.ld.b.v.1.m     u2, %[src2] \t\n"			   // Load B, vectorised at D1
 		"ss.app				   u2, zero, %[si], zero \t\n"     // D3: repeat: for each 'i'     
 		"ss.app                u2, zero, %[sj], %[one] \t\n"   // D2: slide horizontally by 1, access size sizeJ
 		"ss.end                u2, zero, %[sk], %[sj] \t\n"    // D1: slide vertically (stride sizeJ), access size sizeK
@@ -194,9 +186,7 @@ long int uve_kernel(void* src1, void* src2, void* src3, uint64_t sizeI, uint64_t
 		".iLoop1%=: \t\n"    
             "so.v.dp.b u21, zero, p0 \t\n"
             ".kloop1%=: \t\n"
-				//"so.a.mac.sg u21, u1, u2, p0\n\t" // tmp += (.A) * B
-				"so.a.mul.sg u22, u1, u2, p0\n\t" // tmp1 = (.A) * B
-				"so.a.add.sg u21, u21, u22, p0\n\t" // tmp += tmp1
+				"so.a.mac.sg u21, u1, u2, p0\n\t" // tmp += (.A) * B
             "so.b.ndc.1 u2, .kloop1%= \n\t"
             "so.a.adde.sg  u4, u21, p0 \n\t" // store tmp to C 
         "so.b.nc	u2, .iLoop1%= \n\t"

@@ -15,7 +15,7 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original_clang,rvv,original_gcc,
 
 // kernel size map
 const kernelSizeMap = {
-	/*"3mm": size,
+	"3mm": size,
 	"convolution": size,
 	"covariance": size,
 	"gemm": size,
@@ -25,7 +25,7 @@ const kernelSizeMap = {
 	"memcpy": size*size,
 	"mvt": size,
 	"saxpy": size*size,
-	"sgd": 0,*/
+	"sgd": 0,
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
@@ -35,11 +35,11 @@ const kernelSizeMap = {
 
 // read type and size from command line
 const typeMap = {
-    //'B': 'byte',
-	//'H': 'half-word',
-    //'I': 'integer',
-    'F': 'float'//,
-    //'D': 'double'
+    'B': 'byte',
+	'H': 'half-word',
+    'I': 'integer',
+    'F': 'float',
+    'D': 'double'
 };
 
 const compileFlags = ["-O3", "-fno-tree-vectorize", "-fno-unroll-loops", "-Wall", "-pedantic"];
