@@ -32,10 +32,10 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
 
         // vec stream
         "ss.sta.ld.d.v.1.m     u4, %[vec] \n"
-        "ss.app                u4, zero, %[sn], zero \n" //  D1: new line
-        "ss.app.ind.siz.set.1  u4, u10 \n"                 // Indirection from stream u3 -> modify size
-        "ss.app                u4, zero, zero, zero \n" //  D1: new line 
-        "ss.end.ind.ofs.sg.add u4, u2 \n"                // Indirection from stream u2 -> add to base address
+        "ss.app                u4, zero, %[sn], zero \n" // D2
+        "ss.app.ind.siz.set.1  u4, u10 \n"               // Indirection from stream u10(=u3) -> modify size
+        "ss.app                u4, zero, zero, zero \n"  // D1: new line 
+        "ss.end.ind.ofs.sg.add u4, u2 \n"                // SG Indirection from stream u2 -> add to base address
 
         // out stream store
         "ss.sta.st.d  u5, %[out] \n"
