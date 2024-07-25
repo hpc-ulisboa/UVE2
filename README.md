@@ -1,7 +1,5 @@
-# UVE 1.0
+# UVE 2.0
 ### Unlimited Vector Extension with Data Streaming Support
-
-### This branch refers to the old specification of UVE
 
 Check our paper here: https://ieeexplore.ieee.org/document/10563191
 
@@ -71,7 +69,7 @@ Note that this is a work-in-progress version and some bugs may still exist.
 ```
    .
    ├── documentation.pdf            # Documentation
-   ├── riscv-isa-sim                # Modified RISC-V ISA Simulator (Spike) with UVE 1.0 support
+   ├── riscv-isa-sim                # Modified RISC-V ISA Simulator (Spike) submodule with preliminary UVE 2.0 support
    │   ├── ...
    │   ├── build                    # Build directory
    │   ├── riscv                    # RISC-V source code
@@ -106,16 +104,17 @@ Note that this is a work-in-progress version and some bugs may still exist.
 ```
 ## Setup
 
-A cross-compiler familiar with UVE is needed, install it from here: https://github.com/hpc-ulisboa/UVE/tree/uve_compiler.
+A cross-compiler familiar with UVE is needed, install it from here: https://github.com/hpc-ulisboa/UVE/tree/new_spec.
 
 You should also install the RISC-V Proxy Kernel, available at: https://github.com/riscv-software-src/riscv-pk.
 
 In order to install Spike, run these commands, assuming that the `RISCV` environment variable is set to the RISC-V tools install path:
 
 ```sh
+$ git submodule update --init --recursive
 $ apt-get install device-tree-compiler
-$ mkdir spike/build
-$ cd spike/build
+$ mkdir riscv-isa-sim/build
+$ cd riscv-isa-sim/build
 $ ../configure --prefix=$RISCV
 $ sudo make -j$(nproc) -B
 $ sudo make install
@@ -126,26 +125,27 @@ $ sudo make install
 Run the `validate.js` script, after editing the relevant path variables and choosing the desired benchmarks from the available ones, in folder `UVE-testing/spike-test/benchmarks`. Compilation flags can be altered in this script:
 
 * `TYPE` - dataset datatype
-   * `TYPE 1` - byte (hexadecimal int)
-   * `TYPE 2` - half-word (short int)
-   * `TYPE 3` - word (int)
-   * `TYPE 4` - word (float)
-   * `TYPE 5` - double (DEFAULT)
+   * `TYPE B` - byte (hexadecimal int)
+   * `TYPE H` - half-word (short int)
+   * `TYPE I` - word (int)
+   * `TYPE F` - word (float)
+   * `TYPE D` - double
 
 * `SIZE` - size of the dataset (usually a matrix SIZE $\times$ SIZE)
-   * `SIZE 64` - 64 $\times$ 64 matrix (DEFAULT)
+   * `SIZE 50` - 50 $\times$ 50 matrix (DEFAULT)
 
-Every UVE kernel is made to support datatype `double`, but can easily be altered to support other datatypes. Keep this in mind when running the validation script, which should be updated accordingly.
+Every UVE kernel is made to support each datatype, with the exception of 'sgd', 'spmv_ellpack', and 'spmv_ellpack_delimiters' (double only), as well as jacobi-1d' and 'jacobi-2d' (double and float only).
 
-Alternatively, each benchmark directory contains the executables with and without UVE (`run_uve` and `run_simple`, respectively, with `SIZE=50` and `TYPE=5`), which can be ran on Spike with the following commands:
+The validation script creates executable files in each benchmark directory, which can be ran on Spike as following:
 
 ```sh
 $ (path_to_spike) (path_to_pk) (executable_name)
 $ (path_to_spike) -d (path_to_pk) (executable_name) # spike debugger
+$ (path_to_spike) -l (path_to_pk) (executable_name) # spike instruction log
 ```
 
-It is recommended that, when using the debugger, the output is redirected to a file, for example:
+It is recommended that, when using the debugger/log, the output is redirected to a file, for example:
 
 ```sh
-$ (path_to_spike) -d (path_to_pk) (executable_name) &> log
+$ (path_to_spike) -l (path_to_pk) (executable_name) &> log
 ```
