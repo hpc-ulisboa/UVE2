@@ -122,7 +122,15 @@ $ sudo make install
 
 ## Compiling and running the benchmarks
 
-Run the `validate.js` script, after editing the relevant path variables and choosing the desired benchmarks from the available ones, in folder `UVE-testing/spike-test/benchmarks`. Compilation flags can be altered in this script:
+The validation script requires that some environment variables are set, along with the already mentioned `RISCV` variable, where the cross-compiler should also be.
+
+```sh
+$ export $CLANG_PATH=/path/to/clang
+$ export $PK_PATH=/path/to/pk
+$ export $SPIKE_PATH=/path/to/spike
+```
+
+Run the `validate.js` script, choosing the desired benchmarks from the available ones, in folder `UVE-testing/spike-test/benchmarks`. Compilation flags can be altered in this script:
 
 * `TYPE` - dataset datatype
    * `TYPE B` - byte (hexadecimal int)
@@ -131,12 +139,12 @@ Run the `validate.js` script, after editing the relevant path variables and choo
    * `TYPE F` - word (float)
    * `TYPE D` - double
    
-You can also define the size of the dataset:
+You can also define the size of the dataset in the script:
 
 * `SIZE` - size of the dataset (usually a matrix SIZE $\times$ SIZE)
    * `SIZE 50` - 50 $\times$ 50 matrix (DEFAULT)
 
-For example, you can run:
+Or through the terminal, for example, you can run:
 
 ```sh
 $ node validate.js 20
@@ -149,13 +157,13 @@ Every UVE kernel is made to support each datatype, with the exception of 'sgd', 
 The validation script creates executable files in each benchmark directory, which can be ran on Spike as following:
 
 ```sh
-$ (path_to_spike) (path_to_pk) (executable_name)
-$ (path_to_spike) -d (path_to_pk) (executable_name) # spike debugger
-$ (path_to_spike) -l (path_to_pk) (executable_name) # spike instruction log
+$ $SPIKE_PATH $PK_PATH (executable_name)
+$ $SPIKE_PATH -d $PK_PATH (executable_name) # spike debugger
+$ $SPIKE_PATH -l $PK_PATH (executable_name) # spike instruction log
 ```
 
 It is recommended that, when using the debugger/log, the output is redirected to a file, for example:
 
 ```sh
-$ (path_to_spike) -l (path_to_pk) (executable_name) &> log
+$ $SPIKE_PATH -l $PK_PATH (executable_name) &> log
 ```
