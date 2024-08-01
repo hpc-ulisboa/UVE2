@@ -2,6 +2,47 @@
 const fs = require('node:fs');
 const { spawnSync } = require("child_process");
 
+// Function to exit the script with an error message
+function exitWithError(message) {
+    console.error(message);
+    process.exit(1);
+}
+
+const riscvPath = process.env.RISCV; // /
+
+if (!riscvPath) {
+	exitWithError("RISCV environment variable is not set");
+}
+
+const gccPath = `${riscvPath}/bin/riscv64-unknown-elf-gcc`;
+
+const clangPath = process.env.CLANG_PATH;
+
+if (!clangPath) {
+	exitWithError("CLANG_PATH environment variable is not set");
+}
+
+const pkPath = process.env.PK_PATH;
+
+if (!pkPath) {
+	exitWithError("PK_PATH environment variable is not set");
+}
+
+const spikePath = process.env.SPIKE_PATH;
+
+if (!spikePath) {
+	exitWithError("SPIKE_PATH environment variable is not set");
+}
+
+const compileFlags = ["-O3", "-fno-tree-vectorize", "-fno-unroll-loops", "-Wall", "-pedantic"];
+const linkFlags = ["-O3", "-Wall", "-pedantic", "-static"];
+const clangFlagsV = ["-O3", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
+const clangFlags = ["-O3", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math",  "-fno-vectorize", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gc"];
+const bin_simple_gcc = `.run_simple_gcc`;
+const bin_uve = `.run_uve`;
+const bin_rvv = `.run_rvv`;
+const bin_simple_clang = `.run_simple_clang`;
+
 // read size from command line
 const size = process.argv[2] || 50;
 
@@ -15,7 +56,7 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original_clang,rvv,original_gcc,
 
 // kernel size map
 const kernelSizeMap = {
-	/*"3mm": size,
+	"3mm": size,
 	"convolution": size,
 	"covariance": size,
 	"gemm": size,
@@ -26,10 +67,10 @@ const kernelSizeMap = {
 	"mvt": size,
 	"saxpy": size*size,
 	"sgd": 0,
-	"spmv_ellpack": 0,*/
-	"spmv_ellpack_delimiters": 0/*,
+	"spmv_ellpack": 0,
+	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size*/
+	"trisolv": size
 	//"ind": size,
 };
 
@@ -41,19 +82,6 @@ const typeMap = {
     'F': 'float',
     'D': 'double'
 };
-
-const compileFlags = ["-O3", "-fno-tree-vectorize", "-fno-unroll-loops", "-Wall", "-pedantic"];
-const linkFlags = ["-O3", "-Wall", "-pedantic", "-static"];
-const clangFlagsV = ["-O3", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
-const clangFlags = ["-O3", "--sysroot=/home/afernandes/install/uve_tc/riscv64-unknown-elf", "--gcc-toolchain=/home/afernandes/install/uve_tc", "-I/home/afernandes/install/uve_tc/include", "-ffast-math",  "-fno-vectorize", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gc"];
-const gccPath = "/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-gcc";
-const clangPath = "/home/afernandes/LLVM-Compiler/llvm-project/build/bin/clang";
-const pkPath = "/home/afernandes/uve-dev/UVE-Testing/pk";
-const spikePath = "/home/afernandes/uve-dev/UVE-Testing/spike";
-const bin_simple_gcc = `.run_simple_gcc`;
-const bin_uve = `.run_uve`;
-const bin_rvv = `.run_rvv`;
-const bin_simple_clang = `.run_simple_clang`;
 
 function adjustTableWidth(data) {
     // Function to calculate the maximum width of each column
@@ -98,10 +126,10 @@ function adjustTableWidth(data) {
 function executableRun(command, args) {
 	const executable = spawnSync(command, args);
 	if (executable.error) {
-		throw new Error(`An error occured while trying to run ${command}: ${executable.error.message}`);
+		exitWithError(`An error occured while trying to run ${command}: ${executable.error.message}`);
 	}
 	if (executable.status != 0) {
-		throw new Error(`Execution failed\nStderr: ${executable.stderr}\nStdout: ${executable.stdout}`);
+		exitWithError(`Execution failed\nStderr: ${executable.stderr}\nStdout: ${executable.stdout}`);
 	}
 	return executable;
 }
@@ -113,10 +141,10 @@ function compileKernel(command, args, flag = false) {
 		console.log(executable.stderr.toString());
 
 	if (executable.error) {
-		throw new Error(`An error occured while trying to compile ${command} ${args.join(" ")}: ${executable.error.message}`);
+		exitWithError(`An error occured while trying to compile ${command} ${args.join(" ")}: ${executable.error.message}`);
 	}
 	if (executable.status != 0) {
-		throw new Error(`Compilation failed\nStderr: ${executable.stderr}\nStdout: ${executable.stdout}`);
+		exitWithError(`Compilation failed\nStderr: ${executable.stderr}\nStdout: ${executable.stdout}`);
 	}
 }
 
