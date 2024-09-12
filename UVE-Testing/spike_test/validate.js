@@ -72,6 +72,7 @@ const kernelSizeMap = {
 	"stream": size*size,
 	"trisolv": size
 	//"ind": size,
+	//"test": size
 };
 
 // read type and size from command line

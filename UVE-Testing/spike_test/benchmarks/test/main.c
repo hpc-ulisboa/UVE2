@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include "Functions.h"
 
-extern void core(DataType x[SIZE], DataType y[SIZE], DataType A);
+//extern void core(DataType x[SIZE], DataType y[SIZE], DataType A);
+extern void core();
 
 int main()
 {
-  DataType src[SIZE];
+  /*DataType src[SIZE];
   DataType dest[SIZE];
   DataType value = 3;
 
@@ -16,6 +17,8 @@ int main()
 
   for (int i = 0; i < SIZE; i++)
     printf( DataFormat("", "\n"), dest[i]);
-
+  */
+  core();
+  
   return 0;
 }
