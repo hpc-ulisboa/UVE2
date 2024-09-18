@@ -56,7 +56,7 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original_clang,rvv,original_gcc,
 
 // kernel size map
 const kernelSizeMap = {
-	"3mm": size,
+	/*"3mm": size,
 	"convolution": size,
 	"covariance": size,
 	"gemm": size,
@@ -70,18 +70,18 @@ const kernelSizeMap = {
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size
+	"trisolv": size*/
 	//"ind": size,
-	//"test": size
+	"vec_cv": size
 };
 
 // read type and size from command line
 const typeMap = {
-    'B': 'byte',
+    'B': 'byte'/*,
 	'H': 'half-word',
     'I': 'integer',
     'F': 'float',
-    'D': 'double'
+    'D': 'double'*/
 };
 
 function adjustTableWidth(data) {
