@@ -125,7 +125,7 @@ $ sudo make install
 The validation script requires that some environment variables are set, along with the already mentioned `RISCV` variable, where the cross-compiler should also be.
 
 ```sh
-$ export $CLANG_PATH=/path/to/clang
+$ export $LLVM_PATH=/path/to/llvm-project/parent/dir
 $ export $PK_PATH=/path/to/pk
 $ export $SPIKE_PATH=/path/to/spike
 ```

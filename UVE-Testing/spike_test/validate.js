@@ -16,11 +16,17 @@ if (!riscvPath) {
 
 const gccPath = `${riscvPath}/bin/riscv64-unknown-elf-gcc`;
 
-const clangPath = process.env.CLANG_PATH;
+const llvmPath = process.env.LLVM_PATH;
 
-if (!clangPath) {
-	exitWithError("CLANG_PATH environment variable is not set");
+if (!llvmPath) {	
+	exitWithError("LLVM_PATH environment variable is not set");
 }
+
+const clangPath = `${llvmPath}/llvm-project/build/bin/clang`;
+
+const objDumpPathCLANG = `${llvmPath}/llvm-project/build/bin/llvm-objdump`;
+
+const objDumpPathGCC = `${riscvPath}/bin/riscv64-unknown-elf-objdump`;
 
 const pkPath = process.env.PK_PATH;
 
@@ -64,24 +70,24 @@ const kernelSizeMap = {
 	"jacobi-1d": size*size,
 	"jacobi-2d": size,
 	"memcpy": size*size,
-	"mvt": size,
+	"mvt": size,*/
 	"saxpy": size*size,
-	"sgd": 0,
+	/*"sgd": 0,
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
 	"trisolv": size*/
 	//"ind": size,
-	"vec_cv": size
+	//"vec_cv": size
 };
 
 // read type and size from command line
 const typeMap = {
-    'B': 'byte'/*,
+    /*'B': 'byte',
 	'H': 'half-word',
     'I': 'integer',
-    'F': 'float',
-    'D': 'double'*/
+    'F': 'float',*/
+    'D': 'double'
 };
 
 function adjustTableWidth(data) {
@@ -285,7 +291,7 @@ for (let kernel in kernelSizeMap) {
 		const sizeCSV = s === size ? s*s : s;
 		console.log(`\n### Attempting to compile and run kernel ${kernel} (size: ${sizeCSV}, type: ${typeMap[type]}) ...\n`);
 
-		/* Compile Functions source files */
+		/* Compile Functions and main source files */
 		compileKernel(gccPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
 		compileKernel(gccPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
 
@@ -293,7 +299,7 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(gccPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-DRUN_UVE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 		compileKernel(gccPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`]);
 
-		let objDump = spawnSync("/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-objdump", ["-d", "kernel.o"]);
+		let objDump = spawnSync(`${objDumpPathGCC}`, ["-d", "kernel.o"]);
 		let stdoutO = objDump.stdout.toString();
 		fs.writeFile(`${dir}/uve.dump`, stdoutO, (err) => {
 			if (err) throw err;
@@ -303,7 +309,7 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(gccPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 		compileKernel(gccPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple_gcc}`]);
 
-		objDump = spawnSync("/home/afernandes/install/uve_tc/bin/riscv64-unknown-elf-objdump", ["-d", "kernel.o"]);
+		objDump = spawnSync(`${objDumpPathGCC}`, ["-d", "kernel.o"]);
 		stdoutO = objDump.stdout.toString();
 		fs.writeFile(`${dir}/simple_gcc.dump`, stdoutO, (err) => {
 			if (err) throw err;
@@ -315,7 +321,7 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(clangPath, [...clangFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"], true);
 		compileKernel(clangPath, [...clangFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple_clang}`]);
 
-		objDump = spawnSync("/home/afernandes/LLVM-Compiler/llvm-project/build/bin/llvm-objdump", ["--mattr=rv64gc",  "-d", "kernel.o"]);
+		objDump = spawnSync(`${objDumpPathCLANG}`, ["--mattr=rv64gc",  "-d", "kernel.o"]);
 		stdoutO = objDump.stdout.toString();
 		fs.writeFile(`${dir}/simple_clang.dump`, stdoutO, (err) => {
 			if (err) throw err;
@@ -324,7 +330,7 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(clangPath, [...clangFlagsV, `-D${type}_TYPE`, `-DSIZE=${s}`, "-DRUN_SIMPLE", "-I..", `benchmarks/${kernel}/kernel.c`, "-c"], true);
 		compileKernel(clangPath, [...clangFlagsV, `-D${type}_TYPE`, `-DSIZE=${s}`, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_rvv}`]);
 
-		objDump = spawnSync("/home/afernandes/LLVM-Compiler/llvm-project/build/bin/llvm-objdump", ["--mattr=rv64gcv",  "-d", "kernel.o"]);
+		objDump = spawnSync(`${objDumpPathCLANG}`, ["--mattr=rv64gcv",  "-d", "kernel.o"]);
 		stdoutO = objDump.stdout.toString();
 		fs.writeFile(`${dir}/rvv.dump`, stdoutO, (err) => {
 			if (err) throw err;
