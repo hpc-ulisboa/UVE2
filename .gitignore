@@ -69,7 +69,6 @@ clang.txt
 *.txt
 
 # Directories
-UVE-Testing/compiler_test
 UVE-Testing/spike_test/benchmarks/others
 UVE-Testing/spike_test/benchmarks/floyd-warshall
 UVE-Testing/spike_test/benchmarks/pred
