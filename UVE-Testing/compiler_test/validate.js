@@ -42,12 +42,12 @@ if (!spikePath) {
 	exitWithError("SPIKE_PATH environment variable is not set");
 }
 
-const compileFlags = ["-O3", "-fno-tree-vectorize", "-fno-unroll-loops", "-Wall", "-pedantic"];
-const linkFlags = ["-O3", "-Wall", "-pedantic", "-static"];
-//const compileFlagsV = ["-O3", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
-const clangIRFlags = ["-O3", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math",  "-fno-vectorize", "-fno-slp-vectorize", "-fdiscard-value-names", "-ffp-contract=off", "-emit-llvm", "-fno-unroll-loops", "--target=riscv64", "-march=rv64gc"];
-const optFlags = ["-enable-new-pm=0", "-load", passPath, "-loop-simplify", "-legacy-stream-analysis"];
-const llcFlags = ["-march=riscv64", "--mcpu=generic-rv64", "-mattr=+experimental-xuve"];
+const compileFlags = ["-O2", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-fno-tree-vectorize", "-fno-unroll-loops"];
+const linkFlags = [ `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", "-v"];
+//const compileFlagsV = ["-O2", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64imafdcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
+const clangIRFlags = ["-O2", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`,  "-fno-vectorize", "-fno-slp-vectorize", "-fdiscard-value-names", "-ffp-contract=off", "-emit-llvm", "-fno-unroll-loops"];
+const optFlags = ["-enable-new-pm=0", "-load", passPath, "-loop-simplify", "-legacy-stream-analysis", "-passes='print<scalar-evolution>'"];
+const llcFlags = ["-march=riscv64", "--mcpu=generic-rv64", "-mattr=+d,+m,+experimental-xuve"];
 
 const bin_simple = `.run_simple`;
 const bin_uve = `.run_uve`;
@@ -66,8 +66,8 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original,rvv,uve\n", (err) => {
 
 // kernel size map
 const kernelSizeMap = {
-	/*"3mm": size,
-	"convolution": size,
+	/*"3mm": size,*/
+	"convolution": size/*,
 	"covariance": size,
 	"gemm": size,
 	"gemver": size,
@@ -80,16 +80,16 @@ const kernelSizeMap = {
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size*/
-	//"ind": size,
-	"vec_cv": size
+	"trisolv": size
+	"ind": size,
+	"vec_cv": size*/
 };
 
 // read type and size from command line
 const typeMap = {
-    'B': 'byte'/*,
-	'H': 'half-word',
-    'I': 'integer',
+    /*'B': 'byte',
+	'H': 'half-word',*/
+    'I': 'integer'/*,
     'F': 'float',
     'D': 'double'*/
 };
@@ -292,23 +292,39 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
 		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 
-		/* Generate kernel IR with Clang */
-		compileKernel(clangPath, [...clangIRFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-S", "-o", `kernel.ll`]);
-
-		/* Apply UVE pass */
-		compileKernel(optPath, [...optFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `kernel.ll`, "-S", "-o", `UVEkernel.ll`]);
-
-		/* LL to Assembly */
-		compileKernel(llcPath, [...llcFlags, `UVEkernel.ll`]);
-
-		/* Link and compile */
+		/* Link and create no UVE executable */
 		compileKernel(clangPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}`]);
+
+		/* Create objdump file */
 
 		objDump = spawnSync(objDumpPathCLANG, ["-d", "kernel.o"]);
 		stdoutO = objDump.stdout.toString();
 		fs.writeFile(`${dir}/simple.dump`, stdoutO, (err) => {
 			if (err) throw err;
 		});
+
+		/* Generate kernel IR with Clang */
+		compileKernel(clangPath, [...clangIRFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-S", "-o", `kernel.ll`]);
+
+		/* Apply UVE pass */
+		compileKernel(optPath, [...optFlags, `kernel.ll`, "-S", "-o", `UVEkernel.ll`]);
+
+		/* LL to Assembly */
+		compileKernel(llcPath, [...llcFlags, `UVEkernel.ll`]);	
+
+		/* Assembly to object */
+		compileKernel(clangPath, [...compileFlags, "-c", "-o", "UVEkernel.o", `UVEkernel.s`]);
+
+		/* Create objdump file */
+
+		objDump = spawnSync(objDumpPathCLANG, ["-d", "UVEkernel.o"]);
+		stdoutO = objDump.stdout.toString();
+		fs.writeFile(`${dir}/uve.dump`, stdoutO, (err) => {
+			if (err) throw err;
+		});
+
+		/* Link everyting */
+		compileKernel(clangPath, [...linkFlags, "Functions.o", `UVEkernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`]);
 
 		/* Compile for RVV with clang */
 		/*compileKernel(clangPath, [...clangIRFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
@@ -338,7 +354,7 @@ for (let kernel in kernelSizeMap) {
 
 		/* Test if generated values are similar */
 
-		if (aproximateEqual(execSimple.stdout.toString(),  execUVE.stdout.toString(), /*execRVV.stdout.toString(),*/ kernel, type, sizeCSV, dir)) {
+		if (aproximateEqual(execSimple.stdout.toString(), execUVE.stdout.toString(), /*execRVV.stdout.toString(),*/ kernel, type, sizeCSV, dir)) {
 			console.log(`Kernel ${kernel} is similar enough`);
 		} else {
 			console.error(`Kernel ${kernel}: Did not generate result similar enough`);
@@ -346,7 +362,7 @@ for (let kernel in kernelSizeMap) {
 		}
 
 		// Delete executables for next kernel
-		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o', 'Functions.o']);
+		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', /*'UVEkernel.ll', 'UVEkernel.s',*/ 'Functions.o']);
 		if (del.error) {
 			console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 			break;
