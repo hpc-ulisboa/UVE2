@@ -25,8 +25,6 @@ int main()
   for (int i = 0; i < N; i++)
     printf( DataFormat("", "\n"), x_1[i]);
 
-  printf("\n");
-
   for (int i = 0; i < N; i++)
     printf( DataFormat("", "\n"), x_2[i]);
 

@@ -308,10 +308,3 @@ void core(DataType *L, DataType *b, DataType *x) {
     printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE
-
-
-
-#ifdef RUN_BLANK
-void core(DataType *L, DataType *b, DataType *x){
-}
-#endif // RUN_BLANK

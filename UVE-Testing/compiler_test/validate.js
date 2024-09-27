@@ -43,10 +43,10 @@ if (!spikePath) {
 }
 
 const compileFlags = ["-O2", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-fno-tree-vectorize", "-fno-unroll-loops"];
-const linkFlags = [ `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", "-v"];
+const linkFlags = [ `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d"];
 //const compileFlagsV = ["-O2", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64imafdcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
 const clangIRFlags = ["-O2", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`,  "-fno-vectorize", "-fno-slp-vectorize", "-fdiscard-value-names", "-ffp-contract=off", "-emit-llvm", "-fno-unroll-loops"];
-const optFlags = ["-enable-new-pm=0", "-load", passPath, "-loop-simplify", "-legacy-stream-analysis", "-passes='print<scalar-evolution>'"];
+const optFlags = ["-enable-new-pm=0", "-load", passPath, "-loop-simplify", "-legacy-stream-analysis"];
 const llcFlags = ["-march=riscv64", "--mcpu=generic-rv64", "-mattr=+d,+m,+experimental-xuve"];
 
 const bin_simple = `.run_simple`;
@@ -65,9 +65,9 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original,rvv,uve\n", (err) => {
 });
 
 // kernel size map
-const kernelSizeMap = {
-	/*"3mm": size,*/
-	"convolution": size/*,
+/*const kernelSizeMap = {
+	"3mm": size,
+	"convolution": size,
 	"covariance": size,
 	"gemm": size,
 	"gemver": size,
@@ -81,17 +81,19 @@ const kernelSizeMap = {
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
 	"trisolv": size
-	"ind": size,
-	"vec_cv": size*/
-};
+};*/
+
+const kernelSizeMap = {
+	"spmv_ellpack": size,
+}
 
 // read type and size from command line
 const typeMap = {
     /*'B': 'byte',
-	'H': 'half-word',*/
-    'I': 'integer'/*,
-    'F': 'float',
-    'D': 'double'*/
+	'H': 'half-word',
+    'I': 'integer',
+    'F': 'float',*/
+    'D': 'double'
 };
 
 function adjustTableWidth(data) {

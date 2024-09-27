@@ -242,9 +242,3 @@ void core(DataType *A, DataType *B) {
   printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE
-
-
-#ifdef RUN_BLANK
-void core(DataType *A, DataType *B) {
-}
-#endif // RUN_BLANK
