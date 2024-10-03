@@ -8,27 +8,27 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 	asm volatile(
 		"rdinstret %[s] \n"
 
-		"ss.sta.st.d.v.1 u1, %[A] \n"
+		"ss.sta.st.d.v   u1, %[A] \n"
 		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d.v.1 u10, %[v2] \n"
+		"ss.sta.ld.d.v   u10, %[v2] \n"
 		"ss.app			 u10, zero, %[sizeN], zero \n"
 		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d.v.1 u9, %[u2] \n"
+		"ss.sta.ld.d.v   u9, %[u2] \n"
 		"ss.app		     u9, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.d.v.1 u7, %[v1] \n"
+		"ss.sta.ld.d.v   u7, %[v1] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d.v.1 u6, %[u1] \n"
+		"ss.sta.ld.d.v   u6, %[u1] \n"
 		"ss.app			 u6, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.d.v.1 u4, %[A] \n"
+		"ss.sta.ld.d.v   u4, %[A] \n"
 		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
@@ -40,11 +40,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.d.v.1 u7, %[y] \n"
+		"ss.sta.ld.d.v   u7, %[y] \n"
 		"ss.app		     u7, zero, %[sizeN], zero \n"
 		"ss.end 	     u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d.v.1 u5, %[A] \n"
+		"ss.sta.ld.d.v   u5, %[A] \n"
 		"ss.app			 u5, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
@@ -63,7 +63,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.fp  u16, u5, u6, p0 \n"
 				"so.a.mul.fp  u29, u16, u7, p0 \n"
 				"so.a.adde.acc.fp  u11, u29, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_2_0%= \n"
 
 			//"so.a.adde.fp  u30, u11, p0 \n"
 			//"so.a.add.fp  u1, u9, u30, p0 \n"
@@ -85,11 +85,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"so.b.nc u1, .SLOOP_3%= \n"
 		
 
-		"ss.sta.ld.d.v.1 u7, %[x] \n"
+		"ss.sta.ld.d.v   u7, %[x] \n"
 		"ss.app		 	 u7, zero, %[sizeN], zero \n"
 		"ss.end      	 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.d.v.1 u5, %[A] \n"
+		"ss.sta.ld.d.v   u5, %[A] \n"
 		"ss.app			 u5, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
 
@@ -109,7 +109,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.fp  u14, u5, u12, p0 \n"
 				"so.a.mul.fp  u15, u14, u7, p0 \n"
 				"so.a.adde.acc.fp  u13, u15, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_4_0%= \n"
 
 			//"so.a.adde.fp  u15, u13, p0 \n"
 			//"so.a.add.fp  u1, u9, u15, p0 \n"
@@ -134,27 +134,27 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 	asm volatile(
 		"rdinstret %[s] \n"
 
-		"ss.sta.st.w.v.1 u1, %[A] \n"
+		"ss.sta.st.w.v   u1, %[A] \n"
 		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u10, %[v2] \n"
+		"ss.sta.ld.w.v   u10, %[v2] \n"
 		"ss.app			 u10, zero, %[sizeN], zero \n"
 		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u9, %[u2] \n"
+		"ss.sta.ld.w.v   u9, %[u2] \n"
 		"ss.app		     u9, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.w.v.1 u7, %[v1] \n"
+		"ss.sta.ld.w.v   u7, %[v1] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u6, %[u1] \n"
+		"ss.sta.ld.w.v   u6, %[u1] \n"
 		"ss.app			 u6, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.w.v.1 u4, %[A] \n"
+		"ss.sta.ld.w.v   u4, %[A] \n"
 		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
@@ -166,11 +166,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.w.v.1 u7, %[y] \n"
+		"ss.sta.ld.w.v   u7, %[y] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u5, %[A] \n"
+		"ss.sta.ld.w.v   u5, %[A] \n"
 		"ss.app			 u5, zero, %[sizeN], %[one]	\n"
 		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
@@ -190,7 +190,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.fp  u16, u5, u6, p0 \n"
 				"so.a.mul.fp  u29, u16, u7, p0 \n"
 				"so.a.adde.acc.fp  u11, u29, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_2_0%= \n"
 
 			//"so.a.adde.fp  u30, u11, p0 \n"
 			//"so.a.add.fp  u1, u9, u30, p0 \n"
@@ -212,11 +212,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"so.b.nc u1, .SLOOP_3%= \n"
 		
 
-		"ss.sta.ld.w.v.1 u7, %[x] \n"
+		"ss.sta.ld.w.v   u7, %[x] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero,  %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u5, %[A] \n"
+		"ss.sta.ld.w.v   u5, %[A] \n"
 		"ss.app		     u5, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
 
@@ -236,7 +236,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.fp  u14, u5, u12, p0 \n"
 				"so.a.mul.fp  u15, u14, u7, p0 \n"
 				"so.a.adde.acc.fp  u13, u15, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_4_0%= \n"
 
 			//"so.a.adde.fp  u15, u13, p0 \n"
 			//"so.a.add.fp  u1, u9, u15, p0 \n"
@@ -261,27 +261,27 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 	asm volatile(
 		"rdinstret %[s] \n"
 
-		"ss.sta.st.w.v.1 u1, %[A] \n"
+		"ss.sta.st.w.v   u1, %[A] \n"
 		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
 		"ss.end			 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u10, %[v2] \n"
+		"ss.sta.ld.w.v   u10, %[v2] \n"
 		"ss.app			 u10, zero, %[sizeN], zero \n"
 		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u9, %[u2] \n"
+		"ss.sta.ld.w.v   u9, %[u2] \n"
 		"ss.app		     u9, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.w.v.1 u7, %[v1] \n"
+		"ss.sta.ld.w.v   u7, %[v1] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u6, %[u1] \n"
+		"ss.sta.ld.w.v   u6, %[u1] \n"
 		"ss.app			 u6, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.w.v.1 u4, %[A] \n"
+		"ss.sta.ld.w.v   u4, %[A] \n"
 		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
@@ -293,11 +293,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.w.v.1 u7, %[y] \n"
+		"ss.sta.ld.w.v   u7, %[y] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u5, %[A] \n"
+		"ss.sta.ld.w.v   u5, %[A] \n"
 		"ss.app			 u5, zero, %[sizeN], %[one]	\n"
 		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
@@ -317,7 +317,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.sg  u16, u5, u6, p0 \n"
 				"so.a.mul.sg  u29, u16, u7, p0 \n"
 				"so.a.adde.acc.sg  u11, u29, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_2_0%= \n"
 
 			//"so.a.adde.sg  u30, u11, p0 \n"
 			//"so.a.add.sg  u1, u9, u30, p0 \n"
@@ -340,11 +340,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		
 
 
-		"ss.sta.ld.w.v.1 u7, %[x] \n"
+		"ss.sta.ld.w.v   u7, %[x] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero,  %[sizeN], %[one] \n"
 
-		"ss.sta.ld.w.v.1 u5, %[A] \n"
+		"ss.sta.ld.w.v   u5, %[A] \n"
 		"ss.app		     u5, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
 
@@ -364,7 +364,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.sg  u14, u5, u12, p0 \n"
 				"so.a.mul.sg  u15, u14, u7, p0 \n"
 				"so.a.adde.acc.sg  u13, u15, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_4_0%= \n"
 
 			//"so.a.adde.sg  u15, u13, p0 \n"
 			//"so.a.add.sg  u1, u9, u15, p0 \n"
@@ -389,27 +389,27 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 	asm volatile(
 		"rdinstret %[s] \n"
 
-		"ss.sta.st.h.v.1 u1, %[A] \n"
+		"ss.sta.st.h.v   u1, %[A] \n"
 		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
 		"ss.end			 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.h.v.1 u10, %[v2] \n"
+		"ss.sta.ld.h.v   u10, %[v2] \n"
 		"ss.app			 u10, zero, %[sizeN], zero \n"
 		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.h.v.1 u9, %[u2] \n"
+		"ss.sta.ld.h.v   u9, %[u2] \n"
 		"ss.app		     u9, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.h.v.1 u7, %[v1] \n"
+		"ss.sta.ld.h.v   u7, %[v1] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.h.v.1 u6, %[u1] \n"
+		"ss.sta.ld.h.v   u6, %[u1] \n"
 		"ss.app			 u6, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.h.v.1 u4, %[A] \n"
+		"ss.sta.ld.h.v   u4, %[A] \n"
 		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
@@ -421,11 +421,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.h.v.1 u7, %[y] \n"
+		"ss.sta.ld.h.v   u7, %[y] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.h.v.1 u5, %[A] \n"
+		"ss.sta.ld.h.v   u5, %[A] \n"
 		"ss.app			 u5, zero, %[sizeN], %[one]	\n"
 		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
@@ -445,7 +445,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.sg  u16, u5, u6, p0 \n"
 				"so.a.mul.sg  u29, u16, u7, p0 \n"
 				"so.a.adde.acc.sg  u11, u29, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_2_0%= \n"
 
 			//"so.a.adde.sg  u30, u11, p0 \n"
 			//"so.a.add.sg  u1, u9, u30, p0 \n"
@@ -468,11 +468,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		
 
 
-		"ss.sta.ld.h.v.1 u7, %[x] \n"
+		"ss.sta.ld.h.v   u7, %[x] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero,  %[sizeN], %[one] \n"
 
-		"ss.sta.ld.h.v.1 u5, %[A] \n"
+		"ss.sta.ld.h.v   u5, %[A] \n"
 		"ss.app		     u5, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
 
@@ -492,7 +492,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.sg  u14, u5, u12, p0 \n"
 				"so.a.mul.sg  u15, u14, u7, p0 \n"
 				"so.a.adde.acc.sg  u13, u15, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_4_0%= \n"
 
 			//"so.a.adde.sg  u15, u13, p0 \n"
 			//"so.a.add.sg  u1, u9, u15, p0 \n"
@@ -517,27 +517,27 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 	asm volatile(
 		"rdinstret %[s] \n"
 
-		"ss.sta.st.b.v.1 u1, %[A] \n"
+		"ss.sta.st.b.v   u1, %[A] \n"
 		"ss.app			 u1, zero, %[sizeN], %[sizeN] \n"
 		"ss.end			 u1, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.b.v.1 u10, %[v2] \n"
+		"ss.sta.ld.b.v   u10, %[v2] \n"
 		"ss.app			 u10, zero, %[sizeN], zero \n"
 		"ss.end 		 u10, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.b.v.1 u9, %[u2] \n"
+		"ss.sta.ld.b.v   u9, %[u2] \n"
 		"ss.app		     u9, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u9, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.b.v.1 u7, %[v1] \n"
+		"ss.sta.ld.b.v   u7, %[v1] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.b.v.1 u6, %[u1] \n"
+		"ss.sta.ld.b.v   u6, %[u1] \n"
 		"ss.app			 u6, zero, %[sizeN], %[one] \n"
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
-		"ss.sta.ld.b.v.1 u4, %[A] \n"
+		"ss.sta.ld.b.v   u4, %[A] \n"
 		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
@@ -549,11 +549,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"so.b.nc u1, .SLOOP_1%= \n"
 		
 
-		"ss.sta.ld.b.v.1 u7, %[y] \n"
+		"ss.sta.ld.b.v   u7, %[y] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero, %[sizeN], %[one] \n"
 
-		"ss.sta.ld.b.v.1 u5, %[A] \n"
+		"ss.sta.ld.b.v   u5, %[A] \n"
 		"ss.app			 u5, zero, %[sizeN], %[one]	\n"
 		"ss.end 		 u5, zero, %[sizeN], %[sizeN] \n"
 
@@ -573,7 +573,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.sg  u16, u5, u6, p0 \n"
 				"so.a.mul.sg  u29, u16, u7, p0 \n"
 				"so.a.adde.acc.sg  u11, u29, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_2_0%= \n"
 
 			//"so.a.adde.sg  u30, u11, p0 \n"
 			//"so.a.add.sg  u1, u9, u30, p0 \n"
@@ -596,11 +596,11 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		
 
 
-		"ss.sta.ld.b.v.1 u7, %[x] \n"
+		"ss.sta.ld.b.v   u7, %[x] \n"
 		"ss.app			 u7, zero, %[sizeN], zero \n"
 		"ss.end 		 u7, zero,  %[sizeN], %[one] \n"
 
-		"ss.sta.ld.b.v.1 u5, %[A] \n"
+		"ss.sta.ld.b.v   u5, %[A] \n"
 		"ss.app		     u5, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u5, zero, %[sizeN], %[one] \n"
 
@@ -620,7 +620,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 				"so.a.mul.sg  u14, u5, u12, p0 \n"
 				"so.a.mul.sg  u15, u14, u7, p0 \n"
 				"so.a.adde.acc.sg  u13, u15, p0 \n"
-			"so.b.ndc.1 u5, .SLOOP_4_0%= \n"
+			"so.b.ndc.2 u5, .SLOOP_4_0%= \n"
 
 			//"so.a.adde.sg  u15, u13, p0 \n"
 			//"so.a.add.sg  u1, u9, u15, p0 \n"

@@ -16,13 +16,13 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
         "rdinstret %[s] \n"
         // KERNEL 1 Streams
         // sgd_model(j) stream load
-        "ss.sta.ld.d.v.1.m     u1, %[sgd_model] \n"
+        "ss.sta.ld.d.v.m       u1, %[sgd_model] \n"
         "ss.app                u1, zero, %[epochs], zero \n"
         "ss.app                u1, zero, %[pb_n], zero \n"
         "ss.end                u1, zero, %[pb_d], %[one] \n"
 
         // x(i,j) stream load
-        "ss.sta.ld.d.v.1.m     u2, %[x] \n"
+        "ss.sta.ld.d.v.m       u2, %[x] \n"
         "ss.app                u2, zero, %[epochs], zero \n"
         "ss.app                u2, zero, %[pb_n], %[pb_d] \n"
         "ss.end                u2, zero, %[pb_d], %[one] \n"
@@ -39,19 +39,19 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
 
         // KERNEL 2 Streams
         // y_err(i) stream load
-        "ss.sta.ld.d.v.1       u5, %[y_err] \n"
+        "ss.sta.ld.d.v         u5, %[y_err] \n"
         "ss.app                u5, zero, %[epochs], zero \n"
         "ss.end                u5, zero, %[pb_n], %[one] \n"
 
         // KERNEL 3 Streams
         // x(j,i) stream load kernel3
-        "ss.sta.ld.d.v.1       u6, %[x] \n"
+        "ss.sta.ld.d.v         u6, %[x] \n"
         "ss.app                u6, zero, %[epochs], zero \n"
         "ss.app                u6, zero, %[pb_d], %[one] \n"
         "ss.end                u6, zero, %[pb_n], %[pb_d] \n"
 
         // y_err(j)
-        "ss.sta.ld.d.v.1       u7, %[y_err] \n"
+        "ss.sta.ld.d.v         u7, %[y_err] \n"
         "ss.app                u7, zero, %[epochs], zero \n"
         "ss.app                u7, zero, %[pb_d], zero \n"
         "ss.end                u7, zero, %[pb_n], %[one] \n"
@@ -81,7 +81,7 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
                     /*"so.a.mul.fp  u14, u2, u1, p0 \n"   // x(i,j) *sgd_model(j)
                     "so.a.add.fp  u13, u13, u14, p0 \n" // yhat += x(i,j) *sgd_model(j)*/
                     "so.a.mac.fp  u13, u2, u1, p0 \n" // yhat += x(i,j) *sgd_model(j)
-                "so.b.ndc.1 u1, .SLOOP_1_0_0%= \n"
+                "so.b.ndc.3 u1, .SLOOP_1_0_0%= \n"
 
                 "so.a.adde.fp  u15, u13, p0 \n" // reduce yhat
                 "so.a.add.fp  u15, u15, u10, p0 \n" // yhat += intercept
@@ -95,7 +95,7 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
 
             ".SLOOP_1_1%=:  \n"
                 "so.a.adde.acc.fp  u16, u5, p0 \n" // intercept_der += y_err(i)
-            "so.b.ndc.1 u5, .SLOOP_1_1%= \n"
+            "so.b.ndc.2 u5, .SLOOP_1_1%= \n"
 
             //"so.a.adde.fp  u17, u16, p0 \n"     // reduce intercept_der
             "so.a.div.fp  u16, u16, u12, p0 \n" // intercept_der /= PB_N
@@ -111,7 +111,7 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
                 ".SLOOP_1_2_0%=:  \n"
                     "so.a.mul.fp  u19, u6, u7, p0 \n"   // x(j,i) * y_err(j)
                     "so.a.adde.acc.fp  u18, u19, p0 \n" // raw_update += x(j,i) * y_err(j)
-                "so.b.ndc.1 u6, .SLOOP_1_2_0%= \n"
+                "so.b.ndc.3 u6, .SLOOP_1_2_0%= \n"
 
                 //"so.a.adde.fp  u19, u18, p0 \n"     // reduce raw_update
                 "so.a.mul.fp  u18, u18, u11, p0 \n" // raw_update * lr
@@ -142,12 +142,12 @@ long int predict(void *y_fitted, void *x_array, void *sgd_model, DataType interc
 
         // KERNEL 1 Streams
         // sgd_model(j) stream load
-        "ss.sta.ld.d.v.1.m     u1, %[sgd_model] \n"
+        "ss.sta.ld.d.v.m       u1, %[sgd_model] \n"
         "ss.app                u1, zero, %[pb_n], zero \n"
         "ss.end                u1, zero, %[pb_d], %[one] \n"
 
         // x(i,j) stream load
-        "ss.sta.ld.d.v.1.m     u2, %[x] \n"
+        "ss.sta.ld.d.v.m       u2, %[x] \n"
         "ss.app                u2, zero, %[pb_n], %[pb_d] \n"
         "ss.end                u2, zero, %[pb_d], %[one] \n"
 
@@ -165,12 +165,12 @@ long int predict(void *y_fitted, void *x_array, void *sgd_model, DataType interc
                 /*"so.a.mul.fp  u6, u2, u1, p0 \n" // aux = x(i,j) *sgd_model(j)
                 "so.a.adde.acc.fp  u5, u6, p0 \n" // r += aux*/
                 "so.a.mac.fp  u5, u2, u1, p0 \n" // r += x(i,j) *sgd_model(j)
-            "so.b.ndc.1 u1, .SLOOP_1_0%= \n"
+            "so.b.ndc.2 u1, .SLOOP_1_0%= \n"
 
             "so.a.adde.fp u7, u5, p0 \n"    // reduce r
             "so.a.add.fp  u3, u7, u4, p0 \n" // store r + intercept
 
-        "so.b.ndc.2 u1, .SLOOP_1%= \n"
+        "so.b.nc  u1, .SLOOP_1%= \n"
 
         "rdinstret %[e] \n"
 

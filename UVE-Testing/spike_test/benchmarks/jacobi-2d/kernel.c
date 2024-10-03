@@ -9,32 +9,32 @@ void core(DataType *A, DataType *B) {
     "rdinstret %[s] \n"
 
     // A1 stream load
-    "ss.sta.ld.d.v.2       u1, %[src1a] \n"
+    "ss.sta.ld.d.v.1       u1, %[src1a] \n"
     "ss.app                u1, zero, %[snm2], %[sn] \n"
     "ss.end                u1, zero, %[snm2], %[one] \n"
 
     // A2 stream load
-    "ss.sta.ld.d.v.2       u2, %[src1b] \n"
+    "ss.sta.ld.d.v.1       u2, %[src1b] \n"
     "ss.app                u2, zero, %[snm2], %[sn] \n"
     "ss.end                u2, zero, %[snm2], %[one] \n"
 
     // A3 stream load
-    "ss.sta.ld.d.v.2       u3, %[src1c] \n"
+    "ss.sta.ld.d.v.1       u3, %[src1c] \n"
     "ss.app                u3, zero, %[snm2], %[sn] \n"
     "ss.end                u3, zero, %[snm2], %[one] \n"
 
     // A4 stream load
-    "ss.sta.ld.d.v.2       u4, %[src1d] \n"
+    "ss.sta.ld.d.v.1       u4, %[src1d] \n"
     "ss.app                u4, zero, %[snm2], %[sn] \n"
     "ss.end                u4, zero, %[snm2], %[one] \n"
 
     // A5 stream load
-    "ss.sta.ld.d.v.2       u5, %[src1e] \n"
+    "ss.sta.ld.d.v.1       u5, %[src1e] \n"
     "ss.app                u5, zero, %[snm2], %[sn] \n"
     "ss.end                u5, zero, %[snm2], %[one] \n"
 
     // B stream store
-    "ss.sta.st.d.v.2       u6, %[src2] \n"
+    "ss.sta.st.d.v.1       u6, %[src2] \n"
     "ss.app                u6, zero, %[snm2], %[sn] \n"
     "ss.end                u6, zero, %[snm2], %[one] \n"
 
@@ -49,32 +49,32 @@ void core(DataType *A, DataType *B) {
     "so.b.nc	u1, .loop_1%= \n\t"
 
     // B1 stream load
-    "ss.sta.ld.d.v.2       u1, %[src2a] \n"
+    "ss.sta.ld.d.v.1       u1, %[src2a] \n"
     "ss.app                u1, zero, %[snm2], %[sn] \n"
     "ss.end                u1, zero, %[snm2], %[one] \n"
 
     // B2 stream load
-    "ss.sta.ld.d.v.2       u2, %[src2b] \n"
+    "ss.sta.ld.d.v.1       u2, %[src2b] \n"
     "ss.app                u2, zero, %[snm2], %[sn] \n"
     "ss.end                u2, zero, %[snm2], %[one] \n"
 
     // B3 stream load
-    "ss.sta.ld.d.v.2       u3, %[src2c] \n"
+    "ss.sta.ld.d.v.1       u3, %[src2c] \n"
     "ss.app                u3, zero, %[snm2], %[sn] \n"
     "ss.end                u3, zero, %[snm2], %[one] \n"
 
     // B4 stream load
-    "ss.sta.ld.d.v.2       u4, %[src2d] \n"
+    "ss.sta.ld.d.v.1       u4, %[src2d] \n"
     "ss.app                u4, zero, %[snm2], %[sn] \n"
     "ss.end                u4, zero, %[snm2], %[one] \n"
 
     // B5 stream load
-    "ss.sta.ld.d.v.2       u5, %[src2e] \n"
+    "ss.sta.ld.d.v.1       u5, %[src2e] \n"
     "ss.app                u5, zero, %[snm2], %[sn] \n"
     "ss.end                u5, zero, %[snm2], %[one] \n"
 
     // A stream store
-    "ss.sta.st.d.v.2       u6, %[src1] \n"
+    "ss.sta.st.d.v.1       u6, %[src1] \n"
     "ss.app                u6, zero, %[snm2], %[sn] \n"
     "ss.end                u6, zero, %[snm2], %[one] \n"
 
@@ -115,32 +115,32 @@ void core(DataType *A, DataType *B) {
     "rdinstret %[s] \n"
 
     // A1 stream load
-    "ss.sta.ld.w.v.2       u1, %[src1a] \n"
+    "ss.sta.ld.w.v.1       u1, %[src1a] \n"
     "ss.app                u1, zero, %[snm2], %[sn] \n"
     "ss.end                u1, zero, %[snm2], %[one] \n"
 
     // A2 stream load
-    "ss.sta.ld.w.v.2       u2, %[src1b] \n"
+    "ss.sta.ld.w.v.1       u2, %[src1b] \n"
     "ss.app                u2, zero, %[snm2], %[sn] \n"
     "ss.end                u2, zero, %[snm2], %[one] \n"
 
     // A3 stream load
-    "ss.sta.ld.w.v.2       u3, %[src1c] \n"
+    "ss.sta.ld.w.v.1       u3, %[src1c] \n"
     "ss.app                u3, zero, %[snm2], %[sn] \n"
     "ss.end                u3, zero, %[snm2], %[one] \n"
 
     // A4 stream load
-    "ss.sta.ld.w.v.2       u4, %[src1d] \n"
+    "ss.sta.ld.w.v.1       u4, %[src1d] \n"
     "ss.app                u4, zero, %[snm2], %[sn] \n"
     "ss.end                u4, zero, %[snm2], %[one] \n"
 
     // A5 stream load
-    "ss.sta.ld.w.v.2       u5, %[src1e] \n"
+    "ss.sta.ld.w.v.1       u5, %[src1e] \n"
     "ss.app                u5, zero, %[snm2], %[sn] \n"
     "ss.end                u5, zero, %[snm2], %[one] \n"
 
     // B stream store
-    "ss.sta.st.w.v.2       u6, %[src2] \n"
+    "ss.sta.st.w.v.1       u6, %[src2] \n"
     "ss.app                u6, zero, %[snm2], %[sn] \n"
     "ss.end                u6, zero, %[snm2], %[one] \n"
 
@@ -155,32 +155,32 @@ void core(DataType *A, DataType *B) {
     "so.b.nc	u1, .loop_1%= \n\t"
 
     // B1 stream load
-    "ss.sta.ld.w.v.2       u1, %[src2a] \n"
+    "ss.sta.ld.w.v.1       u1, %[src2a] \n"
     "ss.app                u1, zero, %[snm2], %[sn] \n"
     "ss.end                u1, zero, %[snm2], %[one] \n"
 
     // B2 stream load
-    "ss.sta.ld.w.v.2       u2, %[src2b] \n"
+    "ss.sta.ld.w.v.1       u2, %[src2b] \n"
     "ss.app                u2, zero, %[snm2], %[sn] \n"
     "ss.end                u2, zero, %[snm2], %[one] \n"
 
     // B3 stream load
-    "ss.sta.ld.w.v.2       u3, %[src2c] \n"
+    "ss.sta.ld.w.v.1       u3, %[src2c] \n"
     "ss.app                u3, zero, %[snm2], %[sn] \n"
     "ss.end                u3, zero, %[snm2], %[one] \n"
 
     // B4 stream load
-    "ss.sta.ld.w.v.2       u4, %[src2d] \n"
+    "ss.sta.ld.w.v.1       u4, %[src2d] \n"
     "ss.app                u4, zero, %[snm2], %[sn] \n"
     "ss.end                u4, zero, %[snm2], %[one] \n"
 
     // B5 stream load
-    "ss.sta.ld.w.v.2       u5, %[src2e] \n"
+    "ss.sta.ld.w.v.1       u5, %[src2e] \n"
     "ss.app                u5, zero, %[snm2], %[sn] \n"
     "ss.end                u5, zero, %[snm2], %[one] \n"
 
     // A stream store
-    "ss.sta.st.w.v.2       u6, %[src1] \n"
+    "ss.sta.st.w.v.1       u6, %[src1] \n"
     "ss.app                u6, zero, %[snm2], %[sn] \n"
     "ss.end                u6, zero, %[snm2], %[one] \n"
 

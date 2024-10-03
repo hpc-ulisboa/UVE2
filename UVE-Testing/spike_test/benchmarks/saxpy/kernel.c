@@ -15,7 +15,7 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
         "ss.sta.ld.d.v u2, %[src2] \t\n"
         "ss.end        u2, zero, %[size], %[stride] \t\n"
 
-        "ss.sta.st.d.v.1 u3, %[dest] \t\n"
+        "ss.sta.st.d.v u3, %[dest] \t\n"
         "ss.end          u3, zero, %[size], %[stride] \t\n"
 
         "so.v.dp.d u4, %[value], p0\t\n"

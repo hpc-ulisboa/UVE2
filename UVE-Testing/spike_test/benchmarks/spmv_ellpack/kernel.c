@@ -11,14 +11,14 @@ void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t 
         "ss.app           u1, zero, %[N], %[L] \n"
         "ss.end           u1, zero, %[L], %[one] \n"
 
-        "ss.sta.ld.d.v.1.m u2, %[nzval] \n"
+        "ss.sta.ld.d.v.m   u2, %[nzval] \n"
         "ss.app            u2, zero, %[N], %[L] \n"
         "ss.end            u2, zero, %[L], %[one] \n"
 
         "ss.sta.ld.d.v.2.m    u3, %[vec] \n"
         "ss.app               u3, zero, %[N], zero \n"
         "ss.app		          u3, zero, %[L], zero \n"
-        "ss.app.ind.ofs.add.1 u3, u1 \n"
+        "ss.app.ind.ofs.add.3 u3, u1 \n"
         "ss.end               u3, zero, %[one], zero \n"
 
         "ss.sta.st.d  u4, %[out] \n"
@@ -31,7 +31,7 @@ void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t 
                 "so.a.mac.fp u5, u2, u3, p0\n\t"
                 //"so.a.mul.fp u6, u2, u3, p0\n\t"
                 //"so.a.add.fp u5, u5, u6, p0\n\t"
-            "so.b.ndc.1 u2, .kloop1%= \n\t"
+            "so.b.ndc.2 u2, .kloop1%= \n\t"
 
             "so.a.adde.fp  u4, u5, p0 \n\t"
         "so.b.nc	u2, .iLoop1%= \n\t"

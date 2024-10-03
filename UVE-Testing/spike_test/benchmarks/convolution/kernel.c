@@ -9,52 +9,52 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "rdinstret %[s] \n"
 
         // src(y-1,x-1) stream load
-        "ss.sta.ld.d.v.1       u1, %[src_0] \n"
+        "ss.sta.ld.d.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
         "ss.end                u1, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x) stream load
-        "ss.sta.ld.d.v.1       u2, %[src_1] \n"
+        "ss.sta.ld.d.v         u2, %[src_1] \n"
         "ss.app                u2, zero, %[inm2], %[jn] \n"
         "ss.end                u2, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x+1) stream load
-        "ss.sta.ld.d.v.1       u3, %[src_2] \n"
+        "ss.sta.ld.d.v         u3, %[src_2] \n"
         "ss.app                u3, zero, %[inm2], %[jn] \n"
         "ss.end                u3, zero, %[jnm2], %[one] \n"
 
         // src(y,x-1) stream load
-        "ss.sta.ld.d.v.1       u4, %[src_3] \n"
+        "ss.sta.ld.d.v         u4, %[src_3] \n"
         "ss.app                u4, zero, %[inm2], %[jn] \n"
         "ss.end                u4, zero, %[jnm2], %[one] \n"
 
         // src(y,x) stream load
-        "ss.sta.ld.d.v.1       u5, %[src_4] \n"
+        "ss.sta.ld.d.v         u5, %[src_4] \n"
         "ss.app                u5, zero, %[inm2], %[jn] \n"
         "ss.end                u5, zero, %[jnm2], %[one] \n"
 
         // src(y,x+1) stream load
-        "ss.sta.ld.d.v.1       u6, %[src_5] \n"
+        "ss.sta.ld.d.v         u6, %[src_5] \n"
         "ss.app                u6, zero, %[inm2], %[jn] \n"
         "ss.end                u6, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x-1) stream load
-        "ss.sta.ld.d.v.1       u7, %[src_6] \n"
+        "ss.sta.ld.d.v         u7, %[src_6] \n"
         "ss.app                u7, zero, %[inm2], %[jn] \n"
         "ss.end                u7, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x) stream load
-        "ss.sta.ld.d.v.1       u8, %[src_7] \n"
+        "ss.sta.ld.d.v         u8, %[src_7] \n"
         "ss.app                u8, zero, %[inm2], %[jn] \n"
         "ss.end                u8, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x+1) stream load
-        "ss.sta.ld.d.v.1       u9, %[src_8] \n"
+        "ss.sta.ld.d.v         u9, %[src_8] \n"
         "ss.app                u9, zero, %[inm2], %[jn] \n"
         "ss.end                u9, zero, %[jnm2], %[one] \n"
 
         /* filter(k,j) stream load
-        "ss.sta.ld.d.v.1       u10, %[filter] \n"
+        "ss.sta.ld.d.v         u10, %[filter] \n"
         "ss.app                u10, zero, %[inm2], zero \n"
         "ss.app                u10, zero, %[jnm2], %[one] \n""
         "ss.end                u10, zero, %[fsize], zero \n"*/
@@ -72,7 +72,7 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.d.v.1  u0, %[dst] \n"
+        "ss.sta.st.d.v    u0, %[dst] \n"
         "ss.app           u0, zero, %[inm2], %[jn] \n"
         "ss.end           u0, %[one], %[jnm2], %[one] \n"
 
@@ -123,52 +123,52 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "rdinstret %[s] \n"
 
         // src(y-1,x-1) stream load
-        "ss.sta.ld.w.v.1       u1, %[src_0] \n"
+        "ss.sta.ld.w.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
         "ss.end                u1, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x) stream load
-        "ss.sta.ld.w.v.1       u2, %[src_1] \n"
+        "ss.sta.ld.w.v         u2, %[src_1] \n"
         "ss.app                u2, zero, %[inm2], %[jn] \n"
         "ss.end                u2, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x+1) stream load
-        "ss.sta.ld.w.v.1       u3, %[src_2] \n"
+        "ss.sta.ld.w.v         u3, %[src_2] \n"
         "ss.app                u3, zero, %[inm2], %[jn] \n"
         "ss.end                u3, zero, %[jnm2], %[one] \n"
 
         // src(y,x-1) stream load
-        "ss.sta.ld.w.v.1       u4, %[src_3] \n"
+        "ss.sta.ld.w.v         u4, %[src_3] \n"
         "ss.app                u4, zero, %[inm2], %[jn] \n"
         "ss.end                u4, zero, %[jnm2], %[one] \n"
 
         // src(y,x) stream load
-        "ss.sta.ld.w.v.1       u5, %[src_4] \n"
+        "ss.sta.ld.w.v         u5, %[src_4] \n"
         "ss.app                u5, zero, %[inm2], %[jn] \n"
         "ss.end                u5, zero, %[jnm2], %[one] \n"
 
         // src(y,x+1) stream load
-        "ss.sta.ld.w.v.1       u6, %[src_5] \n"
+        "ss.sta.ld.w.v         u6, %[src_5] \n"
         "ss.app                u6, zero, %[inm2], %[jn] \n"
         "ss.end                u6, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x-1) stream load
-        "ss.sta.ld.w.v.1       u7, %[src_6] \n"
+        "ss.sta.ld.w.v         u7, %[src_6] \n"
         "ss.app                u7, zero, %[inm2], %[jn] \n"
         "ss.end                u7, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x) stream load
-        "ss.sta.ld.w.v.1       u8, %[src_7] \n"
+        "ss.sta.ld.w.v         u8, %[src_7] \n"
         "ss.app                u8, zero, %[inm2], %[jn] \n"
         "ss.end                u8, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x+1) stream load
-        "ss.sta.ld.w.v.1       u9, %[src_8] \n"
+        "ss.sta.ld.w.v         u9, %[src_8] \n"
         "ss.app                u9, zero, %[inm2], %[jn] \n"
         "ss.end                u9, zero, %[jnm2], %[one] \n"
 
         /* filter(k,j) stream load
-        "ss.sta.ld.w.v.1       u10, %[filte \n"
+        "ss.sta.ld.w.v         u10, %[filte \n"
         "ss.app                u10, zero,], %[inm2], zero \n"
         "ss.app                u10, zero, %[jnm2], %[one] \n""
         "ss.end                u10, zero, %[fsize], zero \n"*/
@@ -186,7 +186,7 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.w.v.1  u0, %[dst] \n"
+        "ss.sta.st.w.v    u0, %[dst] \n"
         "ss.app           u0, zero, %[inm2], %[jn] \n"
         "ss.end           u0, %[one], %[jnm2], %[one] \n"
 
@@ -237,52 +237,52 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "rdinstret %[s] \n"
 
         // src(y-1,x-1) stream load
-        "ss.sta.ld.w.v.1       u1, %[src_0] \n"
+        "ss.sta.ld.w.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
         "ss.end                u1, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x) stream load
-        "ss.sta.ld.w.v.1       u2, %[src_1] \n"
+        "ss.sta.ld.w.v         u2, %[src_1] \n"
         "ss.app                u2, zero, %[inm2], %[jn] \n"
         "ss.end                u2, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x+1) stream load
-        "ss.sta.ld.w.v.1       u3, %[src_2] \n"
+        "ss.sta.ld.w.v         u3, %[src_2] \n"
         "ss.app                u3, zero, %[inm2], %[jn] \n"
         "ss.end                u3, zero, %[jnm2], %[one] \n"
 
         // src(y,x-1) stream load
-        "ss.sta.ld.w.v.1       u4, %[src_3] \n"
+        "ss.sta.ld.w.v         u4, %[src_3] \n"
         "ss.app                u4, zero, %[inm2], %[jn] \n"
         "ss.end                u4, zero, %[jnm2], %[one] \n"
 
         // src(y,x) stream load
-        "ss.sta.ld.w.v.1       u5, %[src_4] \n"
+        "ss.sta.ld.w.v         u5, %[src_4] \n"
         "ss.app                u5, zero, %[inm2], %[jn] \n"
         "ss.end                u5, zero, %[jnm2], %[one] \n"
 
         // src(y,x+1) stream load
-        "ss.sta.ld.w.v.1       u6, %[src_5] \n"
+        "ss.sta.ld.w.v         u6, %[src_5] \n"
         "ss.app                u6, zero, %[inm2], %[jn] \n"
         "ss.end                u6, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x-1) stream load
-        "ss.sta.ld.w.v.1       u7, %[src_6] \n"
+        "ss.sta.ld.w.v         u7, %[src_6] \n"
         "ss.app                u7, zero, %[inm2], %[jn] \n"
         "ss.end                u7, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x) stream load
-        "ss.sta.ld.w.v.1       u8, %[src_7] \n"
+        "ss.sta.ld.w.v         u8, %[src_7] \n"
         "ss.app                u8, zero, %[inm2], %[jn] \n"
         "ss.end                u8, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x+1) stream load
-        "ss.sta.ld.w.v.1       u9, %[src_8] \n"
+        "ss.sta.ld.w.v         u9, %[src_8] \n"
         "ss.app                u9, zero, %[inm2], %[jn] \n"
         "ss.end                u9, zero, %[jnm2], %[one] \n"
 
         /* filter(k,j) stream load
-        "ss.sta.ld.w.v.1       u10, %[filte \n"
+        "ss.sta.ld.w.v         u10, %[filte \n"
         "ss.app                u10, zero,], %[inm2], zero \n"
         "ss.app                u10, zero, %[jnm2], %[one] \n""
         "ss.end                u10, zero, %[fsize], zero \n"*/
@@ -300,7 +300,7 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.w.v.1  u0, %[dst] \n"
+        "ss.sta.st.w.v    u0, %[dst] \n"
         "ss.app           u0, zero, %[inm2], %[jn] \n"
         "ss.end           u0, %[one], %[jnm2], %[one] \n"
 
@@ -351,52 +351,52 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "rdinstret %[s] \n"
 
         // src(y-1,x-1) stream load
-        "ss.sta.ld.h.v.1       u1, %[src_0] \n"
+        "ss.sta.ld.h.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
         "ss.end                u1, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x) stream load
-        "ss.sta.ld.h.v.1       u2, %[src_1] \n"
+        "ss.sta.ld.h.v         u2, %[src_1] \n"
         "ss.app                u2, zero, %[inm2], %[jn] \n"
         "ss.end                u2, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x+1) stream load
-        "ss.sta.ld.h.v.1       u3, %[src_2] \n"
+        "ss.sta.ld.h.v         u3, %[src_2] \n"
         "ss.app                u3, zero, %[inm2], %[jn] \n"
         "ss.end                u3, zero, %[jnm2], %[one] \n"
 
         // src(y,x-1) stream load
-        "ss.sta.ld.h.v.1       u4, %[src_3] \n"
+        "ss.sta.ld.h.v         u4, %[src_3] \n"
         "ss.app                u4, zero, %[inm2], %[jn] \n"
         "ss.end                u4, zero, %[jnm2], %[one] \n"
 
         // src(y,x) stream load
-        "ss.sta.ld.h.v.1       u5, %[src_4] \n"
+        "ss.sta.ld.h.v         u5, %[src_4] \n"
         "ss.app                u5, zero, %[inm2], %[jn] \n"
         "ss.end                u5, zero, %[jnm2], %[one] \n"
 
         // src(y,x+1) stream load
-        "ss.sta.ld.h.v.1       u6, %[src_5] \n"
+        "ss.sta.ld.h.v         u6, %[src_5] \n"
         "ss.app                u6, zero, %[inm2], %[jn] \n"
         "ss.end                u6, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x-1) stream load
-        "ss.sta.ld.h.v.1       u7, %[src_6] \n"
+        "ss.sta.ld.h.v         u7, %[src_6] \n"
         "ss.app                u7, zero, %[inm2], %[jn] \n"
         "ss.end                u7, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x) stream load
-        "ss.sta.ld.h.v.1       u8, %[src_7] \n"
+        "ss.sta.ld.h.v         u8, %[src_7] \n"
         "ss.app                u8, zero, %[inm2], %[jn] \n"
         "ss.end                u8, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x+1) stream load
-        "ss.sta.ld.h.v.1       u9, %[src_8] \n"
+        "ss.sta.ld.h.v         u9, %[src_8] \n"
         "ss.app                u9, zero, %[inm2], %[jn] \n"
         "ss.end                u9, zero, %[jnm2], %[one] \n"
 
         /* filter(k,j) stream load
-        "ss.sta.ld.h.v.1       u10, %[filter] \n"
+        "ss.sta.ld.h.v         u10, %[filter] \n"
         "ss.app                u10, zero, %[inm2], zero \n"
         "ss.app                u10, zero, %[jnm2], %[one] \n""
         "ss.end                u10, zero, %[fsize], zero \n"*/
@@ -414,7 +414,7 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.h.v.1  u0, %[dst] \n"
+        "ss.sta.st.h.v    u0, %[dst] \n"
         "ss.app           u0, zero, %[inm2], %[jn] \n"
         "ss.end           u0, %[one], %[jnm2], %[one] \n"
 
@@ -465,52 +465,52 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "rdinstret %[s] \n"
 
         // src(y-1,x-1) stream load
-        "ss.sta.ld.b.v.1       u1, %[src_0] \n"
+        "ss.sta.ld.b.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
         "ss.end                u1, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x) stream load
-        "ss.sta.ld.b.v.1       u2, %[src_1] \n"
+        "ss.sta.ld.b.v         u2, %[src_1] \n"
         "ss.app                u2, zero, %[inm2], %[jn] \n"
         "ss.end                u2, zero, %[jnm2], %[one] \n"
 
         // src(y-1,x+1) stream load
-        "ss.sta.ld.b.v.1       u3, %[src_2] \n"
+        "ss.sta.ld.b.v         u3, %[src_2] \n"
         "ss.app                u3, zero, %[inm2], %[jn] \n"
         "ss.end                u3, zero, %[jnm2], %[one] \n"
 
         // src(y,x-1) stream load
-        "ss.sta.ld.b.v.1       u4, %[src_3] \n"
+        "ss.sta.ld.b.v         u4, %[src_3] \n"
         "ss.app                u4, zero, %[inm2], %[jn] \n"
         "ss.end                u4, zero, %[jnm2], %[one] \n"
 
         // src(y,x) stream load
-        "ss.sta.ld.b.v.1       u5, %[src_4] \n"
+        "ss.sta.ld.b.v         u5, %[src_4] \n"
         "ss.app                u5, zero, %[inm2], %[jn] \n"
         "ss.end                u5, zero, %[jnm2], %[one] \n"
 
         // src(y,x+1) stream load
-        "ss.sta.ld.b.v.1       u6, %[src_5] \n"
+        "ss.sta.ld.b.v         u6, %[src_5] \n"
         "ss.app                u6, zero, %[inm2], %[jn] \n"
         "ss.end                u6, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x-1) stream load
-        "ss.sta.ld.b.v.1       u7, %[src_6] \n"
+        "ss.sta.ld.b.v         u7, %[src_6] \n"
         "ss.app                u7, zero, %[inm2], %[jn] \n"
         "ss.end                u7, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x) stream load
-        "ss.sta.ld.b.v.1       u8, %[src_7] \n"
+        "ss.sta.ld.b.v         u8, %[src_7] \n"
         "ss.app                u8, zero, %[inm2], %[jn] \n"
         "ss.end                u8, zero, %[jnm2], %[one] \n"
 
         // src(y+1,x+1) stream load
-        "ss.sta.ld.b.v.1       u9, %[src_8] \n"
+        "ss.sta.ld.b.v         u9, %[src_8] \n"
         "ss.app                u9, zero, %[inm2], %[jn] \n"
         "ss.end                u9, zero, %[jnm2], %[one] \n"
 
         /* filter(k,j) stream load
-        "ss.sta.ld.b.v.1       u10, %[filte \n"
+        "ss.sta.ld.b.v         u10, %[filte \n"
         "ss.app                u10, zero,], %[inm2], zero \n"
         "ss.app                u10, zero, %[jnm2], %[one] \n""
         "ss.end                u10, zero, %[fsize], zero \n"*/
@@ -528,7 +528,7 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 
         // dst(y,x) stream store
-        "ss.sta.st.b.v.1  u0, %[dst] \n"
+        "ss.sta.st.b.v    u0, %[dst] \n"
         "ss.app           u0, zero, %[inm2], %[jn] \n"
         "ss.end           u0, %[one], %[jnm2], %[one] \n"
 

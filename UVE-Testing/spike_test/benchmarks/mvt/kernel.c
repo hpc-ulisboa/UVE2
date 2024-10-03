@@ -9,12 +9,12 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.d.v.1.m u4, %[A] \n"
+		"ss.sta.ld.d.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.d.v.1.m u5, %[y_1] \n"
+		"ss.sta.ld.d.v.m   u5, %[y_1] \n"
 		"ss.app 		   u5, zero, %[sizeN], zero \n"
 		"ss.end 	       u5, zero, %[sizeN], %[one] \n"
 
@@ -33,19 +33,19 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.fp  u3, u4, u5, p0 \n"
 				"so.a.add.fp  u2, u2, u3, p0 \n"*/
 				"so.a.mac.fp  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_1_0%= \n"
 
 			"so.a.adde.fp  u3, u2, p0 \n"
 			"so.a.add.fp  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.d.v.1.m u4, %[A] \n"
+		"ss.sta.ld.d.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[one] \n"
 		"ss.end 		   u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.d.v.1.m u5, %[y_2] \n"
+		"ss.sta.ld.d.v.m   u5, %[y_2] \n"
 		"ss.app			   u5, zero, %[sizeN], zero \n"
 		"ss.end 		   u5, zero, %[sizeN], %[one] \n"
 
@@ -64,7 +64,7 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.fp  u3, u4, u5, p0 \n"
 				"so.a.add.fp  u2, u2, u3, p0 \n"*/
 				"so.a.mac.fp  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_2_0%= \n"
 
 			"so.a.adde.fp  u3, u2, p0 \n"
 			"so.a.add.fp  u1, u7, u3, p0 \n"
@@ -87,12 +87,12 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.w.v.1.m u4, %[A] \n"
+		"ss.sta.ld.w.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.w.v.1.m u5, %[y_1] \n"
+		"ss.sta.ld.w.v.m   u5, %[y_1] \n"
 		"ss.app 		   u5, zero, %[sizeN], zero \n"
 		"ss.end 	       u5, zero, %[sizeN], %[one] \n"
 
@@ -111,19 +111,19 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.fp  u3, u4, u5, p0 \n"
 				"so.a.add.fp  u2, u2, u3, p0 \n"*/
 				"so.a.mac.fp  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_1_0%= \n"
 
 			"so.a.adde.fp  u3, u2, p0 \n"
 			"so.a.add.fp  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.w.v.1.m u4, %[A] \n"
+		"ss.sta.ld.w.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[one] \n"
 		"ss.end 		   u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.w.v.1.m u5, %[y_2] \n"
+		"ss.sta.ld.w.v.m   u5, %[y_2] \n"
 		"ss.app			   u5, zero, %[sizeN], zero \n"
 		"ss.end 		   u5, zero, %[sizeN], %[one] \n"
 
@@ -142,7 +142,7 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.fp  u3, u4, u5, p0 \n"
 				"so.a.add.fp  u2, u2, u3, p0 \n"*/
 				"so.a.mac.fp  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_2_0%= \n"
 
 			"so.a.adde.fp  u3, u2, p0 \n"
 			"so.a.add.fp  u1, u7, u3, p0 \n"
@@ -165,12 +165,12 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.w.v.1.m u4, %[A] \n"
+		"ss.sta.ld.w.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.w.v.1.m u5, %[y_1] \n"
+		"ss.sta.ld.w.v.m   u5, %[y_1] \n"
 		"ss.app 		   u5, zero, %[sizeN], zero \n"
 		"ss.end 	       u5, zero, %[sizeN], %[one] \n"
 
@@ -189,19 +189,19 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.sg  u3, u4, u5, p0 \n"
 				"so.a.add.sg  u2, u2, u3, p0 \n"*/
 				"so.a.mac.sg  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_1_0%= \n"
 
 			"so.a.adde.sg  u3, u2, p0 \n"
 			"so.a.add.sg  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.w.v.1.m u4, %[A] \n"
+		"ss.sta.ld.w.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[one] \n"
 		"ss.end            u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.w.v.1.m u5, %[y_2] \n"
+		"ss.sta.ld.w.v.m   u5, %[y_2] \n"
 		"ss.app			   u5, zero, %[sizeN], zero \n"
 		"ss.end 		   u5, zero, %[sizeN], %[one] \n"
 
@@ -220,7 +220,7 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.sg  u3, u4, u5, p0 \n"
 				"so.a.add.sg  u2, u2, u3, p0 \n"*/
 				"so.a.mac.sg  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_2_0%= \n"
 
 			"so.a.adde.sg  u3, u2, p0 \n"
 			"so.a.add.sg  u1, u7, u3, p0 \n"
@@ -243,12 +243,12 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.h.v.1.m u4, %[A] \n"
+		"ss.sta.ld.h.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.h.v.1.m u5, %[y_1] \n"
+		"ss.sta.ld.h.v.m   u5, %[y_1] \n"
 		"ss.app 		   u5, zero, %[sizeN], zero \n"
 		"ss.end 	       u5, zero, %[sizeN], %[one] \n"
 
@@ -267,19 +267,19 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.sg  u3, u4, u5, p0 \n"
 				"so.a.add.sg  u2, u2, u3, p0 \n"*/
 				"so.a.mac.sg  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_1_0%= \n"
 
 			"so.a.adde.sg  u3, u2, p0 \n"
 			"so.a.add.sg  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.h.v.1.m u4, %[A] \n"
+		"ss.sta.ld.h.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[one] \n"
 		"ss.end 		   u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.h.v.1.m u5, %[y_2] \n"
+		"ss.sta.ld.h.v.m   u5, %[y_2] \n"
 		"ss.app			   u5, zero, %[sizeN], zero \n"
 		"ss.end 		   u5, zero, %[sizeN], %[one] \n"
 
@@ -298,7 +298,7 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.sg  u3, u4, u5, p0 \n"
 				"so.a.add.sg  u2, u2, u3, p0 \n"*/
 				"so.a.mac.sg  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_2_0%= \n"
 
 			"so.a.adde.sg  u3, u2, p0 \n"
 			"so.a.add.sg  u1, u7, u3, p0 \n"
@@ -321,12 +321,12 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 		"rdinstret %[s] \n"
 
 		// A stream load
-		"ss.sta.ld.b.v.1.m u4, %[A] \n"
+		"ss.sta.ld.b.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
 
 		// y_1 stream load
-		"ss.sta.ld.b.v.1.m u5, %[y_1] \n"
+		"ss.sta.ld.b.v.m   u5, %[y_1] \n"
 		"ss.app 		   u5, zero, %[sizeN], zero \n"
 		"ss.end 	       u5, zero, %[sizeN], %[one] \n"
 
@@ -345,19 +345,19 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.sg  u3, u4, u5, p0 \n"
 				"so.a.add.sg  u2, u2, u3, p0 \n"*/
 				"so.a.mac.sg  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_1_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_1_0%= \n"
 
 			"so.a.adde.sg  u3, u2, p0 \n"
 			"so.a.add.sg  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_1%= \n"
 
 		// A stream load
-		"ss.sta.ld.b.v.1.m u4, %[A] \n"
+		"ss.sta.ld.b.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[one] \n"
 		"ss.end 		   u4, zero, %[sizeN], %[sizeN] \n"
 
 		// y_2 stream load
-		"ss.sta.ld.b.v.1.m u5, %[y_2] \n"
+		"ss.sta.ld.b.v.m   u5, %[y_2] \n"
 		"ss.app			   u5, zero, %[sizeN], zero \n"
 		"ss.end            u5, zero, %[sizeN], %[one] \n"
 
@@ -376,7 +376,7 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 				/*"so.a.mul.sg  u3, u4, u5, p0 \n"
 				"so.a.add.sg  u2, u2, u3, p0 \n"*/
 				"so.a.mac.sg  u2, u4, u5, p0 \n"
-			"so.b.ndc.1 u4, .SLOOP_2_0%= \n"
+			"so.b.ndc.2 u4, .SLOOP_2_0%= \n"
 
 			"so.a.adde.sg  u3, u2, p0 \n"
 			"so.a.add.sg  u1, u7, u3, p0 \n"
