@@ -8,39 +8,59 @@
 core:                                   # @core
 # %bb.0:
 	#APP
-	rdinstret	a7
+	rdinstret	a5
 
 	#NO_APP
 	lui	a6, %hi(start)
-	sd	a7, %lo(start)(a6)
-	blez	a4, .LBB0_2
-# %bb.1:                                # %.loopexit1
-	slli	a7, a5, 32
-	srli	a7, a7, 32
-	li	t0, 1
+	sd	a5, %lo(start)(a6)
+	beqz	a3, .LBB0_2
+# %bb.1:                                # %.preheader3
+	li	a5, 1
 	#APP
-	ss.sta.ld.d.v	u4, a0
-	ss.app	u4, zero, a4, a5
-	ss.end	u4, zero, a7, t0
-	ss.sta.ld.w.inds	u6, a1
-	ss.app	u6, zero, a4, a5
-	ss.end	u6, zero, a7, t0
+	ss.sta.ld.d.v	u2, a0
+	ss.end	u2, zero, a3, a5
+	ss.sta.st.d.v	u1, a2
+	ss.end	u1, zero, a3, a5
+.SLOOP_4:
+	so.v.mv	u1, u2, p0
+	so.b.nc	u1, .SLOOP_4
+
+	#NO_APP
+	fmv.x.d	a4, fa0
+	#APP
+	ss.sta.ld.d.v	u3, a2
+	ss.end	u3, zero, a3, a5
+	ss.sta.st.d.v	u1, a1
+	ss.end	u1, zero, a3, a5
+	so.v.dp.d	u4, a4, p0
+.SLOOP_3:
+	so.a.mul.fp	u1, u3, u4, p0
+	so.b.nc	u1, .SLOOP_3
+
+	#NO_APP
+	#APP
+	ss.sta.ld.d.v	u3, a0
+	ss.end	u3, zero, a3, a5
+	ss.sta.ld.d.v	u4, a1
+	ss.end	u4, zero, a3, a5
+	ss.sta.st.d.v	u1, a2
+	ss.end	u1, zero, a3, a5
+.SLOOP_2:
+	so.a.add.fp	u1, u3, u4, p0
+	so.b.nc	u1, .SLOOP_2
+
+	#NO_APP
+	#APP
+	ss.sta.ld.d.v	u3, a1
+	ss.end	u3, zero, a3, a5
 	ss.sta.ld.d.v	u5, a2
-	ss.app	u5, zero, a4, zero
-	ss.app	u5, zero, a7, zero
-	ss.end.ind.ofs.add.1	u5, u6
-	ss.sta.ld.d	u8, a3
-	ss.end	u8, zero, a4, t0
-	ss.sta.st.d	u1, a3
-	ss.end	u1, zero, a4, t0
+	ss.end	u5, zero, a3, a5
+	ss.sta.st.d.v	u1, a0
+	ss.end	u1, zero, a3, a5
+	so.v.dp.d	u6, a4, p0
 .SLOOP_1:
-	so.v.dp.d	u2, zero, p0
-.SLOOP_1_0:
-	so.a.mul.fp	u3, u4, u5, p0
-	so.a.add.fp	u2, u2, u3, p0
-	so.b.ndc.1	u4, .SLOOP_1_0
-	so.a.adde.fp	u3, u2, p0
-	so.a.add.fp	u1, u8, u3, p0
+	so.a.mul.fp	u4, u5, u6, p0
+	so.a.add.fp	u1, u3, u4, p0
 	so.b.nc	u1, .SLOOP_1
 
 	#NO_APP

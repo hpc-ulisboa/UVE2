@@ -65,10 +65,10 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original,rvv,uve\n", (err) => {
 });
 
 // kernel size map
-/*const kernelSizeMap = {
+const kernelSizeMap = {
 	"3mm": size,
-	"convolution": size,
-	"covariance": size,
+	//"convolution": size,
+	//"covariance": size,
 	"gemm": size,
 	"gemver": size,
 	"jacobi-1d": size*size,
@@ -76,16 +76,12 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original,rvv,uve\n", (err) => {
 	"memcpy": size*size,
 	"mvt": size,
 	"saxpy": size*size,
-	"sgd": 0,
-	"spmv_ellpack": 0,
+	//"sgd": 0,
+	//"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size
-};*/
-
-const kernelSizeMap = {
-	"spmv_ellpack": size,
-}
+	//"trisolv": size
+};
 
 // read type and size from command line
 const typeMap = {
