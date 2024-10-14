@@ -1,0 +1,39 @@
+
+UVEkernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <core_kernel>:
+       0: 73 28 20 c0  	rdinstret	a6
+       4: 63 80 06 00  	beqz	a3, 0x4 <core_kernel+0x4>
+       8: 93 08 10 00  	li	a7, 1
+       c: 0b 72 05 78  	ss.sta.ld.d.v	u4, a0
+      10: 0b 02 d0 7a  	ss.app	u4, zero, a3, a5
+      14: 0b 02 e0 02  	ss.app	u4, zero, a4, zero
+      18: 0b 02 f0 8c  	ss.end	u4, zero, a5, a7
+      1c: 8b f2 05 78  	ss.sta.ld.d.v	u5, a1
+      20: 8b 02 d0 02  	ss.app	u5, zero, a3, zero
+      24: 8b 02 e0 8a  	ss.app	u5, zero, a4, a7
+      28: 8b 02 f0 74  	ss.end	u5, zero, a5, a4
+      2c: 8b 73 06 00  	ss.sta.ld.d	u7, a2
+      30: 8b 03 d0 72  	ss.app	u7, zero, a3, a4
+      34: 8b 03 e0 8c  	ss.end	u7, zero, a4, a7
+      38: 8b 30 06 00  	ss.sta.st.d	u1, a2
+      3c: 8b 00 d0 72  	ss.app	u1, zero, a3, a4
+      40: 8b 00 e0 8c  	ss.end	u1, zero, a4, a7
+
+0000000000000044 <.SLOOP_1>:
+      44: 2b 31 00 ac  	so.v.dp.d	u2, zero, p0
+
+0000000000000048 <.SLOOP_1_0_0>:
+      48: ab 11 52 10  	so.a.mul.fp	u3, u4, u5, p0
+      4c: 2b 11 31 00  	so.a.add.fp	u2, u2, u3, p0
+      50: 2b 20 12 e0  	so.b.ndc.3	u4, 0x50 <.SLOOP_1_0_0+0x8>
+      54: ab 11 01 20  	so.a.adde.fp	u3, u2, p0
+      58: ab 90 33 00  	so.a.add.fp	u1, u7, u3, p0
+      5c: 2b f0 10 e0  	so.b.nc	u1, 0x5c <.SLOOP_1_0_0+0x14>
+
+0000000000000060 <.LBB0_2>:
+      60: 73 25 20 c0  	rdinstret	a0
+      64: 33 05 05 41  	sub	a0, a0, a6
+      68: 67 80 00 00  	ret

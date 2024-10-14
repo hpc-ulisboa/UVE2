@@ -9,40 +9,40 @@ Disassembly of section .text:
        8: 23 b0 58 00  	sd	t0, 0(a7)
        c: 63 80 07 00  	beqz	a5, 0xc <core+0xc>
       10: 93 02 10 00  	li	t0, 1
-      14: 8b 30 07 00  	ss.sta.st.d	u1, a4
-      18: 8b 00 f0 2c  	ss.end	u1, zero, a5, t0
-      1c: 8b 63 06 01  	ss.sta.ld.w.inds	u7, a2
-      20: 8b 03 f0 2c  	ss.end	u7, zero, a5, t0
-      24: 0b 73 05 78  	ss.sta.ld.d.v	u6, a0
-      28: 0b 03 f0 82  	ss.app	u6, zero, a5, a6
-      2c: 0b e3 03 13  	ss.app.ind.siz.set.2	u6, u7
-      30: 0b 03 00 2c  	ss.end	u6, zero, zero, t0
-      34: 0b 65 06 01  	ss.sta.ld.w.inds	u10, a2
-      38: 0b 05 f0 2c  	ss.end	u10, zero, a5, t0
-      3c: 8b e4 05 01  	ss.sta.ld.w.inds	u9, a1
-      40: 8b 04 f0 82  	ss.app	u9, zero, a5, a6
-      44: 8b 64 05 13  	ss.app.ind.siz.set.2	u9, u10
-      48: 8b 04 00 2c  	ss.end	u9, zero, zero, t0
-      4c: 8b 65 06 01  	ss.sta.ld.w.inds	u11, a2
-      50: 8b 05 f0 2c  	ss.end	u11, zero, a5, t0
-      54: 0b f4 06 78  	ss.sta.ld.d.v	u8, a3
-      58: 0b 04 f0 02  	ss.app	u8, zero, a5, zero
-      5c: 0b e4 05 13  	ss.app.ind.siz.set.2	u8, u11
-      60: 0b 04 00 02  	ss.app	u8, zero, zero, zero
-      64: 0b e4 a4 0c  	ss.end.sgi.ofs.add	u8, u9
-      68: 8b 31 07 00  	ss.sta.st.d	u3, a4
-      6c: 8b 01 f0 2c  	ss.end	u3, zero, a5, t0
+      14: 8b 62 06 01  	ss.sta.ld.w.inds	u5, a2
+      18: 8b 02 f0 2c  	ss.end	u5, zero, a5, t0
+      1c: 0b 72 05 78  	ss.sta.ld.d.v	u4, a0
+      20: 0b 02 f0 82  	ss.app	u4, zero, a5, a6
+      24: 0b e2 02 13  	ss.app.ind.siz.set.2	u4, u5
+      28: 0b 02 00 2c  	ss.end	u4, zero, zero, t0
+      2c: 0b 64 06 01  	ss.sta.ld.w.inds	u8, a2
+      30: 0b 04 f0 2c  	ss.end	u8, zero, a5, t0
+      34: 8b e3 05 01  	ss.sta.ld.w.inds	u7, a1
+      38: 8b 03 f0 82  	ss.app	u7, zero, a5, a6
+      3c: 8b 63 04 13  	ss.app.ind.siz.set.2	u7, u8
+      40: 8b 03 00 2c  	ss.end	u7, zero, zero, t0
+      44: 8b 64 06 01  	ss.sta.ld.w.inds	u9, a2
+      48: 8b 04 f0 2c  	ss.end	u9, zero, a5, t0
+      4c: 0b f3 06 78  	ss.sta.ld.d.v	u6, a3
+      50: 0b 03 f0 02  	ss.app	u6, zero, a5, zero
+      54: 0b e3 04 13  	ss.app.ind.siz.set.2	u6, u9
+      58: 0b 03 00 02  	ss.app	u6, zero, zero, zero
+      5c: 0b e3 a3 0c  	ss.end.sgi.ofs.add	u6, u7
+      60: 8b 75 07 00  	ss.sta.ld.d	u11, a4
+      64: 8b 05 f0 2c  	ss.end	u11, zero, a5, t0
+      68: 8b 30 07 00  	ss.sta.st.d	u1, a4
+      6c: 8b 00 f0 2c  	ss.end	u1, zero, a5, t0
 
 0000000000000070 <.SLOOP_1>:
-      70: ab 30 80 a9  	so.v.mvsv.d	u1, zero
-      74: 2b 32 00 ac  	so.v.dp.d	u4, zero, p0
+      70: 2b 31 00 ac  	so.v.dp.d	u2, zero, p0
 
-0000000000000078 <.SLOOP_1_0>:
-      78: ab 12 83 10  	so.a.mul.fp	u5, u6, u8, p0
-      7c: 2b 12 52 00  	so.a.add.fp	u4, u4, u5, p0
-      80: 2b 10 13 e0  	so.b.ndc.2	u6, 0x80 <.SLOOP_1_0+0x8>
-      84: ab 11 02 20  	so.a.adde.fp	u3, u4, p0
-      88: 2b f0 10 e0  	so.b.nc	u1, 0x88 <.SLOOP_1_0+0x10>
+0000000000000074 <.SLOOP_1_0>:
+      74: ab 11 62 10  	so.a.mul.fp	u3, u4, u6, p0
+      78: 2b 11 31 00  	so.a.add.fp	u2, u2, u3, p0
+      7c: 2b 10 12 e0  	so.b.ndc.2	u4, 0x7c <.SLOOP_1_0+0x8>
+      80: ab 11 01 20  	so.a.adde.fp	u3, u2, p0
+      84: ab 90 35 00  	so.a.add.fp	u1, u11, u3, p0
+      88: 2b f0 10 e0  	so.b.nc	u1, 0x88 <.SLOOP_1_0+0x14>
 
 000000000000008c <.LBB0_2>:
       8c: 73 26 20 c0  	rdinstret	a2

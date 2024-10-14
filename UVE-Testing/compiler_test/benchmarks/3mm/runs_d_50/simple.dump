@@ -1,0 +1,64 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core_kernel>:
+       2: 41 11        	addi	sp, sp, -16
+       4: 22 e4        	sd	s0, 8(sp)
+       6: 26 e0        	sd	s1, 0(sp)
+       8: 73 28 20 c0  	rdinstret	a6
+       c: 81 c2        	beqz	a3, 0xc <core_kernel+0xa>
+       e: 81 48        	li	a7, 0
+      10: 93 12 37 00  	slli	t0, a4, 3
+      14: 13 93 37 00  	slli	t1, a5, 3
+      18: 01 a0        	j	0x18 <core_kernel+0x16>
+
+000000000000001a <.LBB0_2>:
+      1a: 85 08        	addi	a7, a7, 1
+      1c: 1a 95        	add	a0, a0, t1
+      1e: 63 80 d8 00  	beq	a7, a3, 0x1e <.LBB0_2+0x4>
+
+0000000000000022 <.LBB0_3>:
+      22: 01 c3        	beqz	a4, 0x22 <.LBB0_3>
+      24: 81 43        	li	t2, 0
+      26: 33 8e e8 02  	mul	t3, a7, a4
+      2a: ae 8e        	mv	t4, a1
+      2c: 01 a0        	j	0x2c <.LBB0_3+0xa>
+
+000000000000002e <.LBB0_5>:
+      2e: 85 03        	addi	t2, t2, 1
+      30: a1 0e        	addi	t4, t4, 8
+      32: 63 80 e3 00  	beq	t2, a4, 0x32 <.LBB0_5+0x4>
+
+0000000000000036 <.LBB0_6>:
+      36: 81 c3        	beqz	a5, 0x36 <.LBB0_6>
+      38: b3 84 c3 01  	add	s1, t2, t3
+      3c: 13 9f 34 00  	slli	t5, s1, 3
+      40: 32 9f        	add	t5, t5, a2
+      42: 07 30 0f 00  	fld	ft0, 0(t5)
+      46: be 8f        	mv	t6, a5
+      48: 2a 84        	mv	s0, a0
+      4a: f6 84        	mv	s1, t4
+
+000000000000004c <.LBB0_8>:
+      4c: 87 30 04 00  	fld	ft1, 0(s0)
+      50: 07 b1 04 00  	fld	ft2, 0(s1)
+      54: 43 f0 20 02  	fmadd.d	ft0, ft1, ft2, ft0
+      58: 27 30 0f 00  	fsd	ft0, 0(t5)
+      5c: 96 94        	add	s1, s1, t0
+      5e: fd 1f        	addi	t6, t6, -1
+      60: 21 04        	addi	s0, s0, 8
+      62: 63 90 0f 00  	bnez	t6, 0x62 <.LBB0_8+0x16>
+      66: 01 a0        	j	0x66 <.LBB0_8+0x1a>
+
+0000000000000068 <.LBB0_9>:
+      68: 73 25 20 c0  	rdinstret	a0
+      6c: 33 05 05 41  	sub	a0, a0, a6
+      70: 22 64        	ld	s0, 8(sp)
+      72: 82 64        	ld	s1, 0(sp)
+      74: 41 01        	addi	sp, sp, 16
+      76: 82 80        	ret
