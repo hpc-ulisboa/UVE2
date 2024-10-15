@@ -9,8 +9,6 @@ void core(int N, DataType alpha, DataType beta, DataType *A, DataType *B, DataTy
     int i, j, k;
 
     for (i = 0; i < N; i++) {
-        tmp[i] = 0.0;
-        y[i] = 0.0;
         for (j = 0; j < N; j++) {
             tmp[i] += A[i*N+j] * x[j];
             y[i] += B[i*N+j] * x[j];

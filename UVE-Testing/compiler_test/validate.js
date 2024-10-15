@@ -77,10 +77,10 @@ const kernelSizeMap = {
 	"mvt": size,
 	"saxpy": size*size,
 	"spmv_ellpack_delimiters": 0,
-	"stream": size*size,*/
-	"trisolv": size,
-	"syrk": size,
-	"syr2k": size,
+	"stream": size*size,
+	"trisolv": size,*/
+	//"syrk": size,
+	//"syr2k": size,
 
 	//"convolution": size,
 	//"covariance": size,
@@ -89,7 +89,13 @@ const kernelSizeMap = {
 	//"symm": size,
 	//"gesummv": size,
 	//"trmm": 0
-	//"atax": size,*/
+	//"atax": size,
+	//"doitgen": 0,
+	//"cholesky": size,
+	//"durbin": size*size,
+	//"2mm": 0,
+	//"seidel-2d": size,
+	"lu": size
 };
 
 // read type and size from command line
@@ -292,7 +298,7 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 
 		/* Link and create no UVE executable */
-		compileKernel(clangPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}`]);
+		compileKernel(clangPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}`, "-lm"]);
 
 		/* Create objdump file */
 
@@ -323,7 +329,7 @@ for (let kernel in kernelSizeMap) {
 		});
 
 		/* Link everyting */
-		compileKernel(clangPath, [...linkFlags, "Functions.o", `UVEkernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`]);
+		compileKernel(clangPath, [...linkFlags, "Functions.o", `UVEkernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`, "-lm"]);
 
 		/* Compile for RVV with clang */
 		/*compileKernel(clangPath, [...clangIRFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
@@ -361,7 +367,7 @@ for (let kernel in kernelSizeMap) {
 		}
 
 		// Delete executables for next kernel
-		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', 'UVEkernel.ll', 'UVEkernel.s', 'Functions.o']);
+		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', /*'UVEkernel.ll', 'UVEkernel.s',*/ 'Functions.o']);
 		if (del.error) {
 			console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 			break;

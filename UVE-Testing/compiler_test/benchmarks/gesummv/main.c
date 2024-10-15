@@ -22,6 +22,9 @@ int main() {
         }
     }
 
+    initZero(tmp, SIZE);
+    initZero(y, SIZE);
+
     core(SIZE, a, b, tmp, A, B, x, y);
     
     for (int i = 0; i < SIZE; ++i)
