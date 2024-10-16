@@ -66,8 +66,10 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original,rvv,uve\n", (err) => {
 
 // kernel size map
 const kernelSizeMap = {
-	/*"3mm": size,
+	/*"2mm": 0,
+	"3mm": size,
 	"bicg": size,
+	"fdtd-2d": size,
 	"gemm": size,
 	"gemver": size,
 	"jacobi-1d": size*size,
@@ -93,9 +95,10 @@ const kernelSizeMap = {
 	//"doitgen": 0,
 	//"cholesky": size,
 	//"durbin": size*size,
-	//"2mm": 0,
 	//"seidel-2d": size,
 	"lu": size
+	//"adi": size
+	//"heat-3d": size
 };
 
 // read type and size from command line

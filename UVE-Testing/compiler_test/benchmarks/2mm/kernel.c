@@ -14,11 +14,11 @@ void core(DataType *A, DataType *B, DataType *C, DataType *D, DataType *tmp, Dat
             for (k = 0; k < K; ++k)
                 tmp[i * J + j] += alpha * A[i * K + k] * B[k * J + j];
     for (i = 0; i < I; i++) {
-        for (j = 0; j < L; j++)
+        for (j = 0; j < L; j++){
             D[i * L + j] *= beta;
-        for (j = 0; j < L; j++)
             for (k = 0; k < J; ++k)
                 D[i * L + j] += tmp[i * J + k] * C[k * I + j];
+        }
     }
 
     asm volatile("rdinstret %[e] \t\n" : [e] "=&r"(end));

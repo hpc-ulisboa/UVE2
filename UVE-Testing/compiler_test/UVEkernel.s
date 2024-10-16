@@ -64,13 +64,16 @@ core:                                   # @core
 	ss.app.mod.siz.inc.3	u14, a4
 	ss.app	u14, zero, a1, a4
 	ss.end	u14, zero, zero, a1
-	ss.sta.st.d.v	u10, a0
+	ss.sta.ld.d	u18, a0
+	ss.app	u18, zero, a1, a1
+	ss.app.mod.ofs.inc.2	u18, a4
+	ss.app.mod.siz.dec.2	u18, a4
+	ss.end	u18, zero, a1, a4
+	ss.sta.st.d	u10, a0
 	ss.app	u10, zero, a1, a1
 	ss.app.mod.ofs.inc.2	u10, a4
 	ss.app.mod.siz.dec.2	u10, a4
-	ss.app.mod.siz.inc.3	u10, a4
-	ss.app	u10, zero, a1, a4
-	ss.end	u10, zero, zero, zero
+	ss.end	u10, zero, a1, a4
 .SLOOP_1:
 .SLOOP_1_0:
 	so.v.dp.d	u2, zero, p0
@@ -83,8 +86,13 @@ core:                                   # @core
 	so.a.div.fp	u6, u8, u9, p0
 	so.b.ndc.2	u1, .SLOOP_1_0
 .SLOOP_1_1:
+	so.v.dp.d	u11, zero, p0
+.SLOOP_1_1_0:
 	so.a.mul.fp	u12, u13, u14, p0
-	so.a.sub.fp	u10, u11, u12, p0
+	so.a.sub.fp	u11, u11, u12, p0
+	so.b.ndc.3	u13, .SLOOP_1_1_0
+	so.a.adde.fp	u12, u11, p0
+	so.a.add.fp	u10, u18, u12, p0
 	so.b.ndc.2	u10, .SLOOP_1_1
 	so.b.nc	u1, .SLOOP_1
 
