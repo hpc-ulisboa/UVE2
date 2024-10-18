@@ -66,8 +66,9 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original,rvv,uve\n", (err) => {
 
 // kernel size map
 const kernelSizeMap = {
-	/*"2mm": 0,
+	"2mm": 0,
 	"3mm": size,
+	"atax": size,
 	"bicg": size,
 	"fdtd-2d": size,
 	"gemm": size,
@@ -80,9 +81,9 @@ const kernelSizeMap = {
 	"saxpy": size*size,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size,*/
-	//"syrk": size,
-	//"syr2k": size,
+	"trisolv": size,
+	"syrk": size,
+	"syr2k": size,
 
 	//"convolution": size,
 	//"covariance": size,
@@ -91,12 +92,11 @@ const kernelSizeMap = {
 	//"symm": size,
 	//"gesummv": size,
 	//"trmm": 0
-	//"atax": size,
 	//"doitgen": 0,
 	//"cholesky": size,
 	//"durbin": size*size,
 	//"seidel-2d": size,
-	"lu": size
+	//"lu": size
 	//"adi": size
 	//"heat-3d": size
 };
@@ -370,7 +370,7 @@ for (let kernel in kernelSizeMap) {
 		}
 
 		// Delete executables for next kernel
-		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', /*'UVEkernel.ll', 'UVEkernel.s',*/ 'Functions.o']);
+		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', 'UVEkernel.ll', 'UVEkernel.s','Functions.o']);
 		if (del.error) {
 			console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 			break;
