@@ -65,27 +65,41 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original,rvv,uve\n", (err) => {
 });
 
 // kernel size map
-/*const kernelSizeMap = {
+const kernelSizeMap = {
+	"2mm": 0,
 	"3mm": size,
-	"convolution": size,
-	"covariance": size,
+	"atax": size,
+	"bicg": size,
+	"fdtd-2d": size,
 	"gemm": size,
 	"gemver": size,
 	"jacobi-1d": size*size,
 	"jacobi-2d": size,
+	"knn": 0,
 	"memcpy": size*size,
 	"mvt": size,
 	"saxpy": size*size,
-	"sgd": 0,
-	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size
-};*/
+	"trisolv": size,
+	"syrk": size,
+	"syr2k": size,
 
-const kernelSizeMap = {
-	"spmv_ellpack": size,
-}
+	//"convolution": size,
+	//"covariance": size,
+	//"sgd": 0,
+	//"spmv_ellpack": 0,
+	//"symm": size,
+	//"gesummv": size,
+	//"trmm": 0
+	//"doitgen": 0,
+	//"cholesky": size,
+	//"durbin": size*size,
+	//"seidel-2d": size,
+	//"lu": size
+	//"adi": size
+	//"heat-3d": size
+};
 
 // read type and size from command line
 const typeMap = {
@@ -269,25 +283,17 @@ for (let kernel in kernelSizeMap) {
 	for (let type in typeMap) {
 		let dir; let s = kernelSizeMap[kernel];
 		// check if sgd, spmv_ellpack or spmv_ellpack_delimiters are wanted
-		if (kernel === "sgd" || kernel === "spmv_ellpack" || kernel === "spmv_ellpack_delimiters") {
-			if (type === "D") {
-				dir = `benchmarks/${kernel}`;
-			} else {
-				continue;
-			}
+		if (s === 0) {
+			dir = `benchmarks/${kernel}`;
 		} else {
-			if ((kernel === "jacobi-1d" || kernel === "jacobi-2d") && type !== "F" && type !== "D") {
-				continue;
-			}
-			dir = `benchmarks/${kernel}/runs_${type.toLowerCase()}_${size*size}`;
+			dir = `benchmarks/${kernel}/runs_${type.toLowerCase()}_${s}`;
 			// if the directory does not exist, create it
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		}
 
-		const sizeCSV = s === size ? s*s : s;
-		console.log(`\n### Attempting to compile and run kernel ${kernel} (size: ${sizeCSV}, type: ${typeMap[type]}) ...\n`);
+		console.log(`\n### Attempting to compile and run kernel ${kernel} (size: ${s}, type: ${typeMap[type]}) ...\n`);
 
 		/* Compile source files */
 		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
@@ -295,7 +301,7 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 
 		/* Link and create no UVE executable */
-		compileKernel(clangPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}`]);
+		compileKernel(clangPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}`, "-lm"]);
 
 		/* Create objdump file */
 
@@ -326,7 +332,7 @@ for (let kernel in kernelSizeMap) {
 		});
 
 		/* Link everyting */
-		compileKernel(clangPath, [...linkFlags, "Functions.o", `UVEkernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`]);
+		compileKernel(clangPath, [...linkFlags, "Functions.o", `UVEkernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`, "-lm"]);
 
 		/* Compile for RVV with clang */
 		/*compileKernel(clangPath, [...clangIRFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
@@ -356,7 +362,7 @@ for (let kernel in kernelSizeMap) {
 
 		/* Test if generated values are similar */
 
-		if (aproximateEqual(execSimple.stdout.toString(), execUVE.stdout.toString(), /*execRVV.stdout.toString(),*/ kernel, type, sizeCSV, dir)) {
+		if (aproximateEqual(execSimple.stdout.toString(), execUVE.stdout.toString(), /*execRVV.stdout.toString(),*/ kernel, type, s, dir)) {
 			console.log(`Kernel ${kernel} is similar enough`);
 		} else {
 			console.error(`Kernel ${kernel}: Did not generate result similar enough`);
@@ -364,7 +370,7 @@ for (let kernel in kernelSizeMap) {
 		}
 
 		// Delete executables for next kernel
-		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', /*'UVEkernel.ll', 'UVEkernel.s',*/ 'Functions.o']);
+		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', 'UVEkernel.ll', 'UVEkernel.s','Functions.o']);
 		if (del.error) {
 			console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 			break;

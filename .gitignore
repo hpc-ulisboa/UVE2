@@ -55,10 +55,13 @@ dkms.conf
 UVE-Testing/spike 
 UVE-Testing/pk
 
+# Auxiliary scripts
+UVE-Testing/compiler_test/parse_pipe.py
+
 # Log files that may be too big to commit
-UVE-testing/log*
-UVE-testing/*.log
-UVE-testing/*/log*
+UVE-Testing/log*
+UVE-Testing/*.log
+UVE-Testing/*/log*
 */debug.log
 
 # Auxiliary files

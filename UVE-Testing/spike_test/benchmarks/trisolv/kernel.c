@@ -32,9 +32,6 @@ void core(void *src1, void *src2, void *src3) {
         "ss.sta.st.d           u5, %[src3] \t\n"
         "ss.end                u5, zero, %[sn], %[one] \t\n" // D1: vector - linear access
 
-
-        // "so.a.div.fp    u5, u3, u4, p0  \n\t" //  x = b / L
-
         ".fLoop1%=: \t\n"
 
             "so.v.dp.d  u6, zero, p0\n\t" // u6 = 0

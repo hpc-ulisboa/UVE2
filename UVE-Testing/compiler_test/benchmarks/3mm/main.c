@@ -32,25 +32,9 @@ int main() {
     initArray2D(B, K, J);
     initArray2D(C, J, M);
     initArray2D(D, M, L);
-
-#ifdef F_TYPE
-    for (int i = 0; i < I; i++) {
-        for (int j = 0; j < K; j++)
-            A[i * K + j] /= 100;
-    }
-    for (int i = 0; i < K; i++) {
-        for (int j = 0; j < J; j++)
-            B[i * J + j] /= 100;
-    }
-    for (int i = 0; i < J; i++) {
-        for (int j = 0; j < M; j++)
-            C[i * M + j] /= 100;
-    }
-    for (int i = 0; i < M; i++) {
-        for (int j = 0; j < L; j++)
-            D[i * L + j] /= 100;
-    }
-#endif
+    initZero(E, I * J);
+    initZero(F, J * L);
+    initZero(G, I * L);
 
     core(A, B, C, D, E, F, G, I, J, K, L, M);
 

@@ -5,7 +5,7 @@
 
 // Problem Constants
 #define nAtoms 256
-#define maxNeighbors 16
+#define maxNeighbours 16
 
 extern void core(void *force_x, void *force_y, void *force_z, void *position_x, void *position_y, void *position_z, void *NL);
 
@@ -23,13 +23,13 @@ DataType distance(
     return r2inv;
 }
 
-inline void insertInOrder(DataType currDist[maxNeighbors],
-                          int currList[maxNeighbors],
+inline void insertInOrder(DataType currDist[maxNeighbours],
+                          int currList[maxNeighbours],
                           int j,
                           DataType distIJ) {
     int dist, pos;
     DataType currMax;
-    pos = maxNeighbors - 1;
+    pos = maxNeighbours - 1;
     currMax = currDist[pos];
     if (distIJ > currMax) {
         return;
@@ -47,34 +47,34 @@ inline void insertInOrder(DataType currDist[maxNeighbors],
     currList[dist] = j;
 }
 
-int populateNeighborList(DataType currDist[maxNeighbors],
-                         int currList[maxNeighbors],
+int populateNeighbourList(DataType currDist[maxNeighbours],
+                         int currList[maxNeighbours],
                          const int i,
-                         int NL[nAtoms*maxNeighbors]) {
-    int validPairs, neighborIter;
+                         int NL[nAtoms*maxNeighbours]) {
+    int validPairs, neighbourIter;
     validPairs = 0;
-    for (neighborIter = 0; neighborIter < maxNeighbors; neighborIter++) {
-        NL[i*maxNeighbors + neighborIter] = currList[neighborIter];
+    for (neighbourIter = 0; neighbourIter < maxNeighbours; neighbourIter++) {
+        NL[i*maxNeighbours + neighbourIter] = currList[neighbourIter];
         validPairs++;
     }
     return validPairs;
 }
 
-int buildNeighborList(DataType position_x[nAtoms],
+int buildNeighbourList(DataType position_x[nAtoms],
                       DataType position_y[nAtoms],
                       DataType position_z[nAtoms],
-                      int NL[nAtoms*maxNeighbors]) {
+                      int NL[nAtoms*maxNeighbours]) {
     int totalPairs, i, j, k;
     totalPairs = 0;
     DataType distIJ;
     for (i = 0; i < nAtoms; i++) {
-        int currList[maxNeighbors];
-        DataType currDist[maxNeighbors];
-        for (k = 0; k < maxNeighbors; k++) {
+        int currList[maxNeighbours];
+        DataType currDist[maxNeighbours];
+        for (k = 0; k < maxNeighbours; k++) {
             currList[k] = 0;
             currDist[k] = 999999999;
         }
-        for (j = 0; j < maxNeighbors; j++) {
+        for (j = 0; j < maxNeighbours; j++) {
             if (i == j) {
                 continue;
             }
@@ -82,7 +82,7 @@ int buildNeighborList(DataType position_x[nAtoms],
             currList[j] = j;
             currDist[j] = distIJ;
         }
-        totalPairs += populateNeighborList(currDist, currList, i, NL);
+        totalPairs += populateNeighbourList(currDist, currList, i, NL);
     }
     return totalPairs;
 }
@@ -98,30 +98,36 @@ int main() {
     DataType *force_x = (DataType *)malloc(nAtoms * sizeof(DataType));
     DataType *force_y = (DataType *)malloc(nAtoms * sizeof(DataType));
     DataType *force_z = (DataType *)malloc(nAtoms * sizeof(DataType));
-    int NL[nAtoms*maxNeighbors];
-    int *neighborList = (int *)malloc(nAtoms * maxNeighbors * sizeof(int));
+    int NL[nAtoms*maxNeighbours];
+    int *neighbourList = (int *)malloc(nAtoms * maxNeighbours * sizeof(int));
 
 	initArray(position_x, nAtoms);
 	initArray(position_y, nAtoms);
 	initArray(position_z, nAtoms);
-	initArray(force_x, nAtoms);
-	initArray(force_y, nAtoms);
-	initArray(force_z, nAtoms);
+	initZero(force_x, nAtoms);
+	initZero(force_y, nAtoms);
+	initZero(force_z, nAtoms);
 
-	for(i=0; i<nAtoms*maxNeighbors; ++i)
+	for(i=0; i<nAtoms*maxNeighbours; ++i)
         NL[i] = 0;
 
-    totalPairs = buildNeighborList(position_x, position_y, position_z, NL);
+    totalPairs = buildNeighbourList(position_x, position_y, position_z, NL);
 
     for (i = 0; i < nAtoms; i++) {
-        for (j = 0; j < maxNeighbors; ++j)
-            neighborList[i * maxNeighbors + j] = NL[i*maxNeighbors+j];
+        for (j = 0; j < maxNeighbours; ++j)
+            neighbourList[i * maxNeighbours + j] = NL[i*maxNeighbours+j];
     }
 
-    core(force_x, force_y, force_z, position_x, position_y, position_z, neighborList);
+    core(force_x, force_y, force_z, position_x, position_y, position_z, neighbourList);
 
 	for (int i = 0; i < nAtoms; ++i)
     	printf(DataFormat("", "\n"), force_x[i]);
+
+    /*for (int i = 0; i < nAtoms; ++i)
+    	printf(DataFormat("", "\n"), force_y[i]);
+
+    for (int i = 0; i < nAtoms; ++i)
+        printf(DataFormat("", "\n"), force_z[i]);*/                                    
 
     return 0;
 }

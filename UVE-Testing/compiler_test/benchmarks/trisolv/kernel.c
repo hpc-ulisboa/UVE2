@@ -12,7 +12,7 @@ void core(DataType *L, DataType *b, DataType *x) {
             x[i] -= L[i * SIZE + j] * x[j];
         }
         //printf("x[%d] = [(x[%d]=%f) / (L[%d][%d]=%f)] = %f\n", i, i, x[i], i, i, L[i*SIZE+i], x[i]/L[i*SIZE+i]);
-        x[i] = x[i] / L[i * SIZE + i];
+        x[i] /= L[i * SIZE + i];
         //printf("store x[%d] = %f\n", i, x[i]);
     }
     asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));

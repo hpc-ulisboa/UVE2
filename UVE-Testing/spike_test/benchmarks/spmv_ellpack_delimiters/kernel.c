@@ -35,7 +35,7 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
         "ss.app                u4, zero, %[sn], zero \n" // D1
         "ss.app.ind.siz.set.2  u4, u10 \n"               // Indirection from stream u10(=u3) -> modify size
         "ss.app                u4, zero, zero, zero \n"  // D2: new line 
-        "ss.end.sgi.ofs.add u4, u2 \n"                // SG Indirection from stream u2 -> add to base address
+        "ss.end.sgi.ofs.add    u4, u2 \n"                // SG Indirection from stream u2 -> add to base address
 
         // out stream store
         "ss.sta.st.d  u5, %[out] \n"

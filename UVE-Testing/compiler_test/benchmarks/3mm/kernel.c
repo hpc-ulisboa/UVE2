@@ -6,13 +6,10 @@ long int core_kernel(DataType *src1, DataType *src2, DataType *src3, uint64_t si
 
 	int i,j,k;
 
-    for (i = 0; i < sizeI; i++) {
-        for (j = 0; j < sizeJ; j++){
-        	src3[i*sizeJ+j] = 0;
+    for (i = 0; i < sizeI; i++)
+        for (j = 0; j < sizeJ; j++)
         	for (k = 0; k < sizeK; k++)
             	src3[i*sizeJ+j] += src1[i*sizeK+k] * src2[k*sizeJ+j];
-    	}
-	}
 
 	asm volatile ("rdinstret %[e] \t\n":[e] "=&r"(end));
 

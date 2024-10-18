@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const fileExtensions = ['.txt', '.dump', '.s', '.ll', '.o', '.din', ''];
+
 function deleteLogsAndExecutables(dirPath) {
     fs.readdir(dirPath, { withFileTypes: true }, (err, files) => {
         if (err) throw err;
@@ -13,7 +15,7 @@ function deleteLogsAndExecutables(dirPath) {
                 deleteLogsAndExecutables(fullPath);
             } else if (file.isFile()) {
                 // Delete .txt files and executables
-                if (path.extname(file.name) === '.txt' || path.extname(file.name) === '.dump' || path.extname(file.name) === '.s' || path.extname(file.name) === '.o' || !path.extname(file.name)) {
+                if (fileExtensions.includes(path.extname(file.name))) {
                     fs.unlink(fullPath, err => {
                         if (err) throw err;
                         console.log(`Deleted ${fullPath}`);
