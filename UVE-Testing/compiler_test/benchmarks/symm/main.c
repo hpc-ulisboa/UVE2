@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern void core(int N, int M, DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B);
+extern void core(int N, int M, DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, DataType *temp2);
 
 int main() {
     int N = SIZE+SIZE/5;
@@ -12,6 +12,7 @@ int main() {
     DataType *A = (DataType *)malloc(M * M * sizeof(DataType));
     DataType *B = (DataType *)malloc(M * N * sizeof(DataType));
     DataType *C = (DataType *)malloc(M * N * sizeof(DataType));
+    DataType *temp2 = (DataType *)malloc(N * sizeof(DataType));
 
     DataType a = 1.5;
     DataType b = 1.2;
@@ -28,7 +29,7 @@ int main() {
             A[i * M + j] = -999; // regions of arrays that should not be used
     }
 
-    core(N, M, a, b, C, A, B);
+    core(N, M, a, b, C, A, B, temp2);
 
     for (int i = 0; i < M*N; ++i)
         printf(DataFormat("", "\n"), C[i]);
@@ -37,6 +38,7 @@ int main() {
     free(A);
     free(C);
     free(B);
+    free(temp2);
 
     return 0;
 }
