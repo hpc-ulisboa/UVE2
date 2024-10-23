@@ -74,6 +74,7 @@ const kernelSizeMap = {
 	"fdtd-2d": size,
 	"gemm": size,
 	"gemver": size,
+	"gesummv": size,
 	"jacobi-1d": size*size,
 	"jacobi-2d": size,
 	"knn": 0,
@@ -91,7 +92,6 @@ const kernelSizeMap = {
 	//"convolution": size,
 	//"covariance": size,
 	//"sgd": 0,
-	//"gesummv": size,
 	//"trmm": 0
 	//"cholesky": size,
 	//"durbin": size*size,
