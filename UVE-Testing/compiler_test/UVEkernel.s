@@ -8,64 +8,90 @@
 core:                                   # @core
 # %bb.0:
 	#APP
-	rdinstret	a7
+	rdinstret	a2
 
 	#NO_APP
-	lui	a6, %hi(start)
-	sd	a7, %lo(start)(a6)
-	blez	a0, .LBB0_2
-# %bb.1:                                # %.loopexit
-	fmv.x.d	a7, fa0
-	fmv.x.d	t0, fa1
-	li	t1, 1
+	lui	a3, %hi(start)
+	sd	a2, %lo(start)(a3)
+	blez	a1, .LBB0_2
+# %bb.1:                                # %.loopexit2
+	addiw	a2, a1, 1
+	addi	a4, a1, 1
+	li	a5, 1
 	#APP
-	ss.sta.st.d	u1, a3
-	ss.end	u1, zero, a0, t1
-	ss.sta.st.d	u3, a5
-	ss.end	u3, zero, a0, t1
-	ss.sta.ld.d.v	u7, a1
-	ss.app	u7, zero, a0, a0
-	ss.end	u7, zero, a0, t1
-	ss.sta.ld.d.v	u8, a4
-	ss.app	u8, zero, a0, zero
-	ss.end	u8, zero, a0, t1
-	ss.sta.ld.d	u24, a3
-	ss.end	u24, zero, a0, t1
-	ss.sta.st.d	u4, a3
-	ss.end	u4, zero, a0, t1
-	ss.sta.ld.d.v	u13, a2
-	ss.app	u13, zero, a0, a0
-	ss.end	u13, zero, a0, t1
-	ss.sta.ld.d.v	u14, a4
-	ss.app	u14, zero, a0, zero
-	ss.end	u14, zero, a0, t1
-	ss.sta.ld.d	u26, a5
-	ss.end	u26, zero, a0, t1
-	ss.sta.ld.d	u19, a3
-	ss.end	u19, zero, a0, t1
-	ss.sta.st.d	u16, a5
-	ss.end	u16, zero, a0, t1
-	so.v.mvsv.d	u22, t0
-	so.v.mvsv.d	u20, a7
+	ss.sta.ld.d.v	u4, a0
+	ss.app	u4, zero, a1, a1
+	ss.app.mod.siz.inc.2	u4, a5
+	ss.app	u4, zero, zero, zero
+	ss.app.mod.siz.inc.3	u4, a5
+	ss.end	u4, zero, zero, a5
+	ss.sta.ld.d.v	u5, a0
+	ss.app	u5, zero, a1, zero
+	ss.app.mod.siz.inc.2	u5, a5
+	ss.app	u5, zero, zero, a5
+	ss.app.mod.siz.inc.3	u5, a5
+	ss.end	u5, zero, zero, a1
+	ss.sta.ld.d	u16, a0
+	ss.app	u16, zero, a1, a1
+	ss.app.mod.siz.inc.2	u16, a5
+	ss.end	u16, zero, zero, a5
+	ss.sta.st.d	u1, a0
+	ss.app	u1, zero, a1, a1
+	ss.app.mod.siz.inc.2	u1, a5
+	ss.end	u1, zero, zero, a5
+	ss.sta.ld.d	u8, a0
+	ss.app	u8, zero, a1, a1
+	ss.app.mod.siz.inc.2	u8, a5
+	ss.end	u8, zero, zero, a5
+	ss.sta.ld.d	u9, a0
+	ss.app	u9, zero, a1, zero
+	ss.app.mod.siz.inc.2	u9, a5
+	ss.end	u9, zero, zero, a2
+	ss.sta.st.d	u6, a0
+	ss.app	u6, zero, a1, a1
+	ss.app.mod.siz.inc.2	u6, a5
+	ss.end	u6, zero, zero, a5
+	ss.sta.ld.d.v	u13, a0
+	ss.app	u13, zero, a1, a1
+	ss.app.mod.siz.dec.2	u13, a5
+	ss.app.mod.siz.inc.3	u13, a5
+	ss.app	u13, zero, a1, zero
+	ss.end	u13, zero, zero, a5
+	ss.sta.ld.d.v	u14, a0
+	ss.app	u14, zero, a1, a5
+	ss.app.mod.siz.dec.2	u14, a5
+	ss.app.mod.siz.inc.3	u14, a5
+	ss.app	u14, zero, a1, a5
+	ss.end	u14, zero, zero, a1
+	ss.sta.ld.d	u18, a0
+	ss.app	u18, zero, a1, a4
+	ss.app.mod.siz.dec.2	u18, a5
+	ss.end	u18, zero, a1, a5
+	ss.sta.st.d	u10, a0
+	ss.app	u10, zero, a1, a4
+	ss.app.mod.siz.dec.2	u10, a5
+	ss.end	u10, zero, a1, a5
 .SLOOP_1:
-	so.v.mvsv.d	u1, zero
-	so.v.mvsv.d	u3, zero
-	so.v.dp.d	u5, zero, p0
-	so.v.dp.d	u11, zero, p0
 .SLOOP_1_0:
-	so.a.mul.fp	u6, u7, u8, p0
-	so.a.add.fp	u5, u6, u5, p0
+	so.v.dp.d	u2, zero, p0
+.SLOOP_1_0_0:
+	so.a.mul.fp	u3, u4, u5, p0
+	so.a.sub.fp	u2, u2, u3, p0
+	so.b.ndc.3	u4, .SLOOP_1_0_0
+	so.a.adde.fp	u3, u2, p0
+	so.a.add.fp	u1, u16, u3, p0
+	so.a.div.fp	u6, u8, u9, p0
+	so.b.ndc.2	u4, .SLOOP_1_0
+.SLOOP_1_1:
+	so.v.dp.d	u11, zero, p0
+.SLOOP_1_1_0:
 	so.a.mul.fp	u12, u13, u14, p0
-	so.a.add.fp	u11, u12, u11, p0
-	so.b.ndc.2	u7, .SLOOP_1_0
+	so.a.sub.fp	u11, u11, u12, p0
+	so.b.ndc.3	u13, .SLOOP_1_1_0
 	so.a.adde.fp	u12, u11, p0
-	so.a.add.fp	u25, u12, u26, p0
-	so.a.adde.fp	u6, u5, p0
-	so.a.add.fp	u4, u6, u24, p0
-	so.a.mul.fp	u18, u19, u20, p0
-	so.a.mul.fp	u21, u25, u22, p0
-	so.a.add.fp	u16, u18, u21, p0
-	so.b.nc	u1, .SLOOP_1
+	so.a.add.fp	u10, u18, u12, p0
+	so.b.ndc.2	u13, .SLOOP_1_1
+	so.b.nc	u4, .SLOOP_1
 
 	#NO_APP
 .LBB0_2:
@@ -73,7 +99,7 @@ core:                                   # @core
 	rdinstret	a2
 
 	#NO_APP
-	ld	a1, %lo(start)(a6)
+	ld	a1, %lo(start)(a3)
 	lui	a3, %hi(end)
 	lui	a0, %hi(.L.str)
 	addi	a0, a0, %lo(.L.str)

@@ -1,5 +1,5 @@
 ; ModuleID = 'kernel.ll'
-source_filename = "benchmarks/gesummv/kernel.c"
+source_filename = "benchmarks/lu/kernel.c"
 target datalayout = "e-m:e-p:64:64-i64:64-i128:128-n32:64-S128"
 target triple = "riscv64-unknown-unknown"
 
@@ -8,22 +8,25 @@ target triple = "riscv64-unknown-unknown"
 @.str = private unnamed_addr constant [9 x i8] c"%ld\0A%ld\0A\00", align 1
 
 ; Function Attrs: nounwind
-define dso_local void @core(i32 noundef signext %0, double noundef %1, double noundef %2, ptr nocapture noundef readonly %3, ptr nocapture noundef readonly %4, ptr nocapture noundef %5, ptr nocapture noundef readonly %6, ptr nocapture noundef %7) local_unnamed_addr #0 {
-  %9 = tail call i64 asm sideeffect "rdinstret $0 \0A", "=&r"() #2, !srcloc !4
-  store i64 %9, ptr @start, align 8, !tbaa !5
-  %10 = icmp sgt i32 %0, 0
-  br i1 %10, label %.loopexit, label %12
+define dso_local void @core(ptr nocapture noundef %0, i32 noundef signext %1) local_unnamed_addr #0 {
+  %3 = tail call i64 asm sideeffect "rdinstret $0 \09\0A", "=&r"() #2, !srcloc !4
+  store i64 %3, ptr @start, align 8, !tbaa !5
+  %4 = icmp sgt i32 %1, 0
+  br i1 %4, label %.loopexit2, label %9
 
-.loopexit:                                        ; preds = %8
-  %11 = zext i32 %0 to i64
-  call void asm sideeffect "ss.sta.st.d u1, $3\0Ass.end u1, $4, $5, $6\0Ass.sta.st.d u3, $7\0Ass.end u3, $4, $5, $6\0Ass.sta.ld.d.v u7, $8\0Ass.app u7, $4, $5, $9\0Ass.end u7, $4, $5, $6\0Ass.sta.ld.d.v u8, $10\0Ass.app u8, $4, $5, $4\0Ass.end u8, $4, $5, $6\0Ass.sta.ld.d u24, $3\0Ass.end u24, $4, $5, $6\0Ass.sta.st.d u4, $3\0Ass.end u4, $4, $5, $6\0Ass.sta.ld.d.v u13, $11\0Ass.app u13, $4, $5, $9\0Ass.end u13, $4, $5, $6\0Ass.sta.ld.d.v u14, $10\0Ass.app u14, $4, $5, $4\0Ass.end u14, $4, $5, $6\0Ass.sta.ld.d u26, $7\0Ass.end u26, $4, $5, $6\0Ass.sta.ld.d u19, $3\0Ass.end u19, $4, $5, $6\0Ass.sta.st.d u16, $7\0Ass.end u16, $4, $5, $6\0Aso.v.mvsv.d u22, $2\0Aso.v.mvsv.d u20, $1\0A.SLOOP_1:  \0Aso.v.mvsv.d u1, $0\0Aso.v.mvsv.d u3, $0\0Aso.v.dp.d u5, zero, p0\0Aso.v.dp.d u11, zero, p0\0A.SLOOP_1_0:  \0Aso.a.mul.fp  u6, u7, u8, p0\0Aso.a.add.fp  u5, u6, u5, p0\0Aso.a.mul.fp  u12, u13, u14, p0\0Aso.a.add.fp  u11, u12, u11, p0\0Aso.b.ndc.2 u7, .SLOOP_1_0\0Aso.a.adde.fp  u12, u11, p0\0Aso.a.add.fp  u25, u12, u26, p0\0Aso.a.adde.fp  u6, u5, p0\0Aso.a.add.fp  u4, u6, u24, p0\0Aso.a.mul.fp  u18, u19, u20, p0\0Aso.a.mul.fp  u21, u25, u22, p0\0Aso.a.add.fp  u16, u18, u21, p0\0Aso.b.nc u1, .SLOOP_1\0A", "r,r,r,r,r,r,r,r,r,r,r,r"(double 0.000000e+00, double %1, double %2, ptr %5, i64 0, i64 %11, i64 1, ptr %7, ptr %3, i64 %11, ptr %6, ptr %4) #2
-  br label %12
+.loopexit2:                                       ; preds = %2
+  %5 = add nuw i32 %1, 1
+  %6 = zext i32 %1 to i64
+  %7 = sext i32 %5 to i64
+  %8 = add nuw nsw i64 %6, 1
+  call void asm sideeffect "ss.sta.ld.d.v u4, $0\0Ass.app u4, $1, $2, $3\0Ass.app.mod.siz.inc.2 u4, $4\0Ass.app u4, $1, $1, $1\0Ass.app.mod.siz.inc.3 u4, $4\0Ass.end u4, $1, $1, $4\0Ass.sta.ld.d.v u5, $0\0Ass.app u5, $1, $2, $1\0Ass.app.mod.siz.inc.2 u5, $4\0Ass.app u5, $1, $1, $4\0Ass.app.mod.siz.inc.3 u5, $4\0Ass.end u5, $1, $1, $3\0Ass.sta.ld.d u16, $0\0Ass.app u16, $1, $2, $3\0Ass.app.mod.siz.inc.2 u16, $4\0Ass.end u16, $1, $1, $4\0Ass.sta.st.d u1, $0\0Ass.app u1, $1, $2, $3\0Ass.app.mod.siz.inc.2 u1, $4\0Ass.end u1, $1, $1, $4\0Ass.sta.ld.d u8, $0\0Ass.app u8, $1, $2, $3\0Ass.app.mod.siz.inc.2 u8, $4\0Ass.end u8, $1, $1, $4\0Ass.sta.ld.d u9, $0\0Ass.app u9, $1, $2, $1\0Ass.app.mod.siz.inc.2 u9, $4\0Ass.end u9, $1, $1, $5\0Ass.sta.st.d u6, $0\0Ass.app u6, $1, $2, $3\0Ass.app.mod.siz.inc.2 u6, $4\0Ass.end u6, $1, $1, $4\0Ass.sta.ld.d.v u13, $0\0Ass.app u13, $1, $2, $3\0Ass.app.mod.siz.dec.2 u13, $4\0Ass.app.mod.siz.inc.3 u13, $4\0Ass.app u13, $1, $2, $1\0Ass.end u13, $1, $1, $4\0Ass.sta.ld.d.v u14, $0\0Ass.app u14, $1, $2, $4\0Ass.app.mod.siz.dec.2 u14, $4\0Ass.app.mod.siz.inc.3 u14, $4\0Ass.app u14, $1, $2, $4\0Ass.end u14, $1, $1, $3\0Ass.sta.ld.d u18, $0\0Ass.app u18, $1, $2, $6\0Ass.app.mod.siz.dec.2 u18, $4\0Ass.end u18, $1, $2, $4\0Ass.sta.st.d u10, $0\0Ass.app u10, $1, $2, $7\0Ass.app.mod.siz.dec.2 u10, $4\0Ass.end u10, $1, $2, $4\0A.SLOOP_1:  \0A.SLOOP_1_0:  \0Aso.v.dp.d u2, zero, p0\0A.SLOOP_1_0_0:  \0Aso.a.mul.fp  u3, u4, u5, p0\0Aso.a.sub.fp  u2, u2, u3, p0\0Aso.b.ndc.3 u4, .SLOOP_1_0_0\0Aso.a.adde.fp  u3, u2, p0\0Aso.a.add.fp  u1, u16, u3, p0\0Aso.a.div.fp  u6, u8, u9, p0\0Aso.b.ndc.2 u4, .SLOOP_1_0\0A.SLOOP_1_1:  \0Aso.v.dp.d u11, zero, p0\0A.SLOOP_1_1_0:  \0Aso.a.mul.fp  u12, u13, u14, p0\0Aso.a.sub.fp  u11, u11, u12, p0\0Aso.b.ndc.3 u13, .SLOOP_1_1_0\0Aso.a.adde.fp  u12, u11, p0\0Aso.a.add.fp  u10, u18, u12, p0\0Aso.b.ndc.2 u13, .SLOOP_1_1\0Aso.b.nc u4, .SLOOP_1\0A", "r,r,r,r,r,r,r,r"(ptr %0, i64 0, i64 %6, i64 %6, i64 1, i64 %7, i64 %8, i64 %8) #2
+  br label %9
 
-12:                                               ; preds = %.loopexit, %8
-  %13 = tail call i64 asm sideeffect "rdinstret $0 \0A", "=&r"() #2, !srcloc !9
-  store i64 %13, ptr @end, align 8, !tbaa !5
-  %14 = load i64, ptr @start, align 8, !tbaa !5
-  %15 = tail call signext i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i64 noundef %14, i64 noundef %13)
+9:                                                ; preds = %.loopexit2, %2
+  %10 = tail call i64 asm sideeffect "rdinstret $0 \09\0A", "=&r"() #2, !srcloc !9
+  store i64 %10, ptr @end, align 8, !tbaa !5
+  %11 = load i64, ptr @start, align 8, !tbaa !5
+  %12 = tail call signext i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i64 noundef %11, i64 noundef %10)
   ret void
 }
 
@@ -41,9 +44,9 @@ attributes #2 = { nounwind }
 !1 = !{i32 1, !"target-abi", !"lp64d"}
 !2 = !{i32 1, !"SmallDataLimit", i32 8}
 !3 = !{!"clang version 16.0.6 (https://github.com/llvm/llvm-project/ 7cbf1a2591520c2491aa35339f227775f4d3adf6)"}
-!4 = !{i64 191}
+!4 = !{i64 146}
 !5 = !{!6, !6, i64 0}
 !6 = !{!"long", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
-!9 = !{i64 522}
+!9 = !{i64 909}

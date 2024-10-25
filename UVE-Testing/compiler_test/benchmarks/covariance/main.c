@@ -28,5 +28,10 @@ int main() {
     //printf("\n");
   }
 
+  /*print mean
+  for (int i = 0; i < sizeM; i++) {
+    printf( DataFormat("", "\n"), mean[i]);
+  }*/
+
   return 0;
 }
