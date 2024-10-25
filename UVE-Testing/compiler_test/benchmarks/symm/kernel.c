@@ -2,12 +2,11 @@
 
 long int start = 0, end = 0;
 
-void core(int N, int M, DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B) {
+void core(int N, int M, DataType alpha, DataType beta, DataType *C, DataType *A, DataType *B, DataType *temp2) {
 
     asm volatile("rdinstret %[s] \n" : [s] "=&r"(start));
 
     int i, j, k;
-	DataType temp2[N];
 
     for (i = 0; i < M; i++)
         for (j = 0; j < N; j++) {

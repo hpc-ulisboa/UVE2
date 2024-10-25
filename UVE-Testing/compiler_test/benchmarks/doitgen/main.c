@@ -23,13 +23,15 @@ int main() {
 
     core(A, C4, sum, R, Q, P);
 
-    for (int i = 0; i < R; i++)
-        for (int j = 0; j < Q; j++)
-            for (int k = 0; k < P; k++)
-                printf(DataFormat("", "\n"), A[i*Q*P+j*P+k]);
+    for (int i = 0; i < R*Q*P; i++)
+        printf(DataFormat("", "\n"), A[i]);
+
+    //for (int i = 0; i < P; i++)
+    //    printf(DataFormat("", "\n"), sum[i]);
 
     free(A);
     free(C4);
+    free(sum);
 
     return 0;
 }

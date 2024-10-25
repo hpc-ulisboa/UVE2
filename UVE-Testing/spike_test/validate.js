@@ -60,9 +60,9 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original_clang,rvv,original_gcc,
 	if (err) throw err;
 });
 
-/* kernel size map
+// kernel size map
 const kernelSizeMap = {
-	"3mm": size,
+	/*"3mm": size,
 	"convolution": size,
 	"covariance": size,
 	"gemm": size,
@@ -76,21 +76,18 @@ const kernelSizeMap = {
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size
+	"trisolv": size*/
 	//"ind": size,
 	//"vec_cv": size
-};*/
-
-const kernelSizeMap = {
-	"spmv_ellpack_delimiters": 0
-}
+	"covariance": size,
+};
 
 // read type and size from command line
 const typeMap = {
-    'B': 'byte',
+    /*'B': 'byte',
 	'H': 'half-word',
     'I': 'integer',
-    'F': 'float',
+    'F': 'float',*/
     'D': 'double'
 };
 
