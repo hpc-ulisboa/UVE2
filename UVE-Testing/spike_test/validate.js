@@ -79,7 +79,8 @@ const kernelSizeMap = {
 	"trisolv": size*/
 	//"ind": size,
 	//"vec_cv": size
-	"covariance": size,
+	//"covariance": size,
+	"trmm": 0,
 };
 
 // read type and size from command line

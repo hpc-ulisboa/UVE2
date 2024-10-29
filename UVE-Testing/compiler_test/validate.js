@@ -94,7 +94,7 @@ const kernelSizeMap = {
 	"spmv_ellpack_delimiters": 0,
 	"stencil2d": size,
 	"stream": size*size,
-	"symm": size,
+	//"symm": size,
 	"syrk": size,
 	"syr2k": size,
 	"trisolv": size,*/
@@ -102,11 +102,11 @@ const kernelSizeMap = {
 
 	//"convolution": size,
 	//"sgd": 0,
-	//"trmm": 0
+	"trmm": 0
 	//"cholesky": size,
 	//"durbin": size*size,
 	//"seidel-2d": size,
-	"lu": size
+	//"lu": size
 	//"adi": size
 	//"heat-3d": size
 	//"gemm_blocked": size

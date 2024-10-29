@@ -18,11 +18,11 @@ void core(DataType *A, int N) {
             A[i*N+j] /= A[j*N+j];
             //printf("DIV     %lf / %lf = %lf\n", A[i*N+j], A[j*N+j], A[i*N+j]/A[j*N+j]);
         }
-        for (j = i; j < N; j++) {
+        /*for (j = i; j < N; j++) {
             for (k = 0; k < i; k++) {
                 A[i*N+j] -= A[i*N+k] * A[k*N+j];
             }
-        }
+        }*/
     }
 
     asm volatile("rdinstret %[e] \t\n" : [e] "=&r"(end));

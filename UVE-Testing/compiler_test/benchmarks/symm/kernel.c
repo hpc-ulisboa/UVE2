@@ -7,10 +7,11 @@ void core(int N, int M, DataType alpha, DataType beta, DataType *C, DataType *A,
     asm volatile("rdinstret %[s] \n" : [s] "=&r"(start));
 
     int i, j, k;
+	//DataType temp2[N];
 
     for (i = 0; i < M; i++)
         for (j = 0; j < N; j++) {
-            temp2[j] = 0;
+            temp2[j] = 0.0;
             for (k = 0; k < i; k++) {
                 C[k*N+j] += alpha * B[i*N+j] * A[i*M+k];
                 temp2[j] += B[k*N+j] * A[i*M+k];

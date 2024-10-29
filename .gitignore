@@ -36,6 +36,10 @@
 *.x86_64
 *.hex
 
+# Clang/ASM files
+*.ll 
+*.s
+
 # Debug files
 *.dSYM/
 *.su
