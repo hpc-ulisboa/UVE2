@@ -1,3 +1,4 @@
+// https://github.com/MatthiasJReisinger/PolyBenchC-4.2.1/tree/master/linear-algebra/kernels/bicg
 #include "Functions.h"
 
 long int start = 0, end = 0;

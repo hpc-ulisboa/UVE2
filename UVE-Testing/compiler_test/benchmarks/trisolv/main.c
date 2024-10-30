@@ -12,6 +12,12 @@ int main() {
     initArray(b, SIZE);
     initArray(x, SIZE);
 
+
+    for (int i = 0; i < SIZE; i++) {
+        b[i] /= 1000;
+        x[i] /= 1000;
+    }
+
     /*
 
     for (int i = 0; i < SIZE; ++i) {

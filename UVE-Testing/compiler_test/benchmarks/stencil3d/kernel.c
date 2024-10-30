@@ -1,3 +1,4 @@
+// https://github.com/breagen/MachSuite/tree/master/stencil/stencil3d
 #include "Functions.h"
 
 #define INDX(_row_size,_col_size,_i,_j,_k) ((_i)+_row_size*((_j)+_col_size*(_k)))

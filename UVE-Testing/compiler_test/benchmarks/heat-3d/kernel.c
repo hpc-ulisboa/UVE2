@@ -1,3 +1,4 @@
+// https://github.com/MatthiasJReisinger/PolyBenchC-4.2.1/tree/master/stencils/heat-3d
 #include "Functions.h"
 
 #define IDX(i, j, k, N) ((i) * (N) * (N) + (j) * (N) + (k))

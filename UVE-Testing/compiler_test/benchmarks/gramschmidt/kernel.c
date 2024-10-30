@@ -1,23 +1,30 @@
+// https://github.com/MatthiasJReisinger/PolyBenchC-4.2.1/tree/master/linear-algebra/solvers/gramschmidt
 #include "Functions.h"
+#include <math.h>
 
 long int start = 0, end = 0;
 
-void core(DataType *L, DataType *b, DataType *x) {
+void core(int M, int N, DataType *A, DataType *R, DataType *Q) {
     asm volatile("rdinstret %[s] \t\n" : [s] "=&r"(start));
 
-    for (k = 0; k < _PB_N; k++) {
-        nrm = SCALAR_VAL(0.0);
-        for (i = 0; i < _PB_M; i++)
-            nrm += A[i][k] * A[i][k];
-        R[k][k] = SQRT_FUN(nrm);
-        for (i = 0; i < _PB_M; i++)
-            Q[i][k] = A[i][k] / R[k][k];
-        for (j = k + 1; j < _PB_N; j++) {
-            R[k][j] = SCALAR_VAL(0.0);
-            for (i = 0; i < _PB_M; i++)
-                R[k][j] += Q[i][k] * A[i][j];
-            for (i = 0; i < _PB_M; i++)
-                A[i][j] = A[i][j] - Q[i][k] * R[k][j];
+    int i, j, k;
+
+    for (k = 0; k < N; k++) {
+        R[k*N+k] = 0.0;
+        for (i = 0; i < M; i++){
+            R[k*N+k] += A[i*N+k] * A[i*N+k];
+        }
+        R[k*N+k] = sqrt(R[k*N+k]);
+        for (i = 0; i < M; i++)
+            Q[i*N+k] = A[i*N+k] / R[k*N+k];
+        for (j = k + 1; j < N; j++) {
+            R[k*N+j] = 0.0;
+            for (i = 0; i < M; i++){
+                R[k*N+j] += Q[i*N+k] * A[i*N+j];
+            }
+            for (i = 0; i < M; i++){
+                A[i*N+j] -= Q[i*N+k] * R[k*N+j];
+            }
         }
     }
 

@@ -8,6 +8,10 @@ int main() {
 
     initArray2D(A, SIZE, SIZE);
 
+    for (int i = 0; i < SIZE*SIZE; i++) {
+        A[i] /= 10;
+    }
+
     core(A, SIZE);
 
     for (int i = 0; i < SIZE*SIZE; i++) {

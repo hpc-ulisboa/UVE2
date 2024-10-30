@@ -48,13 +48,13 @@ if (!gccPath) {
 	exitWithError("GCC_PATH environment variable is not set");
 }*/
 
-const compileFlags = ["-O3", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-fno-tree-vectorize", "-fno-unroll-loops"];
+const compileFlags = ["-O2", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-fno-tree-vectorize", "-fno-unroll-loops"];
 const linkFlags = [ `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d"];
-const clangIRFlags = ["-O3", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`,  "-fno-vectorize", "-fno-slp-vectorize", "-fdiscard-value-names", "-ffp-contract=off", "-emit-llvm", "-fno-unroll-loops"];
+const clangIRFlags = ["-O2", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp64d", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`,  "-fno-vectorize", "-fno-slp-vectorize", "-fdiscard-value-names", "-ffp-contract=off", "-emit-llvm", "-fno-unroll-loops"];
 const optFlags = ["-enable-new-pm=0", "-load", passPath, "-loop-simplify", "-legacy-stream-analysis"];
 const llcFlags = ["-march=riscv64", "--mcpu=generic-rv64", "-mattr=+d,+m,+experimental-xuve"];
 
-const compileFlagsRVV = ["-O3", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64imafdcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
+const compileFlagsRVV = ["-O2", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64imafdcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
 
 const bin_simple = `.run_simple`;
 const bin_uve = `.run_uve`;
@@ -84,6 +84,7 @@ const kernelSizeMap = {
 	"gemm_ncubed": size,
 	"gemver": size,
 	"gesummv": size,
+	"gramschmidt": size
 	"jacobi-1d": size*size,
 	"jacobi-2d": size,
 	"knn": 0,
@@ -94,7 +95,7 @@ const kernelSizeMap = {
 	"spmv_ellpack_delimiters": 0,
 	"stencil2d": size,
 	"stream": size*size,
-	//"symm": size,
+	"symm": size,
 	"syrk": size,
 	"syr2k": size,
 	"trisolv": size,*/
@@ -102,11 +103,11 @@ const kernelSizeMap = {
 
 	//"convolution": size,
 	//"sgd": 0,
-	"trmm": 0
+	//"trmm": 0
 	//"cholesky": size,
 	//"durbin": size*size,
 	//"seidel-2d": size,
-	//"lu": size
+	"lu": size
 	//"adi": size
 	//"heat-3d": size
 	//"gemm_blocked": size
@@ -119,10 +120,10 @@ const kernelSizeMap = {
 
 // read type and size from command line
 const typeMap = {
-    /*'B': 'byte',
-	'H': 'half-word',
-    'I': 'integer',
-    'F': 'float',*/
+    //'B': 'byte',
+	//'H': 'half-word',
+    //'I': 'integer',
+    //'F': 'float',
     'D': 'double'
 };
 
@@ -386,7 +387,7 @@ for (let kernel in kernelSizeMap) {
 		}
 
 		// Delete executables for next kernel
-		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', /*'UVEkernel.ll', 'UVEkernel.s',*/'Functions.o']);
+		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', /*'kernel.ll', 'UVEkernel.ll', 'UVEkernel.s',*/'Functions.o']);
 		if (del.error) {
 			console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 			break;

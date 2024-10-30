@@ -1,0 +1,59 @@
+
+UVEkernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+       0: f3 28 20 c0  	rdinstret	a7
+       4: 37 08 00 00  	lui	a6, 0
+       8: 23 30 18 01  	sd	a7, 0(a6)
+       c: 63 80 07 00  	beqz	a5, 0xc <core+0xc>
+      10: 93 08 10 00  	li	a7, 1
+      14: 8b b0 06 00  	ss.sta.st.d	u1, a3
+      18: 8b 00 f0 8c  	ss.end	u1, zero, a5, a7
+      1c: 0b 73 05 78  	ss.sta.ld.d.v	u6, a0
+      20: 0b 03 f0 72  	ss.app	u6, zero, a5, a4
+      24: 0b 03 e0 8c  	ss.end	u6, zero, a4, a7
+      28: 8b f3 05 78  	ss.sta.ld.d.v	u7, a1
+      2c: 8b 03 f0 02  	ss.app	u7, zero, a5, zero
+      30: 8b 03 e0 8c  	ss.end	u7, zero, a4, a7
+      34: 8b b1 06 00  	ss.sta.st.d	u3, a3
+      38: 8b 01 f0 8c  	ss.end	u3, zero, a5, a7
+      3c: 0b 75 06 78  	ss.sta.ld.d.v	u10, a2
+      40: 0b 05 f0 02  	ss.app	u10, zero, a5, zero
+      44: 0b 05 e0 8c  	ss.end	u10, zero, a4, a7
+      48: 0b 76 05 78  	ss.sta.ld.d.v	u12, a0
+      4c: 0b 06 f0 72  	ss.app	u12, zero, a5, a4
+      50: 0b 06 e0 8c  	ss.end	u12, zero, a4, a7
+      54: 8b f6 06 78  	ss.sta.ld.d.v	u13, a3
+      58: 8b 06 f0 8a  	ss.app	u13, zero, a5, a7
+      5c: 8b 06 e0 04  	ss.end	u13, zero, a4, zero
+      60: 0b 34 06 78  	ss.sta.st.d.v	u8, a2
+      64: 0b 04 f0 02  	ss.app	u8, zero, a5, zero
+      68: 0b 04 e0 8c  	ss.end	u8, zero, a4, a7
+
+000000000000006c <.SLOOP_1>:
+      6c: ab 30 80 a9  	so.v.mvsv.d	u1, zero
+      70: 2b 32 00 ac  	so.v.dp.d	u4, zero, p0
+
+0000000000000074 <.SLOOP_1_0>:
+      74: ab 12 73 10  	so.a.mul.fp	u5, u6, u7, p0
+      78: 2b 12 52 00  	so.a.add.fp	u4, u4, u5, p0
+      7c: 2b 10 13 e0  	so.b.ndc.2	u6, 0x7c <.SLOOP_1_0+0x8>
+      80: ab 11 02 20  	so.a.adde.fp	u3, u4, p0
+
+0000000000000084 <.SLOOP_1_1>:
+      84: ab 15 d6 10  	so.a.mul.fp	u11, u12, u13, p0
+      88: 2b 14 b5 00  	so.a.add.fp	u8, u10, u11, p0
+      8c: 2b 10 14 e0  	so.b.ndc.2	u8, 0x8c <.SLOOP_1_1+0x8>
+      90: 2b f0 10 e0  	so.b.nc	u1, 0x90 <.SLOOP_1_1+0xc>
+
+0000000000000094 <.LBB0_2>:
+      94: 73 26 20 c0  	rdinstret	a2
+      98: 83 35 08 00  	ld	a1, 0(a6)
+      9c: b7 06 00 00  	lui	a3, 0
+      a0: 37 05 00 00  	lui	a0, 0
+      a4: 13 05 05 00  	mv	a0, a0
+      a8: 23 b0 c6 00  	sd	a2, 0(a3)
+      ac: 17 03 00 00  	auipc	t1, 0
+      b0: 67 00 03 00  	jr	t1

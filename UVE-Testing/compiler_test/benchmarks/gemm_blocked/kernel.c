@@ -1,3 +1,4 @@
+// https://github.com/breagen/MachSuite/tree/master/gemm/blocked
 #include "Functions.h"
 
 long int start = 0, end = 0;
@@ -13,7 +14,11 @@ void core(DataType *m1, DataType *m2, DataType *prod, int row_size, int block_si
                 for (k = 0; k < block_size; ++k) {
                     for (j = 0; j < block_size; ++j) {
                         prod[i * row_size + j + jj] += m1[i * row_size + k + kk] * m2[(k + kk) * row_size + j + jj];
+                        printf("MUL   %lf * %lf = %lf\n", m1[i * row_size + k + kk], m2[(k + kk) * row_size + j + jj], m1[i * row_size + k + kk] * m2[(k + kk) * row_size + j + jj]);
+                        printf("ADD = %.5lf\n", prod[i * row_size + j + jj]);
+                        printf("jj = %d, kk = %d, i = %d, k = %d, j = %d\n", jj, kk, i, k, j);
                     }
+                    printf("\n");
                 }
             }
         }
@@ -22,3 +27,4 @@ void core(DataType *m1, DataType *m2, DataType *prod, int row_size, int block_si
     asm volatile("rdinstret %[e] \t\n" : [e] "=&r"(end));
     printf("%ld\n%ld\n", start, end);
 }
+ 
