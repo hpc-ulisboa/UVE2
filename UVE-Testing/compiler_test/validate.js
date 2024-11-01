@@ -84,10 +84,11 @@ const kernelSizeMap = {
 	"gemm_ncubed": size,
 	"gemver": size,
 	"gesummv": size,
-	"gramschmidt": size
+	"gramschmidt": size,
 	"jacobi-1d": size*size,
 	"jacobi-2d": size,
 	"knn": 0,
+	"lu": size,
 	"memcpy": size*size,
 	"mvt": size, 
 	"saxpy": size*size,
@@ -107,7 +108,6 @@ const kernelSizeMap = {
 	//"cholesky": size,
 	//"durbin": size*size,
 	//"seidel-2d": size,
-	"lu": size
 	//"adi": size
 	//"heat-3d": size
 	//"gemm_blocked": size
@@ -115,7 +115,7 @@ const kernelSizeMap = {
 	//"fft": size
 	//"kmp": 0
 	//"stencil3d": size
-	//"symm": size
+	"gesummv": size
 };
 
 // read type and size from command line

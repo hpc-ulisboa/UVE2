@@ -3,7 +3,7 @@
 
 long int start = 0, end = 0;
 
-void core(int N, DataType alpha, DataType beta, DataType *A, DataType *B, DataType *tmp, DataType *x, DataType *y) {
+void core(int N, DataType alpha, DataType beta, DataType *tmp, DataType *A, DataType *B, DataType *x, DataType *y) {
 
     asm volatile("rdinstret %[s] \n" : [s] "=&r"(start));
 
@@ -13,8 +13,8 @@ void core(int N, DataType alpha, DataType beta, DataType *A, DataType *B, DataTy
         tmp[i] = 0;
         y[i] = 0;
         for (j = 0; j < N; j++) {
-            tmp[i] = A[i*N+j] * x[j] + tmp[i];
-            y[i] = B[i*N+j] * x[j] + y[i];
+            tmp[i] += A[i*N+j] * x[j];
+            y[i] += B[i*N+j] * x[j];
         }
         y[i] = alpha * tmp[i] + beta * y[i];
     }

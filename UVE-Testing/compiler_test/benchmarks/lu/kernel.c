@@ -11,16 +11,17 @@ void core(DataType *A, int N) {
 
     for (i = 0; i < N; i++) {
         for (j = 0; j < i; j++) {
-        //    for (k = 0; k < j; k++) {
-                //A[i * N + j] -= A[i * N + k] * A[k * N + j];
+            for (k = 0; k < j; k++) {
+                A[i * N + j] -= A[i * N + k] * A[k * N + j];
                 // printf("MUL     %lf * %lf = %lf\n", A[i*N+k], A[k*N+j], A[i*N+k]*A[k*N+j]);
                 // printf("SUB     %lf - %lf = %lf\n", A[i*N+j], A[i*N+k]*A[k*N+j], A[i*N+j]-A[i*N+k]*A[k*N+j]);
-        //    }
+            }
+            //printf("DIV     %lf / %lf = %lf\n", A[i*N+j], A[j*N+j], A[i*N+j]/A[j*N+j]);
             A[i * N + j] /= A[j * N + j];
-            // printf("DIV     %lf / %lf = %lf\n", A[i*N+j], A[j*N+j], A[i*N+j]/A[j*N+j]);
         }
         for (j = i; j < N; j++) {
             for (k = 0; k < i; k++) {
+                //printf("i=%d j=%d k=%d\n", i, j, k);
                 //printf("MUL     %lf * %lf = %lf\n", A[i*N+k], A[k*N+j], A[i*N+k]*A[k*N+j]);
                 //printf("SUB     %lf - %lf = %lf\n", A[i*N+j], A[i*N+k]*A[k*N+j], A[i*N+j]-A[i*N+k]*A[k*N+j]);
                 A[i * N + j] -= A[i * N + k] * A[k * N + j];

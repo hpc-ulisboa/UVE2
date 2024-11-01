@@ -14,11 +14,11 @@ void core(DataType *m1, DataType *m2, DataType *prod, int row_size, int block_si
                 for (k = 0; k < block_size; ++k) {
                     for (j = 0; j < block_size; ++j) {
                         prod[i * row_size + j + jj] += m1[i * row_size + k + kk] * m2[(k + kk) * row_size + j + jj];
-                        printf("MUL   %lf * %lf = %lf\n", m1[i * row_size + k + kk], m2[(k + kk) * row_size + j + jj], m1[i * row_size + k + kk] * m2[(k + kk) * row_size + j + jj]);
-                        printf("ADD = %.5lf\n", prod[i * row_size + j + jj]);
-                        printf("jj = %d, kk = %d, i = %d, k = %d, j = %d\n", jj, kk, i, k, j);
+                        //printf("MUL   %lf * %lf = %lf\n", m1[i * row_size + k + kk], m2[(k + kk) * row_size + j + jj], m1[i * row_size + k + kk] * m2[(k + kk) * row_size + j + jj]);
+                        //printf("ADD = %.5lf\n", prod[i * row_size + j + jj]);
+                        //printf("jj = %d, kk = %d, i = %d, k = %d, j = %d\n", jj, kk, i, k, j);
                     }
-                    printf("\n");
+                    //printf("\n");
                 }
             }
         }
