@@ -4,7 +4,7 @@
 extern void core(DataType *sol, DataType *orig, DataType *filter, int row_size, int col_size);
 
 int main() {
-    int row_size = SIZE*SIZE;
+    int row_size = SIZE*1.2;
     int col_size = SIZE;
 
     DataType sol[row_size*col_size];

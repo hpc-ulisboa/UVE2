@@ -14,11 +14,11 @@ void core(DataType* A, DataType* B, DataType* C, DataType* D, DataType* E, DataT
 
 
 int main() {
-    size_t I = SIZE;
-    size_t J = SIZE;
+    size_t I = SIZE-10;
+    size_t J = SIZE-8;
     size_t K = SIZE;
-    size_t L = SIZE;
-    size_t M = SIZE;
+    size_t L = SIZE+8;
+    size_t M = SIZE+10;
 
     DataType A[I * K];
     DataType B[K * J];

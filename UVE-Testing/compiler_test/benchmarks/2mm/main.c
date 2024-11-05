@@ -4,10 +4,10 @@
 extern void core(DataType *A, DataType *B, DataType *C, DataType *D, DataType *tmp, DataType alpha, DataType beta, uint64_t I, uint64_t J, uint64_t K, uint64_t L);
 
 int main() {
-    size_t I = 16;
-    size_t J = 18;
-    size_t K = 22;
-    size_t L = 24;
+    size_t I = SIZE-8;
+    size_t J = SIZE-4;
+    size_t K = SIZE;
+    size_t L = SIZE+4;
 
     DataType A[I * K];
     DataType B[K * J];

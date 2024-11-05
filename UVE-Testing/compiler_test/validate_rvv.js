@@ -14,6 +14,22 @@ if (!riscvPath) {
 	exitWithError("RISCV environment variable is not set");
 }
 
+const llvmUVEPath = process.env.LLVM16_PATH;
+
+if (!llvmUVEPath) {	
+	exitWithError("LLVM_PATH environment variable is not set");
+}
+
+const clangUVEPath = `${llvmUVEPath}/llvm-project/build/bin/clang`;
+
+const objDumpPathUVECLANG = `${llvmUVEPath}/llvm-project/build/bin/llvm-objdump`;
+
+const optPath = `${llvmUVEPath}/llvm-project/build/bin/opt`;
+
+const llcPath = `${llvmUVEPath}/llvm-project/build/bin/llc`;
+
+const passPath = `${llvmUVEPath}/StreamPass/build/libStreamAnalysis.so`;
+
 const llvmPath = process.env.LLVM_PATH;
 
 if (!llvmPath) {	
@@ -22,13 +38,7 @@ if (!llvmPath) {
 
 const clangPath = `${llvmPath}/llvm-project/build/bin/clang`;
 
- const objDumpPathCLANG = `${llvmPath}/llvm-project/build/bin/llvm-objdump`;
-
-const optPath = `${llvmPath}/llvm-project/build/bin/opt`;
-
-const llcPath = `${llvmPath}/llvm-project/build/bin/llc`;
-
-const passPath = `${llvmPath}/StreamPass/build/libStreamAnalysis.so`;
+const objDumpPathCLANG = `${llvmPath}/llvm-project/build/bin/llvm-objdump`;
 
 const pkPath = process.env.PK_PATH;
 
@@ -54,8 +64,11 @@ const clangIRFlags = ["-O2", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp6
 const optFlags = ["-enable-new-pm=0", "-load", passPath, "-loop-simplify", "-legacy-stream-analysis"];
 const llcFlags = ["-march=riscv64", "--mcpu=generic-rv64", "-mattr=+d,+m,+experimental-xuve"];
 
+const compileFlagsRVV = ["-O2", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64imafdcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
+
 const bin_simple = `.run_simple`;
 const bin_uve = `.run_uve`;
+const bin_rvv = `.run_rvv`;
 
 // read size from command line
 const size = process.argv[2] || 50;
@@ -64,13 +77,13 @@ const size = process.argv[2] || 50;
 const csvFilename = process.argv[3] || "results.csv";
 
 // write csv header
-fs.writeFile(csvFilename, "kernel,size,datatype,original,uve\n", (err) => {
+fs.writeFile(csvFilename, "kernel,size,datatype,original,rvv,uve\n", (err) => {
 	if (err) throw err;
 });
 
 // kernel size map
 const kernelSizeMap = {
-	"2mm": size,
+	/*"2mm": size,
 	"3mm": size,
 	"atax": size,
 	"bicg": size,
@@ -96,7 +109,7 @@ const kernelSizeMap = {
 	"symm": size,
 	"syrk": size,
 	"syr2k": size,
-	"trisolv": size,
+	"trisolv": size,*/
 	
 
 	//"convolution": size,
@@ -190,57 +203,98 @@ function compileKernel(command, args, flag = false) {
 	}
 }
 
-function aproximateEqual(stdout1, stdout2, kernel, t, s, dir) {
+function aproximateEqual(stdout1, stdout2, stdout3, stdout4, kernel, t, s, dir) {
 	let flag = true;
 	/* Write log files */
 	fs.writeFile(`${dir}/simple_uve.txt`, stdout1, (err) => {
 		if (err) throw err;
 	});
 
-	fs.writeFile(`${dir}/uve.txt`, stdout2, (err) => {
+	fs.writeFile(`${dir}/simple_rvv.txt`, stdout2, (err) => {
+		if (err) throw err;
+	});
+
+	fs.writeFile(`${dir}/uve.txt`, stdout3, (err) => {
+		if (err) throw err;
+	});
+
+	fs.writeFile(`${dir}/rvv.txt`, stdout4, (err) => {
 		if (err) throw err;
 	});
 
 	/* Compare values */
-	const original = stdout1.split("\n");
-	const uve = stdout2.split("\n");
+	const original_uve = stdout1.split("\n");
+	const original_rvv = stdout2.split("\n");
+	const uve = stdout3.split("\n");
+	const rvv = stdout4.split("\n");
 
-	if (original.length !== uve.length) {
+	if (original_uve.length !== uve.length  || original_rvv.length !== rvv.length) {
 		console.log(`Tests did not generate same amount of values`);
 		return false;
 	}
 
-	const start1 = parseInt(original[0]);
+	const start1 = parseInt(original_uve[0]);
 	const start2 = parseInt(uve[0]);
-	const end1 = parseInt(original[1]);
+	const start3 = parseInt(original_rvv[0]);
+	const start4 = parseInt(rvv[0]);
+	const end1 = parseInt(original_uve[1]);
 	const end2 = parseInt(uve[1]);
+	const end3 = parseInt(original_rvv[1]);
+	const end4 = parseInt(rvv[1]);
 
-	for (i = 2; i < original.length; i++) {
-		const value1 = parseFloat(original[i]);
+	for (i = 2; i < original_uve.length; i++) {
+		const value1 = parseFloat(original_uve[i]);
 		const value2 = parseFloat(uve[i]);
+		const value3 = parseFloat(original_rvv[i]);
+		const value4 = parseFloat(rvv[i]);
 
 		const diff = Math.abs(value1 - value2);
+		const diff2 = Math.abs(value3 - value4);
 		if (diff > 0.1) {
-			console.error(`UVE: Values were ${original[i]} and ${uve[i]} with difference of ${diff} at index ${i-2}`);
+			console.error(`UVE: Values were ${original_uve[i]} and ${uve[i]} with difference of ${diff} at index ${i-2}`);
+			flag = false;
+		}
+		if (diff2 > 0.1) {
+			console.error(`RVV: Values were ${original_rvv[i]} and ${rvv[i]} with difference of ${diff2} at index ${i-2}`);
 			flag = false;
 		}
 	}
 
-	const insnsO = end1-start1;
+	const insnsO_UVE = end1-start1;
 	const insnsUVE = end2-start2;
-	const diffInsnsUVE = insnsUVE-insnsO;
+	const insnsO_RVV = end3-start3;
+	const insnsRVV = end4-start4;
+	const diffInsnsUVE = insnsUVE-insnsO_UVE;
+	const diffInsnsRVV = insnsRVV-insnsO_RVV;
+	const diffInsnsUVE_RVV = insnsUVE - insnsRVV;
 
 	// difference in percentage
-	const diffInsnsPuve = (diffInsnsUVE/insnsO)*100;
+	const diffInsnsPuve = (diffInsnsUVE/insnsO_UVE)*100;
+	const diffInsnsPrvv = (diffInsnsRVV/insnsO_RVV)*100;
+	const diffInsnsPuve_rvv = (diffInsnsUVE_RVV/insnsRVV)*100;
 
 	if (diffInsnsUVE < 0)
 		console.log(`UVE executed ${-diffInsnsUVE} less instructions`);
 	else if (diffInsnsUVE > 0)
 		console.log(`UVE executed ${diffInsnsUVE} more instructions`);
 
+	if (diffInsnsRVV < 0)
+		console.log(`RVV executed ${-diffInsnsRVV} less instructions`);
+	else if (diffInsnsRVV > 0)
+		console.log(`RVV executed ${diffInsnsRVV} more instructions`);
+
+	if (diffInsnsUVE_RVV < 0)
+		console.log(`UVE executed ${-diffInsnsUVE_RVV} less instructions than RVV`);
+	else if (diffInsnsUVE_RVV > 0)
+		console.log(`UVE executed ${diffInsnsUVE_RVV} more instructions than RVV`);
+
 	const data = [
+		['Original', 'RVV', 'Difference', 'Difference (%)'],
+		[insnsO_RVV, insnsRVV, diffInsnsRVV, diffInsnsPrvv.toFixed(2)],
 		['Original', 'UVE', 'Difference', 'Difference (%)'],
-		[insnsO, insnsUVE, diffInsnsUVE, diffInsnsPuve.toFixed(2)],
+		[insnsO_UVE, insnsUVE, diffInsnsUVE, diffInsnsPuve.toFixed(2)],
+		['RVV', 'UVE', 'Difference', 'Difference (%)'],
+		[insnsRVV, insnsUVE, diffInsnsUVE_RVV, diffInsnsPuve_rvv.toFixed(2)]
 	];
 
 	// Call the function to adjust table width and print the table
@@ -249,8 +303,8 @@ function aproximateEqual(stdout1, stdout2, kernel, t, s, dir) {
 	console.log(`\n`);
 
 	// export to csv
-	// kernel, size, datatype, original, uve
-	const csv = `${kernel},${s},${typeMap[t]},${insnsO},${insnsUVE}\n`;
+	// kernel, size, datatype, original, rvv, uve
+	const csv = `${kernel},${s},${typeMap[t]},${insnsO_UVE},${insnsRVV},${insnsUVE}\n`;
 	fs.appendFile(csvFilename, csv, (err) => {
 		if (err) throw err;
 	});
@@ -277,23 +331,23 @@ for (let kernel in kernelSizeMap) {
 		console.log(`\n### Attempting to compile and run kernel ${kernel} (size: ${s}, type: ${typeMap[type]}) ...\n`);
 
 		/* Compile source files */
-		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
-		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
-		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
+		compileKernel(clangUVEPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
+		compileKernel(clangUVEPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
+		compileKernel(clangUVEPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 
 		/* Link and create no UVE executable */
-		compileKernel(clangPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}_uve`, "-lm"]);
+		compileKernel(clangUVEPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}_uve`, "-lm"]);
 
 		/* Create objdump file */
 
-		objDump = spawnSync(objDumpPathCLANG, ["-d", "kernel.o"]);
+		objDump = spawnSync(objDumpPathUVECLANG, ["-d", "kernel.o"]);
 		stdoutO = objDump.stdout.toString();
 		fs.writeFile(`${dir}/simple.dump`, stdoutO, (err) => {
 			if (err) throw err;
 		});
 
 		/* Generate kernel IR with LLVM 16 */
-		compileKernel(clangPath, [...clangIRFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-S", "-o", `kernel.ll`]);
+		compileKernel(clangUVEPath, [...clangIRFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-S", "-o", `kernel.ll`]);
 
 		/* Apply UVE pass */
 		compileKernel(optPath, [...optFlags, `kernel.ll`, "-S", "-o", `UVEkernel.ll`]);
@@ -302,7 +356,7 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(llcPath, [...llcFlags, `UVEkernel.ll`]);	
 
 		/* Assembly to object */
-		compileKernel(clangPath, [...compileFlags, "-c", "-o", "UVEkernel.o", `UVEkernel.s`]);
+		compileKernel(clangUVEPath, [...compileFlags, "-c", "-o", "UVEkernel.o", `UVEkernel.s`]);
 
 		/* Create objdump file */
 
@@ -313,15 +367,38 @@ for (let kernel in kernelSizeMap) {
 		});
 
 		/* Link everyting */
-		compileKernel(clangPath, [...linkFlags, "Functions.o", `UVEkernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`, "-lm"]);
+		compileKernel(clangUVEPath, [...linkFlags, "Functions.o", `UVEkernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`, "-lm"]);
+
+		/* Compile for RVV with LLVM 19*/
+		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
+		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
+		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-c"], true);
+		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}_rvv`]);
+
+		objDump = spawnSync(`${objDumpPathCLANG}`, ["--mattr=rv64gc",  "-d", "kernel.o"]);
+		stdoutO = objDump.stdout.toString();ß
+		fs.writeFile(`${dir}/simple.dump`, stdoutO, (err) => {
+			if (err) throw err;
+		});
+
+		compileKernel(clangPath, [...compileFlagsRVV, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-c"], true);
+		compileKernel(clangPath, [...compileFlagsRVV, `-D${type}_TYPE`, `-DSIZE=${s}`, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_rvv}`]);
+
+		objDump = spawnSync(`${objDumpPathCLANG}`, ["--mattr=rv64gcv",  "-d", "kernel.o"]);
+		stdoutO = objDump.stdout.toString();
+		fs.writeFile(`${dir}/rvv.dump`, stdoutO, (err) => {
+			if (err) throw err;
+		});
 
 		/* Run each kernel file */
 		const execSimpleUVE = executableRun(spikePath, [pkPath, `${dir}/${bin_simple}_uve`, kernel]);
+		const execSimpleRVV = executableRun(spikePath, [pkPath, `${dir}/${bin_simple}_rvv`, kernel]);
 		const execUVE = executableRun(spikePath, [pkPath, `${dir}/${bin_uve}`, kernel]);
+		const execRVV = executableRun(spikePath, ["--isa=rv64gcv_Zicntr_zvl512b_zve64d", pkPath, `${dir}/${bin_rvv}`, kernel]);
 
 		/* Test if generated values are similar */
 
-		if (aproximateEqual(execSimpleUVE.stdout.toString(), execUVE.stdout.toString(), kernel, type, s, dir)) {
+		if (aproximateEqual(execSimpleUVE.stdout.toString(), execSimpleRVV.stdout.toString(), execUVE.stdout.toString(), execRVV.stdout.toString(), kernel, type, s, dir)) {
 			console.log(`Kernel ${kernel} is similar enough`);
 		} else {
 			console.error(`Kernel ${kernel}: Did not generate result similar enough`);
