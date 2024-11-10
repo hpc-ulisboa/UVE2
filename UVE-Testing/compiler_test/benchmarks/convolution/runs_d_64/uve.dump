@@ -1,0 +1,59 @@
+
+UVEkernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+       0: f3 27 20 c0  	rdinstret	a5
+       4: b7 08 00 00  	lui	a7, 0
+       8: 13 08 30 00  	li	a6, 3
+       c: 23 b0 f8 00  	sd	a5, 0(a7)
+      10: 63 40 07 01  	blt	a4, a6, 0x10 <core+0x10>
+      14: 1b 07 f7 ff  	addiw	a4, a4, -1
+      18: 9b 87 f6 ff  	addiw	a5, a3, -1
+      1c: 13 17 07 02  	slli	a4, a4, 32
+      20: 13 57 07 02  	srli	a4, a4, 32
+      24: 93 97 07 02  	slli	a5, a5, 32
+      28: 93 d7 07 02  	srli	a5, a5, 32
+      2c: 93 02 f7 ff  	addi	t0, a4, -1
+      30: 93 83 f7 ff  	addi	t2, a5, -1
+      34: 33 07 d0 40  	neg	a4, a3
+      38: 13 03 10 00  	li	t1, 1
+      3c: 93 07 f0 ff  	li	a5, -1
+      40: 0b 72 06 78  	ss.sta.ld.d.v	u4, a2
+      44: 0b 02 50 02  	ss.app	u4, zero, t0, zero
+      48: 0b 02 70 02  	ss.app	u4, zero, t2, zero
+      4c: 0b 02 00 33  	ss.app	u4, zero, a6, t1
+      50: 0b 02 00 85  	ss.end	u4, zero, a6, a6
+      54: 8b 72 05 78  	ss.sta.ld.d.v	u5, a0
+      58: 8b 82 56 6a  	ss.app	u5, a3, t0, a3
+      5c: 8b 02 73 32  	ss.app	u5, t1, t2, t1
+      60: 8b 02 03 7b  	ss.app	u5, t1, a6, a5
+      64: 8b 82 06 75  	ss.end	u5, a3, a6, a4
+      68: 8b f3 05 00  	ss.sta.ld.d	u7, a1
+      6c: 8b 83 56 6a  	ss.app	u7, a3, t0, a3
+      70: 8b 03 73 34  	ss.end	u7, t1, t2, t1
+      74: 8b b0 05 00  	ss.sta.st.d	u1, a1
+      78: 8b 80 56 6a  	ss.app	u1, a3, t0, a3
+      7c: 8b 00 73 34  	ss.end	u1, t1, t2, t1
+
+0000000000000080 <.SLOOP_1>:
+      80: 2b 31 00 ac  	so.v.dp.d	u2, zero, p0
+
+0000000000000084 <.SLOOP_1_0_0>:
+      84: ab 11 52 10  	so.a.mul.fp	u3, u4, u5, p0
+      88: 2b 11 31 00  	so.a.add.fp	u2, u2, u3, p0
+      8c: 2b 20 12 e0  	so.b.ndc.3	u4, 0x8c <.SLOOP_1_0_0+0x8>
+      90: ab 11 01 20  	so.a.adde.fp	u3, u2, p0
+      94: ab 90 33 00  	so.a.add.fp	u1, u7, u3, p0
+      98: 2b 70 12 e0  	so.b.nc	u4, 0x98 <.SLOOP_1_0_0+0x14>
+
+000000000000009c <.LBB0_2>:
+      9c: 73 26 20 c0  	rdinstret	a2
+      a0: 83 b5 08 00  	ld	a1, 0(a7)
+      a4: b7 06 00 00  	lui	a3, 0
+      a8: 37 05 00 00  	lui	a0, 0
+      ac: 13 05 05 00  	mv	a0, a0
+      b0: 23 b0 c6 00  	sd	a2, 0(a3)
+      b4: 17 03 00 00  	auipc	t1, 0
+      b8: 67 00 03 00  	jr	t1

@@ -43,8 +43,7 @@ void core(DataType src[SIZE]) {
         ".uve_loop%= : \n"
             "so.v.cv.sg.b u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest2),
+        :: [dest] "r" (dest2),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -66,8 +65,7 @@ void core(DataType src[SIZE]) {
         ".uve_loop%= : \n"
             "so.v.cv.us.h u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest3),
+        :: [dest] "r" (dest3),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -89,8 +87,7 @@ void core(DataType src[SIZE]) {
         ".uve_loop%= : \n"
             "so.v.cv.sg.h u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest4),
+        :: [dest] "r" (dest4),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -112,8 +109,7 @@ void core(DataType src[SIZE]) {
         ".uve_loop%= : \n"
             "so.v.cv.us.w u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest5),
+        :: [dest] "r" (dest5),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -135,8 +131,7 @@ void core(DataType src[SIZE]) {
         ".uve_loop%= : \n"
             "so.v.cv.sg.w u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest6),
+        :: [dest] "r" (dest6),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -158,8 +153,7 @@ void core(DataType src[SIZE]) {
         ".uve_loop%= : \n"
             "so.v.cv.us.d u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest7),
+        :: [dest] "r" (dest7),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -181,8 +175,7 @@ void core(DataType src[SIZE]) {
         ".uve_loop%= : \n"
             "so.v.cv.sg.d u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest8),
+        :: [dest] "r" (dest8),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -211,8 +204,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.us.b u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest1),
+        :: [dest] "r" (dest1),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -234,8 +226,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.sg.b u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest2),
+        :: [dest] "r" (dest2),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -257,8 +248,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.us.h u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest3),
+        :: [dest] "r" (dest3),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -280,8 +270,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.sg.h u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest4),
+        :: [dest] "r" (dest4),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -303,8 +292,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.us.w u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest5),
+        :: [dest] "r" (dest5),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -326,8 +314,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.sg.w u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest6),
+        :: [dest] "r" (dest6),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -349,8 +336,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.us.d u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest7),
+        :: [dest] "r" (dest7),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -372,8 +358,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.sg.d u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest8),
+        :: [dest] "r" (dest8),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -402,8 +387,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.us.b u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest1),
+        :: [dest] "r" (dest1),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -425,8 +409,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.sg.b u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest2),
+        :: [dest] "r" (dest2),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -448,8 +431,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.us.h u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest3),
+        :: [dest] "r" (dest3),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -471,8 +453,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.sg.h u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest4),
+        :: [dest] "r" (dest4),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -494,8 +475,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.us.w u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest5),
+        :: [dest] "r" (dest5),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -517,8 +497,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.sg.w u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest6),
+        :: [dest] "r" (dest6),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -540,8 +519,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.us.d u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest7),
+        :: [dest] "r" (dest7),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -563,8 +541,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.sg.d u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest8),
+        :: [dest] "r" (dest8),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -594,8 +571,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.fp.w u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest1),
+        :: [dest] "r" (dest1),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -617,8 +593,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.fp.d u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest10),
+        :: [dest] "r" (dest10),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -647,8 +622,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.fp.w u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest1),
+        :: [dest] "r" (dest1),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));
@@ -670,8 +644,7 @@ void core(DataType src[SIZE]){
         ".uve_loop%= : \n"
             "so.v.cv.fp.d u2, u1 \n"
         "so.b.nc u2, .uve_loop%= \n"
-        :
-        : [dest] "r" (dest10),
+        :: [dest] "r" (dest10),
           [src] "r" (src),
           [size] "r" (SIZE),
           [stride] "r" (1));

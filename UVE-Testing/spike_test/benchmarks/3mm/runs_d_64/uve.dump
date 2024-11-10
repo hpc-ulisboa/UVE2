@@ -1,0 +1,115 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <uve_kernel>:
+   0:	c0202873          	rdinstret	a6
+   4:	4885                	li	a7,1
+   6:	f805708b          	ss.sta.ld.d.v.m	u1,a0
+   a:	7ad0008b          	ss.app	u1,zero,a3,a5
+   e:	02e0008b          	ss.app	u1,zero,a4,zero
+  12:	8cf0008b          	ss.end	u1,zero,a5,a7
+  16:	f805f10b          	ss.sta.ld.d.v.m	u2,a1
+  1a:	02d0010b          	ss.app	u2,zero,a3,zero
+  1e:	8ae0010b          	ss.app	u2,zero,a4,a7
+  22:	74f0010b          	ss.end	u2,zero,a5,a4
+  26:	0006320b          	ss.sta.st.d	u4,a2
+  2a:	72d0020b          	ss.app	u4,zero,a3,a4
+  2e:	8ce0020b          	ss.end	u4,zero,a4,a7
+
+0000000000000032 <.iLoop18>:
+  32:	ac003aab          	so.v.dp.d	u21,zero,p0
+
+0000000000000036 <.kloop18>:
+  36:	3020daab          	so.a.mac.fp	u21,u1,u2,p0
+  3a:	ffd12eab          	so.b.ndc.3	u2,36 <.kloop18>
+  3e:	200a922b          	so.a.adde.fp	u4,u21,p0
+  42:	ffd178ab          	so.b.nc	u2,32 <.iLoop18>
+  46:	c0202573          	rdinstret	a0
+  4a:	41050533          	sub	a0,a0,a6
+  4e:	8082                	ret
+
+0000000000000050 <core>:
+  50:	6302                	ld	t1,0(sp)
+  52:	6ec2                	ld	t4,16(sp)
+  54:	c0202f73          	rdinstret	t5
+  58:	4e05                	li	t3,1
+  5a:	6fa2                	ld	t6,8(sp)
+  5c:	f805708b          	ss.sta.ld.d.v.m	u1,a0
+  60:	fb10008b          	ss.app	u1,zero,a7,t6
+  64:	0260008b          	ss.app	u1,zero,t1,zero
+  68:	e5f0008b          	ss.end	u1,zero,t6,t3
+  6c:	f805f10b          	ss.sta.ld.d.v.m	u2,a1
+  70:	0310010b          	ss.app	u2,zero,a7,zero
+  74:	e260010b          	ss.app	u2,zero,t1,t3
+  78:	35f0010b          	ss.end	u2,zero,t6,t1
+  7c:	0007320b          	ss.sta.st.d	u4,a4
+  80:	3310020b          	ss.app	u4,zero,a7,t1
+  84:	e460020b          	ss.end	u4,zero,t1,t3
+
+0000000000000088 <.iLoop127>:
+  88:	ac003aab          	so.v.dp.d	u21,zero,p0
+
+000000000000008c <.kloop127>:
+  8c:	3020daab          	so.a.mac.fp	u21,u1,u2,p0
+  90:	ffd12eab          	so.b.ndc.3	u2,8c <.kloop127>
+  94:	200a922b          	so.a.adde.fp	u4,u21,p0
+  98:	ffd178ab          	so.b.nc	u2,88 <.iLoop127>
+  9c:	c02025f3          	rdinstret	a1
+  a0:	c0202573          	rdinstret	a0
+  a4:	6fe2                	ld	t6,24(sp)
+  a6:	f806708b          	ss.sta.ld.d.v.m	u1,a2
+  aa:	fa60008b          	ss.app	u1,zero,t1,t6
+  ae:	03d0008b          	ss.app	u1,zero,t4,zero
+  b2:	e5f0008b          	ss.end	u1,zero,t6,t3
+  b6:	f806f10b          	ss.sta.ld.d.v.m	u2,a3
+  ba:	0260010b          	ss.app	u2,zero,t1,zero
+  be:	e3d0010b          	ss.app	u2,zero,t4,t3
+  c2:	edf0010b          	ss.end	u2,zero,t6,t4
+  c6:	0007b20b          	ss.sta.st.d	u4,a5
+  ca:	ea60020b          	ss.app	u4,zero,t1,t4
+  ce:	e5d0020b          	ss.end	u4,zero,t4,t3
+
+00000000000000d2 <.iLoop131>:
+  d2:	ac003aab          	so.v.dp.d	u21,zero,p0
+
+00000000000000d6 <.kloop131>:
+  d6:	3020daab          	so.a.mac.fp	u21,u1,u2,p0
+  da:	ffd12eab          	so.b.ndc.3	u2,d6 <.kloop131>
+  de:	200a922b          	so.a.adde.fp	u4,u21,p0
+  e2:	ffd178ab          	so.b.nc	u2,d2 <.iLoop131>
+  e6:	c02026f3          	rdinstret	a3
+  ea:	8e89                	sub	a3,a3,a0
+  ec:	41e585b3          	sub	a1,a1,t5
+  f0:	96ae                	add	a3,a3,a1
+  f2:	c02025f3          	rdinstret	a1
+  f6:	f807708b          	ss.sta.ld.d.v.m	u1,a4
+  fa:	3310008b          	ss.app	u1,zero,a7,t1
+  fe:	03d0008b          	ss.app	u1,zero,t4,zero
+ 102:	e460008b          	ss.end	u1,zero,t1,t3
+ 106:	f807f10b          	ss.sta.ld.d.v.m	u2,a5
+ 10a:	0310010b          	ss.app	u2,zero,a7,zero
+ 10e:	e3d0010b          	ss.app	u2,zero,t4,t3
+ 112:	ec60010b          	ss.end	u2,zero,t1,t4
+ 116:	0008320b          	ss.sta.st.d	u4,a6
+ 11a:	eb10020b          	ss.app	u4,zero,a7,t4
+ 11e:	e5d0020b          	ss.end	u4,zero,t4,t3
+
+0000000000000122 <.iLoop137>:
+ 122:	ac003aab          	so.v.dp.d	u21,zero,p0
+
+0000000000000126 <.kloop137>:
+ 126:	3020daab          	so.a.mac.fp	u21,u1,u2,p0
+ 12a:	ffd12eab          	so.b.ndc.3	u2,126 <.kloop137>
+ 12e:	200a922b          	so.a.adde.fp	u4,u21,p0
+ 132:	ffd178ab          	so.b.nc	u2,122 <.iLoop137>
+ 136:	c0202673          	rdinstret	a2
+ 13a:	00000537          	lui	a0,0x0
+ 13e:	8e0d                	sub	a2,a2,a1
+ 140:	9636                	add	a2,a2,a3
+ 142:	4581                	li	a1,0
+ 144:	00050513          	mv	a0,a0
+ 148:	00000317          	auipc	t1,0x0
+ 14c:	00030067          	jr	t1 # 148 <.kloop137+0x22>

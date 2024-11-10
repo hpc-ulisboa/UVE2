@@ -5,8 +5,8 @@
 extern void core(int N, int M, DataType alpha, DataType *A, DataType *B);
 
 int main() {
-    int N = 24;
-    int M = 20;
+    int N = SIZE;
+    int M = SIZE-SIZE/6;
 
     // Dynamically allocate memory for large arrays
     DataType *A = (DataType *)malloc(M * M * sizeof(DataType));

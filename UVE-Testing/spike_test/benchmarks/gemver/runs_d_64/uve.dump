@@ -1,0 +1,104 @@
+
+kernel.o:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+   0:	c0202373          	rdinstret	t1
+   4:	4f85                	li	t6,1
+   6:	6e82                	ld	t4,0(sp)
+   8:	6f22                	ld	t5,8(sp)
+   a:	e20502d3          	fmv.x.d	t0,fa0
+   e:	e20583d3          	fmv.x.d	t2,fa1
+  12:	c0202e73          	rdinstret	t3
+  16:	7805308b          	ss.sta.st.d.v	u1,a0
+  1a:	f3e0008b          	ss.app	u1,zero,t5,t5
+  1e:	fde0008b          	ss.end	u1,zero,t5,t6
+  22:	7807750b          	ss.sta.ld.d.v	u10,a4
+  26:	03e0050b          	ss.app	u10,zero,t5,zero
+  2a:	fde0050b          	ss.end	u10,zero,t5,t6
+  2e:	7806f48b          	ss.sta.ld.d.v	u9,a3
+  32:	fbe0048b          	ss.app	u9,zero,t5,t6
+  36:	05e0048b          	ss.end	u9,zero,t5,zero
+  3a:	7806738b          	ss.sta.ld.d.v	u7,a2
+  3e:	03e0038b          	ss.app	u7,zero,t5,zero
+  42:	fde0038b          	ss.end	u7,zero,t5,t6
+  46:	7805f30b          	ss.sta.ld.d.v	u6,a1
+  4a:	fbe0030b          	ss.app	u6,zero,t5,t6
+  4e:	05e0030b          	ss.end	u6,zero,t5,zero
+  52:	7805720b          	ss.sta.ld.d.v	u4,a0
+  56:	f3e0020b          	ss.app	u4,zero,t5,t5
+  5a:	fde0020b          	ss.end	u4,zero,t5,t6
+
+000000000000005e <.SLOOP_111>:
+  5e:	107312ab          	so.a.mul.fp	u5,u6,u7,p0
+  62:	005211ab          	so.a.add.fp	u3,u4,u5,p0
+  66:	10a4942b          	so.a.mul.fp	u8,u9,u10,p0
+  6a:	008190ab          	so.a.add.fp	u1,u3,u8,p0
+  6e:	ffd0f8ab          	so.b.nc	u1,5e <.SLOOP_111>
+  72:	7808f38b          	ss.sta.ld.d.v	u7,a7
+  76:	03e0038b          	ss.app	u7,zero,t5,zero
+  7a:	fde0038b          	ss.end	u7,zero,t5,t6
+  7e:	7805728b          	ss.sta.ld.d.v	u5,a0
+  82:	fbe0028b          	ss.app	u5,zero,t5,t6
+  86:	f5e0028b          	ss.end	u5,zero,t5,t5
+  8a:	0008308b          	ss.sta.st.d	u1,a6
+  8e:	fde0008b          	ss.end	u1,zero,t5,t6
+  92:	0008748b          	ss.sta.ld.d	u9,a6
+  96:	fde0048b          	ss.end	u9,zero,t5,t6
+  9a:	ac03b32b          	so.v.dp.d	u6,t2,p0
+
+000000000000009e <.SLOOP_211>:
+  9e:	ac0035ab          	so.v.dp.d	u11,zero,p0
+
+00000000000000a2 <.SLOOP_2_011>:
+  a2:	1062982b          	so.a.mul.fp	u16,u5,u6,p0
+  a6:	10781eab          	so.a.mul.fp	u29,u16,u7,p0
+  aa:	201e95ab          	so.a.adde.acc.fp	u11,u29,p0
+  ae:	ffd29aab          	so.b.ndc.2	u5,a2 <.SLOOP_2_011>
+  b2:	00b490ab          	so.a.add.fp	u1,u9,u11,p0
+  b6:	ffd0f4ab          	so.b.nc	u1,9e <.SLOOP_211>
+  ba:	7808308b          	ss.sta.st.d.v	u1,a6
+  be:	fde0008b          	ss.end	u1,zero,t5,t6
+  c2:	780ef20b          	ss.sta.ld.d.v	u4,t4
+  c6:	fde0020b          	ss.end	u4,zero,t5,t6
+  ca:	7808718b          	ss.sta.ld.d.v	u3,a6
+  ce:	fde0018b          	ss.end	u3,zero,t5,t6
+
+00000000000000d2 <.SLOOP_311>:
+  d2:	004190ab          	so.a.add.fp	u1,u3,u4,p0
+  d6:	ffd0feab          	so.b.nc	u1,d2 <.SLOOP_311>
+  da:	7808738b          	ss.sta.ld.d.v	u7,a6
+  de:	03e0038b          	ss.app	u7,zero,t5,zero
+  e2:	fde0038b          	ss.end	u7,zero,t5,t6
+  e6:	7805728b          	ss.sta.ld.d.v	u5,a0
+  ea:	f3e0028b          	ss.app	u5,zero,t5,t5
+  ee:	fde0028b          	ss.end	u5,zero,t5,t6
+  f2:	0007b08b          	ss.sta.st.d	u1,a5
+  f6:	fde0008b          	ss.end	u1,zero,t5,t6
+  fa:	0007f48b          	ss.sta.ld.d	u9,a5
+  fe:	fde0048b          	ss.end	u9,zero,t5,t6
+ 102:	ac02b62b          	so.v.dp.d	u12,t0,p0
+
+0000000000000106 <.SLOOP_411>:
+ 106:	ac0036ab          	so.v.dp.d	u13,zero,p0
+
+000000000000010a <.SLOOP_4_011>:
+ 10a:	10c2972b          	so.a.mul.fp	u14,u5,u12,p0
+ 10e:	107717ab          	so.a.mul.fp	u15,u14,u7,p0
+ 112:	201796ab          	so.a.adde.acc.fp	u13,u15,p0
+ 116:	ffd29aab          	so.b.ndc.2	u5,10a <.SLOOP_4_011>
+ 11a:	00d490ab          	so.a.add.fp	u1,u9,u13,p0
+ 11e:	ffd0f4ab          	so.b.nc	u1,106 <.SLOOP_411>
+ 122:	c0202373          	rdinstret	t1
+ 126:	000007b7          	lui	a5,0x0
+ 12a:	00000537          	lui	a0,0x0
+ 12e:	01c7b023          	sd	t3,0(a5) # 0 <core>
+ 132:	861a                	mv	a2,t1
+ 134:	000007b7          	lui	a5,0x0
+ 138:	85f2                	mv	a1,t3
+ 13a:	00050513          	mv	a0,a0
+ 13e:	0067b023          	sd	t1,0(a5) # 0 <core>
+ 142:	00000317          	auipc	t1,0x0
+ 146:	00030067          	jr	t1 # 142 <.SLOOP_4_011+0x38>

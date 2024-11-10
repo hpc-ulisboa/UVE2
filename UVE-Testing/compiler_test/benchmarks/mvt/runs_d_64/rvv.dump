@@ -1,0 +1,192 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+       0: 7179         	addi	sp, sp, -0x30
+       2: f422         	sd	s0, 0x28(sp)
+       4: f026         	sd	s1, 0x20(sp)
+       6: ec4a         	sd	s2, 0x18(sp)
+       8: e84e         	sd	s3, 0x10(sp)
+       a: e452         	sd	s4, 0x8(sp)
+       c: e056         	sd	s5, 0x0(sp)
+       e: c02024f3     	rdinstret	s1
+      12: 00000837     	lui	a6, 0x0
+      16: 00983023     	sd	s1, 0x0(a6)
+      1a: 00078063     	beqz	a5, 0x1a <core+0x1a>
+      1e: 00379893     	slli	a7, a5, 0x3
+      22: 01158933     	add	s2, a1, a7
+      26: 02f78433     	mul	s0, a5, a5
+      2a: 00341293     	slli	t0, s0, 0x3
+      2e: 92aa         	add	t0, t0, a0
+      30: c2202373     	csrr	t1, vlenb
+      34: 00235393     	srli	t2, t1, 0x2
+      38: 4ea1         	li	t4, 0x8
+      3a: 01168e33     	add	t3, a3, a7
+      3e: 8f9e         	mv	t6, t2
+      40: 007ee063     	bltu	t4, t2, 0x40 <core+0x40>
+      44: 4fa1         	li	t6, 0x8
+      46: 4f01         	li	t5, 0x0
+      48: 0055b433     	sltu	s0, a1, t0
+      4c: 012534b3     	sltu	s1, a0, s2
+      50: 009472b3     	and	t0, s0, s1
+      54: 01c5b4b3     	sltu	s1, a1, t3
+      58: 0126b433     	sltu	s0, a3, s2
+      5c: 8c65         	and	s0, s0, s1
+      5e: 0008a493     	slti	s1, a7, 0x0
+      62: 8c45         	or	s0, s0, s1
+      64: 0082e4b3     	or	s1, t0, s0
+      68: 00131293     	slli	t0, t1, 0x1
+      6c: 01f7b433     	sltu	s0, a5, t6
+      70: 00946e33     	or	t3, s0, s1
+      74: 407004b3     	neg	s1, t2
+      78: 00f4feb3     	and	t4, s1, a5
+      7c: 0d8074d7     	vsetvli	s1, zero, e64, m1, ta, ma
+      80: 5e003457     	vmv.v.i	v8, 0x0
+      84: 0d9074d7     	vsetvli	s1, zero, e64, m2, ta, ma
+      88: 5e003557     	vmv.v.i	v10, 0x0
+      8c: 420064d7     	vmv.s.x	v9, zero
+      90: 8faa         	mv	t6, a0
+      92: a001         	j	0x92 <core+0x92>
+      94: 0f05         	addi	t5, t5, 0x1
+      96: 9fc6         	add	t6, t6, a7
+      98: 00ff0063     	beq	t5, a5, 0x98 <core+0x98>
+      9c: 003f1913     	slli	s2, t5, 0x3
+      a0: 992e         	add	s2, s2, a1
+      a2: 00093787     	fld	fa5, 0x0(s2)
+      a6: 000e0063     	beqz	t3, 0xa6 <core+0xa6>
+      aa: 4481         	li	s1, 0x0
+      ac: a001         	j	0xac <core+0xac>
+      ae: 9e803757     	vmv1r.v	v14, v8
+      b2: 09807457     	vsetvli	s0, zero, e64, m1, tu, ma
+      b6: 4207d757     	vfmv.s.f	v14, fa5
+      ba: 9ea0b657     	vmv2r.v	v12, v10
+      be: 9ee03657     	vmv1r.v	v12, v14
+      c2: 89f6         	mv	s3, t4
+      c4: 8a36         	mv	s4, a3
+      c6: 847e         	mv	s0, t6
+      c8: 22847707     	vl2re64.v	v14, (s0)
+      cc: 228a7807     	vl2re64.v	v16, (s4)
+      d0: 0d9074d7     	vsetvli	s1, zero, e64, m2, ta, ma
+      d4: b2e81657     	vfmacc.vv	v12, v16, v14
+      d8: 9416         	add	s0, s0, t0
+      da: 407989b3     	sub	s3, s3, t2
+      de: 9a16         	add	s4, s4, t0
+      e0: 00099063     	bnez	s3, 0xe0 <core+0xe0>
+      e4: 06c49657     	vfredusum.vs	v12, v12, v9
+      e8: cd80f057     	vsetivli	zero, 0x1, e64, m1, ta, ma
+      ec: 02097627     	vse64.v	v12, (s2)
+      f0: 00fe8063     	beq	t4, a5, 0xf0 <core+0xf0>
+      f4: 42c017d7     	vfmv.f.s	fa5, v12
+      f8: 84f6         	mv	s1, t4
+      fa: 00349413     	slli	s0, s1, 0x3
+      fe: 008f89b3     	add	s3, t6, s0
+     102: 9436         	add	s0, s0, a3
+     104: 409784b3     	sub	s1, a5, s1
+     108: 0009b707     	fld	fa4, 0x0(s3)
+     10c: 2014         	fld	fa3, 0x0(s0)
+     10e: 7ae6f7c3     	fmadd.d	fa5, fa3, fa4, fa5
+     112: 00f93027     	fsd	fa5, 0x0(s2)
+     116: 09a1         	addi	s3, s3, 0x8
+     118: 14fd         	addi	s1, s1, -0x1
+     11a: 0421         	addi	s0, s0, 0x8
+     11c: e081         	bnez	s1, 0x11c <core+0x11c>
+     11e: a001         	j	0x11e <core+0x11e>
+     120: 011603b3     	add	t2, a2, a7
+     124: 55fd         	li	a1, -0x1
+     126: 818d         	srli	a1, a1, 0x3
+     128: 95be         	add	a1, a1, a5
+     12a: 011706b3     	add	a3, a4, a7
+     12e: 00235f13     	srli	t5, t1, 0x2
+     132: 4411         	li	s0, 0x4
+     134: 00335493     	srli	s1, t1, 0x3
+     138: 837a         	mv	t1, t5
+     13a: 01e46063     	bltu	s0, t5, 0x13a <core+0x13a>
+     13e: 4311         	li	t1, 0x4
+     140: 4a01         	li	s4, 0x0
+     142: 02f58e33     	mul	t3, a1, a5
+     146: 00d635b3     	sltu	a1, a2, a3
+     14a: 007736b3     	sltu	a3, a4, t2
+     14e: 00d5feb3     	and	t4, a1, a3
+     152: 029789b3     	mul	s3, a5, s1
+     156: 0992         	slli	s3, s3, 0x4
+     158: 41e005b3     	neg	a1, t5
+     15c: 00f5ffb3     	and	t6, a1, a5
+     160: 892a         	mv	s2, a0
+     162: a001         	j	0x162 <core+0x162>
+     164: 0a05         	addi	s4, s4, 0x1
+     166: 0921         	addi	s2, s2, 0x8
+     168: 00fa0063     	beq	s4, a5, 0x168 <core+0x168>
+     16c: 003a1593     	slli	a1, s4, 0x3
+     170: 00b60ab3     	add	s5, a2, a1
+     174: 000ab787     	fld	fa5, 0x0(s5)
+     178: 0067e063     	bltu	a5, t1, 0x178 <core+0x178>
+     17c: 95aa         	add	a1, a1, a0
+     17e: 014e06b3     	add	a3, t3, s4
+     182: 068e         	slli	a3, a3, 0x3
+     184: 00d50433     	add	s0, a0, a3
+     188: 86ae         	mv	a3, a1
+     18a: 00b46063     	bltu	s0, a1, 0x18a <core+0x18a>
+     18e: 86a2         	mv	a3, s0
+     190: 0085e063     	bltu	a1, s0, 0x190 <core+0x190>
+     194: 85a2         	mv	a1, s0
+     196: 06a1         	addi	a3, a3, 0x8
+     198: 00d636b3     	sltu	a3, a2, a3
+     19c: 0075b5b3     	sltu	a1, a1, t2
+     1a0: 8df5         	and	a1, a1, a3
+     1a2: 01d5e5b3     	or	a1, a1, t4
+     1a6: c181         	beqz	a1, 0x1a6 <core+0x1a6>
+     1a8: 4581         	li	a1, 0x0
+     1aa: 00359413     	slli	s0, a1, 0x3
+     1ae: 943a         	add	s0, s0, a4
+     1b0: 02b886b3     	mul	a3, a7, a1
+     1b4: 96ca         	add	a3, a3, s2
+     1b6: 40b785b3     	sub	a1, a5, a1
+     1ba: 2298         	fld	fa4, 0x0(a3)
+     1bc: 2014         	fld	fa3, 0x0(s0)
+     1be: 7ae6f7c3     	fmadd.d	fa5, fa3, fa4, fa5
+     1c2: 00fab027     	fsd	fa5, 0x0(s5)
+     1c6: 0421         	addi	s0, s0, 0x8
+     1c8: 15fd         	addi	a1, a1, -0x1
+     1ca: 96c6         	add	a3, a3, a7
+     1cc: e181         	bnez	a1, 0x1cc <core+0x1cc>
+     1ce: a001         	j	0x1ce <core+0x1ce>
+     1d0: 9e803757     	vmv1r.v	v14, v8
+     1d4: 098075d7     	vsetvli	a1, zero, e64, m1, tu, ma
+     1d8: 4207d757     	vfmv.s.f	v14, fa5
+     1dc: 9ea0b657     	vmv2r.v	v12, v10
+     1e0: 9ee03657     	vmv1r.v	v12, v14
+     1e4: 85ca         	mv	a1, s2
+     1e6: 86fe         	mv	a3, t6
+     1e8: 843a         	mv	s0, a4
+     1ea: 0d9074d7     	vsetvli	s1, zero, e64, m2, ta, ma
+     1ee: 0b15f707     	vlse64.v	v14, (a1), a7
+     1f2: 22847807     	vl2re64.v	v16, (s0)
+     1f6: b2e81657     	vfmacc.vv	v12, v16, v14
+     1fa: 9416         	add	s0, s0, t0
+     1fc: 41e686b3     	sub	a3, a3, t5
+     200: 95ce         	add	a1, a1, s3
+     202: e281         	bnez	a3, 0x202 <core+0x202>
+     204: 06c49657     	vfredusum.vs	v12, v12, v9
+     208: cd80f057     	vsetivli	zero, 0x1, e64, m1, ta, ma
+     20c: 020af627     	vse64.v	v12, (s5)
+     210: 00ff8063     	beq	t6, a5, 0x210 <core+0x210>
+     214: 42c017d7     	vfmv.f.s	fa5, v12
+     218: 85fe         	mv	a1, t6
+     21a: a001         	j	0x21a <core+0x21a>
+     21c: c0202673     	rdinstret	a2
+     220: 00083583     	ld	a1, 0x0(a6)
+     224: 000006b7     	lui	a3, 0x0
+     228: 00000537     	lui	a0, 0x0
+     22c: 00050513     	mv	a0, a0
+     230: 00c6b023     	sd	a2, 0x0(a3)
+     234: 7422         	ld	s0, 0x28(sp)
+     236: 7482         	ld	s1, 0x20(sp)
+     238: 6962         	ld	s2, 0x18(sp)
+     23a: 69c2         	ld	s3, 0x10(sp)
+     23c: 6a22         	ld	s4, 0x8(sp)
+     23e: 6a82         	ld	s5, 0x0(sp)
+     240: 6145         	addi	sp, sp, 0x30
+     242: 00000317     	auipc	t1, 0x0
+     246: 00030067     	jr	t1 <core+0x242>

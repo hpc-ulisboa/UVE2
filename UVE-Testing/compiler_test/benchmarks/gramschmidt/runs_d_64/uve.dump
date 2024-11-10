@@ -1,0 +1,106 @@
+
+UVEkernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+       0: f3 27 20 c0  	rdinstret	a5
+       4: 37 08 00 00  	lui	a6, 0
+       8: 23 30 f8 00  	sd	a5, 0(a6)
+       c: 63 50 b0 00  	blez	a1, 0xc <core+0xc>
+      10: 13 15 05 02  	slli	a0, a0, 32
+      14: 93 58 05 02  	srli	a7, a0, 32
+      18: 93 82 f5 ff  	addi	t0, a1, -1
+      1c: 13 85 15 00  	addi	a0, a1, 1
+      20: 93 07 10 00  	li	a5, 1
+      24: 8b 73 06 00  	ss.sta.ld.d	u7, a2
+      28: 8b 03 b0 7a  	ss.app	u7, zero, a1, a5
+      2c: 8b 03 10 5d  	ss.end	u7, zero, a7, a1
+      30: 0b 74 06 00  	ss.sta.ld.d	u8, a2
+      34: 0b 04 b0 7a  	ss.app	u8, zero, a1, a5
+      38: 0b 04 10 5d  	ss.end	u8, zero, a7, a1
+      3c: 8b b4 06 00  	ss.sta.st.d	u9, a3
+      40: 8b 04 b0 54  	ss.end	u9, zero, a1, a0
+      44: 8b 76 06 00  	ss.sta.ld.d	u13, a2
+      48: 8b 06 b0 7a  	ss.app	u13, zero, a1, a5
+      4c: 8b 06 10 5d  	ss.end	u13, zero, a7, a1
+      50: 0b f7 06 00  	ss.sta.ld.d	u14, a3
+      54: 0b 07 b0 52  	ss.app	u14, zero, a1, a0
+      58: 0b 07 10 05  	ss.end	u14, zero, a7, zero
+      5c: 8b 35 07 00  	ss.sta.st.d	u11, a4
+      60: 8b 05 b0 7a  	ss.app	u11, zero, a1, a5
+      64: 8b 05 10 5d  	ss.end	u11, zero, a7, a1
+      68: 8b 79 07 78  	ss.sta.ld.d.v	u19, a4
+      6c: 8b 09 b0 7a  	ss.app	u19, zero, a1, a5
+      70: 8b c9 40 7a  	ss.app.mod.siz.dec.2	u19, a5
+      74: 8b 09 50 02  	ss.app	u19, zero, t0, zero
+      78: 8b 09 10 5d  	ss.end	u19, zero, a7, a1
+      7c: 0b 7a 06 78  	ss.sta.ld.d.v	u20, a2
+      80: 0b 0a b0 7a  	ss.app	u20, zero, a1, a5
+      84: 0b ca 40 7a  	ss.app.mod.siz.dec.2	u20, a5
+      88: 0b 8a 57 7a  	ss.app	u20, a5, t0, a5
+      8c: 0b 0a 10 5d  	ss.end	u20, zero, a7, a1
+      90: 0b b8 06 00  	ss.sta.st.d	u16, a3
+      94: 0b 08 b0 52  	ss.app	u16, zero, a1, a0
+      98: 0b c8 40 7a  	ss.app.mod.siz.dec.2	u16, a5
+      9c: 0b 88 57 7c  	ss.end	u16, a5, t0, a5
+      a0: 8b 7b 06 78  	ss.sta.ld.d.v	u23, a2
+      a4: 8b 0b b0 7a  	ss.app	u23, zero, a1, a5
+      a8: 8b cb 40 7a  	ss.app.mod.siz.dec.2	u23, a5
+      ac: 8b 8b 57 7a  	ss.app	u23, a5, t0, a5
+      b0: 8b 0b 10 5d  	ss.end	u23, zero, a7, a1
+      b4: 8b 7c 07 78  	ss.sta.ld.d.v	u25, a4
+      b8: 8b 0c b0 7a  	ss.app	u25, zero, a1, a5
+      bc: 8b cc 40 7a  	ss.app.mod.siz.dec.2	u25, a5
+      c0: 8b 0c 50 02  	ss.app	u25, zero, t0, zero
+      c4: 8b 0c 10 5d  	ss.end	u25, zero, a7, a1
+      c8: 0b fd 06 78  	ss.sta.ld.d.v	u26, a3
+      cc: 0b 0d b0 52  	ss.app	u26, zero, a1, a0
+      d0: 0b cd 40 7a  	ss.app.mod.siz.dec.2	u26, a5
+      d4: 0b 8d 57 7a  	ss.app	u26, a5, t0, a5
+      d8: 0b 0d 10 05  	ss.end	u26, zero, a7, zero
+      dc: 8b 3a 06 78  	ss.sta.st.d.v	u21, a2
+      e0: 8b 0a b0 7a  	ss.app	u21, zero, a1, a5
+      e4: 8b ca 40 7a  	ss.app.mod.siz.dec.2	u21, a5
+      e8: 8b 8a 57 7a  	ss.app	u21, a5, t0, a5
+      ec: 8b 0a 10 5d  	ss.end	u21, zero, a7, a1
+
+00000000000000f0 <.SLOOP_1>:
+      f0: ab 32 00 ac  	so.v.dp.d	u5, zero, p0
+
+00000000000000f4 <.SLOOP_1_0>:
+      f4: 2b 93 83 10  	so.a.mul.fp	u6, u7, u8, p0
+      f8: ab 92 62 00  	so.a.add.fp	u5, u5, u6, p0
+      fc: 2b 90 13 e0  	so.b.ndc.2	u7, 0xfc <.SLOOP_1_0+0x8>
+     100: 2b 93 02 20  	so.a.adde.fp	u6, u5, p0
+     104: ab 54 13 60  	so.a.sqrt.fp	u9, u6, p0
+
+0000000000000108 <.SLOOP_1_1>:
+     108: ab d5 e6 10  	so.a.div.fp	u11, u13, u14, p0
+     10c: 2b 90 15 e0  	so.b.ndc.2	u11, 0x10c <.SLOOP_1_1+0x4>
+
+0000000000000110 <.SLOOP_1_2>:
+     110: ab 38 00 ac  	so.v.dp.d	u17, zero, p0
+
+0000000000000114 <.SLOOP_1_2_0>:
+     114: 2b 99 49 11  	so.a.mul.fp	u18, u19, u20, p0
+     118: ab 98 28 01  	so.a.add.fp	u17, u17, u18, p0
+     11c: 2b a0 19 e0  	so.b.ndc.3	u19, 0x11c <.SLOOP_1_2_0+0x8>
+     120: 2b 98 08 20  	so.a.adde.fp	u16, u17, p0
+
+0000000000000124 <.SLOOP_1_2_1>:
+     124: 2b 9c ac 11  	so.a.mul.fp	u24, u25, u26, p0
+     128: ab da 8b 01  	so.a.sub.fp	u21, u23, u24, p0
+     12c: 2b a0 1a e0  	so.b.ndc.3	u21, 0x12c <.SLOOP_1_2_1+0x8>
+     130: 2b 90 19 e0  	so.b.ndc.2	u19, 0x130 <.SLOOP_1_2_1+0xc>
+     134: 2b f0 13 e0  	so.b.nc	u7, 0x134 <.SLOOP_1_2_1+0x10>
+
+0000000000000138 <.LBB0_2>:
+     138: 73 26 20 c0  	rdinstret	a2
+     13c: 83 35 08 00  	ld	a1, 0(a6)
+     140: b7 06 00 00  	lui	a3, 0
+     144: 37 05 00 00  	lui	a0, 0
+     148: 13 05 05 00  	mv	a0, a0
+     14c: 23 b0 c6 00  	sd	a2, 0(a3)
+     150: 17 03 00 00  	auipc	t1, 0
+     154: 67 00 03 00  	jr	t1

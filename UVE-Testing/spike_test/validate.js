@@ -50,19 +50,19 @@ const bin_rvv = `.run_rvv`;
 const bin_simple_clang = `.run_simple_clang`;
 
 // read size from command line
-const size = process.argv[2] || 50;
+const size = process.argv[2] || 64;
 
 // read csv filename from command line
 const csvFilename = process.argv[3] || "results.csv";
 
 // write csv header
-fs.writeFile(csvFilename, "kernel,size,datatype,original_clang,rvv,original_gcc,uve\n", (err) => {
+fs.writeFile(csvFilename, "kernel,size,datatype,original,uve\n", (err) => {
 	if (err) throw err;
 });
 
 // kernel size map
 const kernelSizeMap = {
-	/*"3mm": size,
+	"3mm": size,
 	"convolution": size,
 	"covariance": size,
 	"gemm": size,
@@ -72,15 +72,11 @@ const kernelSizeMap = {
 	"memcpy": size*size,
 	"mvt": size,
 	"saxpy": size*size,
-	"sgd": 0,
+	//"sgd": 0,
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
 	"stream": size*size,
-	"trisolv": size*/
-	//"ind": size,
-	//"vec_cv": size
-	//"covariance": size,
-	"trmm": 0,
+	"trisolv": size
 };
 
 // read type and size from command line
@@ -259,10 +255,10 @@ function aproximateEqual(stdout1, stdout2, /*stdout3, stdout4,*/ kernel, t, s, d
 
 	// export to csv
 	// kernel, size, datatype, original_clang, rvv, original_gcc, uve
-	/*const csv = `${kernel},${s},${typeMap[t]},${insnsOCLANG},${insnsRVV},${insnsOGCC},${insnsUVE}\n`;
+	const csv = `${kernel},${s},${typeMap[t]},${insnsOGCC},${insnsUVE}\n`;
 	fs.appendFile(csvFilename, csv, (err) => {
 		if (err) throw err;
-	});*/
+	});
 
 	return flag;
 }
@@ -283,15 +279,14 @@ for (let kernel in kernelSizeMap) {
 			if ((kernel === "jacobi-1d" || kernel === "jacobi-2d") && type !== "F" && type !== "D") {
 				continue;
 			}
-			dir = `benchmarks/${kernel}/runs_${type.toLowerCase()}_${size*size}`;
+			dir = `benchmarks/${kernel}/runs_${type.toLowerCase()}_${size}`;
 			// if the directory does not exist, create it
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		}
 
-		const sizeCSV = s === size ? s*s : s;
-		console.log(`\n### Attempting to compile and run kernel ${kernel} (size: ${sizeCSV}, type: ${typeMap[type]}) ...\n`);
+		console.log(`\n### Attempting to compile and run kernel ${kernel} (size: ${s}, type: ${typeMap[type]}) ...\n`);
 
 		/* Compile Functions and main source files */
 		compileKernel(gccPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
@@ -346,7 +341,7 @@ for (let kernel in kernelSizeMap) {
 
 		/* Test if generated values are similar */
 
-		if (aproximateEqual(execSimpleGCC.stdout.toString(),  execUVE.stdout.toString(), /*execSimpleClang.stdout.toString(), execRVV.stdout.toString(),*/ kernel, type, sizeCSV, dir)) {
+		if (aproximateEqual(execSimpleGCC.stdout.toString(),  execUVE.stdout.toString(), /*execSimpleClang.stdout.toString(), execRVV.stdout.toString(),*/ kernel, type, s, dir)) {
 			console.log(`Kernel ${kernel} is similar enough`);
 		} else {
 			console.error(`Kernel ${kernel}: Did not generate result similar enough`);

@@ -5,8 +5,9 @@ long int start = 0, end = 0;
 #ifdef RUN_UVE
 #ifdef D_TYPE
 void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
+    asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+
     asm volatile(
-        "rdinstret %[s] \n"
 
         "ss.sta.ld.d.v u1, %[src1a] \n"
         "ss.end        u1, zero, %[sn], %[one] \n"
@@ -46,19 +47,20 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
 			"so.a.mul.fp   u4,  u10, u5, p0 \n"
         "so.b.nc  u1,  .uve_loop2%= \n"
 
-        "rdinstret %[e] \n"
-        : [s] "=&r"(start), [e] "=&r"(end)
-        : [src1a] "r"(A), [src1b] "r"(A + 1), [src1c] "r"(A + 2), [src1] "r"(A + 1),
+        :: [src1a] "r"(A), [src1b] "r"(A + 1), [src1c] "r"(A + 2), [src1] "r"(A + 1),
           [src2a] "r"(B), [src2b] "r"(B + 1), [src2c] "r"(B + 2), [src2] "r"(B + 1),
           [sn] "r"(SIZE - 2), [one] "r"(1), [ct] "r"(ct));
+
+    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 
     printf("%ld\n%ld\n", start, end);
 }
 #endif // D_TYPE
 #ifdef F_TYPE
 void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
+    asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+
     asm volatile(
-        "rdinstret %[s] \n"
 
         "ss.sta.ld.w.v u1, %[src1a] \n"
         "ss.end        u1, zero, %[sn], %[one] \n"
@@ -98,11 +100,11 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
 			"so.a.mul.fp   u4,  u10, u5, p0 \n"
         "so.b.nc  u1,  .uve_loop2%= \n"
 
-        "rdinstret %[e] \n"
-        : [s] "=&r"(start), [e] "=&r"(end)
-        : [src1a] "r"(A), [src1b] "r"(A + 1), [src1c] "r"(A + 2), [src1] "r"(A + 1),
+        :: [src1a] "r"(A), [src1b] "r"(A + 1), [src1c] "r"(A + 2), [src1] "r"(A + 1),
           [src2a] "r"(B), [src2b] "r"(B + 1), [src2c] "r"(B + 2), [src2] "r"(B + 1),
           [sn] "r"(SIZE - 2), [one] "r"(1), [ct] "r"(ct));
+
+    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 
     printf("%ld\n%ld\n", start, end);
 }

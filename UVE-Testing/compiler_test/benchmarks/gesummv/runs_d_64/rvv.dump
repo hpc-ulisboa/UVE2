@@ -1,0 +1,58 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+       0: 1141         	addi	sp, sp, -0x10
+       2: e422         	sd	s0, 0x8(sp)
+       4: c0202473     	rdinstret	s0
+       8: 00000837     	lui	a6, 0x0
+       c: 00883023     	sd	s0, 0x0(a6)
+      10: 00a05063     	blez	a0, 0x10 <core+0x10>
+      14: 4881         	li	a7, 0x0
+      16: 00351293     	slli	t0, a0, 0x3
+      1a: 8336         	mv	t1, a3
+      1c: 03128433     	mul	s0, t0, a7
+      20: 00828e33     	add	t3, t0, s0
+      24: 9e36         	add	t3, t3, a3
+      26: 00389393     	slli	t2, a7, 0x3
+      2a: 00758eb3     	add	t4, a1, t2
+      2e: 000eb023     	sd	zero, 0x0(t4)
+      32: 93be         	add	t2, t2, a5
+      34: 0003b023     	sd	zero, 0x0(t2)
+      38: 8f3a         	mv	t5, a4
+      3a: 8fb2         	mv	t6, a2
+      3c: 841a         	mv	s0, t1
+      3e: 000fb787     	fld	fa5, 0x0(t6)
+      42: 000f3707     	fld	fa4, 0x0(t5)
+      46: 000eb687     	fld	fa3, 0x0(t4)
+      4a: 6af777c3     	fmadd.d	fa5, fa4, fa5, fa3
+      4e: 00feb027     	fsd	fa5, 0x0(t4)
+      52: 201c         	fld	fa5, 0x0(s0)
+      54: 000f3707     	fld	fa4, 0x0(t5)
+      58: 0003b687     	fld	fa3, 0x0(t2)
+      5c: 6af777c3     	fmadd.d	fa5, fa4, fa5, fa3
+      60: 00f3b027     	fsd	fa5, 0x0(t2)
+      64: 0421         	addi	s0, s0, 0x8
+      66: 0fa1         	addi	t6, t6, 0x8
+      68: 0f21         	addi	t5, t5, 0x8
+      6a: 01c41063     	bne	s0, t3, 0x6a <core+0x6a>
+      6e: 000eb707     	fld	fa4, 0x0(t4)
+      72: 12a77753     	fmul.d	fa4, fa4, fa0
+      76: 72b7f7c3     	fmadd.d	fa5, fa5, fa1, fa4
+      7a: 00f3b027     	fsd	fa5, 0x0(t2)
+      7e: 0885         	addi	a7, a7, 0x1
+      80: 9316         	add	t1, t1, t0
+      82: 9616         	add	a2, a2, t0
+      84: 00a89063     	bne	a7, a0, 0x84 <core+0x84>
+      88: c0202673     	rdinstret	a2
+      8c: 00083583     	ld	a1, 0x0(a6)
+      90: 000006b7     	lui	a3, 0x0
+      94: 00000537     	lui	a0, 0x0
+      98: 00050513     	mv	a0, a0
+      9c: 00c6b023     	sd	a2, 0x0(a3)
+      a0: 6422         	ld	s0, 0x8(sp)
+      a2: 0141         	addi	sp, sp, 0x10
+      a4: 00000317     	auipc	t1, 0x0
+      a8: 00030067     	jr	t1 <core+0xa4>

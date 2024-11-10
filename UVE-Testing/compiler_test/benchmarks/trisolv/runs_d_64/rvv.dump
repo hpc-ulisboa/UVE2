@@ -1,0 +1,99 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+       0: 1101         	addi	sp, sp, -0x20
+       2: ec22         	sd	s0, 0x18(sp)
+       4: e826         	sd	s1, 0x10(sp)
+       6: e44a         	sd	s2, 0x8(sp)
+       8: 4f81         	li	t6, 0x0
+       a: c02026f3     	rdinstret	a3
+       e: 00000737     	lui	a4, 0x0
+      12: 00d73023     	sd	a3, 0x0(a4)
+      16: 20060813     	addi	a6, a2, 0x200
+      1a: c22026f3     	csrr	a3, vlenb
+      1e: 00169e93     	slli	t4, a3, 0x1
+      22: 0026d393     	srli	t2, a3, 0x2
+      26: 20800893     	li	a7, 0x208
+      2a: 04000293     	li	t0, 0x40
+      2e: 40700333     	neg	t1, t2
+      32: 0d8076d7     	vsetvli	a3, zero, e64, m1, ta, ma
+      36: 5e003457     	vmv.v.i	v8, 0x0
+      3a: 0d9076d7     	vsetvli	a3, zero, e64, m2, ta, ma
+      3e: 5e003557     	vmv.v.i	v10, 0x0
+      42: 420064d7     	vmv.s.x	v9, zero
+      46: 8e2a         	mv	t3, a0
+      48: a001         	j	0x48 <core+0x48>
+      4a: 00093707     	fld	fa4, 0x0(s2)
+      4e: 1ae7f7d3     	fdiv.d	fa5, fa5, fa4
+      52: a31c         	fsd	fa5, 0x0(a4)
+      54: 0f85         	addi	t6, t6, 0x1
+      56: 200e0e13     	addi	t3, t3, 0x200
+      5a: 005f8063     	beq	t6, t0, 0x5a <core+0x5a>
+      5e: 003f9713     	slli	a4, t6, 0x3
+      62: 00e586b3     	add	a3, a1, a4
+      66: 229c         	fld	fa5, 0x0(a3)
+      68: 031f87b3     	mul	a5, t6, a7
+      6c: 00f50933     	add	s2, a0, a5
+      70: 9732         	add	a4, a4, a2
+      72: a31c         	fsd	fa5, 0x0(a4)
+      74: 000f8063     	beqz	t6, 0x74 <core+0x74>
+      78: 4491         	li	s1, 0x4
+      7a: 869e         	mv	a3, t2
+      7c: 0074e063     	bltu	s1, t2, 0x7c <core+0x7c>
+      80: 4691         	li	a3, 0x4
+      82: 00dfe063     	bltu	t6, a3, 0x82 <core+0x82>
+      86: 01267063     	bgeu	a2, s2, 0x86 <core+0x86>
+      8a: 009f9693     	slli	a3, t6, 0x9
+      8e: 96aa         	add	a3, a3, a0
+      90: 0106f063     	bgeu	a3, a6, 0x90 <core+0x90>
+      94: 4f01         	li	t5, 0x0
+      96: 0f0e         	slli	t5, t5, 0x3
+      98: 01ee06b3     	add	a3, t3, t5
+      9c: 01e604b3     	add	s1, a2, t5
+      a0: 2298         	fld	fa4, 0x0(a3)
+      a2: 2094         	fld	fa3, 0x0(s1)
+      a4: 7ae6f7cb     	fnmsub.d	fa5, fa3, fa4, fa5
+      a8: a31c         	fsd	fa5, 0x0(a4)
+      aa: 06a1         	addi	a3, a3, 0x8
+      ac: 04a1         	addi	s1, s1, 0x8
+      ae: 01269063     	bne	a3, s2, 0xae <core+0xae>
+      b2: a001         	j	0xb2 <core+0xb2>
+      b4: 006fff33     	and	t5, t6, t1
+      b8: 9e803757     	vmv1r.v	v14, v8
+      bc: 098076d7     	vsetvli	a3, zero, e64, m1, tu, ma
+      c0: 4207d757     	vfmv.s.f	v14, fa5
+      c4: 9ea0b657     	vmv2r.v	v12, v10
+      c8: 9ee03657     	vmv1r.v	v12, v14
+      cc: 86fa         	mv	a3, t5
+      ce: 8432         	mv	s0, a2
+      d0: 84f2         	mv	s1, t3
+      d2: 2284f707     	vl2re64.v	v14, (s1)
+      d6: 22847807     	vl2re64.v	v16, (s0)
+      da: 0d9077d7     	vsetvli	a5, zero, e64, m2, ta, ma
+      de: bee81657     	vfnmsac.vv	v12, v16, v14
+      e2: 94f6         	add	s1, s1, t4
+      e4: 407686b3     	sub	a3, a3, t2
+      e8: 9476         	add	s0, s0, t4
+      ea: e281         	bnez	a3, 0xea <core+0xea>
+      ec: 06c49657     	vfredusum.vs	v12, v12, v9
+      f0: 42c017d7     	vfmv.f.s	fa5, v12
+      f4: cd80f057     	vsetivli	zero, 0x1, e64, m1, ta, ma
+      f8: 02077627     	vse64.v	v12, (a4)
+      fc: 01ef8063     	beq	t6, t5, 0xfc <core+0xfc>
+     100: a001         	j	0x100 <core+0x100>
+     102: c0202673     	rdinstret	a2
+     106: 00000537     	lui	a0, 0x0
+     10a: 00053583     	ld	a1, 0x0(a0)
+     10e: 000006b7     	lui	a3, 0x0
+     112: 00000537     	lui	a0, 0x0
+     116: 00050513     	mv	a0, a0
+     11a: 00c6b023     	sd	a2, 0x0(a3)
+     11e: 6462         	ld	s0, 0x18(sp)
+     120: 64c2         	ld	s1, 0x10(sp)
+     122: 6922         	ld	s2, 0x8(sp)
+     124: 6105         	addi	sp, sp, 0x20
+     126: 00000317     	auipc	t1, 0x0
+     12a: 00030067     	jr	t1 <core+0x126>

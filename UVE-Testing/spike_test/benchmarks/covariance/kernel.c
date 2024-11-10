@@ -6,9 +6,9 @@ long int start = 0, end = 0;
 #ifdef D_TYPE
 void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, DataType *data /* %3 */, DataType *cov /* %4 */, DataType *mean /* %5 */) {
     // kernel 1
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+    
     asm volatile(
-        "rdinstret %[s] \n"
-
         "ss.sta.ld.d.v      u1, %[data] \n"
         "ss.app             u1, zero, %[M], %[one] \n"
         "ss.end             u1, zero, %[N], %[M] \n"
@@ -89,20 +89,21 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.mv        u4, u8, p0 \n"
         "so.b.nc u1, .SLOOP_3%= \n"
 
-        "rdinstret %[e] \n"
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
+        
+:: [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
           [one] "r"(1), [datat_nn] "r"((DataType)(datat_n - 1.0)));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // D_TYPE
 #ifdef F_TYPE
 void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, DataType *data /* %3 */, DataType *cov /* %4 */, DataType *mean /* %5 */) {
     // kernel 1
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+    
     asm volatile(
-        "rdinstret %[s] \n"
-
         "ss.sta.ld.w.v      u1, %[data] \n"
         "ss.app             u1, zero, %[M], %[one] \n"
         "ss.end             u1, zero, %[N], %[M] \n"
@@ -183,20 +184,21 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.mv        u4, u8, p0 \n"
         "so.b.nc u1, .SLOOP_3%= \n"
 
-        "rdinstret %[e] \n"
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
+        
+:: [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
           [one] "r"(1), [datat_nn] "r"((DataType)(datat_n - 1.0)));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // F_TYPE
 #ifdef I_TYPE
 void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, DataType *data /* %3 */, DataType *cov /* %4 */, DataType *mean /* %5 */) {
     // kernel 1
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+    
     asm volatile(
-        "rdinstret %[s] \n"
-
         "ss.sta.ld.w.v      u1, %[data] \n"
         "ss.app             u1, zero, %[M], %[one] \n"
         "ss.end             u1, zero, %[N], %[M] \n"
@@ -277,20 +279,21 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.mv        u4, u8, p0 \n"
         "so.b.nc u1, .SLOOP_3%= \n"
 
-        "rdinstret %[e] \n"
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
+        
+:: [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
           [one] "r"(1), [datat_nn] "r"((DataType)(datat_n - 1.0)));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // I_TYPE
 #ifdef H_TYPE
 void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, DataType *data /* %3 */, DataType *cov /* %4 */, DataType *mean /* %5 */) {
     // kernel 1
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+    
     asm volatile(
-        "rdinstret %[s] \n"
-
         "ss.sta.ld.h.v      u1, %[data] \n"
         "ss.app             u1, zero, %[M], %[one] \n"
         "ss.end             u1, zero, %[N], %[M] \n"
@@ -371,20 +374,21 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.mv        u4, u8, p0 \n"
         "so.b.nc u1, .SLOOP_3%= \n"
 
-        "rdinstret %[e] \n"
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
+        
+:: [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
           [one] "r"(1), [datat_nn] "r"((DataType)(datat_n - 1.0)));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // H_TYPE
 #ifdef B_TYPE
 void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, DataType *data /* %3 */, DataType *cov /* %4 */, DataType *mean /* %5 */) {
     // kernel 1
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+    
     asm volatile(
-        "rdinstret %[s] \n"
-
         "ss.sta.ld.b.v      u1, %[data] \n"
         "ss.app             u1, zero, %[M], %[one] \n"
         "ss.end             u1, zero, %[N], %[M] \n"
@@ -465,11 +469,12 @@ void core(int sizeM /* %0 */, int sizeN /* %1 */, DataType datat_n /* %2 */, Dat
             "so.v.mv        u4, u8, p0 \n"
         "so.b.nc u1, .SLOOP_3%= \n"
 
-        "rdinstret %[e] \n"
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
+        
+:: [M] "r"(sizeM), [N] "r"(sizeN), [datat_n] "r"(datat_n), [data] "r"(data), [cov] "r"(cov), [mean] "r"(mean),
           [one] "r"(1), [datat_nn] "r"((DataType)(datat_n - 1.0)));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // B_TYPE
@@ -539,7 +544,8 @@ void core(int sizeM, int sizeN, DataType datat_n, DataType *data, DataType *cov,
             }*/
         }
     
-    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 

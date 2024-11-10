@@ -4,8 +4,9 @@ long int start = 0, end = 0;
 
 #ifdef RUN_UVE
 void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint64_t N, uint64_t K) {
+    asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+
     asm volatile(
-        "rdinstret %[s] \n"
 
         // rowDelimiters stream (!!! this one should not be vectorial)
         "ss.sta.ld.w.inds  u3, %[rowDelimiters] \n"
@@ -53,11 +54,10 @@ void core(void *val, void *cols, void *rowDelimiters, void *vec, void *out, uint
             "so.a.adde.fp u5, u8, p0 \n"
         "so.b.nc	u1, .iLoop1%= \n"
 
-        "rdinstret %[e] \n"
-
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [val] "r"(val), [cols] "r"(cols), [rowDelimiters] "r"(rowDelimiters), [vec] "r"(vec), [out] "r"(out),
+        :: [val] "r"(val), [cols] "r"(cols), [rowDelimiters] "r"(rowDelimiters), [vec] "r"(vec), [out] "r"(out),
           [sn] "r"(N), [sk] "r"(K), [zero] "r"(0), [one] "r"(1));
+
+    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 
     printf("%ld\n%ld\n", start, end);
 }

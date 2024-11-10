@@ -5,9 +5,9 @@ long int start = 0, end = 0;
 #ifdef RUN_UVE
 #ifdef D_TYPE
 void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
-    asm volatile(
-        "rdinstret %[s] \n"
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
+    asm volatile(
         // src(y-1,x-1) stream load
         "ss.sta.ld.d.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
@@ -60,15 +60,15 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "ss.end                u10, zero, %[fsize], zero \n"*/
 
         // filter
-        "so.v.dp.d  u10, %[filter0], p0\n"
-        "so.v.dp.d  u11, %[filter1], p0\n"
-        "so.v.dp.d  u12, %[filter2], p0\n"
-        "so.v.dp.d  u13, %[filter3], p0\n"
-        "so.v.dp.d  u14, %[filter4], p0\n"
-        "so.v.dp.d  u15, %[filter5], p0\n"
-        "so.v.dp.d  u16, %[filter6], p0\n"
-        "so.v.dp.d  u17, %[filter7], p0\n"
-        "so.v.dp.d  u18, %[filter8], p0\n"
+        "so.v.dp.d  u10, %[filter0], p0 \n"
+        "so.v.dp.d  u11, %[filter1], p0 \n"
+        "so.v.dp.d  u12, %[filter2], p0 \n"
+        "so.v.dp.d  u13, %[filter3], p0 \n"
+        "so.v.dp.d  u14, %[filter4], p0 \n"
+        "so.v.dp.d  u15, %[filter5], p0 \n"
+        "so.v.dp.d  u16, %[filter6], p0 \n"
+        "so.v.dp.d  u17, %[filter7], p0 \n"
+        "so.v.dp.d  u18, %[filter8], p0 \n"
 
 
         // dst(y,x) stream store
@@ -78,33 +78,30 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
         ".loop_y%=: \n"
         
-            "so.a.mul.fp u19, u10, u9, p0\n\t" // filter[0] * src[(y + 1)][(x + 1)]
-            "so.a.mul.fp u20, u11, u8, p0\n\t" // filter[1] * src[(y + 1)][(x)]
-            "so.a.mul.fp u21, u12, u7, p0\n\t" // filter[2] * src[(y + 1)][(x - 1)]
-            "so.a.mul.fp u22, u13, u6, p0\n\t" // filter[3] * src[(y)][(x + 1)]
-            "so.a.mul.fp u23, u14, u5, p0\n\t" // filter[4] * src[(y)][(x)]
-            "so.a.mul.fp u24, u15, u4, p0\n\t" // filter[5] * src[(y)][(x - 1)]
-            "so.a.mul.fp u25, u16, u3, p0\n\t" // filter[6] * src[(y - 1)][(x + 1)]
-            "so.a.mul.fp u26, u17, u2, p0\n\t" // filter[7] * src[(y - 1)][(x)]
-            "so.a.mul.fp u27, u18, u1, p0\n\t" // filter[8] * src[(y - 1)][(x - 1)]
+            "so.a.mul.fp u19, u10, u9, p0 \n" // filter[0] * src[(y + 1)][(x + 1)]
+            "so.a.mul.fp u20, u11, u8, p0 \n" // filter[1] * src[(y + 1)][(x)]
+            "so.a.mul.fp u21, u12, u7, p0 \n" // filter[2] * src[(y + 1)][(x - 1)]
+            "so.a.mul.fp u22, u13, u6, p0 \n" // filter[3] * src[(y)][(x + 1)]
+            "so.a.mul.fp u23, u14, u5, p0 \n" // filter[4] * src[(y)][(x)]
+            "so.a.mul.fp u24, u15, u4, p0 \n" // filter[5] * src[(y)][(x - 1)]
+            "so.a.mul.fp u25, u16, u3, p0 \n" // filter[6] * src[(y - 1)][(x + 1)]
+            "so.a.mul.fp u26, u17, u2, p0 \n" // filter[7] * src[(y - 1)][(x)]
+            "so.a.mul.fp u27, u18, u1, p0 \n" // filter[8] * src[(y - 1)][(x - 1)]
 
-            "so.a.add.fp u28, u19, u20, p0\n\t" 
-            "so.a.add.fp u29, u21, u22, p0\n\t"
-            "so.a.add.fp u30, u23, u24, p0\n\t"
-            "so.a.add.fp u31, u25, u26, p0\n\t"
+            "so.a.add.fp u28, u19, u20, p0 \n" 
+            "so.a.add.fp u29, u21, u22, p0 \n"
+            "so.a.add.fp u30, u23, u24, p0 \n"
+            "so.a.add.fp u31, u25, u26, p0 \n"
 
-            "so.a.add.fp u29, u29, u28, p0\n\t"
-            "so.a.add.fp u31, u31, u30, p0\n\t"
-            "so.a.add.fp u31, u31, u29, p0\n\t"
+            "so.a.add.fp u29, u29, u28, p0 \n"
+            "so.a.add.fp u31, u31, u30, p0 \n"
+            "so.a.add.fp u31, u31, u29, p0 \n"
 
-            "so.a.add.fp u0, u31, u27, p0\n\t"
+            "so.a.add.fp u0, u31, u27, p0 \n"
 
-            "so.b.nc	u0, .loop_y%= \n\t"
+            "so.b.nc	u0, .loop_y%= \n"
 
-        "rdinstret %[e] \n"
-
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
+:: [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
         [src_3] "r" (src+PB_J),      [src_4] "r" (src+PB_J+1),      [src_5] "r" (src+PB_J+2),
         [src_6] "r" (src+PB_J+PB_J), [src_7] "r" (src+PB_J+PB_J+1), [src_8] "r" (src+PB_J+PB_J+2),
         [dst] "r"(dst + PB_J), [filter] "r"(filter), 	
@@ -114,14 +111,16 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         [filter3] "r"(filter[3]), [filter4] "r"(filter[4]), [filter5] "r"(filter[5]),
         [filter6] "r"(filter[6]), [filter7] "r"(filter[7]), [filter8] "r"(filter[8]));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // D_TYPE
 #ifdef F_TYPE
 void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
-    asm volatile(
-        "rdinstret %[s] \n"
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
+    asm volatile(
         // src(y-1,x-1) stream load
         "ss.sta.ld.w.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
@@ -174,15 +173,15 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "ss.end                u10, zero, %[fsize], zero \n"*/
 
         // filter
-        "so.v.dp.w  u10, %[filter0], p0\n"
-        "so.v.dp.w  u11, %[filter1], p0\n"
-        "so.v.dp.w  u12, %[filter2], p0\n"
-        "so.v.dp.w  u13, %[filter3], p0\n"
-        "so.v.dp.w  u14, %[filter4], p0\n"
-        "so.v.dp.w  u15, %[filter5], p0\n"
-        "so.v.dp.w  u16, %[filter6], p0\n"
-        "so.v.dp.w  u17, %[filter7], p0\n"
-        "so.v.dp.w  u18, %[filter8], p0\n"
+        "so.v.dp.w  u10, %[filter0], p0 \n"
+        "so.v.dp.w  u11, %[filter1], p0 \n"
+        "so.v.dp.w  u12, %[filter2], p0 \n"
+        "so.v.dp.w  u13, %[filter3], p0 \n"
+        "so.v.dp.w  u14, %[filter4], p0 \n"
+        "so.v.dp.w  u15, %[filter5], p0 \n"
+        "so.v.dp.w  u16, %[filter6], p0 \n"
+        "so.v.dp.w  u17, %[filter7], p0 \n"
+        "so.v.dp.w  u18, %[filter8], p0 \n"
 
 
         // dst(y,x) stream store
@@ -192,33 +191,30 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
         ".loop_y%=: \n"
         
-            "so.a.mul.fp u19, u10, u9, p0\n\t" // filter[0] * src[(y + 1)][(x + 1)]
-            "so.a.mul.fp u20, u11, u8, p0\n\t" // filter[1] * src[(y + 1)][(x)]
-            "so.a.mul.fp u21, u12, u7, p0\n\t" // filter[2] * src[(y + 1)][(x - 1)]
-            "so.a.mul.fp u22, u13, u6, p0\n\t" // filter[3] * src[(y)][(x + 1)]
-            "so.a.mul.fp u23, u14, u5, p0\n\t" // filter[4] * src[(y)][(x)]
-            "so.a.mul.fp u24, u15, u4, p0\n\t" // filter[5] * src[(y)][(x - 1)]
-            "so.a.mul.fp u25, u16, u3, p0\n\t" // filter[6] * src[(y - 1)][(x + 1)]
-            "so.a.mul.fp u26, u17, u2, p0\n\t" // filter[7] * src[(y - 1)][(x)]
-            "so.a.mul.fp u27, u18, u1, p0\n\t" // filter[8] * src[(y - 1)][(x - 1)]
+            "so.a.mul.fp u19, u10, u9, p0 \n" // filter[0] * src[(y + 1)][(x + 1)]
+            "so.a.mul.fp u20, u11, u8, p0 \n" // filter[1] * src[(y + 1)][(x)]
+            "so.a.mul.fp u21, u12, u7, p0 \n" // filter[2] * src[(y + 1)][(x - 1)]
+            "so.a.mul.fp u22, u13, u6, p0 \n" // filter[3] * src[(y)][(x + 1)]
+            "so.a.mul.fp u23, u14, u5, p0 \n" // filter[4] * src[(y)][(x)]
+            "so.a.mul.fp u24, u15, u4, p0 \n" // filter[5] * src[(y)][(x - 1)]
+            "so.a.mul.fp u25, u16, u3, p0 \n" // filter[6] * src[(y - 1)][(x + 1)]
+            "so.a.mul.fp u26, u17, u2, p0 \n" // filter[7] * src[(y - 1)][(x)]
+            "so.a.mul.fp u27, u18, u1, p0 \n" // filter[8] * src[(y - 1)][(x - 1)]
 
-            "so.a.add.fp u28, u19, u20, p0\n\t" 
-            "so.a.add.fp u29, u21, u22, p0\n\t"
-            "so.a.add.fp u30, u23, u24, p0\n\t"
-            "so.a.add.fp u31, u25, u26, p0\n\t"
+            "so.a.add.fp u28, u19, u20, p0 \n" 
+            "so.a.add.fp u29, u21, u22, p0 \n"
+            "so.a.add.fp u30, u23, u24, p0 \n"
+            "so.a.add.fp u31, u25, u26, p0 \n"
 
-            "so.a.add.fp u29, u29, u28, p0\n\t"
-            "so.a.add.fp u31, u31, u30, p0\n\t"
-            "so.a.add.fp u31, u31, u29, p0\n\t"
+            "so.a.add.fp u29, u29, u28, p0 \n"
+            "so.a.add.fp u31, u31, u30, p0 \n"
+            "so.a.add.fp u31, u31, u29, p0 \n"
 
-            "so.a.add.fp u0, u31, u27, p0\n\t"
+            "so.a.add.fp u0, u31, u27, p0 \n"
 
-            "so.b.nc	u0, .loop_y%= \n\t"
+            "so.b.nc	u0, .loop_y%= \n"
 
-        "rdinstret %[e] \n"
-
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
+:: [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
         [src_3] "r" (src+PB_J),      [src_4] "r" (src+PB_J+1),      [src_5] "r" (src+PB_J+2),
         [src_6] "r" (src+PB_J+PB_J), [src_7] "r" (src+PB_J+PB_J+1), [src_8] "r" (src+PB_J+PB_J+2),
         [dst] "r"(dst + PB_J), [filter] "r"(filter), 	
@@ -228,14 +224,16 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         [filter3] "r"(filter[3]), [filter4] "r"(filter[4]), [filter5] "r"(filter[5]),
         [filter6] "r"(filter[6]), [filter7] "r"(filter[7]), [filter8] "r"(filter[8]));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // F_TYPE
 #ifdef I_TYPE
 void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
-    asm volatile(
-        "rdinstret %[s] \n"
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
+    asm volatile(
         // src(y-1,x-1) stream load
         "ss.sta.ld.w.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
@@ -288,15 +286,15 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "ss.end                u10, zero, %[fsize], zero \n"*/
 
         // filter
-        "so.v.dp.w  u10, %[filter0], p0\n"
-        "so.v.dp.w  u11, %[filter1], p0\n"
-        "so.v.dp.w  u12, %[filter2], p0\n"
-        "so.v.dp.w  u13, %[filter3], p0\n"
-        "so.v.dp.w  u14, %[filter4], p0\n"
-        "so.v.dp.w  u15, %[filter5], p0\n"
-        "so.v.dp.w  u16, %[filter6], p0\n"
-        "so.v.dp.w  u17, %[filter7], p0\n"
-        "so.v.dp.w  u18, %[filter8], p0\n"
+        "so.v.dp.w  u10, %[filter0], p0 \n"
+        "so.v.dp.w  u11, %[filter1], p0 \n"
+        "so.v.dp.w  u12, %[filter2], p0 \n"
+        "so.v.dp.w  u13, %[filter3], p0 \n"
+        "so.v.dp.w  u14, %[filter4], p0 \n"
+        "so.v.dp.w  u15, %[filter5], p0 \n"
+        "so.v.dp.w  u16, %[filter6], p0 \n"
+        "so.v.dp.w  u17, %[filter7], p0 \n"
+        "so.v.dp.w  u18, %[filter8], p0 \n"
 
 
         // dst(y,x) stream store
@@ -306,33 +304,30 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
         ".loop_y%=: \n"
         
-            "so.a.mul.sg u19, u10, u9, p0\n\t" // filter[0] * src[(y + 1)][(x + 1)]
-            "so.a.mul.sg u20, u11, u8, p0\n\t" // filter[1] * src[(y + 1)][(x)]
-            "so.a.mul.sg u21, u12, u7, p0\n\t" // filter[2] * src[(y + 1)][(x - 1)]
-            "so.a.mul.sg u22, u13, u6, p0\n\t" // filter[3] * src[(y)][(x + 1)]
-            "so.a.mul.sg u23, u14, u5, p0\n\t" // filter[4] * src[(y)][(x)]
-            "so.a.mul.sg u24, u15, u4, p0\n\t" // filter[5] * src[(y)][(x - 1)]
-            "so.a.mul.sg u25, u16, u3, p0\n\t" // filter[6] * src[(y - 1)][(x + 1)]
-            "so.a.mul.sg u26, u17, u2, p0\n\t" // filter[7] * src[(y - 1)][(x)]
-            "so.a.mul.sg u27, u18, u1, p0\n\t" // filter[8] * src[(y - 1)][(x - 1)]
+            "so.a.mul.sg u19, u10, u9, p0 \n" // filter[0] * src[(y + 1)][(x + 1)]
+            "so.a.mul.sg u20, u11, u8, p0 \n" // filter[1] * src[(y + 1)][(x)]
+            "so.a.mul.sg u21, u12, u7, p0 \n" // filter[2] * src[(y + 1)][(x - 1)]
+            "so.a.mul.sg u22, u13, u6, p0 \n" // filter[3] * src[(y)][(x + 1)]
+            "so.a.mul.sg u23, u14, u5, p0 \n" // filter[4] * src[(y)][(x)]
+            "so.a.mul.sg u24, u15, u4, p0 \n" // filter[5] * src[(y)][(x - 1)]
+            "so.a.mul.sg u25, u16, u3, p0 \n" // filter[6] * src[(y - 1)][(x + 1)]
+            "so.a.mul.sg u26, u17, u2, p0 \n" // filter[7] * src[(y - 1)][(x)]
+            "so.a.mul.sg u27, u18, u1, p0 \n" // filter[8] * src[(y - 1)][(x - 1)]
 
-            "so.a.add.sg u28, u19, u20, p0\n\t" 
-            "so.a.add.sg u29, u21, u22, p0\n\t"
-            "so.a.add.sg u30, u23, u24, p0\n\t"
-            "so.a.add.sg u31, u25, u26, p0\n\t"
+            "so.a.add.sg u28, u19, u20, p0 \n" 
+            "so.a.add.sg u29, u21, u22, p0 \n"
+            "so.a.add.sg u30, u23, u24, p0 \n"
+            "so.a.add.sg u31, u25, u26, p0 \n"
 
-            "so.a.add.sg u29, u29, u28, p0\n\t"
-            "so.a.add.sg u31, u31, u30, p0\n\t"
-            "so.a.add.sg u31, u31, u29, p0\n\t"
+            "so.a.add.sg u29, u29, u28, p0 \n"
+            "so.a.add.sg u31, u31, u30, p0 \n"
+            "so.a.add.sg u31, u31, u29, p0 \n"
 
-            "so.a.add.sg u0, u31, u27, p0\n\t"
+            "so.a.add.sg u0, u31, u27, p0 \n"
 
-            "so.b.nc	u0, .loop_y%= \n\t"
+            "so.b.nc	u0, .loop_y%= \n"
 
-        "rdinstret %[e] \n"
-
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
+:: [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
         [src_3] "r" (src+PB_J),      [src_4] "r" (src+PB_J+1),      [src_5] "r" (src+PB_J+2),
         [src_6] "r" (src+PB_J+PB_J), [src_7] "r" (src+PB_J+PB_J+1), [src_8] "r" (src+PB_J+PB_J+2),
         [dst] "r"(dst + PB_J), [filter] "r"(filter), 	
@@ -342,14 +337,16 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         [filter3] "r"(filter[3]), [filter4] "r"(filter[4]), [filter5] "r"(filter[5]),
         [filter6] "r"(filter[6]), [filter7] "r"(filter[7]), [filter8] "r"(filter[8]));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // I_TYPE
 #ifdef H_TYPE
 void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
-    asm volatile(
-        "rdinstret %[s] \n"
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
+    asm volatile(
         // src(y-1,x-1) stream load
         "ss.sta.ld.h.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
@@ -402,15 +399,15 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "ss.end                u10, zero, %[fsize], zero \n"*/
 
         // filter
-        "so.v.dp.h  u10, %[filter0], p0\n"
-        "so.v.dp.h  u11, %[filter1], p0\n"
-        "so.v.dp.h  u12, %[filter2], p0\n"
-        "so.v.dp.h  u13, %[filter3], p0\n"
-        "so.v.dp.h  u14, %[filter4], p0\n"
-        "so.v.dp.h  u15, %[filter5], p0\n"
-        "so.v.dp.h  u16, %[filter6], p0\n"
-        "so.v.dp.h  u17, %[filter7], p0\n"
-        "so.v.dp.h  u18, %[filter8], p0\n"
+        "so.v.dp.h  u10, %[filter0], p0 \n"
+        "so.v.dp.h  u11, %[filter1], p0 \n"
+        "so.v.dp.h  u12, %[filter2], p0 \n"
+        "so.v.dp.h  u13, %[filter3], p0 \n"
+        "so.v.dp.h  u14, %[filter4], p0 \n"
+        "so.v.dp.h  u15, %[filter5], p0 \n"
+        "so.v.dp.h  u16, %[filter6], p0 \n"
+        "so.v.dp.h  u17, %[filter7], p0 \n"
+        "so.v.dp.h  u18, %[filter8], p0 \n"
 
 
         // dst(y,x) stream store
@@ -420,33 +417,30 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
         ".loop_y%=: \n"
         
-            "so.a.mul.sg u19, u10, u9, p0\n\t" // filter[0] * src[(y + 1)][(x + 1)]
-            "so.a.mul.sg u20, u11, u8, p0\n\t" // filter[1] * src[(y + 1)][(x)]
-            "so.a.mul.sg u21, u12, u7, p0\n\t" // filter[2] * src[(y + 1)][(x - 1)]
-            "so.a.mul.sg u22, u13, u6, p0\n\t" // filter[3] * src[(y)][(x + 1)]
-            "so.a.mul.sg u23, u14, u5, p0\n\t" // filter[4] * src[(y)][(x)]
-            "so.a.mul.sg u24, u15, u4, p0\n\t" // filter[5] * src[(y)][(x - 1)]
-            "so.a.mul.sg u25, u16, u3, p0\n\t" // filter[6] * src[(y - 1)][(x + 1)]
-            "so.a.mul.sg u26, u17, u2, p0\n\t" // filter[7] * src[(y - 1)][(x)]
-            "so.a.mul.sg u27, u18, u1, p0\n\t" // filter[8] * src[(y - 1)][(x - 1)]
+            "so.a.mul.sg u19, u10, u9, p0 \n" // filter[0] * src[(y + 1)][(x + 1)]
+            "so.a.mul.sg u20, u11, u8, p0 \n" // filter[1] * src[(y + 1)][(x)]
+            "so.a.mul.sg u21, u12, u7, p0 \n" // filter[2] * src[(y + 1)][(x - 1)]
+            "so.a.mul.sg u22, u13, u6, p0 \n" // filter[3] * src[(y)][(x + 1)]
+            "so.a.mul.sg u23, u14, u5, p0 \n" // filter[4] * src[(y)][(x)]
+            "so.a.mul.sg u24, u15, u4, p0 \n" // filter[5] * src[(y)][(x - 1)]
+            "so.a.mul.sg u25, u16, u3, p0 \n" // filter[6] * src[(y - 1)][(x + 1)]
+            "so.a.mul.sg u26, u17, u2, p0 \n" // filter[7] * src[(y - 1)][(x)]
+            "so.a.mul.sg u27, u18, u1, p0 \n" // filter[8] * src[(y - 1)][(x - 1)]
 
-            "so.a.add.sg u28, u19, u20, p0\n\t" 
-            "so.a.add.sg u29, u21, u22, p0\n\t"
-            "so.a.add.sg u30, u23, u24, p0\n\t"
-            "so.a.add.sg u31, u25, u26, p0\n\t"
+            "so.a.add.sg u28, u19, u20, p0 \n" 
+            "so.a.add.sg u29, u21, u22, p0 \n"
+            "so.a.add.sg u30, u23, u24, p0 \n"
+            "so.a.add.sg u31, u25, u26, p0 \n"
 
-            "so.a.add.sg u29, u29, u28, p0\n\t"
-            "so.a.add.sg u31, u31, u30, p0\n\t"
-            "so.a.add.sg u31, u31, u29, p0\n\t"
+            "so.a.add.sg u29, u29, u28, p0 \n"
+            "so.a.add.sg u31, u31, u30, p0 \n"
+            "so.a.add.sg u31, u31, u29, p0 \n"
 
-            "so.a.add.sg u0, u31, u27, p0\n\t"
+            "so.a.add.sg u0, u31, u27, p0 \n"
 
-            "so.b.nc	u0, .loop_y%= \n\t"
+            "so.b.nc	u0, .loop_y%= \n"
 
-        "rdinstret %[e] \n"
-
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
+:: [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
         [src_3] "r" (src+PB_J),      [src_4] "r" (src+PB_J+1),      [src_5] "r" (src+PB_J+2),
         [src_6] "r" (src+PB_J+PB_J), [src_7] "r" (src+PB_J+PB_J+1), [src_8] "r" (src+PB_J+PB_J+2),
         [dst] "r"(dst + PB_J), [filter] "r"(filter), 	
@@ -456,14 +450,16 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         [filter3] "r"(filter[3]), [filter4] "r"(filter[4]), [filter5] "r"(filter[5]),
         [filter6] "r"(filter[6]), [filter7] "r"(filter[7]), [filter8] "r"(filter[8]));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // H_TYPE
 #ifdef B_TYPE
 void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
-    asm volatile(
-        "rdinstret %[s] \n"
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
+    asm volatile(
         // src(y-1,x-1) stream load
         "ss.sta.ld.b.v         u1, %[src_0] \n"
         "ss.app                u1, zero, %[inm2], %[jn] \n"
@@ -516,15 +512,15 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         "ss.end                u10, zero, %[fsize], zero \n"*/
 
         // filter
-        "so.v.dp.b  u10, %[filter0], p0\n"
-        "so.v.dp.b  u11, %[filter1], p0\n"
-        "so.v.dp.b  u12, %[filter2], p0\n"
-        "so.v.dp.b  u13, %[filter3], p0\n"
-        "so.v.dp.b  u14, %[filter4], p0\n"
-        "so.v.dp.b  u15, %[filter5], p0\n"
-        "so.v.dp.b  u16, %[filter6], p0\n"
-        "so.v.dp.b  u17, %[filter7], p0\n"
-        "so.v.dp.b  u18, %[filter8], p0\n"
+        "so.v.dp.b  u10, %[filter0], p0 \n"
+        "so.v.dp.b  u11, %[filter1], p0 \n"
+        "so.v.dp.b  u12, %[filter2], p0 \n"
+        "so.v.dp.b  u13, %[filter3], p0 \n"
+        "so.v.dp.b  u14, %[filter4], p0 \n"
+        "so.v.dp.b  u15, %[filter5], p0 \n"
+        "so.v.dp.b  u16, %[filter6], p0 \n"
+        "so.v.dp.b  u17, %[filter7], p0 \n"
+        "so.v.dp.b  u18, %[filter8], p0 \n"
 
 
         // dst(y,x) stream store
@@ -534,33 +530,30 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
         ".loop_y%=: \n"
         
-            "so.a.mul.sg u19, u10, u9, p0\n\t" // filter[0] * src[(y + 1)][(x + 1)]
-            "so.a.mul.sg u20, u11, u8, p0\n\t" // filter[1] * src[(y + 1)][(x)]
-            "so.a.mul.sg u21, u12, u7, p0\n\t" // filter[2] * src[(y + 1)][(x - 1)]
-            "so.a.mul.sg u22, u13, u6, p0\n\t" // filter[3] * src[(y)][(x + 1)]
-            "so.a.mul.sg u23, u14, u5, p0\n\t" // filter[4] * src[(y)][(x)]
-            "so.a.mul.sg u24, u15, u4, p0\n\t" // filter[5] * src[(y)][(x - 1)]
-            "so.a.mul.sg u25, u16, u3, p0\n\t" // filter[6] * src[(y - 1)][(x + 1)]
-            "so.a.mul.sg u26, u17, u2, p0\n\t" // filter[7] * src[(y - 1)][(x)]
-            "so.a.mul.sg u27, u18, u1, p0\n\t" // filter[8] * src[(y - 1)][(x - 1)]
+            "so.a.mul.sg u19, u10, u9, p0 \n" // filter[0] * src[(y + 1)][(x + 1)]
+            "so.a.mul.sg u20, u11, u8, p0 \n" // filter[1] * src[(y + 1)][(x)]
+            "so.a.mul.sg u21, u12, u7, p0 \n" // filter[2] * src[(y + 1)][(x - 1)]
+            "so.a.mul.sg u22, u13, u6, p0 \n" // filter[3] * src[(y)][(x + 1)]
+            "so.a.mul.sg u23, u14, u5, p0 \n" // filter[4] * src[(y)][(x)]
+            "so.a.mul.sg u24, u15, u4, p0 \n" // filter[5] * src[(y)][(x - 1)]
+            "so.a.mul.sg u25, u16, u3, p0 \n" // filter[6] * src[(y - 1)][(x + 1)]
+            "so.a.mul.sg u26, u17, u2, p0 \n" // filter[7] * src[(y - 1)][(x)]
+            "so.a.mul.sg u27, u18, u1, p0 \n" // filter[8] * src[(y - 1)][(x - 1)]
 
-            "so.a.add.sg u28, u19, u20, p0\n\t" 
-            "so.a.add.sg u29, u21, u22, p0\n\t"
-            "so.a.add.sg u30, u23, u24, p0\n\t"
-            "so.a.add.sg u31, u25, u26, p0\n\t"
+            "so.a.add.sg u28, u19, u20, p0 \n" 
+            "so.a.add.sg u29, u21, u22, p0 \n"
+            "so.a.add.sg u30, u23, u24, p0 \n"
+            "so.a.add.sg u31, u25, u26, p0 \n"
 
-            "so.a.add.sg u29, u29, u28, p0\n\t"
-            "so.a.add.sg u31, u31, u30, p0\n\t"
-            "so.a.add.sg u31, u31, u29, p0\n\t"
+            "so.a.add.sg u29, u29, u28, p0 \n"
+            "so.a.add.sg u31, u31, u30, p0 \n"
+            "so.a.add.sg u31, u31, u29, p0 \n"
 
-            "so.a.add.sg u0, u31, u27, p0\n\t"
+            "so.a.add.sg u0, u31, u27, p0 \n"
 
-            "so.b.nc	u0, .loop_y%= \n\t"
+            "so.b.nc	u0, .loop_y%= \n"
 
-        "rdinstret %[e] \n"
-
-        : [s] "=&r" (start), [e] "=&r" (end)
-        : [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
+:: [src_0] "r" (src),         [src_1] "r" (src+1),           [src_2] "r" (src+2),
         [src_3] "r" (src+PB_J),      [src_4] "r" (src+PB_J+1),      [src_5] "r" (src+PB_J+2),
         [src_6] "r" (src+PB_J+PB_J), [src_7] "r" (src+PB_J+PB_J+1), [src_8] "r" (src+PB_J+PB_J+2),
         [dst] "r"(dst + PB_J), [filter] "r"(filter), 	
@@ -570,6 +563,8 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
         [filter3] "r"(filter[3]), [filter4] "r"(filter[4]), [filter5] "r"(filter[5]),
         [filter6] "r"(filter[6]), [filter7] "r"(filter[7]), [filter8] "r"(filter[8]));
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // B_TYPE
@@ -577,7 +572,7 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
 
 #ifdef RUN_SIMPLE
 void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
-    asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+	asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
     DataType sum;
     int y, x, k, j;
@@ -591,7 +586,9 @@ void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
             dst[y * PB_J + x] = sum;
         }
     }
-    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+    
     printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE

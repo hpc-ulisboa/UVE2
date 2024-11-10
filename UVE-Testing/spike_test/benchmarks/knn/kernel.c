@@ -6,114 +6,124 @@
 #define LJ1 1.5
 #define LJ2 2.0
 
+long int start = 0, end = 0;
+
 #ifdef RUN_UVE
+#ifdef D_TYPE
 void core(void *force_x, void *force_y, void *force_z, void *position_x, void *position_y, void *position_z, void *NL) {
+
+    asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+
     asm volatile(
         // position_x_i stream
-        "ss.sta.ld.d              u1, %[pos_x], %[vl], zero \t\n" // D0: scalar access
-        "ss.end                   u1, zero, %[na], %[one] \t\n"   // D1: linear access
+        "ss.sta.ld.d              u1, %[pos_x], %[vl], zero \n" // D0: scalar access
+        "ss.end                   u1, zero, %[na], %[one] \n"   // D1: linear access
         // position_y_i stream
-        "ss.sta.ld.d              u2, %[pos_y], %[vl], zero \t\n" // D0: scalar access
-        "ss.end                   u2, zero, %[na], %[one] \t\n"   // D1: linear access
+        "ss.sta.ld.d              u2, %[pos_y], %[vl], zero \n" // D0: scalar access
+        "ss.end                   u2, zero, %[na], %[one] \n"   // D1: linear access
         // position_z_i stream
-        "ss.sta.ld.d              u3, %[pos_z], %[vl], zero \t\n" // D0: scalar access
-        "ss.end                   u3, zero, %[na], %[one] \t\n"   // D1: linear access
+        "ss.sta.ld.d              u3, %[pos_z], %[vl], zero \n" // D0: scalar access
+        "ss.end                   u3, zero, %[na], %[one] \n"   // D1: linear access
 
         // NL stream
-        "ss.sta.ld.d              u27, %[n_list], %[mn], %[one] \t\n" // D1: linear access size maxNeighbors
-        //"ss.cfg.ind               u27 \t\n"
-        "ss.end                   u27, zero, %[na], %[mn] \t\n"       // D2: new line stride maxNeighbors size nAtoms
-        "ss.sta.ld.d              u28, %[n_list], %[mn], %[one] \t\n" // D1: linear access size maxNeighbors
-        //"ss.cfg.ind               u28 \t\n"
-        "ss.end                   u28, zero, %[na], %[mn] \t\n"       // D2: new line stride maxNeighbors size nAtoms
-        "ss.sta.ld.d              u29, %[n_list], %[mn], %[one] \t\n" // D1: linear access size maxNeighbors
-        //"ss.cfg.ind               u29 \t\n"
-        "ss.end                   u29, zero, %[na], %[mn] \t\n" // D2: new line stride maxNeighbors size nAtoms
+        "ss.sta.ld.d              u27, %[n_list], %[mn], %[one] \n" // D1: linear access size maxNeighbors
+        //"ss.cfg.ind               u27 \n"
+        "ss.end                   u27, zero, %[na], %[mn] \n"       // D2: new line stride maxNeighbors size nAtoms
+        "ss.sta.ld.d              u28, %[n_list], %[mn], %[one] \n" // D1: linear access size maxNeighbors
+        //"ss.cfg.ind               u28 \n"
+        "ss.end                   u28, zero, %[na], %[mn] \n"       // D2: new line stride maxNeighbors size nAtoms
+        "ss.sta.ld.d              u29, %[n_list], %[mn], %[one] \n" // D1: linear access size maxNeighbors
+        //"ss.cfg.ind               u29 \n"
+        "ss.end                   u29, zero, %[na], %[mn] \n" // D2: new line stride maxNeighbors size nAtoms
 
         // position_x_j stream
-        "ss.sta.ld.d              u5, %[pos_x], %[one], %[one] \t\n" // D1: linear access size 'unknown'
-        "ss.app                   u5, zero, %[na], zero \t\n"        // Repeat nAtoms times
-        "ss.app.indl.ofs.add      u5, u27 \t\n"                      // Indirection from stream u4 -> add to base address
-        "ss.end                   u5, zero, zero, zero \t\n"         // Repeat nAtoms times
+        "ss.sta.ld.d              u5, %[pos_x], %[one], %[one] \n" // D1: linear access size 'unknown'
+        "ss.app                   u5, zero, %[na], zero \n"        // Repeat nAtoms times
+        "ss.app.indl.ofs.add      u5, u27 \n"                      // Indirection from stream u4 -> add to base address
+        "ss.end                   u5, zero, zero, zero \n"         // Repeat nAtoms times
         // position_y_j stream
-        "ss.sta.ld.d              u6, %[pos_y], %[one], %[one] \t\n" // D1: linear access size 'unknown'
-        "ss.app                   u6, zero, %[na], zero \t\n"        // Repeat nAtoms times
-        "ss.app.indl.ofs.add      u6, u28 \t\n"                      // Indirection from stream u4 -> add to base address
-        "ss.end                   u6, zero, zero, zero \t\n"         // Repeat nAtoms times
+        "ss.sta.ld.d              u6, %[pos_y], %[one], %[one] \n" // D1: linear access size 'unknown'
+        "ss.app                   u6, zero, %[na], zero \n"        // Repeat nAtoms times
+        "ss.app.indl.ofs.add      u6, u28 \n"                      // Indirection from stream u4 -> add to base address
+        "ss.end                   u6, zero, zero, zero \n"         // Repeat nAtoms times
         // position_z_j stream
-        "ss.sta.ld.d              u7, %[pos_z], %[one], %[one] \t\n" // D1: linear access size 'unknown'
-        "ss.app                   u7, zero, %[na], zero \t\n"        // Repeat nAtoms times
-        "ss.app.indl.ofs.add      u7, u29 \t\n"                      // Indirection from stream u4 -> add to base address
-        "ss.end                   u7, zero, zero, zero \t\n"         // Repeat nAtoms times
+        "ss.sta.ld.d              u7, %[pos_z], %[one], %[one] \n" // D1: linear access size 'unknown'
+        "ss.app                   u7, zero, %[na], zero \n"        // Repeat nAtoms times
+        "ss.app.indl.ofs.add      u7, u29 \n"                      // Indirection from stream u4 -> add to base address
+        "ss.end                   u7, zero, zero, zero \n"         // Repeat nAtoms times
 
         // force_x_i stream
-        "ss.sta.st.d              u8, %[frc_x], %[vl], zero \t\n" // D0: scalar access
-        "ss.end                   u8, zero, %[na], %[one] \t\n"   // D1: linear access
+        "ss.sta.st.d              u8, %[frc_x], %[vl], zero \n" // D0: scalar access
+        "ss.end                   u8, zero, %[na], %[one] \n"   // D1: linear access
         // force_y_i stream
-        "ss.sta.st.d              u9, %[frc_y], %[vl], zero \t\n" // D0: scalar access
-        "ss.end                   u9, zero, %[na], %[one] \t\n"   // D1: linear access
+        "ss.sta.st.d              u9, %[frc_y], %[vl], zero \n" // D0: scalar access
+        "ss.end                   u9, zero, %[na], %[one] \n"   // D1: linear access
         // force_z_i stream
-        "ss.sta.st.d              u10, %[frc_z], %[vl], zero \t\n" // D0: scalar access
-        "ss.end                   u10, zero, %[na], %[one] \t\n"   // D1: linear access
+        "ss.sta.st.d              u10, %[frc_z], %[vl], zero \n" // D0: scalar access
+        "ss.end                   u10, zero, %[na], %[one] \n"   // D1: linear access
 
-        :
-        : [pos_x] "r"(position_x), [pos_y] "r"(position_y), [pos_z] "r"(position_z),
+        :: [pos_x] "r"(position_x), [pos_y] "r"(position_y), [pos_z] "r"(position_z),
           [frc_x] "r"(force_x), [frc_y] "r"(force_y), [frc_z] "r"(force_z),
           [n_list] "r"(NL), [vl] "r"(16),
           [na] "r"(nAtoms), [mn] "r"(maxNeighbors), [one] "r"(1));
 
     asm volatile(
-        "so.v.dp.d  u17, %[one], p0\n\t"
-        "so.v.dp.d  u18, %[lj1], p0\n\t"
-        "so.v.dp.d  u19, %[lj2], p0\n\t"
+        "so.v.dp.d  u17, %[one], p0 \n"
+        "so.v.dp.d  u18, %[lj1], p0 \n"
+        "so.v.dp.d  u19, %[lj2], p0 \n"
 
-        ".iLoop1%=: \t\n"
-        "so.v.mv     u11, u1, p0\n\t" // Get pos_x[i]
-        "so.v.mv     u12, u2, p0\n\t" // Get pos_y[i]
-        "so.v.mv     u13, u3, p0\n\t" // Get pos_z[i]
+        ".iLoop1%=: \n"
+        "so.v.mv     u11, u1, p0 \n" // Get pos_x[i]
+        "so.v.mv     u12, u2, p0 \n" // Get pos_y[i]
+        "so.v.mv     u13, u3, p0 \n" // Get pos_z[i]
 
-        "so.v.dp.d  u14, zero, p0\n\t"
-        "so.v.dp.d  u15, zero, p0\n\t"
-        "so.v.dp.d  u16, zero, p0\n\t"
+        "so.v.dp.d  u14, zero, p0 \n"
+        "so.v.dp.d  u15, zero, p0 \n"
+        "so.v.dp.d  u16, zero, p0 \n"
 
-        ".jloop1%=: \t\n"
-        "so.a.sub.fp u11, u5, u11, p0\n\t" //  delx = i_x - j_x;
-        "so.a.sub.fp u12, u6, u12, p0\n\t" //  dely = i_y - j_y;
-        "so.a.sub.fp u13, u7, u13, p0\n\t" //  delz = i_z - j_z;
+        ".jloop1%=: \n"
+        "so.a.sub.fp u11, u5, u11, p0 \n" //  delx = i_x - j_x;
+        "so.a.sub.fp u12, u6, u12, p0 \n" //  dely = i_y - j_y;
+        "so.a.sub.fp u13, u7, u13, p0 \n" //  delz = i_z - j_z;
 
-        "so.a.mul.fp u20, u11, u11, p0\n\t" // delx*delx
-        "so.a.mac.fp u20, u12, u12, p0\n\t" // + dely*dely
-        "so.a.mac.fp u20, u13, u13, p0\n\t" // + delz*delz
+        "so.a.mul.fp u20, u11, u11, p0 \n" // delx*delx
+        "so.a.mac.fp u20, u12, u12, p0 \n" // + dely*dely
+        "so.a.mac.fp u20, u13, u13, p0 \n" // + delz*delz
 
-        "so.a.div.fp u20, u17, u20, p0\n\t" // r2inv = 1.0 / ()
+        "so.a.div.fp u20, u17, u20, p0 \n" // r2inv = 1.0 / ()
 
-        "so.a.mul.fp u21, u20, u20, p0\n\t" // r2inv*r2inv
-        "so.a.mul.fp u21, u20, u21, p0\n\t" // r6inv = ()*r2inv
+        "so.a.mul.fp u21, u20, u20, p0 \n" // r2inv*r2inv
+        "so.a.mul.fp u21, u20, u21, p0 \n" // r6inv = ()*r2inv
 
-        "so.a.mul.fp u22, u18, u21, p0\n\t" // lj1*r6inv
-        "so.a.sub.fp u22, u22, u19, p0\n\t" // () - lj2
-        "so.a.mul.fp u22, u21, u22, p0\n\t" // potential = r6inv*()
+        "so.a.mul.fp u22, u18, u21, p0 \n" // lj1*r6inv
+        "so.a.sub.fp u22, u22, u19, p0 \n" // () - lj2
+        "so.a.mul.fp u22, u21, u22, p0 \n" // potential = r6inv*()
 
-        "so.a.mul.fp u20, u20, u22, p0\n\t" // force = r2inv*potential
+        "so.a.mul.fp u20, u20, u22, p0 \n" // force = r2inv*potential
 
-        "so.a.mac.fp u14, u11, u20, p0\n\t" // fx += delx * force
-        "so.a.mac.fp u15, u12, u20, p0\n\t" // fy += dely * force
-        "so.a.mac.fp u16, u13, u20, p0\n\t" // fz += delz * force
-        "so.b.ndc.1 u1, .jloop1%= \n\t"
+        "so.a.mac.fp u14, u11, u20, p0 \n" // fx += delx * force
+        "so.a.mac.fp u15, u12, u20, p0 \n" // fy += dely * force
+        "so.a.mac.fp u16, u13, u20, p0 \n" // fz += delz * force
+        "so.b.ndc.1 u1, .jloop1%= \n"
 
-        "so.a.adde.fp    u8, u14, p0      \n\t" // reduce fx vector
-        "so.a.adde.fp    u9, u15, p0      \n\t" // reduce fy vector
-        "so.a.adde.fp   u10, u16, p0      \n\t" // reduce fz vector
+        "so.a.adde.fp    u8, u14, p0 \n" // reduce fx vector
+        "so.a.adde.fp    u9, u15, p0 \n" // reduce fy vector
+        "so.a.adde.fp   u10, u16, p0 \n" // reduce fz vector
 
-        "so.b.nc u1, .iLoop1%= \n\t"
-        :
-        : [one] "r"(1), [lj1] "r"(LJ1), [lj2] "r"(LJ2));
+        "so.b.nc u1, .iLoop1%= \n"
+        :: [one] "r"(1), [lj1] "r"(LJ1), [lj2] "r"(LJ2));
+
+    asm volatile("rdinstret %[e] \n":[e] "=&r"(end));
+    printf("%ld\n%ld\n", start, end);
 }
-
+#endif // D_TYPE
 #endif // RUN_UVE
 
 #ifdef RUN_SIMPLE
 void core(DataType *force_x, DataType *force_y, DataType *force_z, DataType *position_x, DataType *position_y, DataType *position_z, int32_t *NL) {
+
+    asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+
     DataType delx, dely, delz, r2inv;
     DataType r6inv, potential, force, j_x, j_y, j_z;
     DataType i_x, i_y, i_z, fx, fy, fz;
@@ -156,5 +166,8 @@ void core(DataType *force_x, DataType *force_y, DataType *force_z, DataType *pos
         //  force_z[i] = fz;
         // printf("dF=%lf,%lf,%lf\n", fx, fy, fz);
     }
+
+    asm volatile("rdinstret %[e] \n":[e] "=&r"(end));
+    printf("%ld\n%ld\n", start, end);
 }
 #endif // RUN_SIMPLE

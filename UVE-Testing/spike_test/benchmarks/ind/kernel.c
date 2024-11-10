@@ -25,8 +25,8 @@ void core(DataType *dest, DataType *src, int *ind) {
 
     asm volatile(
         ".uve_loop%= : \n"
-        	"so.v.mv u3, u2, p0 \n\t"
-        "so.b.nc u3, .uve_loop%= \n\t" :::);
+        	"so.v.mv u3, u2, p0 \n"
+        "so.b.nc u3, .uve_loop%= \n" :::);
 }
 #endif // RUN_UVE
 

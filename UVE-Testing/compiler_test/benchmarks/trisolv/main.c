@@ -12,44 +12,12 @@ int main() {
     initArray(b, SIZE);
     initArray(x, SIZE);
 
-
     for (int i = 0; i < SIZE; i++) {
-        b[i] /= 1000;
-        x[i] /= 1000;
-    }
-
-    /*
-
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j)
-            L[i * SIZE + j] = i + 1;
-        b[i] = i + 1;
-        x[i] = i + 1;
-    }
-
-    // print all the arrays
-
-
-    printf("L:\n");
-    for (int i = 0; i < SIZE; i++) {
+        b[i] /= 500000;
+        x[i] /= 500000;
         for (int j = 0; j < SIZE; j++)
-            printf(DataFormat("", "\t"), L[i * SIZE + j]);
-        printf("\n");
+            L[i * SIZE + j] *= 100;
     }
-
-    printf("\nb:\n");
-    for (int i = 0; i < SIZE; i++) {
-        printf(DataFormat("", "\t"), b[i]);
-    }
-    printf("\n");
-
-    printf("\nx:\n");
-    for (int i = 0; i < SIZE; i++) {
-        printf(DataFormat("", "\t"), x[i]);
-    }
-
-    printf("\n\nResults (x):\n");
-    */
 
     core(L, b, x);
 

@@ -12,8 +12,9 @@ long int start = 0, end = 0;
 DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long int *insns) {
     DataType intercept;
 
+    asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
+
     asm volatile(
-        "rdinstret %[s] \n"
         // KERNEL 1 Streams
         // sgd_model(j) stream load
         "ss.sta.ld.d.v.m       u1, %[sgd_model] \n"
@@ -66,18 +67,18 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
         "ss.app                u9, zero, %[epochs], zero \n"
         "ss.end                u9, zero, %[pb_d], %[one] \n"
 
-        "so.v.mvsv.d u10, zero  \n"   // intercept
+        "so.v.mvsv.d u10, zero \n"   // intercept
         "so.v.mvsv.d u11, %[lr] \n"   // adjusted learning rate
         "so.v.mvsv.d u12, %[pb_n_d] \n" // pb_n (double)
 
         ".SLOOP_1%=: \n"
 
             // KERNEL 1
-            ".SLOOP_1_0%=:  \n"
+            ".SLOOP_1_0%=: \n"
 
                 "so.v.dp.d u13, zero, p0 \n"
 
-                ".SLOOP_1_0_0%=:  \n"
+                ".SLOOP_1_0_0%=: \n"
                     /*"so.a.mul.fp  u14, u2, u1, p0 \n"   // x(i,j) *sgd_model(j)
                     "so.a.add.fp  u13, u13, u14, p0 \n" // yhat += x(i,j) *sgd_model(j)*/
                     "so.a.mac.fp  u13, u2, u1, p0 \n" // yhat += x(i,j) *sgd_model(j)
@@ -86,14 +87,14 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
                 "so.a.adde.fp  u15, u13, p0 \n" // reduce yhat
                 "so.a.add.fp  u15, u15, u10, p0 \n" // yhat += intercept
                 "so.a.sub.fp  u3, u4, u15, p0 \n" // y_err = y - yhat
-                //"so.v.mvsv.d u9, u8  \n" // make a copy of y_err
+                //"so.v.mvsv.d u9, u8 \n" // make a copy of y_err
 
             "so.b.ndc.2 u1, .SLOOP_1_0%= \n"
 
             // KERNEL 2
             "so.v.mvsv.d u16, zero \n" // intercept_der
 
-            ".SLOOP_1_1%=:  \n"
+            ".SLOOP_1_1%=: \n"
                 "so.a.adde.acc.fp  u16, u5, p0 \n" // intercept_der += y_err(i)
             "so.b.ndc.2 u5, .SLOOP_1_1%= \n"
 
@@ -104,11 +105,11 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
             "so.a.mac.fp  u10, u16, u11, p0 \n" // intercept += intercept_der
 
             // KERNEL 3
-            ".SLOOP_1_2%=:  \n"
+            ".SLOOP_1_2%=: \n"
 
                 "so.v.dp.d u18, zero, p0 \n" // raw_update
 
-                ".SLOOP_1_2_0%=:  \n"
+                ".SLOOP_1_2_0%=: \n"
                     "so.a.mul.fp  u19, u6, u7, p0 \n"   // x(j,i) * y_err(j)
                     "so.a.adde.acc.fp  u18, u19, p0 \n" // raw_update += x(j,i) * y_err(j)
                 "so.b.ndc.3 u6, .SLOOP_1_2_0%= \n"
@@ -121,14 +122,14 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
 
         "so.b.nc u1, .SLOOP_1%= \n"
 
-        "so.v.mvvs %[i], u10  \n" // intercept
+        "so.v.mvvs %[i], u10 \n" // intercept
 
-        "rdinstret %[e] \n"
-
-        : [i] "=r" (intercept), [s] "=&r" (start), [e] "=&r" (end)
+        : [i] "=r" (intercept)
         : [sgd_model] "r"(sgd_model), [x] "r"(x_array), [y_err] "r"(y_err), [y] "r"(y),
           [epochs] "r"(EPOCHS), [pb_n] "r"(PB_N), [pb_d] "r"(PB_D), [one] "r"(1),
           [lr] "r"((DataType)(0.02)), [pb_n_d] "r"((DataType)PB_N));
+
+    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 
     *insns = end - start;
 
@@ -137,9 +138,9 @@ DataType core_kernel(void *x_array, void *y, void *y_err, void *sgd_model, long 
 
 long int predict(void *y_fitted, void *x_array, void *sgd_model, DataType intercept) {
 
-    asm volatile(
-        "rdinstret %[s] \n"
+    asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
+    asm volatile(
         // KERNEL 1 Streams
         // sgd_model(j) stream load
         "ss.sta.ld.d.v.m       u1, %[sgd_model] \n"
@@ -157,11 +158,11 @@ long int predict(void *y_fitted, void *x_array, void *sgd_model, DataType interc
 
         "so.v.mvsv.d u4, %[i] \n" // intercept
 
-        ".SLOOP_1%=:  \n"
+        ".SLOOP_1%=: \n"
 
             "so.v.dp.d u5, zero, p0 \n" // r
 
-            ".SLOOP_1_0%=:  \n"
+            ".SLOOP_1_0%=: \n"
                 /*"so.a.mul.fp  u6, u2, u1, p0 \n" // aux = x(i,j) *sgd_model(j)
                 "so.a.adde.acc.fp  u5, u6, p0 \n" // r += aux*/
                 "so.a.mac.fp  u5, u2, u1, p0 \n" // r += x(i,j) *sgd_model(j)
@@ -172,11 +173,10 @@ long int predict(void *y_fitted, void *x_array, void *sgd_model, DataType interc
 
         "so.b.nc  u1, .SLOOP_1%= \n"
 
-        "rdinstret %[e] \n"
-
-        : [e] "=&r" (end), [s] "=&r" (start)
-        : [i] "r"(intercept), [sgd_model] "r"(sgd_model), [x] "r"(x_array), [y_fitted] "r"(y_fitted),
+        :: [i] "r"(intercept), [sgd_model] "r"(sgd_model), [x] "r"(x_array), [y_fitted] "r"(y_fitted),
           [pb_n] "r"(PB_N), [pb_d] "r"(PB_D), [one] "r"(1));
+
+    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 
     return end - start;
 }
@@ -184,9 +184,9 @@ long int predict(void *y_fitted, void *x_array, void *sgd_model, DataType interc
 DataType r2_score(void *y_fitted, void *y, long int *insns) {
     DataType result = 0.0;
 
-    asm volatile (
-        "rdinstret %[s] \n"
+    asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
+    asm volatile (
         // y(i) streams load
         "ss.sta.ld.d           u1, %[y] \n"
         "ss.end                u1, zero, %[pb_n], %[one] \n"
@@ -203,7 +203,7 @@ DataType r2_score(void *y_fitted, void *y, long int *insns) {
 
         "so.v.dp.d u6, zero, p0 \n" // y_mean
 
-        ".SLOOP_1%=:  \n"
+        ".SLOOP_1%=: \n"
             "so.a.add.fp  u6, u6, u1, p0 \n" // y_mean += y[i]
         "so.b.nc u1, .SLOOP_1%= \n"
 
@@ -212,7 +212,7 @@ DataType r2_score(void *y_fitted, void *y, long int *insns) {
 
         "so.v.dp.d u8, zero, p0 \n" // res
 
-        ".SLOOP_2%=:  \n"
+        ".SLOOP_2%=: \n"
             "so.a.sub.fp  u9, u2, u4, p0 \n" // y[i] - y_fitted[i]
             "so.a.mul.fp  u9, u9, u9, p0 \n" // (y[i] - y_fitted[i]) * (y[i] - y_fitted[i])
             //"so.a.add.fp  u8, u8, u9, p0 \n" // res += (y[i] - y_fitted[i]) * (y[i] - y_fitted[i])
@@ -223,7 +223,7 @@ DataType r2_score(void *y_fitted, void *y, long int *insns) {
 
         "so.v.dp.d u11, zero, p0 \n" // tot
 
-        ".SLOOP_3%=:  \n"
+        ".SLOOP_3%=: \n"
             "so.a.sub.fp  u12, u3, u7, p0 \n" // y[i] - y_mean
             "so.a.mul.fp  u12, u12, u12, p0 \n" // (y[i] - y_mean) * (y[i] - y_mean)
             //"so.a.add.fp  u11, u11, u12, p0 \n" // tot += (y[i] - y_mean) * (y[i] - y_mean)
@@ -237,16 +237,16 @@ DataType r2_score(void *y_fitted, void *y, long int *insns) {
         "so.a.div.fp  u11, u8, u11, p0 \n" // res / tot
         "so.a.sub.fp  u14, u14, u11, p0 \n"  // 1.0 - (res / tot)
 
-        "so.v.mvvs %[result], u14  \n" // result = 1.0 - (res / tot)
+        "so.v.mvvs %[result], u14 \n" // result = 1.0 - (res / tot)
         //"so.a.adds.acc.fp %[result], u14, p0 \n" // result = 1.0 - (res / tot) TO TEST ADDS.ACC INSNS
 
         //: [result] "+f"(result) // TO TEST ADDS.ACC INSNS
 
-        "rdinstret %[e] \n"
-
-        : [result] "=&r"(result), [s] "=&r" (start), [e] "=&r" (end)
+        : [result] "=&r"(result)
         : [pb_n_d] "r"((DataType)(PB_N)), [one_d] "r"((DataType)(1)), [y] "r"(y),
           [y_fitted] "r"(y_fitted), [pb_n] "r"(PB_N), [one] "r"(1));
+
+    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 
     *insns = end - start;
 

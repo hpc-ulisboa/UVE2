@@ -1,0 +1,55 @@
+
+UVEkernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <core>:
+       0: f3 27 20 c0  	rdinstret	a5
+       4: 37 08 00 00  	lui	a6, 0
+       8: 23 30 f8 00  	sd	a5, 0(a6)
+       c: 63 50 b0 00  	blez	a1, 0xc <core+0xc>
+      10: 93 17 05 02  	slli	a5, a0, 32
+      14: 93 d8 07 02  	srli	a7, a5, 32
+      18: 93 82 f5 ff  	addi	t0, a1, -1
+      1c: 13 83 15 00  	addi	t1, a1, 1
+      20: 53 07 05 e2  	fmv.x.d	a4, fa0
+      24: 93 07 10 00  	li	a5, 1
+      28: 0b 72 06 78  	ss.sta.ld.d.v	u4, a2
+      2c: 0b 02 b0 32  	ss.app	u4, zero, a1, t1
+      30: 0b 42 41 7a  	ss.app.mod.siz.dec.3	u4, a5
+      34: 0b 02 10 03  	ss.app	u4, zero, a7, zero
+      38: 0b 82 55 5c  	ss.end	u4, a1, t0, a1
+      3c: 8b f2 06 78  	ss.sta.ld.d.v	u5, a3
+      40: 8b 02 b0 52  	ss.app	u5, zero, a1, a0
+      44: 8b 42 41 7a  	ss.app.mod.siz.dec.3	u5, a5
+      48: 8b 02 10 7b  	ss.app	u5, zero, a7, a5
+      4c: 8b 02 55 54  	ss.end	u5, a0, t0, a0
+      50: 8b f5 06 00  	ss.sta.ld.d	u11, a3
+      54: 8b 05 b0 52  	ss.app	u11, zero, a1, a0
+      58: 8b 05 10 7d  	ss.end	u11, zero, a7, a5
+      5c: 0b b3 06 00  	ss.sta.st.d	u6, a3
+      60: 0b 03 b0 52  	ss.app	u6, zero, a1, a0
+      64: 0b 03 10 7d  	ss.end	u6, zero, a7, a5
+      68: ab 34 87 a9  	so.v.mvsv.d	u9, a4
+
+000000000000006c <.SLOOP_1>:
+      6c: 2b 31 00 ac  	so.v.dp.d	u2, zero, p0
+
+0000000000000070 <.SLOOP_1_0_0>:
+      70: ab 11 52 10  	so.a.mul.fp	u3, u4, u5, p0
+      74: 2b 11 31 00  	so.a.add.fp	u2, u2, u3, p0
+      78: 2b 20 12 e0  	so.b.ndc.3	u4, 0x78 <.SLOOP_1_0_0+0x8>
+      7c: ab 11 01 20  	so.a.adde.fp	u3, u2, p0
+      80: 2b 95 35 00  	so.a.add.fp	u10, u11, u3, p0
+      84: 2b 13 95 10  	so.a.mul.fp	u6, u10, u9, p0
+      88: 2b 70 12 e0  	so.b.nc	u4, 0x88 <.SLOOP_1_0_0+0x18>
+
+000000000000008c <.LBB0_2>:
+      8c: 73 26 20 c0  	rdinstret	a2
+      90: 83 35 08 00  	ld	a1, 0(a6)
+      94: b7 06 00 00  	lui	a3, 0
+      98: 37 05 00 00  	lui	a0, 0
+      9c: 13 05 05 00  	mv	a0, a0
+      a0: 23 b0 c6 00  	sd	a2, 0(a3)
+      a4: 17 03 00 00  	auipc	t1, 0
+      a8: 67 00 03 00  	jr	t1

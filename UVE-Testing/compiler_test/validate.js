@@ -58,7 +58,7 @@ const bin_simple = `.run_simple`;
 const bin_uve = `.run_uve`;
 
 // read size from command line
-const size = process.argv[2] || 50;
+const size = process.argv[2] || 64;
 
 // read csv filename from command line
 const csvFilename = process.argv[3] || "results.csv";
@@ -74,10 +74,13 @@ const kernelSizeMap = {
 	"3mm": size,
 	"atax": size,
 	"bicg": size,
+	"cholesky": size,
+	"convolution": size, 
 	"covariance": size,
 	"doitgen": 0,
 	"fdtd-2d": size,
 	"gemm": size,
+	"gemm_blocked": size,
 	"gemm_ncubed": size,
 	"gemver": size,
 	"gesummv": size,
@@ -97,23 +100,19 @@ const kernelSizeMap = {
 	"syrk": size,
 	"syr2k": size,
 	"trisolv": size,
+	"trmm": size
 	
-
-	//"convolution": size,
 	//"sgd": 0,
-	//"trmm": 0
-	//"cholesky": size,
 	//"durbin": size*size,
 	//"seidel-2d": size,
 	//"adi": size
 	//"heat-3d": size
-	//"gemm_blocked": size
-	//"sort": sißßßßze
+	//"sort": size
 	//"fft": size
 	//"kmp": 0
 	//"stencil3d": size
 	//"correlation": size
-	"ludcmp": size
+	//"ludcmp": size
 };
 
 // read type and size from command line

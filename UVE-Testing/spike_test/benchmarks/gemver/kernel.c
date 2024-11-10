@@ -5,7 +5,8 @@ long int start = 0, end = 0;
 #ifdef RUN_UVE
 #ifdef D_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
-	asm volatile(
+	asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+asm volatile(
 		"rdinstret %[s] \n"
 
 		"ss.sta.st.d.v   u1, %[A] \n"
@@ -29,7 +30,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
 		"ss.sta.ld.d.v   u4, %[A] \n"
-		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
         ".SLOOP_1%=: \n"
@@ -131,7 +132,8 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 #endif // D_TYPE
 #ifdef F_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
-	asm volatile(
+	asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+asm volatile(
 		"rdinstret %[s] \n"
 
 		"ss.sta.st.w.v   u1, %[A] \n"
@@ -155,7 +157,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
 		"ss.sta.ld.w.v   u4, %[A] \n"
-		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
         ".SLOOP_1%=: \n"
@@ -258,7 +260,8 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 #endif // F_TYPE
 #ifdef I_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
-	asm volatile(
+	asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+asm volatile(
 		"rdinstret %[s] \n"
 
 		"ss.sta.st.w.v   u1, %[A] \n"
@@ -282,7 +285,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
 		"ss.sta.ld.w.v   u4, %[A] \n"
-		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
         ".SLOOP_1%=: \n"
@@ -386,7 +389,8 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 #endif // I_TYPE
 #ifdef H_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
-	asm volatile(
+	asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+asm volatile(
 		"rdinstret %[s] \n"
 
 		"ss.sta.st.h.v   u1, %[A] \n"
@@ -410,7 +414,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
 		"ss.sta.ld.h.v   u4, %[A] \n"
-		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
         ".SLOOP_1%=: \n"
@@ -514,7 +518,8 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 #endif // H_TYPE
 #ifdef B_TYPE
 void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, DataType *w, DataType *x, DataType *y, DataType *z, DataType a, DataType b, uint64_t sizeN) {
-	asm volatile(
+	asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+asm volatile(
 		"rdinstret %[s] \n"
 
 		"ss.sta.st.b.v   u1, %[A] \n"
@@ -538,7 +543,7 @@ void core(DataType *A, DataType *u1, DataType *v1, DataType *u2, DataType *v2, D
 		"ss.end 		 u6, zero, %[sizeN], zero \n"
 
 		"ss.sta.ld.b.v   u4, %[A] \n"
-		"ss.app			 u4, zero, %[sizeN], %[sizeN]\n"
+		"ss.app			 u4, zero, %[sizeN], %[sizeN] \n"
 		"ss.end 		 u4, zero, %[sizeN], %[one] \n"
 
         ".SLOOP_1%=: \n"

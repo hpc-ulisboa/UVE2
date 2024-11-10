@@ -14,10 +14,10 @@ if (!riscvPath) {
 	exitWithError("RISCV environment variable is not set");
 }
 
-const llvmUVEPath = process.env.LLVM16_PATH;
+const llvmUVEPath = process.env.LLVM_PATH;
 
 if (!llvmUVEPath) {	
-	exitWithError("LLVM_PATH environment variable is not set");
+	exitWithError("LLVM_UVE_PATH environment variable is not set");
 }
 
 const clangUVEPath = `${llvmUVEPath}/llvm-project/build/bin/clang`;
@@ -64,69 +64,71 @@ const clangIRFlags = ["-O2", "--target=riscv64", "-march=rv64imafdc", "-mabi=lp6
 const optFlags = ["-enable-new-pm=0", "-load", passPath, "-loop-simplify", "-legacy-stream-analysis"];
 const llcFlags = ["-march=riscv64", "--mcpu=generic-rv64", "-mattr=+d,+m,+experimental-xuve"];
 
-const compileFlagsRVV = ["-O2", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64imafdcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
+//const compileFlagsRVV = ["-O2", `--sysroot=${riscvPath}/riscv64-unknown-elf`, `--gcc-toolchain=${riscvPath}`, `-I${riscvPath}/include`, "-ffast-math", "-fno-unroll-loops", "--target=riscv64", "-march=rv64imafdcv", "-Rpass=loop-vectorize", "-Rpass-missed=loop-vectorize", "-Rpass-analysis=loop-vectorize"]; // "-fno-unroll-loops",
 
 const bin_simple = `.run_simple`;
+const bin_simple_rvv = `.run_simple_rvv`;
 const bin_uve = `.run_uve`;
 const bin_rvv = `.run_rvv`;
 
 // read size from command line
-const size = process.argv[2] || 50;
+const size = process.argv[2] || 64;
 
 // read csv filename from command line
-const csvFilename = process.argv[3] || "results.csv";
+const csvFilename = process.argv[3] || "results_uve_rvv.csv";
 
 // write csv header
-fs.writeFile(csvFilename, "kernel,size,datatype,original,rvv,uve\n", (err) => {
+fs.writeFile(csvFilename, "kernel,size,datatype,original_llvm19,rvv,original_llvm16,uve\n", (err) => {
 	if (err) throw err;
 });
 
 // kernel size map
 const kernelSizeMap = {
-	/*"2mm": size,
 	"3mm": size,
-	"atax": size,
-	"bicg": size,
+	"convolution": size,
 	"covariance": size,
-	"doitgen": 0,
-	"fdtd-2d": size,
 	"gemm": size,
-	"gemm_ncubed": size,
 	"gemver": size,
-	"gesummv": size,
-	"gramschmidt": size,
 	"jacobi-1d": size*size,
 	"jacobi-2d": size,
-	"knn": 0,
-	"lu": size,
 	"memcpy": size*size,
-	"mvt": size, 
+	"mvt": size,
 	"saxpy": size*size,
+	//"sgd": 0,
 	"spmv_ellpack": 0,
 	"spmv_ellpack_delimiters": 0,
-	"stencil2d": size,
 	"stream": size*size,
+	"trisolv": size,
+
+	"2mm": size,
+	"atax": size,
+	"bicg": size,
+	"cholesky": size,
+	"doitgen": 0,
+	"fdtd-2d": size,
+	"gemm_blocked": size,
+	"gemm_ncubed": size,
+	"gesummv": size,
+	"gramschmidt": size,
+	"knn": 0,
+	"lu": size,
+	"stencil2d": size,
 	"symm": size,
 	"syrk": size,
 	"syr2k": size,
-	"trisolv": size,*/
+	"trmm": size
 	
-
-	//"convolution": size,
 	//"sgd": 0,
-	//"trmm": 0
-	//"cholesky": size,
 	//"durbin": size*size,
 	//"seidel-2d": size,
 	//"adi": size
 	//"heat-3d": size
-	//"gemm_blocked": size
-	//"sort": sißßßßze
+	//"sort": size
 	//"fft": size
 	//"kmp": 0
 	//"stencil3d": size
 	//"correlation": size
-	"ludcmp": size
+	//"ludcmp": size
 };
 
 // read type and size from command line
@@ -304,7 +306,7 @@ function aproximateEqual(stdout1, stdout2, stdout3, stdout4, kernel, t, s, dir) 
 
 	// export to csv
 	// kernel, size, datatype, original, rvv, uve
-	const csv = `${kernel},${s},${typeMap[t]},${insnsO_UVE},${insnsRVV},${insnsUVE}\n`;
+	const csv = `${kernel},${s},${typeMap[t]},${insnsO_RVV},${insnsRVV},${insnsO_UVE},${insnsUVE}\n`;
 	fs.appendFile(csvFilename, csv, (err) => {
 		if (err) throw err;
 	});
@@ -336,7 +338,7 @@ for (let kernel in kernelSizeMap) {
 		compileKernel(clangUVEPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-c"]);
 
 		/* Link and create no UVE executable */
-		compileKernel(clangUVEPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}_uve`, "-lm"]);
+		compileKernel(clangUVEPath, [...linkFlags, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}`, "-lm"]);
 
 		/* Create objdump file */
 
@@ -369,11 +371,11 @@ for (let kernel in kernelSizeMap) {
 		/* Link everyting */
 		compileKernel(clangUVEPath, [...linkFlags, "Functions.o", `UVEkernel.o`, `main.o`, "-o", `${dir}/${bin_uve}`, "-lm"]);
 
-		/* Compile for RVV with LLVM 19*/
+		/* Compile for RVV with LLVM 19
 		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", "../Functions.c", "-c"]);
 		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/main.c`, "-c"]);
 		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "-I..", `benchmarks/${kernel}/kernel.c`, "-c"], true);
-		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple}_rvv`]);
+		compileKernel(clangPath, [...compileFlags, `-D${type}_TYPE`, `-DSIZE=${s}`, "Functions.o", `kernel.o`, `main.o`, "-o", `${dir}/${bin_simple_rvv}`]);
 
 		objDump = spawnSync(`${objDumpPathCLANG}`, ["--mattr=rv64gc",  "-d", "kernel.o"]);
 		stdoutO = objDump.stdout.toString();ß
@@ -388,11 +390,11 @@ for (let kernel in kernelSizeMap) {
 		stdoutO = objDump.stdout.toString();
 		fs.writeFile(`${dir}/rvv.dump`, stdoutO, (err) => {
 			if (err) throw err;
-		});
+		});*/
 
 		/* Run each kernel file */
-		const execSimpleUVE = executableRun(spikePath, [pkPath, `${dir}/${bin_simple}_uve`, kernel]);
-		const execSimpleRVV = executableRun(spikePath, [pkPath, `${dir}/${bin_simple}_rvv`, kernel]);
+		const execSimpleUVE = executableRun(spikePath, [pkPath, `${dir}/${bin_simple}`, kernel]);
+		const execSimpleRVV = executableRun(spikePath, [pkPath, `${dir}/${bin_simple_rvv}`, kernel]);
 		const execUVE = executableRun(spikePath, [pkPath, `${dir}/${bin_uve}`, kernel]);
 		const execRVV = executableRun(spikePath, ["--isa=rv64gcv_Zicntr_zvl512b_zve64d", pkPath, `${dir}/${bin_rvv}`, kernel]);
 
@@ -405,7 +407,7 @@ for (let kernel in kernelSizeMap) {
 			//break;
 		}
 
-		// Delete executables for next kernel
+		// Delete object and assembly files for next execution
 		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', 'UVEkernel.ll', 'UVEkernel.s', 'Functions.o']);
 		if (del.error) {
 			console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);

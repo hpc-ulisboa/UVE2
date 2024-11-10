@@ -1,0 +1,75 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: 73 27 20 c0  	rdinstret	a4
+       6: 37 08 00 00  	lui	a6, 0
+       a: 23 30 e8 00  	sd	a4, 0(a6)
+       e: 81 c2        	beqz	a3, 0xe <core+0xc>
+      10: b6 88        	mv	a7, a3
+      12: aa 87        	mv	a5, a0
+      14: 32 87        	mv	a4, a2
+
+0000000000000016 <.LBB0_2>:
+      16: 07 b0 07 00  	fld	ft0, 0(a5)
+      1a: 27 30 07 00  	fsd	ft0, 0(a4)
+      1e: 21 07        	addi	a4, a4, 8
+      20: fd 18        	addi	a7, a7, -1
+      22: a1 07        	addi	a5, a5, 8
+      24: 63 90 08 00  	bnez	a7, 0x24 <.LBB0_2+0xe>
+      28: 81 c2        	beqz	a3, 0x28 <.LBB0_2+0x12>
+      2a: b6 88        	mv	a7, a3
+      2c: b2 87        	mv	a5, a2
+      2e: 2e 87        	mv	a4, a1
+
+0000000000000030 <.LBB0_5>:
+      30: 07 b0 07 00  	fld	ft0, 0(a5)
+      34: 53 70 a0 12  	fmul.d	ft0, ft0, fa0
+      38: 27 30 07 00  	fsd	ft0, 0(a4)
+      3c: 21 07        	addi	a4, a4, 8
+      3e: fd 18        	addi	a7, a7, -1
+      40: a1 07        	addi	a5, a5, 8
+      42: 63 90 08 00  	bnez	a7, 0x42 <.LBB0_5+0x12>
+      46: 81 c2        	beqz	a3, 0x46 <.LBB0_5+0x16>
+      48: b6 88        	mv	a7, a3
+      4a: aa 82        	mv	t0, a0
+      4c: ae 87        	mv	a5, a1
+      4e: 32 87        	mv	a4, a2
+
+0000000000000050 <.LBB0_8>:
+      50: 07 b0 02 00  	fld	ft0, 0(t0)
+      54: 87 b0 07 00  	fld	ft1, 0(a5)
+      58: 53 70 10 02  	fadd.d	ft0, ft0, ft1
+      5c: 27 30 07 00  	fsd	ft0, 0(a4)
+      60: 21 07        	addi	a4, a4, 8
+      62: a1 07        	addi	a5, a5, 8
+      64: fd 18        	addi	a7, a7, -1
+      66: a1 02        	addi	t0, t0, 8
+      68: 63 90 08 00  	bnez	a7, 0x68 <.LBB0_8+0x18>
+      6c: 81 c2        	beqz	a3, 0x6c <.LBB0_8+0x1c>
+
+000000000000006e <.LBB0_10>:
+      6e: 07 b0 05 00  	fld	ft0, 0(a1)
+      72: 87 30 06 00  	fld	ft1, 0(a2)
+      76: 43 70 15 02  	fmadd.d	ft0, fa0, ft1, ft0
+      7a: 27 30 05 00  	fsd	ft0, 0(a0)
+      7e: 21 05        	addi	a0, a0, 8
+      80: 21 06        	addi	a2, a2, 8
+      82: fd 16        	addi	a3, a3, -1
+      84: a1 05        	addi	a1, a1, 8
+      86: 81 e2        	bnez	a3, 0x86 <.LBB0_10+0x18>
+
+0000000000000088 <.LBB0_11>:
+      88: 73 26 20 c0  	rdinstret	a2
+      8c: 83 35 08 00  	ld	a1, 0(a6)
+      90: b7 06 00 00  	lui	a3, 0
+      94: 37 05 00 00  	lui	a0, 0
+      98: 13 05 05 00  	mv	a0, a0
+      9c: 23 b0 c6 00  	sd	a2, 0(a3)
+      a0: 17 03 00 00  	auipc	t1, 0
+      a4: 67 00 03 00  	jr	t1

@@ -5,13 +5,12 @@ long int start = 0, end = 0;
 #ifdef RUN_UVE
 #ifdef D_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
-    asm volatile(
-		"rdinstret %[s] \n"
-
+    asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+	asm volatile(
 		// A stream load
 		"ss.sta.ld.d.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
-		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
+		"ss.end 		   u4, zero, %[sizeN], %[one] \n"
 
 		// y_1 stream load
 		"ss.sta.ld.d.v.m   u5, %[y_1] \n"
@@ -70,26 +69,23 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 			"so.a.add.fp  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \n"
-
-		: [s] "=&r"(start), [e] "=&r"(end)
-		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
+		:: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
 		  [y_2] "r" (y_2), [x_2] "r" (x_2), 
 		  [sizeN] "r"(sizeN), [one] "r" (1)
 	);
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 	printf("%ld\n%ld\n", start, end);
 }
 #endif // D_TYPE
 #ifdef F_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
-    asm volatile(
-		"rdinstret %[s] \n"
-
+    asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+	asm volatile(
 		// A stream load
 		"ss.sta.ld.w.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
-		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
+		"ss.end 		   u4, zero, %[sizeN], %[one] \n"
 
 		// y_1 stream load
 		"ss.sta.ld.w.v.m   u5, %[y_1] \n"
@@ -148,26 +144,23 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 			"so.a.add.fp  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \n"
-
-		: [s] "=&r"(start), [e] "=&r"(end)
-		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
+		:: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
 		  [y_2] "r" (y_2), [x_2] "r" (x_2), 
 		  [sizeN] "r"(sizeN), [one] "r" (1)
 	);
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 	printf("%ld\n%ld\n", start, end);
 }
 #endif // F_TYPE
 #ifdef I_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
-    asm volatile(
-		"rdinstret %[s] \n"
-
+    asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+	asm volatile(
 		// A stream load
 		"ss.sta.ld.w.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
-		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
+		"ss.end 		   u4, zero, %[sizeN], %[one] \n"
 
 		// y_1 stream load
 		"ss.sta.ld.w.v.m   u5, %[y_1] \n"
@@ -226,26 +219,24 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 			"so.a.add.sg  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \n"
-
-		: [s] "=&r"(start), [e] "=&r"(end)
-		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
+		:: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
 		  [y_2] "r" (y_2), [x_2] "r" (x_2), 
 		  [sizeN] "r"(sizeN), [one] "r" (1)
 	);
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 	printf("%ld\n%ld\n", start, end);
 }
 #endif // I_TYPE
 #ifdef H_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
-    asm volatile(
-		"rdinstret %[s] \n"
+    asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
 
+	asm volatile(
 		// A stream load
 		"ss.sta.ld.h.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
-		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
+		"ss.end 		   u4, zero, %[sizeN], %[one] \n"
 
 		// y_1 stream load
 		"ss.sta.ld.h.v.m   u5, %[y_1] \n"
@@ -288,7 +279,7 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 		"ss.end		 u7, zero, %[sizeN], %[one] \n"
 
 		// x_2 stream store
-		"ss.sta.st.h u1, %[x_2]\n"
+		"ss.sta.st.h u1, %[x_2] \n"
 		"ss.end		 u1, zero, %[sizeN], %[one] \n"
 
 		".SLOOP_2%=: \n"
@@ -304,26 +295,23 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 			"so.a.add.sg  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \n"
-
-		: [s] "=&r"(start), [e] "=&r"(end)
-		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
+		:: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
 		  [y_2] "r" (y_2), [x_2] "r" (x_2), 
 		  [sizeN] "r"(sizeN), [one] "r" (1)
 	);
 
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 	printf("%ld\n%ld\n", start, end);
 }
 #endif // H_TYPE
 #ifdef B_TYPE
 void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_2, uint64_t sizeN){
-    asm volatile(
-		"rdinstret %[s] \n"
-
+    asm volatile("rdinstret %[s] \n":[s] "=&r"(start));
+	asm volatile(
 		// A stream load
 		"ss.sta.ld.b.v.m   u4, %[A] \n"
 		"ss.app			   u4, zero, %[sizeN], %[sizeN] \n"
-		"ss.end 		   u4, zero, %[sizeN], %[one]  \n"
+		"ss.end 		   u4, zero, %[sizeN], %[one] \n"
 
 		// y_1 stream load
 		"ss.sta.ld.b.v.m   u5, %[y_1] \n"
@@ -382,14 +370,12 @@ void core(DataType *A, DataType *x_1, DataType *x_2, DataType *y_1, DataType *y_
 			"so.a.add.sg  u1, u7, u3, p0 \n"
 		"so.b.nc u1, .SLOOP_2%= \n"
 
-		"rdinstret %[e] \n"
-
-		: [s] "=&r"(start), [e] "=&r"(end)
-		: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
+		:: [A] "r"(A), [y_1] "r"(y_1), [x_1] "r"(x_1), 
 		  [y_2] "r" (y_2), [x_2] "r" (x_2), 
 		  [sizeN] "r"(sizeN), [one] "r" (1)
 	);
-
+	
+	asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
 	printf("%ld\n%ld\n", start, end);
 }
 #endif // B_TYPE
