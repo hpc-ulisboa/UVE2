@@ -113,7 +113,7 @@ const kernelSizeMap = {
 	//"stencil3d": size
 	//"correlation": size
 	//"ludcmp": size
-	"memcpy": size
+	"correlation": size
 };
 
 // read type and size from command line

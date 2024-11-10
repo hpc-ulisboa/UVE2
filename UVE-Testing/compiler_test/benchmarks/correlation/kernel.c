@@ -18,8 +18,11 @@ void core(int M, int N, DataType float_n, DataType *data, DataType *corr, DataTy
 
     for (j = 0; j < M; j++) {
         stddev[j] = 0.0;
-        for (i = 0; i < N; i++)
+        for (i = 0; i < N; i++){
+            //printf("MUL    %.4lf * %.4lf = %.4lf\n", (data[i * M + j] - mean[j]), (data[i * M + j] - mean[j]), (data[i * M + j] - mean[j]) * (data[i * M + j] - mean[j]));   
+            //printf("ADDE   %.4lf + %.4lf = %.4lf\n", stddev[j], (data[i * M + j] - mean[j]) * (data[i * M + j] - mean[j]), stddev[j] + (data[i * M + j] - mean[j]) * (data[i * M + j] - mean[j]));
             stddev[j] += (data[i * M + j] - mean[j]) * (data[i * M + j] - mean[j]);
+        }
         stddev[j] /= float_n;
         stddev[j] = sqrt(stddev[j]);
         /* The following in an inelegant but usual way to handle

@@ -23,9 +23,10 @@ int main() {
     core(M, N, float_n, data, corr, mean, stddev, eps);
 
     for (int i = 0; i < M; i++) {
+        //printf(DataFormat("", "\n"), stddev[i]);
         for (int j = 0; j < M; j++)
-            printf(DataFormat("", "\n"), corr[i * M + j]);
-        // printf("\n");
+             printf(DataFormat("", "\n"), corr[i * M + j]);
+        //  printf("\n");
     }
 
     /*print mean
