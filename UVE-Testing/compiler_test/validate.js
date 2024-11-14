@@ -70,7 +70,7 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original,uve\n", (err) => {
 
 // kernel size map
 const kernelSizeMap = {
-	/*"2mm": size,
+	"2mm": size,
 	"3mm": size,
 	"atax": size,
 	"bicg": size,
@@ -100,7 +100,7 @@ const kernelSizeMap = {
 	"syrk": size,
 	"syr2k": size,
 	"trisolv": size,
-	"trmm": size*/
+	"trmm": size
 	
 	//"sgd": 0,
 	//"durbin": size*size,
@@ -113,7 +113,7 @@ const kernelSizeMap = {
 	//"stencil3d": size
 	//"correlation": size
 	//"ludcmp": size
-	"correlation": size
+	//"correlation": size
 };
 
 // read type and size from command line
@@ -267,7 +267,7 @@ for (let kernel in kernelSizeMap) {
 		if (s === 0) {
 			dir = `benchmarks/${kernel}`;
 		} else {
-			dir = `benchmarks/${kernel}/runs_${type.toLowerCase()}_${s}`;
+			dir = `benchmarks/${kernel}/runs_${type.toLowerCase()}_${size}`;
 			// if the directory does not exist, create it
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
@@ -329,7 +329,7 @@ for (let kernel in kernelSizeMap) {
 		}
 
 		// Delete executables for next kernel
-		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', 'UVEkernel.ll', 'UVEkernel.s', 'Functions.o']);
+		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', 'UVEkernel.ll', /*'UVEkernel.s',*/ 'Functions.o']);
 		if (del.error) {
 			console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 			break;

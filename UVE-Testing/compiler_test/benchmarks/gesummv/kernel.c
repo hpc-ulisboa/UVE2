@@ -13,8 +13,8 @@ void core(int N, DataType alpha, DataType beta, DataType *tmp, DataType *A, Data
         tmp[i] = 0;
         y[i] = 0;
         for (j = 0; j < N; j++) {
-            tmp[i] += A[i*N+j] * x[j];
-            y[i] += B[i*N+j] * x[j];
+            tmp[i] = A[i*N+j] * x[j] + tmp[i];
+            y[i] = B[i*N+j] * x[j] + y[i];
         }
         y[i] = alpha * tmp[i] + beta * y[i];
     }

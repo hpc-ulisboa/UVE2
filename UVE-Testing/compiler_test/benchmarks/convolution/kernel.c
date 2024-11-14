@@ -2,18 +2,30 @@
 
 long int start = 0, end = 0;
 
-void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I){
-    asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
-
+void core(DataType *src, DataType *dst, DataType *filter, int PB_J, int PB_I) {
+    asm volatile("rdinstret %[s] \n" : [s] "=&r"(start));
+#ifdef RVV
     DataType sum;
+    int y, x, k, j;
+    for (y = 1; y < PB_I - 1; y++) {
+        for (x = 1; x < PB_J - 1; x++) {
+            sum = 0.0;
+            for (k = -1; k <= 1; k++) {
+                for (j = -1; j <= 1; j++)
+                    sum = sum + filter[(j + 1) * 3 + k + 1] * src[(y - j) * PB_J + (x - k)];
+            }
+            dst[y * PB_J + x] = sum;
+        }
+    }
+#else
     int y, x, k, j;
     for (y = 1; y < PB_I - 1; y++)
         for (x = 1; x < PB_J - 1; x++)
             for (k = -1; k <= 1; k++)
                 for (j = -1; j <= 1; j++)
                     dst[y * PB_J + x] += filter[(j + 1) * 3 + k + 1] * src[(y - j) * PB_J + (x - k)];
-
-    asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
+#endif
+    asm volatile("rdinstret %[e] \n" : [e] "=&r"(end));
     printf("%ld\n%ld\n", start, end);
 }
 

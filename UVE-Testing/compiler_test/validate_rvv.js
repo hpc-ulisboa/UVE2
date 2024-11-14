@@ -84,7 +84,7 @@ fs.writeFile(csvFilename, "kernel,size,datatype,original_llvm19,rvv,original_llv
 
 // kernel size map
 const kernelSizeMap = {
-	"3mm": size,
+	/*"3mm": size,
 	"convolution": size,
 	"covariance": size,
 	"gemm": size,
@@ -116,7 +116,7 @@ const kernelSizeMap = {
 	"symm": size,
 	"syrk": size,
 	"syr2k": size,
-	"trmm": size
+	"trmm": size,*/
 	
 	//"sgd": 0,
 	//"durbin": size*size,
@@ -129,6 +129,15 @@ const kernelSizeMap = {
 	//"stencil3d": size
 	//"correlation": size
 	//"ludcmp": size
+	//"vector_size_scaling": size
+	"vector_size_scaling_1": size,
+	"vector_size_scaling_2": size,
+	"vector_size_scaling_3": size,
+	"vector_size_scaling_4": size,
+	"vector_size_scaling_5": size,
+	"vector_size_scaling_6": size,
+	//"vector_size_scaling_7": size,
+	//"vector_size_scaling_8": size,
 };
 
 // read type and size from command line
@@ -323,7 +332,7 @@ for (let kernel in kernelSizeMap) {
 		if (s === 0) {
 			dir = `benchmarks/${kernel}`;
 		} else {
-			dir = `benchmarks/${kernel}/runs_${type.toLowerCase()}_${s}`;
+			dir = `benchmarks/${kernel}/runs_${type.toLowerCase()}_${size}`;
 			// if the directory does not exist, create it
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
@@ -408,7 +417,7 @@ for (let kernel in kernelSizeMap) {
 		}
 
 		// Delete object and assembly files for next execution
-		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', 'UVEkernel.ll', 'UVEkernel.s', 'Functions.o']);
+		const del = spawnSync("rm", ['-f', 'main.o', 'kernel.o' , 'UVEkernel.o', 'kernel.ll', 'UVEkernel.ll', /*'UVEkernel.s',*/ 'Functions.o']);
 		if (del.error) {
 			console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
 			break;

@@ -222,7 +222,6 @@ long int core_kernel(DataType *src1, DataType *src2, DataType *src3, uint64_t si
 
     for (i = 0; i < sizeI; i++) {
         for (j = 0; j < sizeJ; j++){
-        	src3[i*sizeJ+j] = 0;
         	for (k = 0; k < sizeK; k++)
             	src3[i*sizeJ+j] += src1[i*sizeK+k] * src2[k*sizeJ+j];
     	}
@@ -237,7 +236,7 @@ void core(DataType* A, DataType* B, DataType* C, DataType* D, DataType* E, DataT
 
 	long int a = core_kernel(A, B, E, I, J, K);
 	a += core_kernel(C, D, F, J, L, M);
-	a +=core_kernel(E, F, G, I, L, J);
+	a += core_kernel(E, F, G, I, L, J);
 
 	printf("%d\n%ld\n", 0, a);
 }

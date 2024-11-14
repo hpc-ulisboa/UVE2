@@ -57,16 +57,9 @@ void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t 
 void core(DataType *nzval, int32_t *cols, DataType *vec, DataType *out, int32_t N, int32_t L) {
     asm volatile ("rdinstret %[s] \n":[s] "=&r"(start));
 
-    int i, j;
-    DataType t;
-
-    for (i = 0; i < N; i++) {
-        t = 0.0;
-        for (j = 0; j < L; j++) {
-            t += nzval[i * L + j] * vec[cols[i * L + j]];
-        }
-        out[i] += t;
-    }
+    for (int i = 0; i < N; i++) 
+        for (int j = 0; j < L; j++) 
+            out[i] += nzval[i * L + j] * vec[cols[i * L + j]];
 
     asm volatile ("rdinstret %[e] \n":[e] "=&r"(end));
     printf("%ld\n%ld\n", start, end);
