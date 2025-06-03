@@ -8,7 +8,7 @@ function exitWithError(message) {
     process.exit(1);
 }
 
-const riscvPath = process.env.RISCV; // /
+const riscvPath = process.env.RISCV;
 
 if (!riscvPath) {
 	exitWithError("RISCV environment variable is not set");
