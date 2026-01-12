@@ -13,7 +13,7 @@ void core(DataType *ex, DataType *ey, DataType *hz, DataType *fict, int NX, int 
             ey[0*NY+j] = fict[t];
         for (i = 1; i < NX; i++)
             for (j = 0; j < NY; j++)
-                ey[i*NY+j] = ey[i*NY+j] - 0.5 * (hz[i*NY+j] - hz[i - 1*NY+j]);
+                ey[i*NY+j] = ey[i*NY+j] - 0.5 * (hz[i*NY+j] - hz[(i - 1)*NY+j]);
         for (i = 0; i < NX; i++)
             for (j = 1; j < NY; j++)
                 ex[i*NY+j] = ex[i*NY+j] - 0.5 * (hz[i*NY+j] - hz[i*NY+j - 1]);
@@ -24,4 +24,5 @@ void core(DataType *ex, DataType *ey, DataType *hz, DataType *fict, int NX, int 
 
     asm volatile("rdinstret %[e] \t\n" : [e] "=&r"(end));
     printf("%ld\n%ld\n", start, end);
+
 }
