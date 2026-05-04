@@ -9,15 +9,15 @@ void core(void *src1, void *src2, void *src3) {
     asm volatile(
         // L(i,j) stream load
         "ss.sta.ld.d.v         u1, %[src1] \n"
-        "ss.app                u1, zero, %[sn], %[sn] \n"    // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u1, zero, zero, %[one] \n"    // D1: linear access (initial size: 0)
+        "ss.app                u1, zero, %[sn], %[sn] \n"    // D1: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u1, zero, zero, %[one] \n"    // D2: linear access (initial size: 0)
 
         // x(j) stream load
         "ss.sta.ld.d.v         u2, %[src3] \n"
-        "ss.app                u2, zero, %[sn], zero \n"     // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u2, zero, zero, %[one] \n"    // D1: vector - linear access (initial size: 0)
+        "ss.app                u2, zero, %[sn], zero \n"     // D1: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u2, zero, zero, %[one] \n"    // D2: vector - linear access (initial size: 0)
 
         // b stream scalar load (?)
         "ss.sta.ld.d           u3, %[src2] \n"
@@ -60,15 +60,15 @@ void core(void *src1, void *src2, void *src3) {
     asm volatile(
         // L(i,j) stream load
         "ss.sta.ld.w.v         u1, %[src1] \n"
-        "ss.app                u1, zero, %[sn], %[sn] \n"    // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u1, zero, zero, %[one] \n"    // D1: linear access (initial size: 0)
+        "ss.app                u1, zero, %[sn], %[sn] \n"    // D1: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u1, zero, zero, %[one] \n"    // D2: linear access (initial size: 0)
 
         // x(j) stream load
         "ss.sta.ld.w.v         u2, %[src3] \n"
-        "ss.app                u2, zero, %[sn], zero \n"     // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u2, zero, zero, %[one] \n"    // D1: vector - linear access (initial size: 0)
+        "ss.app                u2, zero, %[sn], zero \n"     // D1: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u2, zero, zero, %[one] \n"    // D2: vector - linear access (initial size: 0)
 
         // b stream scalar load (?)
         "ss.sta.ld.w           u3, %[src2] \n"
@@ -114,15 +114,15 @@ void core(void *src1, void *src2, void *src3) {
     asm volatile(
         // L(i,j) stream load
         "ss.sta.ld.w.v         u1, %[src1] \n"
-        "ss.app                u1, zero, %[sn], %[sn] \n"    // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u1, zero, zero, %[one] \n"    // D1: linear access (initial size: 0)
+        "ss.app                u1, zero, %[sn], %[sn] \n"    // D1: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u1, zero, zero, %[one] \n"    // D2: linear access (initial size: 0)
 
         // x(j) stream load
         "ss.sta.ld.w.v         u2, %[src3] \n"
-        "ss.app                u2, zero, %[sn], zero \n"     // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u2, zero, zero, %[one] \n"    // D1: vector - linear access (initial size: 0)
+        "ss.app                u2, zero, %[sn], zero \n"     // D1: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u2, zero, zero, %[one] \n"    // D2: vector - linear access (initial size: 0)
 
         // b stream scalar load (?)
         "ss.sta.ld.w           u3, %[src2] \n"
@@ -168,15 +168,15 @@ void core(void *src1, void *src2, void *src3) {
     asm volatile(
         // L(i,j) stream load
         "ss.sta.ld.h.v         u1, %[src1] \n"
-        "ss.app                u1, zero, %[sn], %[sn] \n"    // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u1, zero, zero, %[one] \n"    // D1: linear access (initial size: 0)
+        "ss.app                u1, zero, %[sn], %[sn] \n"    // D1: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u1, zero, zero, %[one] \n"    // D2: linear access (initial size: 0)
 
         // x(j) stream load
         "ss.sta.ld.h.v         u2, %[src3] \n"
-        "ss.app                u2, zero, %[sn], zero \n"     // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u2, zero, zero, %[one] \n"    // D1: vector - linear access (initial size: 0)
+        "ss.app                u2, zero, %[sn], zero \n"     // D1: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u2, zero, zero, %[one] \n"    // D2: vector - linear access (initial size: 0)
 
         // b stream scalar load (?)
         "ss.sta.ld.h           u3, %[src2] \n"
@@ -222,15 +222,15 @@ void core(void *src1, void *src2, void *src3) {
     asm volatile(
         // L(i,j) stream load
         "ss.sta.ld.b.v         u1, %[src1] \n"
-        "ss.app                u1, zero, %[sn], %[sn] \n"    // D2: slide verticaly stride N access size N-1
-        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u1, zero, zero, %[one] \n"    // D1: linear access (initial size: 0)
+        "ss.app                u1, zero, %[sn], %[sn] \n"    // D1: slide verticaly stride N access size N-1
+        "ss.app.mod.siz.inc.2  u1, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u1, zero, zero, %[one] \n"    // D2: linear access (initial size: 0)
 
         // x(j) stream load
         "ss.sta.ld.b.v         u2, %[src3] \n"
-        "ss.app                u2, zero, %[sn], zero \n"     // D2: Repeat N-1 times [dummy dimension]
-        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D1 size N-1
-        "ss.end                u2, zero, zero, %[one] \n"    // D1: vector - linear access (initial size: 0)
+        "ss.app                u2, zero, %[sn], zero \n"     // D1: Repeat N-1 times [dummy dimension]
+        "ss.app.mod.siz.inc.2  u2, %[one] \n"                // modifier_t->D1: increment D2 size N-1
+        "ss.end                u2, zero, zero, %[one] \n"    // D2: vector - linear access (initial size: 0)
 
         // b stream scalar load (?)
         "ss.sta.ld.b           u3, %[src2] \n"
