@@ -63,9 +63,9 @@ UVE-Testing/pk
 UVE-Testing/compiler_test/parse_pipe.py
 
 # Log files that may be too big to commit
-UVE-Testing/log*
-UVE-Testing/*.log
-UVE-Testing/*/log*
+UVE-Testing/**/log*
+UVE-Testing/**/*.log
+UVE-Testing/**/log*
 */debug.log
 
 # Auxiliary files
