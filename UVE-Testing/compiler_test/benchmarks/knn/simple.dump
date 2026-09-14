@@ -1,0 +1,60 @@
+
+kernel.o:	file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 01 00        	nop
+
+0000000000000002 <core>:
+       2: 81 42        	li	t0, 0
+       4: 73 26 20 c0  	rdinstret	a2
+       8: 37 07 00 00  	lui	a4, 0
+       c: 07 30 07 00  	fld	ft0, 0(a4)
+      10: 37 07 00 00  	lui	a4, 0
+      14: 87 30 07 00  	fld	ft1, 0(a4)
+      18: 37 07 00 00  	lui	a4, 0
+      1c: 07 31 07 00  	fld	ft2, 0(a4)
+      20: 37 07 00 00  	lui	a4, 0
+      24: 23 30 c7 00  	sd	a2, 0(a4)
+      28: 93 08 00 10  	li	a7, 256
+
+000000000000002c <.LBB0_1>:
+      2c: 13 97 32 00  	slli	a4, t0, 3
+      30: 33 86 e6 00  	add	a2, a3, a4
+      34: 87 31 06 00  	fld	ft3, 0(a2)
+      38: 2a 97        	add	a4, a4, a0
+      3a: 07 32 07 00  	fld	ft4, 0(a4)
+      3e: c1 47        	li	a5, 16
+      40: 42 86        	mv	a2, a6
+
+0000000000000042 <.LBB0_2>:
+      42: 0c 42        	lw	a1, 0(a2)
+      44: 8e 05        	slli	a1, a1, 3
+      46: b6 95        	add	a1, a1, a3
+      48: 87 b2 05 00  	fld	ft5, 0(a1)
+      4c: d3 f2 51 0a  	fsub.d	ft5, ft3, ft5
+      50: 53 f3 52 12  	fmul.d	ft6, ft5, ft5
+      54: 53 73 60 1a  	fdiv.d	ft6, ft0, ft6
+      58: d3 73 63 12  	fmul.d	ft7, ft6, ft6
+      5c: d3 73 73 12  	fmul.d	ft7, ft6, ft7
+      60: 43 f5 23 0a  	fmadd.d	fa0, ft7, ft2, ft1
+      64: d3 f3 a3 12  	fmul.d	ft7, ft7, fa0
+      68: 53 73 73 12  	fmul.d	ft6, ft6, ft7
+      6c: 43 f2 62 22  	fmadd.d	ft4, ft5, ft6, ft4
+      70: 27 30 47 00  	fsd	ft4, 0(a4)
+      74: fd 17        	addi	a5, a5, -1
+      76: 11 06        	addi	a2, a2, 4
+      78: 81 e3        	bnez	a5, 0x78 <.LBB0_2+0x36>
+      7a: 85 02        	addi	t0, t0, 1
+      7c: 13 08 08 04  	addi	a6, a6, 64
+      80: 63 90 12 01  	bne	t0, a7, 0x80 <.LBB0_2+0x3e>
+      84: 73 26 20 c0  	rdinstret	a2
+      88: 37 05 00 00  	lui	a0, 0
+      8c: 83 35 05 00  	ld	a1, 0(a0)
+      90: b7 06 00 00  	lui	a3, 0
+      94: 37 05 00 00  	lui	a0, 0
+      98: 13 05 05 00  	mv	a0, a0
+      9c: 23 b0 c6 00  	sd	a2, 0(a3)
+      a0: 17 03 00 00  	auipc	t1, 0
+      a4: 67 00 03 00  	jr	t1
